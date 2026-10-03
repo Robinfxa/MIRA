@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "fixture_set": "offline-rehearsal-v1",
+  "sample_rate": 24000,
+  "channels": 1,
+  "sample_width_bytes": 2,
+  "encoding": "pcm_s16le",
+  "language": "en-US",
+  "synthetic": true,
+  "offline_only": true,
+  "human_listening_verified": false,
+  "maximum_total_duration_seconds": 90,
+  "maximum_clip_duration_seconds": 30,
+  "limitation": "Finite synthetic English offline demonstration. No Chinese speech, live generation, natural conversation, speaker-quality validation, or proof that a user heard the output.",
+  "provenance": {
+    "script_author": "Original MIRA rehearsal captions written for this project with AI assistance on 2026-10-03.",
+    "generation_method": "Local FFmpeg flite source with the installed CMU slt voice; no cloud provider, credential, download, browser TTS, or paid call.",
+    "voice": "slt",
+    "voice_source": "CMU Flite cmu_us_slt, installed libflite_cmu_us_slt.so.2.2",
+    "flite_version_evidence": "Installed library SONAME libflite.so.2.2; package manager metadata unavailable.",
+    "local_license_source": "/usr/share/doc/libflite1/copyright",
+    "upstream_license_url": "https://github.com/festvox/flite/blob/master/COPYING",
+    "voice_source_url": "https://github.com/festvox/flite/blob/master/lang/cmu_us_slt/cmu_us_slt.c",
+    "license_assessment": "Installed copyright and upstream slt source state a permissive CMU license for the software/voice. This package contains newly synthesized output only, not Flite software or voice data. No separate output restriction was found in these reviewed sources; this is provenance review, not legal advice or an exclusive-rights claim.",
+    "license_reviewed_at": "2026-10-03",
+    "generator": "tools/generate_rehearsal_audio.py",
+    "conversion": "Flite default speech rate; mono PCM signed 16-bit little-endian, resampled to 24000 Hz, linear volume gain 0.75. No pitch/rate change, copied recordings, or external voice source/binary.",
+    "verification_scope": "Decoded PCM and WAV integrity, duration, nonzero samples, peak/clipping only. No microphone, physical playback, listening, intelligibility or Chinese-language quality claim.",
+    "ffmpeg_version": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "generator_sha256": "fa83b6257f8c4433dbeae0653dc2698586c378cd03446720aa94b5a3b253ad23",
+    "installed_source_files": {
+      "ffmpeg": {
+        "path": "/usr/bin/ffmpeg",
+        "sha256": "e8a8d46f5225f3062cec7c07fb145d58ae73c603cb740dcd5bad34bfb54e455a"
+      },
+      "flite_library": {
+        "path": "/usr/lib/x86_64-linux-gnu/libflite.so.2.2",
+        "sha256": "490ffd91ee67acbe4279a6b736dafdacba7a88211985960282e27c0d2d7c6eaf"
+      },
+      "voice_library": {
+        "path": "/usr/lib/x86_64-linux-gnu/libflite_cmu_us_slt.so.2.2",
+        "sha256": "bc025b00db2d651a244f66e85d80a234284921e8d141d96e3189d75839a7980a"
+      },
+      "license": {
+        "path": "/usr/share/doc/libflite1/copyright",
+        "sha256": "77d13a5e6cbe7277b4721033f9ad15707241c2832baa8c74ec823c9ee5ebf71c"
+      }
+    },
+    "generated_at": "2026-10-03T12:41:40.319561+00:00"
+  },
+  "clips": {
+    "greeting": {
+      "caption": "Hello, I am Mira. This is an offline rehearsal. Shall we look at a travel illustration together?",
+      "pcm_file": "greeting.pcm",
+      "wav_file": "greeting.wav",
+      "pcm_sha256": "67179120b348ae05195453fab63199b3e458474311a57791afae51a833c8c924",
+      "wav_sha256": "fb83f6049dd767cd227670e84683712a770eba9813d4448a6cef471d3a543a3f",
+      "caption_sha256": "4b9a3da9eec7332f37306a8983da42b35028918eb60a4d5f4b1d9a344c4efec3",
+      "frames": 147240,
+      "duration_ms": 6135,
+      "peak_abs": 14660,
+      "clipped_samples": 0,
+      "nonzero_samples": 146334,
+      "rms_dbfs": -18.493
+    },
+    "camera": {
+      "caption": "Of course. I will lower my camera. You do not need to be in a photograph.",
+      "pcm_file": "camera.pcm",
+      "wav_file": "camera.wav",
+      "pcm_sha256": "12c1bd0d4f703f451bdb5960839ed6be2e0040a4a3d055c5687189a73a672207",
+      "wav_sha256": "097e9fde93feed0532826407c5376b85a9a5f4e353c540c3027bb4cfdfaa0224",
+      "caption_sha256": "1c34b347ac95a356c9bc63528a5ec090f9c64dd2c19dfc23dfda82052a900133",
+      "frames": 124440,
+      "duration_ms": 5185,
+      "peak_abs": 14090,
+      "clipped_samples": 0,
+      "nonzero_samples": 123660,
+      "rms_dbfs": -18.76
+    },
+    "photo": {
+      "caption": "Here is my original travel illustration. It shows the coast after rain, with a lighthouse glowing on the headland.",
+      "pcm_file": "photo.pcm",
+      "wav_file": "photo.wav",
+      "pcm_sha256": "2110b6df6af0ce3e66a4385aaae378877628615c36022d4504a3d661c92ee094",
+      "wav_sha256": "4001355cca0b829849562cb983797c3bea5a1d095540024ab7b323263badaacc",
+      "caption_sha256": "dc9dd03a5a9ba655959b2950c42f433af6a56e678b01863afcde08f55c7c3632",
+      "frames": 161280,
+      "duration_ms": 6720,
+      "peak_abs": 17959,
+      "clipped_samples": 0,
+      "nonzero_samples": 160709,
+      "rms_dbfs": -17.893
+    },
+    "detail": {
+      "caption": "The picture is still here. A lighthouse glows above the dark coast, and its warm light reaches toward the sea.",
+      "pcm_file": "detail.pcm",
+      "wav_file": "detail.wav",
+      "pcm_sha256": "dfb3a0aae2233d3aa576f7acc8dc4b0400a5d4e41be046d26392942a4c28ee97",
+      "wav_sha256": "babbe4f8c32f3ad040e248414f836b5c04768c4ec73778e89bec10de347e640e",
+      "caption_sha256": "80e6bf16baa4eaa44a98ec7ab36d7a2cf4c412fb27c2fff0c9f250d22c73125d",
+      "frames": 145800,
+      "duration_ms": 6075,
+      "peak_abs": 15586,
+      "clipped_samples": 0,
+      "nonzero_samples": 145059,
+      "rms_dbfs": -19.4
+    },
+    "absent": {
+      "caption": "We have not opened the travel illustration yet. Choose show the picture first.",
+      "pcm_file": "absent.pcm",
+      "wav_file": "absent.wav",
+      "pcm_sha256": "4ca0eec8af49d8581d30663ef177856a14b5fbae962dbc813163ebf0070533c6",
+      "wav_sha256": "4554a740229b3ce8049ab083822b1cd166a0e685adee7f3e2ca26bd16bc7c87d",
+      "caption_sha256": "c9a2ee8ce08d18b21b3eeba6a6e27a5548a3ef3550d35a70afef3be170e275fd",
+      "frames": 106800,
+      "duration_ms": 4450,
+      "peak_abs": 21523,
+      "clipped_samples": 0,
+      "nonzero_samples": 106244,
+      "rms_dbfs": -18.111
+    },
+    "story": {
+      "caption": "Imagine reaching this coast after a long walk. The rain has just passed. A lighthouse shines across the dark water. Its warm light marks the headland, while the evening sea slowly settles. There is no need to hurry. We can stay with this view for a moment.",
+      "pcm_file": "story.pcm",
+      "wav_file": "story.wav",
+      "pcm_sha256": "1aecda9aebe8822a3380b0dfededdfc65a7581060f8d16bc8b6c48a49f745abe",
+      "wav_sha256": "525490c6b72ccdde876635a33999d1f49f802781335932457631c53991f8a7ed",
+      "caption_sha256": "08d8a4ac184a9f58de8a6da16ace2ffddd82bfc71acb4118091bc89af379ba92",
+      "frames": 353160,
+      "duration_ms": 14715,
+      "peak_abs": 15624,
+      "clipped_samples": 0,
+      "nonzero_samples": 351611,
+      "rms_dbfs": -18.333
+    },
+    "rain": {
+      "caption": "Let us turn toward the rain. We can pause here and listen to the world outside.",
+      "pcm_file": "rain.pcm",
+      "wav_file": "rain.wav",
+      "pcm_sha256": "364c040c10f647249e85874519b4ab5e1dec6236a1f1dfecf1a07ae533acc29d",
+      "wav_sha256": "8b6f5514847c03ac86d7e8e86d29bc63e4692647115f0187faa7eda9189521d1",
+      "caption_sha256": "d62cbd746580f6774b014786a7099bd27baae58894d8ae97fed8b8bd335a1be9",
+      "frames": 111840,
+      "duration_ms": 4660,
+      "peak_abs": 16261,
+      "clipped_samples": 0,
+      "nonzero_samples": 111257,
+      "rms_dbfs": -18.488
+    },
+    "warm": {
+      "caption": "The cafe light feels warmer now. Thank you for sharing this quiet moment with me.",
+      "pcm_file": "warm.pcm",
+      "wav_file": "warm.wav",
+      "pcm_sha256": "353003a070953a1391a98b765a92179fd0e6575078c26d506fad0741c2fcc4a1",
+      "wav_sha256": "8451770dd44648fe91a0676799ea67ce0c31b9c590052120293296d792b9eee8",
+      "caption_sha256": "7cd78d1911c73f756b5ab2666ec29d31b3802b2e9d7101ca09f1609ae4a91daa",
+      "frames": 110880,
+      "duration_ms": 4620,
+      "peak_abs": 14329,
+      "clipped_samples": 0,
+      "nonzero_samples": 110172,
+      "rms_dbfs": -18.26
+    }
+  },
+  "total_frames": 1261440,
+  "total_duration_ms": 52560
+}

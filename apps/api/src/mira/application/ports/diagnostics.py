@@ -1,0 +1,19 @@
+"""Best-effort local diagnostics; never a source of session or presentation authority."""
+from typing import Protocol
+
+from mira.application.diagnostic_events import (
+    DiagnosticContext,
+    DiagnosticEvent,
+    RecordingKind,
+    DiagnosticStatus,
+    ReviewedRecording,
+)
+
+
+class Diagnostics(Protocol):
+    def emit(self, event: DiagnosticEvent) -> bool: ...
+    def capture(self, record: ReviewedRecording) -> bool: ...
+    def capture_text(self, kind: RecordingKind, text: str, context: DiagnosticContext) -> bool: ...
+    def add_secret(self, value: str) -> bool: ...
+    def status(self) -> DiagnosticStatus: ...
+    def close(self) -> None: ...

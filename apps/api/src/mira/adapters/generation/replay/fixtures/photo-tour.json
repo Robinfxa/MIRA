@@ -1,0 +1,8 @@
+{
+  "schema_version": "1",
+  "steps": [
+    {"fixture_id": "photo", "delay_ms": 0},
+    {"fixture_id": "photo_caption", "delay_ms": 0}
+  ],
+  "finish": "complete"
+}
