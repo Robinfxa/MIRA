@@ -1,0 +1,13 @@
+{
+  "requirements": [
+    {
+      "id": "FND06-001",
+      "tests": [
+        "tests/unit/test_quality_distribution_identity.py::test_distribution_name_and_version_match_lock_and_python",
+        "tests/unit/test_quality_distribution_identity.py::test_declared_frontend_dependencies_match_lock_root"
+      ]
+    }
+  ],
+  "feature": "FND-06",
+  "spec": "specs/features/FND-06-distribution-identity/spec.md"
+}

@@ -1,0 +1,89 @@
+{
+  "feature": "FND-02",
+  "spec": "specs/features/FND-02-fixture-replay/spec.md",
+  "requirements": [
+    {
+      "id": "FND02-001",
+      "tests": [
+        "tests/contracts/test_replay_generation.py::test_environment_selects_replay_through_existing_loader",
+        "tests/contracts/test_replay_generation.py::test_default_profile_stays_mock",
+        "tests/integration/test_replay_http.py::test_replay_profile_uses_existing_http_permits_and_receipts"
+      ]
+    },
+    {
+      "id": "FND02-002",
+      "tests": [
+        "tests/contracts/test_replay_script.py::test_only_named_packaged_scenarios_can_be_loaded",
+        "tests/architecture/test_boundaries.py::test_module_import_does_not_read_environment_or_connect_network"
+      ]
+    },
+    {
+      "id": "FND02-003",
+      "tests": [
+        "tests/contracts/test_replay_script.py::test_valid_script_is_immutable",
+        "tests/contracts/test_replay_script.py::test_invalid_structure_is_rejected_without_reflecting_payload",
+        "tests/contracts/test_replay_script.py::test_malformed_or_oversized_bytes_fail",
+        "tests/contracts/test_replay_script.py::test_duplicate_json_keys_cannot_replace_failure_with_success",
+        "tests/contracts/test_replay_script.py::test_duplicate_nested_keys_cannot_replace_fixture_identity",
+        "tests/contracts/test_replay_script.py::test_missing_terminal_outcome_is_not_inferred_as_success"
+      ]
+    },
+    {
+      "id": "FND02-004",
+      "tests": [
+        "tests/contracts/test_replay_generation.py::test_replay_yields_complete_ordered_ranges",
+        "tests/contracts/test_replay_generation.py::test_two_invocations_have_independent_cursors",
+        "tests/contracts/test_fixture_generation_port.py::test_fixture_backends_share_order_review_and_repeatability"
+      ]
+    },
+    {
+      "id": "FND02-005",
+      "tests": [
+        "tests/contracts/test_replay_cancellation.py::test_cancel_pending_step_propagates_and_emits_no_tail",
+        "tests/contracts/test_replay_cancellation.py::test_injected_sleeper_receives_declared_order_not_wall_time_guesses",
+        "tests/integration/test_replay_actor.py::test_stop_revokes_tail_without_waiting_for_replay",
+        "tests/unit/test_actor.py::test_uncooperative_provider_result_cannot_revive_stop"
+      ]
+    },
+    {
+      "id": "FND02-006",
+      "tests": [
+        "tests/contracts/test_replay_generation.py::test_script_failure_is_not_a_clean_end",
+        "tests/integration/test_replay_actor.py::test_failed_tail_preserves_only_receipted_history"
+      ]
+    },
+    {
+      "id": "FND02-007",
+      "tests": [
+        "tests/contracts/test_replay_generation.py::test_replay_does_not_relax_fixture_review",
+        "tests/contracts/test_replay_generation.py::test_replay_never_enables_external_or_paid_calls",
+        "tests/contracts/test_replay_generation.py::test_replay_cannot_be_paired_with_unimplemented_live_review",
+        "tests/contracts/test_fixture_generation_port.py::test_fixture_backends_share_order_review_and_repeatability"
+      ]
+    },
+    {
+      "id": "FND02-008",
+      "tests": [
+        "tests/integration/test_replay_http.py::test_replay_profile_uses_existing_http_permits_and_receipts",
+        "tests/architecture/test_boundaries.py::test_generated_contracts_do_not_drift"
+      ]
+    },
+    {
+      "id": "FND02-009",
+      "tests": [
+        "tests/integration/test_replay_http.py::test_bad_replay_configuration_fails_without_reflecting_value",
+        "tests/contracts/test_replay_script.py::test_malformed_or_oversized_bytes_fail",
+        "tests/integration/test_replay_actor.py::test_failed_tail_preserves_only_receipted_history"
+      ]
+    },
+    {
+      "id": "FND02-010",
+      "tests": [
+        "tests/architecture/test_spec_traceability.py::test_spec_mapping_resolves_a_collected_test",
+        "tests/architecture/test_spec_traceability.py::test_nonexistent_test_is_not_accepted",
+        "tests/architecture/test_spec_traceability.py::test_missing_requirement_mapping_fails",
+        "tests/architecture/test_spec_traceability.py::test_editing_status_cannot_manufacture_verification"
+      ]
+    }
+  ]
+}

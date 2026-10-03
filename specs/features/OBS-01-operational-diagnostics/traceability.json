@@ -1,0 +1,67 @@
+{
+  "feature": "OBS-01",
+  "spec": "specs/features/OBS-01-operational-diagnostics/spec.md",
+  "requirements": [
+    {
+      "id": "OBS01-001",
+      "tests": [
+        "tests/contracts/test_diagnostics.py::test_correlated_bounded_events_never_copy_identifiers_or_payloads",
+        "tests/contracts/test_diagnostics.py::test_invalid_free_text_and_nonfinite_timings_are_dropped",
+        "tests/contracts/test_diagnostics_runtime.py::test_http_and_generation_share_safe_request_session_turn_correlation"
+      ]
+    },
+    {
+      "id": "OBS01-002",
+      "tests": [
+        "tests/contracts/test_diagnostics.py::test_known_provider_status_has_safe_actionable_class",
+        "tests/contracts/test_diagnostics.py::test_timeout_permission_and_unknown_causes_are_not_guessed",
+        "tests/contracts/test_diagnostics.py::test_predeclared_adapter_reason_is_known_but_free_text_is_not",
+        "tests/contracts/test_diagnostics.py::test_cancellation_reason_is_not_failure_or_timeout",
+        "tests/contracts/test_diagnostics_runtime.py::test_media_stop_and_disconnect_have_separate_reasons",
+        "tests/contracts/test_diagnostics_runtime.py::test_output_review_cancellation_preserves_stop_and_timeout_cause",
+        "tests/contracts/test_diagnostics_runtime.py::test_unknown_exception_and_domain_code_never_reach_http_output",
+        "tests/contracts/test_diagnostics_runtime.py::test_provider_domain_error_code_never_enters_public_session_state"
+      ]
+    },
+    {
+      "id": "OBS01-003",
+      "tests": [
+        "tests/contracts/test_diagnostics.py::test_queue_pressure_is_nonblocking_and_counted",
+        "tests/contracts/test_diagnostics.py::test_rotation_retention_and_private_permissions",
+        "tests/contracts/test_diagnostics.py::test_logging_io_failure_never_escapes_or_records_exception",
+        "tests/contracts/test_diagnostics.py::test_symlink_destination_is_not_followed",
+        "tests/contracts/test_diagnostics.py::test_slow_disk_cannot_stall_emit_or_close",
+        "tests/contracts/test_diagnostics_runtime.py::test_broken_diagnostic_sink_cannot_break_http_business_path"
+      ]
+    },
+    {
+      "id": "OBS01-004",
+      "tests": [
+        "tests/contracts/test_diagnostics_recording.py::test_raw_is_off_by_default_and_requires_explicit_consent",
+        "tests/contracts/test_diagnostics_recording.py::test_mode_disable_revokes_pending_recordings",
+        "tests/contracts/test_diagnostics_recording.py::test_raw_text_removes_injected_secrets_and_credential_shapes",
+        "tests/contracts/test_diagnostics_recording.py::test_authorization_and_credential_envelopes_are_never_saved",
+        "tests/contracts/test_diagnostics_recording.py::test_uncertain_rejected_or_unreviewed_audio_is_dropped",
+        "tests/contracts/test_diagnostics_recording.py::test_raw_quotas_retention_and_buffer_bounds",
+        "tests/contracts/test_diagnostics_recording.py::test_raw_queue_has_a_byte_budget_independent_of_record_count",
+        "tests/contracts/test_diagnostics_recording.py::test_quoted_credential_values_are_removed",
+        "tests/contracts/test_diagnostics_recording.py::test_retention_bounds_oldest_record_age_despite_new_writes",
+        "tests/contracts/test_diagnostics_recording.py::test_env_style_and_private_key_assignments_never_persist",
+        "tests/contracts/test_diagnostics_recording.py::test_runtime_text_capture_filters_newly_injected_active_secrets",
+        "tests/contracts/test_diagnostics_runtime.py::test_public_diagnostics_status_is_actual_runtime_state",
+        "tests/contracts/test_diagnostics_runtime.py::test_runtime_opt_in_records_dialogue_model_content_but_never_session_token",
+        "tests/contracts/test_diagnostics_runtime.py::test_loader_requires_explicit_raw_consent_and_private_bounded_settings"
+      ]
+    },
+    {
+      "id": "OBS01-005",
+      "tests": [
+        "tests/unit/test_diagnostic_export.py::test_export_defaults_to_revalidated_sanitized_metadata",
+        "tests/unit/test_diagnostic_export.py::test_raw_export_requires_separate_explicit_confirmation",
+        "tests/unit/test_diagnostic_export.py::test_export_drops_injected_fields_malformed_records_and_symlinks",
+        "tests/unit/test_diagnostic_export.py::test_export_never_overwrites_existing_destination",
+        "tests/unit/test_diagnostic_export.py::test_export_skips_overdeep_json_without_crashing"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+[project]
+name = "mira-foundation"
+version = "0.4.1"
+description = "MIRA local-first control-plane foundation; live integrations are not enabled"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "fastapi==0.128.2", "pydantic==2.13.4", "uvicorn==0.48.0", "python-dotenv==1.2.2",
+  "httpx==0.28.1", "google-cloud-speech==2.40.0", "google-auth[requests]==2.59.1",
+  "PyJWT[crypto]==2.13.0", "cryptography==50.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["apps/api/src"]
+testpaths = ["tests/unit", "tests/integration", "tests/architecture", "tests/contracts"]
+asyncio_mode = "strict"
+addopts = "-ra --strict-markers"
+filterwarnings = ["error"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "B", "UP"]
+
+[build-system]
+requires = ["setuptools==84.0.0", "wheel==0.48.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["apps/api/src"]
+
+[project.scripts]
+mira = "mira.__main__:main"
+
+[tool.setuptools.package-data]
+"mira.adapters.generation.replay" = ["fixtures/*.json"]
+"mira.adapters.generation.rehearsal" = ["fixtures/audio/*.json", "fixtures/audio/*.pcm", "fixtures/audio/*.wav"]
+
+# Preserve the config/web layout expected by project_root() after installation.
+# verify_package.py checks every emitted JS/public asset against the installed wheel.
+[tool.setuptools.data-files]
+"config" = ["config/defaults.toml"]
+"config/profiles" = ["config/profiles/*.toml"]
+"apps/web" = ["apps/web/index.html"]
+"apps/web/public" = ["apps/web/public/*.css"]
+"apps/web/public/audio" = ["apps/web/public/audio/*.js"]
+"apps/web/public/scene" = ["apps/web/public/scene/*.svg", "apps/web/public/scene/*.md"]
+"apps/web/dist/app" = ["apps/web/dist/app/*.js"]
+"apps/web/dist/features/audio" = ["apps/web/dist/features/audio/*.js"]
+"apps/web/dist/features/diagnostics" = ["apps/web/dist/features/diagnostics/*.js"]
+"apps/web/dist/features/presentation" = ["apps/web/dist/features/presentation/*.js"]
+"apps/web/dist/features/session" = ["apps/web/dist/features/session/*.js"]
+"apps/web/dist/shared" = ["apps/web/dist/shared/*.js"]
+"apps/web/dist/shared/generated" = ["apps/web/dist/shared/generated/*.js"]

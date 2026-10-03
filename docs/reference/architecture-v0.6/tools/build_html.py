@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""Build a self-contained offline reading edition. Requires mistune (no auto-install)."""
+from pathlib import Path
+import json,re,html
+try:
+    import mistune
+except ImportError as exc:
+    raise SystemExit('Install mistune in your documentation environment before building HTML.') from exc
+B=Path(__file__).resolve().parents[1]
+parts=json.loads((B/'tools/book-parts.json').read_text(encoding='utf-8'))
+md=mistune.create_markdown(escape=False,plugins=['table'])
+def rendered(t):
+    x=md(t)
+    return re.sub(r'<table>(.*?)</table>',r'<div class="table-wrap" tabindex="0"><table>\1</table></div>',x,flags=re.S)
+nav=[];sections=[]
+for p in parts:
+    if '/modules/' in p['path']:group='模块合同与复用'
+    elif '/adr/' in p['path']:group='已确认决策 · 原文保留'
+    elif '/appendices/' in p['path']:group='追踪、差分与源码'
+    elif '/pending/' in p['path']:group='实施与来源'
+    elif p['path'].endswith('00-master-design-book.md'):group='总设计'
+    else:group='实施与来源'
+    nav.append((group,f'<a href="#{p["id"]}">{html.escape(p["title"])}</a>'))
+    sections.append(f'<section class="chapter" id="{p["id"]}" data-title="{html.escape(p["title"],quote=True)}">'+rendered(p['markdown'])+f'<p class="source-note">分章来源：<code>{html.escape(p["path"])}</code> · <a href="#book-toc">返回目录</a></p></section>')
+nav_html='';prev=None
+for g,a in nav:
+    if g!=prev:nav_html+=f'<h3>{g}</h3>';prev=g
+    nav_html+=a
+mobile=''.join(a for _,a in nav)
+css='''
+:root{--ink:#20323d;--muted:#61737d;--accent:#126a69;--border:#dbe5e8;--paper:#fff;--bg:#f2f5f6;--soft:#edf6f4;--warning:#825622}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:26px}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-size:16px;line-height:1.9}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #8bc9c4;outline-offset:3px}
+.top{background:#183841;color:#fff;padding:24px 36px;border-bottom:5px solid #439b93}.top .eyebrow{font-size:11px;letter-spacing:.2em;color:#acd2d1}.top strong{font-size:21px;display:block;margin-top:3px}.top small{display:block;color:#c5d6dd;font-size:12px;margin-top:4px}
+.layout{max-width:1550px;margin:auto;display:grid;grid-template-columns:285px minmax(0,1fr);gap:26px;padding:25px}aside{position:sticky;top:18px;height:calc(100vh - 36px);overflow:auto;padding:0 5px 30px}aside h3{font-size:11px;letter-spacing:.12em;color:var(--muted);margin:18px 8px 8px}aside a{display:block;font-size:12px;line-height:1.65;padding:7px 10px;border-left:2px solid var(--border);margin:2px 0}aside a.active{border-left-color:var(--accent);background:#e4efed;font-weight:650}main{min-width:0}
+.cover,.chapter{background:var(--paper);border:1px solid var(--border);padding:38px 44px;margin:0 0 22px;border-radius:8px;box-shadow:0 3px 13px #18384106}.cover{border-top:4px solid var(--accent)}.kicker{font-size:11px;letter-spacing:.14em;font-weight:700;color:var(--accent)}.cover h1{font-size:34px;line-height:1.4;border:0;margin:14px 0 16px;padding:0}.lead{font-size:18px;line-height:1.9;color:#3a555f}.cover .status{border-left:3px solid var(--accent);background:var(--soft);padding:12px 16px;font-size:14px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:25px 0 18px}.metric{padding:16px 12px;border-right:1px solid var(--border)}.metric:first-child{padding-left:0}.metric:last-child{border:0}.metric b{font-size:27px;display:block;line-height:1.3;color:var(--accent)}.metric span{font-size:12px;color:var(--muted)}.read-path{font-size:14px}.tiny{font-size:12px;color:var(--muted)}
+h1{font-size:26px;line-height:1.5;margin:7px 0 22px;border-bottom:3px solid var(--accent);padding-bottom:14px}h2{font-size:21px;line-height:1.6;margin:34px 0 14px}h3{font-size:17px;line-height:1.6;margin:25px 0 12px}p{margin:13px 0 16px}h1,h2,h3,p,li{overflow-wrap:anywhere}strong{font-weight:650}ul,ol{padding-left:24px}li{margin:4px 0}blockquote{margin:20px 0;border-left:4px solid #6aa49c;background:#f3f8f7;padding:4px 17px;color:#3b565c}pre{background:#f3f6f8;border:1px solid var(--border);border-radius:5px;padding:16px 18px;overflow-x:auto;font-size:12px;line-height:1.7}code{font-family:ui-monospace,SFMono-Regular,Consolas,"Noto Sans CJK SC",monospace;font-size:.88em;overflow-wrap:anywhere}p code,li code,td code{background:#eef3f4;border-radius:3px;padding:1px 4px}pre code{font-size:inherit;white-space:pre}
+.table-wrap{max-width:100%;overflow-x:auto;margin:22px 0;border:1px solid var(--border);border-radius:5px}table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.8;margin:0}th{background:#eaf3f1;color:#224e53;text-align:left;font-weight:650}th,td{border:1px solid var(--border);padding:10px 11px;vertical-align:top;overflow-wrap:anywhere}th{border-top:0}tr:nth-child(even) td{background:#fbfdfd}hr{border:none;border-top:1px solid var(--border);margin:32px 0}.source-note{font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:15px;margin-top:28px}.source-note code{font-size:11px}
+.search{position:relative}.search label{display:block;font-size:12px;color:var(--muted);margin:5px 0}.search input{width:100%;border:1px solid #b9ccd0;border-radius:5px;padding:11px;background:#fff;color:var(--ink);font:inherit;font-size:13px}.search button{margin-top:7px;border:1px solid var(--border);background:white;border-radius:4px;padding:4px 10px;color:var(--muted);cursor:pointer}.search p{font-size:11px;margin:6px 0;color:var(--muted)}.mobile-nav{display:none}section[hidden]{display:none!important}footer{text-align:center;padding:20px 20px 34px;color:var(--muted);font-size:12px}.callout{color:var(--warning);border-left:3px solid #bf9b67;padding-left:12px}.mobile-nav a{display:block;padding:6px 0;font-size:13px}.no-result{display:none;padding:20px}.empty .no-result{display:block}
+@media(max-width:1150px){.layout{grid-template-columns:238px minmax(0,1fr);gap:18px;padding:18px}.cover,.chapter{padding:30px}.cover h1{font-size:30px}table{font-size:12px}th,td{padding:8px}}
+@media(max-width:760px){.top{padding:19px 18px}.top strong{font-size:18px}.layout{display:block;padding:10px}aside{display:none}.cover,.chapter{padding:23px 17px;margin-bottom:14px;border-radius:6px}.cover h1{font-size:28px}.lead{font-size:16px}.cover .status{font-size:13px;padding:10px 12px}.metrics{margin:20px 0 15px}.metric{padding:13px 7px}.metric b{font-size:23px}.metric span{font-size:11px}.mobile-nav{display:block;border:1px solid var(--border);padding:11px 13px;margin:20px 0 0;border-radius:4px}.mobile-nav summary{cursor:pointer;color:var(--accent);font-weight:650}h1{font-size:23px}h2{font-size:20px}h3{font-size:16px}.table-wrap table{min-width:610px}pre{padding:12px;font-size:11px}p{font-size:15px}.source-note{font-size:11px}.chapter{scroll-margin-top:10px}}
+@media print{body{background:#fff;font-size:10pt}.top,aside,.mobile-nav,.search,footer,.metrics{display:none}.layout{display:block;padding:0}.cover,.chapter{border:0;box-shadow:none;padding:0;margin:0;break-before:page}.cover{break-before:auto}h1{font-size:21pt}h2,h3{break-after:avoid}.table-wrap{overflow:visible}table{font-size:8pt}tr{break-inside:avoid}pre{white-space:pre-wrap;overflow-wrap:anywhere}pre code{white-space:pre-wrap}a{color:inherit}}
+'''
+cover=f'''<section class="cover" id="book-toc"><div class="kicker">ARCHITECTURE × OPEN-SOURCE REUSE / v0.6</div><h1>MIRA<br>架构与开源复用整合书</h1><p class="lead">从已经确定的产品合同，落到现成代码、适配差分和可执行的验收入口。</p><div class="status"><strong>已确认架构不变。</strong>语音 v0.2 基础 · G01–G06 · Codex usage 优先 · API 预留。具体复用栈仍按来源建议与准入状态分别记录。</div><div class="metrics"><div class="metric"><b>10</b><span>模块与实施章节</span></div><div class="metric"><b>16</b><span>开源参考项目</span></div><div class="metric"><b>8</b><span>窄工作包</span></div></div><p class="read-path"><strong>阅读路径：</strong>总书 → 对应模块的「复用落点」 → M10工作包 → A5固定源码与A6验收追踪。</p><p class="callout tiny">IC-01：官方接入限制与社区兼容路线的边界显式保留，未由文档整合自动解除。</p><p class="tiny">整合日期 2026-10-03 · 来源：架构v0.5＋借鉴书v0.1。源码记录沿用原阅读范围，本轮未重新联网验证。164条来源／拟验收记录全部未执行，存在重叠，不是独立样本量。</p><details class="mobile-nav"><summary>展开全书目录 · {len(parts)}章</summary>{mobile}</details></section>'''
+js='''
+(function(){const input=document.getElementById('filter');const count=document.getElementById('filter-count');const sections=[...document.querySelectorAll('.chapter')];const links=[...document.querySelectorAll('aside a[href^="#"]')];const index=sections.map(s=>s.innerText.toLocaleLowerCase());
+function apply(){const q=input.value.trim().toLocaleLowerCase();let n=0;sections.forEach((s,i)=>{const ok=!q||index[i].includes(q);s.hidden=!ok;if(ok)n++;});links.forEach(a=>{const s=document.getElementById(a.hash.slice(1));a.hidden=s? s.hidden:false;});count.textContent=q?`含关键词的章节：${n} / ${sections.length}`:`全书 ${sections.length} 章 · 页面内查找可用 Ctrl/⌘+F`;document.body.classList.toggle('empty',n===0);}
+input.addEventListener('input',apply);document.getElementById('clear-filter').addEventListener('click',()=>{input.value='';apply();});
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{const s=document.getElementById(a.hash.slice(1));if(s&&s.hidden){input.value='';apply();}}));
+if('IntersectionObserver' in window){const o=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.hash==='#'+e.target.id));}});},{rootMargin:'-5% 0px -80% 0px'});sections.forEach(s=>o.observe(s));}apply();})();
+'''
+page=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>MIRA 架构与开源复用整合书 v0.6</title><style>{css}</style></head><body><header class="top"><div class="eyebrow">MIRA / REALTIME MULTIMODAL CHARACTER</div><strong>架构合同 · 现成实现 · 适配接缝</strong><small>v0.6 / 2026-10-03 / SOURCE-GROUNDED INTEGRATION</small></header><div class="layout"><aside aria-label="全书导航"><div class="search"><label for="filter">按关键词过滤章节</label><input id="filter" type="search" placeholder="Codex、许可、Hindsight…"><button id="clear-filter" type="button">清除过滤</button><p id="filter-count"></p></div>{nav_html}</aside><main>{cover}<p class="no-result">没有匹配章节，请清除或更换关键词。</p>{''.join(sections)}</main></div><footer>分章为维护源 · 来源与旧版保留 · 非产品运行或账户准入报告</footer><script>{js}</script></body></html>'''
+(B/'MIRA_架构全书_v0.6.html').write_text(page,encoding='utf-8')
+print(json.dumps({'html':str(B/'MIRA_架构全书_v0.6.html'),'chapters':len(parts),'bytes':len(page.encode())},ensure_ascii=False))

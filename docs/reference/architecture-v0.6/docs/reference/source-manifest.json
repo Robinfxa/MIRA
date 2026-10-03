@@ -1,0 +1,178 @@
+{
+  "edition": "v0.6",
+  "date": "2026-10-03",
+  "source_basis": "ARCH-05 + OS-REF v0.1; document-only integration, no new external research",
+  "sources": [
+    {
+      "path": "docs/reference/snapshots/character-scene-research.md",
+      "bytes": 20528,
+      "sha256": "dd4066e6b61c9a0d4a931af9d86148891e925d23b44db18a353384e9e804d030",
+      "role": "source_snapshot"
+    },
+    {
+      "path": "docs/reference/snapshots/companion-research.md",
+      "bytes": 85481,
+      "sha256": "b7414c5c7860c88acee1c051e9595605b21774d9fb66b8395db0996c6badde0b",
+      "role": "source_snapshot"
+    },
+    {
+      "path": "docs/reference/snapshots/mira-memory-persona-v0.1.md",
+      "bytes": 35240,
+      "sha256": "dae01a8817a4b35122fbb88c3ca7a4b25e8524d2af212a58fa8cbbc300f7dfc4",
+      "role": "source_snapshot"
+    },
+    {
+      "path": "docs/reference/snapshots/requirements.pdf",
+      "bytes": 453245,
+      "sha256": "d71be58c6c66191124e56ba77901913b79fabb2896cdfffb4a5cdf9569042db6",
+      "role": "source_snapshot"
+    },
+    {
+      "path": "docs/reference/snapshots/voice-peer-amendments.md",
+      "bytes": 4571,
+      "sha256": "a8830c0ad00e184995b16d90ae99aa07e7ebf6fed40eed50eda4881961a534f9",
+      "role": "source_snapshot"
+    },
+    {
+      "path": "docs/reference/snapshots/voice-v0.2.md",
+      "bytes": 76894,
+      "sha256": "ddf589b2ba0c9d88a2890226a6aba519ccbe10da4ef03de2e90d1168cc3b0b09",
+      "role": "source_snapshot"
+    },
+    {
+      "path": "docs/history/grill-01.md",
+      "bytes": 37542,
+      "sha256": "324c964b5fe26022a10391d7e6e7cf7576276d701220045086e0a9a774d25a39",
+      "role": "historical_grill"
+    },
+    {
+      "path": "docs/history/grill-02.md",
+      "bytes": 24430,
+      "sha256": "f8f65e402bd24388d3e6382b8ef80bc597212da961f3592651704cb319e527f2",
+      "role": "historical_grill"
+    },
+    {
+      "path": "docs/history/grill-03.md",
+      "bytes": 21562,
+      "sha256": "eef71b4e6f4c0d3afdae3c52b505d2676a13d6440f142fe5dda55fe218647c3c",
+      "role": "historical_grill"
+    },
+    {
+      "path": "docs/history/g03-generation-argument-v0.1.md",
+      "bytes": 23142,
+      "sha256": "7b13a4d8b7c2107bd9e91ecfbae158788efe845453b72f706a26ed032f422f18",
+      "role": "historical_argument_before_approval"
+    },
+    {
+      "path": "docs/history/g04-interruption-argument-v0.1.md",
+      "bytes": 25624,
+      "sha256": "e77b9a0d4d4b57b26934f08c942a0b6e12f77aee4acf07f2b720a14ef50a5e8f",
+      "role": "historical_argument_before_approval"
+    },
+    {
+      "path": "docs/history/g05-g06-joint-argument-v0.1.md",
+      "bytes": 34560,
+      "sha256": "96c087394b72c0dbe1d01a93717f76fb94451bb12aacc7ed59759aabc5639e32",
+      "role": "historical_argument_before_approval"
+    },
+    {
+      "path": "docs/reference/codex-plan-usage-evidence-2026-10-02.md",
+      "bytes": 3256,
+      "sha256": "1903a1ddda03576ae89bc67a72aaeafee33d941adfceddff5b6a11fd11c08eb8",
+      "role": "official_web_read_summary_not_full_snapshot"
+    },
+    {
+      "path": "docs/reference/opensource/reference-registry.json",
+      "bytes": 32008,
+      "sha256": "329af239a947317ea275f0493ca9a521e015b657314693485c37c7d32ecfc769",
+      "role": "inherited_reference_registry"
+    },
+    {
+      "path": "docs/reference/opensource/reference-intake-cases.source.json",
+      "bytes": 4406,
+      "sha256": "96a7cf58571a77266207dbeaea69e515bb255228537c1142d429ef492bc01468",
+      "role": "inherited_reference_test_records"
+    },
+    {
+      "path": "docs/history/open-source-reference-v0.1/MIRA_开源实现借鉴书_v0.1.md",
+      "bytes": 75122,
+      "sha256": "fc760d82568efb2f001e8971b7a6b1e6f1e4e4fd6ad26160f3d45fc716a6c97c",
+      "role": "inherited_reference_book"
+    },
+    {
+      "path": "docs/history/edition-v0.5/MIRA_架构全书_v0.5.md",
+      "bytes": 218946,
+      "sha256": "52758c482aa8d277535a8b4457ad52e4362269ab3928b8188cf0bb5e1a6a0610",
+      "role": "previous_architecture_book"
+    }
+  ],
+  "github": {
+    "repository": "Robinfxa/ValueHermes",
+    "ref": "f141ccf842ffed23d33dba73e4da99b5703ccff8",
+    "reading_scope": "selected architecture paragraphs; not whole-repository/source-code audit",
+    "read_in_this_edition": false
+  },
+  "confirmed_decisions": {
+    "foundation": "voice v0.2 explicitly requested",
+    "G01": "B",
+    "G01.1": "3",
+    "G02": "A",
+    "G03": "single primary generation; incremental review and release over complete semantically sufficient scopes; multi-beat scopes and whole-turn wait allowed; A retained under same contract as conservative mode and evaluation control; C not in default chain",
+    "G04": "stop future semantic performance; retain established still-authorized scene results; explicit hide/mute/boundaries override; pre-reviewed non-semantic settlement; causal restart for valid new interaction; invalidated branches never revive; conditional resume only for valid branches; semantic resume stays off by default",
+    "G05": "accepted capability-separated text and visual decisions; JEV first text integration gated on Chinese tests; LLM and image workloads prefer Codex/ChatGPT included usage; API interfaces retained; exact carrier and account gates remain",
+    "G06": "controlled async image visualization, direct actual-image review and fresh display permission; no unreviewed previews or story authority; online video not default; Codex image usage preferred, API retained, runtime capability unverified"
+  },
+  "pending_decisions": [],
+  "product_tests_run": false,
+  "provider_calls_run": false,
+  "github_written": false,
+  "last_decision": {
+    "id": "D7",
+    "user_text": "我同意，但是我倾向于用codex的usage来做llm和生图功能，免费高效（当然也要预留api接口",
+    "approved_scope": "G05/G06 joint direction with Codex usage preference for LLM/images and API interface reservation",
+    "scope_note": "Runtime carrier selection and newly researched OAuth route are implementation proposals; preference is not proof of free unlimited or faster execution.",
+    "not_approved": "credentials access; paid inference, reset purchase or automatic paid fallback; exact provider model/wire; public account proxy; GitHub write; all implementation options"
+  },
+  "previous_edition": {
+    "edition": "v0.5",
+    "archive_name": "MIRA_架构书_v0.5_完整包.zip",
+    "archive_sha256": "88004b1f97b2dc02509eb0b0ca3931c8f6aa2234a8eec8ae0760961ed12c48ff",
+    "unchanged": true
+  },
+  "acceptance_original_fields_sha256": "03687f438c072e87ef9ef1dcb175de9a47a382d7719d6aa1e53db34669b3febf",
+  "acceptance_catalog": {
+    "previous_records_preserved": 146,
+    "added_reference_intake_records": 18,
+    "total_source_records": 164,
+    "distinct_sample_claim": false,
+    "execution_status": "not_run"
+  },
+  "acceptance_inherited_80_sha256": "5f2bd01f9f098c1f104cee5788d92a8b98b87580a1900429be0b82ea7aaf268f",
+  "pending_implementation_gates": [
+    "S01 carrier and IC-01 boundary acceptance",
+    "S02 one voice infrastructure and actual voice",
+    "S03 original character assets and package licenses",
+    "S04 language/actor/memory integration",
+    "S05 exact wire, semantic scopes, causal restart, actual media/Chinese/device tests"
+  ],
+  "public_docs_read_in_this_edition": [],
+  "acceptance_inherited_104_sha256": "54959e7c23733edb689b88d8d6913a7fb37a8382efd35afe1480275ddd9f37b3",
+  "external_sources_refetched_in_this_edition": false,
+  "last_document_instruction": {
+    "user_text": "把你的架构书和这个借鉴整合一下",
+    "scope": "document_integration_only",
+    "new_architecture_decisions": false,
+    "specific_stack_adoption": false
+  },
+  "acceptance_inherited_146_sha256": "e5eb174be0821d628b946abb6a8cea6d2d552630ae10d64f28ee9e26ed25bfc5",
+  "upstream_tests_run": false,
+  "credentials_read": false,
+  "opensource_registry": {
+    "projects": 16,
+    "pinned_key_source_projects": 10,
+    "sources": 41,
+    "review_date_inherited": "2026-10-02",
+    "registry_path": "docs/reference/opensource/reference-registry.json",
+    "not_install_lockfile": true
+  }
+}

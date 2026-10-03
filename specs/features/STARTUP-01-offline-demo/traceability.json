@@ -1,0 +1,10 @@
+{
+  "feature": "STARTUP-01",
+  "spec": "specs/features/STARTUP-01-offline-demo/spec.md",
+  "requirements": [
+    {"id": "STARTUP01-001", "tests": ["tests/unit/test_dev_startup.py::test_incomplete_project_python_does_not_hide_ready_current_python", "tests/unit/test_dev_startup.py::test_explicit_python_is_used_and_not_guessed", "tests/unit/test_dev_startup.py::test_invalid_explicit_python_is_an_error_not_a_fallback", "tests/unit/test_dev_startup.py::test_python_probe_has_timeout_and_redacts_child_failure"]},
+    {"id": "STARTUP01-002", "tests": ["tests/unit/test_dev_startup.py::test_missing_dependencies_fail_without_any_install", "tests/unit/test_dev_startup.py::test_shell_launcher_works_without_executable_file_mode"]},
+    {"id": "STARTUP01-003", "tests": ["tests/unit/test_dev_startup.py::test_demo_settings_ignore_dotenv_process_credentials_and_live_configuration", "tests/unit/test_dev_startup.py::test_demo_rejects_live_profile_and_invalid_ports"]},
+    {"id": "STARTUP01-004", "tests": ["tests/unit/test_package_distribution.py::test_declared_install_data_contains_config_and_built_workbench", "tests/unit/test_package_distribution.py::test_wheel_build_fails_loudly_when_javascript_was_not_built", "tests/unit/test_package_distribution.py::test_installed_manifest_detects_omitted_or_corrupted_assets", "tests/unit/test_package_distribution.py::test_offline_builder_respects_declared_exact_build_requirements"]}
+  ]
+}

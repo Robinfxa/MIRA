@@ -1,0 +1,17 @@
+{
+  "name": "mira-foundation",
+  "version": "0.4.1",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "tsc -p apps/web/tsconfig.json",
+    "typecheck": "tsc -p apps/web/tsconfig.json --noEmit",
+    "test": "npm run build && node --test tests/web/*.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3"
+  }
+}

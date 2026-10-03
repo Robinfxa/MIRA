@@ -1,0 +1,19 @@
+{
+  "feature": "HTTP-01",
+  "spec": "specs/features/HTTP-01-portable-openapi/spec.md",
+  "requirements": [
+    {
+      "id": "HTTP01-001",
+      "tests": [
+        "tests/contracts/test_portable_openapi.py::test_canonical_contract_check_ignores_platform_422_phrase"
+      ]
+    },
+    {
+      "id": "HTTP01-002",
+      "tests": [
+        "tests/contracts/test_portable_openapi.py::test_router_errors_have_stable_descriptions_and_error_response_schema",
+        "tests/contracts/test_portable_openapi.py::test_validation_response_still_matches_public_error_contract"
+      ]
+    }
+  ]
+}

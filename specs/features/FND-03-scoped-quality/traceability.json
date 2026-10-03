@@ -1,0 +1,74 @@
+{
+  "feature": "FND-03",
+  "spec": "specs/features/FND-03-scoped-quality/spec.md",
+  "requirements": [
+    {
+      "id": "FND03-001",
+      "tests": [
+        "tests/unit/test_quality_plan.py::test_replay_change_selects_consumers_not_frontend_or_full_collection",
+        "tests/unit/test_quality_plan.py::test_frontend_change_selects_web_and_small_architecture_guard",
+        "tests/unit/test_quality_plan.py::test_feature_spec_change_selects_actual_mapped_behavior_lanes"
+      ]
+    },
+    {
+      "id": "FND03-002",
+      "tests": [
+        "tests/unit/test_quality_plan.py::test_shared_contract_or_fixture_expands_to_all_offline_lanes",
+        "tests/unit/test_quality_plan.py::test_unknown_path_falls_back_loudly_instead_of_guessing_no_impact"
+      ]
+    },
+    {
+      "id": "FND03-003",
+      "tests": [
+        "tests/unit/test_quality_plan.py::test_diff_includes_staged_unstaged_untracked_deleted_and_both_rename_paths",
+        "tests/unit/test_quality_plan.py::test_base_diff_includes_committed_and_current_work",
+        "tests/unit/test_quality_plan.py::test_bad_base_and_missing_repository_are_errors_not_clean_pass"
+      ]
+    },
+    {
+      "id": "FND03-004",
+      "tests": [
+        "tests/unit/test_quality_plan.py::test_every_test_file_has_exactly_one_owner",
+        "tests/unit/test_quality_plan.py::test_new_unassigned_test_is_a_selection_error",
+        "tests/unit/test_quality_plan.py::test_overlapping_owners_fail_instead_of_double_counting",
+        "tests/unit/test_quality_plan.py::test_misspelled_lane_manifest_field_fails",
+        "tests/unit/test_quality_plan.py::test_pytest_suffix_named_files_cannot_escape_inventory"
+      ]
+    },
+    {
+      "id": "FND03-005",
+      "tests": [
+        "tests/unit/test_quality_execution.py::test_two_lanes_really_overlap_and_get_isolated_temp_and_logs",
+        "tests/unit/test_quality_execution.py::test_serial_lane_runs_after_parallel_group",
+        "tests/unit/test_quality_execution.py::test_invalid_parallel_budget_rejected"
+      ]
+    },
+    {
+      "id": "FND03-006",
+      "tests": [
+        "tests/unit/test_quality_execution.py::test_failed_lane_is_reported_but_other_lane_results_are_not_lost",
+        "tests/unit/test_quality_execution.py::test_timeout_is_not_a_skip_or_pass",
+        "tests/unit/test_quality_execution.py::test_pytest_no_tests_exit_is_not_success",
+        "tests/unit/test_quality_execution.py::test_missing_binary_produces_failed_receipt",
+        "tests/unit/test_quality_execution.py::test_empty_plan_reports_no_checks_not_suite_passed"
+      ]
+    },
+    {
+      "id": "FND03-007",
+      "tests": [
+        "tests/unit/test_quality_execution.py::test_code_modified_during_execution_cannot_be_reported_green",
+        "tests/unit/test_quality_execution.py::test_browser_and_package_inputs_modified_during_execution_are_not_green",
+        "tests/unit/test_quality_execution.py::test_evidence_recorder_uses_complete_quality_source_boundary",
+        "tests/unit/test_quality_execution.py::test_existing_run_directory_is_never_overwritten"
+      ]
+    },
+    {
+      "id": "FND03-008",
+      "tests": [
+        "tests/unit/test_quality_plan.py::test_full_excludes_external_smoke_and_package_but_release_includes_them",
+        "tests/unit/test_quality_specs.py::test_spec_collection_uses_only_mapped_modules_once",
+        "tests/unit/test_quality_specs.py::test_empty_mapping_cannot_fall_back_to_collect_everything"
+      ]
+    }
+  ]
+}

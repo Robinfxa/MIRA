@@ -1,0 +1,31 @@
+{
+  "feature": "DEMO-02",
+  "spec": "specs/features/DEMO-02-offline-speech-assets/spec.md",
+  "requirements": [
+    {
+      "id": "DEMO02-001",
+      "tests": [
+        "tests/contracts/test_rehearsal_audio_assets.py::test_assets_are_finite_bounded_and_disclosed_as_synthetic_english"
+      ]
+    },
+    {
+      "id": "DEMO02-002",
+      "tests": [
+        "tests/contracts/test_rehearsal_audio_assets.py::test_each_clip_has_exact_pcm_wav_caption_and_signal_integrity"
+      ]
+    },
+    {
+      "id": "DEMO02-003",
+      "tests": [
+        "tests/contracts/test_rehearsal_audio_assets.py::test_provenance_records_original_script_installed_tool_and_voice_hashes",
+        "tests/contracts/test_rehearsal_audio_assets.py::test_shipped_assets_verify_without_using_ffmpeg_or_provider_environment"
+      ]
+    },
+    {
+      "id": "DEMO02-004",
+      "tests": [
+        "tests/contracts/test_rehearsal_audio_assets.py::test_offline_verifier_rejects_modified_assets_and_claims"
+      ]
+    }
+  ]
+}

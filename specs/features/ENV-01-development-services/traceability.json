@@ -1,0 +1,89 @@
+{
+  "feature": "ENV-01",
+  "spec": "specs/features/ENV-01-development-services/spec.md",
+  "requirements": [
+    {
+      "id": "ENV01-001",
+      "tests": [
+        "tests/unit/test_service_configuration.py::test_services_are_available_but_disabled_by_default",
+        "tests/unit/test_service_configuration.py::test_preparation_never_enables_live_factory"
+      ]
+    },
+    {
+      "id": "ENV01-002",
+      "tests": [
+        "tests/unit/test_service_configuration.py::test_standard_aliases_are_resolved_in_the_existing_loader",
+        "tests/unit/test_service_configuration.py::test_alias_and_canonical_conflict_is_not_silently_resolved",
+        "tests/unit/test_service_configuration.py::test_environment_layer_beats_file_alias",
+        "tests/unit/test_service_configuration.py::test_legacy_generic_key_is_not_reused_for_other_services"
+      ]
+    },
+    {
+      "id": "ENV01-003",
+      "tests": [
+        "tests/unit/test_service_configuration.py::test_separate_secrets_are_never_serialized_or_in_repr",
+        "tests/unit/test_service_configuration.py::test_toml_cannot_hold_nested_service_credentials",
+        "tests/unit/test_service_configuration.py::test_invalid_service_inputs_are_redacted"
+      ]
+    },
+    {
+      "id": "ENV01-004",
+      "tests": [
+        "tests/unit/test_service_configuration.py::test_valid_gateway_urls",
+        "tests/unit/test_service_configuration.py::test_gateway_accepts_only_explicit_numeric_loopback_and_v1"
+      ]
+    },
+    {
+      "id": "ENV01-005",
+      "tests": [
+        "tests/unit/test_service_configuration.py::test_speech_uses_separate_locale_and_region_fields"
+      ]
+    },
+    {
+      "id": "ENV01-006",
+      "tests": [
+        "tests/unit/test_api_environment.py::test_offline_inspection_does_not_call_network_or_claim_live",
+        "tests/unit/test_api_environment.py::test_fields_and_credential_presence_are_not_authentication",
+        "tests/unit/test_api_environment.py::test_native_credentials_are_managed_not_read_or_guessed"
+      ]
+    },
+    {
+      "id": "ENV01-007",
+      "tests": [
+        "tests/unit/test_api_environment.py::test_probe_admission_rejects_before_any_network",
+        "tests/unit/test_api_environment.py::test_metadata_has_no_environment_proxy_or_redirect_following"
+      ]
+    },
+    {
+      "id": "ENV01-008",
+      "tests": [
+        "tests/unit/test_api_environment.py::test_metadata_selects_correct_endpoint_and_credential_without_inference",
+        "tests/unit/test_api_environment.py::test_errors_are_redacted_and_never_retried",
+        "tests/unit/test_api_environment.py::test_result_contract_and_size_are_checked",
+        "tests/unit/test_api_environment.py::test_timeout_has_no_raw_exception_or_fallback",
+        "tests/unit/test_api_environment.py::test_encoded_metadata_is_rejected_without_decompression"
+      ]
+    },
+    {
+      "id": "ENV01-009",
+      "tests": [
+        "tests/unit/test_api_environment.py::test_initializer_is_private_and_does_not_replace_existing_files",
+        "tests/unit/test_api_environment.py::test_initializer_rejects_symlink"
+      ]
+    },
+    {
+      "id": "ENV01-010",
+      "tests": [
+        "tests/unit/test_service_configuration.py::test_development_template_is_valid_and_keeps_runtime_mock",
+        "tests/unit/test_api_environment.py::test_offline_lanes_strip_standard_service_credentials"
+      ]
+    },
+    {
+      "id": "ENV01-011",
+      "tests": [
+        "tests/unit/test_configuration.py::test_live_provider_factory_rejection_is_truthful_and_actionable",
+        "tests/unit/test_service_configuration.py::test_preparation_never_enables_live_factory"
+      ]
+    }
+  ]
+}

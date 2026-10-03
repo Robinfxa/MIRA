@@ -1,0 +1,44 @@
+{
+  "edition": "v0.6",
+  "date": "2026-10-03",
+  "user_instruction": "把你的架构书和这个借鉴整合一下",
+  "basis": [
+    "MIRA 架构全书 v0.5",
+    "MIRA 开源实现借鉴书 v0.1"
+  ],
+  "scope": "Document integration; no new G decisions or stack adoption.",
+  "modules": 10,
+  "formal_adrs": 8,
+  "formal_adrs_byte_unchanged": true,
+  "reading_parts": 28,
+  "opensource_projects": 16,
+  "projects_with_pinned_key_source_record": 10,
+  "inherited_external_source_records": 41,
+  "existing_acceptance_records_unchanged": 146,
+  "reference_intake_records_added": 18,
+  "total_acceptance_records": 164,
+  "all_acceptance_execution_status": "not_run",
+  "independent_sample_count_claim": false,
+  "document_check_passed": true,
+  "document_check_count": 128,
+  "offline_browser_layout_check_passed": true,
+  "external_research_performed": false,
+  "credentials_read": false,
+  "provider_calls_executed": false,
+  "upstream_tests_executed": false,
+  "product_tests_executed": false,
+  "github_written": false,
+  "unresolved_source_boundary": "IC-01: original direct/private-backend restriction vs community carrier recommendation; retained explicitly, not silently waived.",
+  "exports": [
+    {
+      "path": "MIRA_架构全书_v0.6.md",
+      "bytes": 324042,
+      "sha256": "f107f7231fb1546f8e302bbdddfa3f9f9f7bdaeb32f9ee8bf04c745ca62e53e3"
+    },
+    {
+      "path": "MIRA_架构全书_v0.6.html",
+      "bytes": 389000,
+      "sha256": "da07358ef05a9578538ce9b062f1e899c7b51e0ca2536c83b48ea13c8ff99dd8"
+    }
+  ]
+}

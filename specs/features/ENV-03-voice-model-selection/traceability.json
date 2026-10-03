@@ -1,0 +1,25 @@
+{
+  "feature": "ENV-03",
+  "spec": "specs/features/ENV-03-voice-model-selection/spec.md",
+  "requirements": [
+    {
+      "id": "ENV03-001",
+      "tests": [
+        "tests/unit/test_provider_matrix.py::test_gemini_38_tts_has_exact_current_endpoint_model_and_global_location",
+        "tests/unit/test_provider_matrix.py::test_exact_tts_target_cannot_silently_use_a_legacy_endpoint_or_model"
+      ]
+    },
+    {
+      "id": "ENV03-002",
+      "tests": [
+        "tests/unit/test_provider_matrix.py::test_tts_model_location_and_style_use_existing_loader_entry"
+      ]
+    },
+    {
+      "id": "ENV03-003",
+      "tests": [
+        "tests/unit/test_provider_matrix.py::test_voice_preparation_does_not_require_separate_quota_project_or_claim_access"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "feature": "WP01-CX",
+  "spec": "specs/features/WP01-codex-generation/spec.md",
+  "requirements": [
+    {
+      "id": "WP01CX-001",
+      "tests": [
+        "tests/contracts/test_codex_generation.py::test_default_off_never_starts_transport",
+        "tests/contracts/test_codex_generation.py::test_zero_budget_never_starts_transport",
+        "tests/contracts/test_codex_generation.py::test_budget_reserved_before_concurrent_requests_and_no_retry"
+      ]
+    },
+    {
+      "id": "WP01CX-002",
+      "tests": [
+        "tests/contracts/test_codex_generation.py::test_config_drift_blocks_before_model_turn",
+        "tests/contracts/test_codex_generation.py::test_thread_drift_blocks_before_model_turn",
+        "tests/contracts/test_codex_generation.py::test_api_key_account_is_never_a_subscription_success",
+        "tests/contracts/test_codex_generation_hardening.py::test_full_config_pin_rejects_even_unrelated_drift",
+        "tests/contracts/test_codex_generation_process.py::test_fixed_process_profile_has_all_disabled_categories_and_no_shell_command",
+        "tests/contracts/test_codex_generation_hardening.py::test_native_chatgpt_backend_default_is_allowed",
+        "tests/contracts/test_codex_generation_hardening.py::test_premium_thread_service_tier_cannot_silently_survive",
+        "tests/contracts/test_codex_generation_process.py::test_real_factory_requires_policy_environment_confirmation"
+      ]
+    },
+    {
+      "id": "WP01CX-003",
+      "tests": [
+        "tests/contracts/test_codex_generation_hardening.py::test_context_rebuild_preserves_accepted_presented_and_audio_distinctions",
+        "tests/contracts/test_codex_generation_hardening.py::test_prompt_bound_blocks_before_process_and_does_not_truncate_facts"
+      ]
+    },
+    {
+      "id": "WP01CX-004",
+      "tests": [
+        "tests/contracts/test_codex_generation.py::test_complete_output_has_distinct_effects_and_local_origin",
+        "tests/contracts/test_codex_generation.py::test_malformed_or_unsupported_effects_never_yield",
+        "tests/contracts/test_codex_generation.py::test_noncompleted_terminal_never_yields",
+        "tests/contracts/test_codex_generation.py::test_async_delivery_is_candidate_never_external_message",
+        "tests/contracts/test_codex_generation.py::test_delta_without_completed_item_never_becomes_candidate"
+      ]
+    },
+    {
+      "id": "WP01CX-005",
+      "tests": [
+        "tests/contracts/test_codex_generation.py::test_requests_tools_unknown_events_and_reroutes_fail_closed",
+        "tests/contracts/test_codex_generation.py::test_reasoning_and_plan_are_ignored_without_retaining_them",
+        "tests/contracts/test_codex_generation_hardening.py::test_adversarial_protocol_never_yields",
+        "tests/contracts/test_codex_generation_hardening.py::test_known_plan_and_clock_output_is_ignored_and_never_transmitted"
+      ]
+    },
+    {
+      "id": "WP01CX-006",
+      "tests": [
+        "tests/contracts/test_codex_generation.py::test_total_turn_deadline_interrupts_and_closes",
+        "tests/contracts/test_codex_generation_process.py::test_adjacent_lines_are_queued_without_another_os_readiness_event",
+        "tests/contracts/test_codex_generation_process.py::test_queue_flood_fails_bounded_and_child_is_reaped",
+        "tests/contracts/test_codex_generation_process.py::test_sigterm_ignoring_child_is_killed_and_reaped",
+        "tests/contracts/test_codex_generation_process.py::test_cancellation_during_spawn_reaps_created_child",
+        "tests/contracts/test_codex_generation_hardening.py::test_synthetic_actual_process_runs_full_adapter_path",
+        "tests/contracts/test_codex_generation_process.py::test_cancellation_during_close_still_kills_and_reaps_child"
+      ]
+    },
+    {
+      "id": "WP01CX-007",
+      "tests": [
+        "tests/contracts/test_codex_generation_process.py::test_real_factory_requires_config_pin_before_spawn_or_auth_read",
+        "tests/contracts/test_codex_generation_hardening.py::test_request_ids_are_monotonic_and_candidate_is_not_a_fixture",
+        "tests/contracts/test_codex_generation_process.py::test_runtime_never_accepts_credential_override_or_relative_paths"
+      ]
+    }
+  ]
+}

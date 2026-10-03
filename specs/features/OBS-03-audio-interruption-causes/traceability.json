@@ -1,0 +1,26 @@
+{
+  "feature": "OBS-03",
+  "spec": "specs/features/OBS-03-audio-interruption-causes/spec.md",
+  "requirements": [
+    {
+      "id": "OBS03-001",
+      "tests": [
+        "tests/contracts/test_audio_interruption_diagnostics.py::test_interruption_distinguishes_unknown_playback_from_revoked_work"
+      ]
+    },
+    {
+      "id": "OBS03-002",
+      "tests": [
+        "tests/contracts/test_audio_interruption_diagnostics.py::test_known_cause_survives_late_interruption_without_cancelling_new_branch",
+        "tests/contracts/test_audio_interruption_diagnostics.py::test_later_stop_does_not_relabel_prior_unexplained_interruption",
+        "tests/contracts/test_audio_interruption_diagnostics.py::test_late_interruption_during_stop_teardown_keeps_known_cause"
+      ]
+    },
+    {
+      "id": "OBS03-003",
+      "tests": [
+        "tests/contracts/test_audio_interruption_diagnostics.py::test_playback_failure_keeps_failure_class_and_permit_revocation"
+      ]
+    }
+  ]
+}

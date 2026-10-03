@@ -1,0 +1,382 @@
+{
+  "integration_date": "2026-10-03",
+  "instruction": "把你的架构书和这个借鉴整合一下",
+  "edition": "v0.6",
+  "archival_files": [
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "MIRA_开源实现借鉴书_v0.1.html",
+      "archived_path": "docs/history/open-source-reference-v0.1/MIRA_开源实现借鉴书_v0.1.html",
+      "bytes": 99470,
+      "sha256": "43331556f90146f008ed42c48b15df4d081c6a5d0ebb5c053270eaa09135c4d0"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "MIRA_开源实现借鉴书_v0.1.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/MIRA_开源实现借鉴书_v0.1.md",
+      "bytes": 75122,
+      "sha256": "fc760d82568efb2f001e8971b7a6b1e6f1e4e4fd6ad26160f3d45fc716a6c97c"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "README.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/README.md",
+      "bytes": 927,
+      "sha256": "0aff2d47852edde610fe4399a78c0274bc0260741e5424f33a84bc2d2ee115b0"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "baseline/MIRA_架构全书_v0.5.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/baseline/MIRA_架构全书_v0.5.md",
+      "bytes": 218946,
+      "sha256": "52758c482aa8d277535a8b4457ad52e4362269ab3928b8188cf0bb5e1a6a0610"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "baseline-manifest.json",
+      "archived_path": "docs/history/open-source-reference-v0.1/baseline-manifest.json",
+      "bytes": 448,
+      "sha256": "bafc7e9bd3f4f6f6af22370b87550a2bd441f9cf618e36a53e5e32a50f043605"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "checks/build-summary.txt",
+      "archived_path": "docs/history/open-source-reference-v0.1/checks/build-summary.txt",
+      "bytes": 691,
+      "sha256": "03ef930879f3dca61c15cdf096cc0c9792306d052892f41f7ba432fa881ee406"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "checks/document-check.json",
+      "archived_path": "docs/history/open-source-reference-v0.1/checks/document-check.json",
+      "bytes": 691,
+      "sha256": "03ef930879f3dca61c15cdf096cc0c9792306d052892f41f7ba432fa881ee406"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "checks/layout-check.json",
+      "archived_path": "docs/history/open-source-reference-v0.1/checks/layout-check.json",
+      "bytes": 410,
+      "sha256": "d9f4755bdd35dbc224f3647130dd32ea23a17cc73282de6c24454d7f5bed9960"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/00-overview.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/00-overview.md",
+      "bytes": 4754,
+      "sha256": "785d4ea6fbb9557b8b57e4404ce4abe2b253b797cc0d6873484728ba0e13dc3d"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/01-requirements-map.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/01-requirements-map.md",
+      "bytes": 4381,
+      "sha256": "832fe9ae8ee7637e5836e8fe45fa8c64e82cceca0bdde63f7e9f317d6c374b75"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/02-codex.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/02-codex.md",
+      "bytes": 9885,
+      "sha256": "25f2db67db045d63c193770ebf7730c44e75b07b2f0bda5bb3db2569427b96e8"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/03-realtime.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/03-realtime.md",
+      "bytes": 5314,
+      "sha256": "34aeea97a19143d3d544b1cf33e8e886fa8752ab23ec69d7a8363702ff534ee6"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/04-character.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/04-character.md",
+      "bytes": 4154,
+      "sha256": "8c7e4e1b1dde01f9962fed6a28fcea0c9a9ba8248d7da58ddd619b194805dfbd"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/05-memory-and-state.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/05-memory-and-state.md",
+      "bytes": 4592,
+      "sha256": "e69e84e57de50983f7bc474c012de1a8c23eaa525788ae7e6026bdec3ce6a01e"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/06-evaluation.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/06-evaluation.md",
+      "bytes": 3409,
+      "sha256": "465022e98843a6be7d211b6cc94770f2fa2d335786b9f06ac98a8e4482883d0d"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/07-dont-copy-defaults.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/07-dont-copy-defaults.md",
+      "bytes": 4639,
+      "sha256": "e2c8ed98af63ea373eebcde5b0027e00915dd47fb4554c068266a983ff1cbbde"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/08-integration-stack.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/08-integration-stack.md",
+      "bytes": 3439,
+      "sha256": "d6307a8f2103821c4d7cc39c108dbc162cec98da3e09b8e96fc9e2fbfc39b552"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/09-work-packages.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/09-work-packages.md",
+      "bytes": 3298,
+      "sha256": "aeed0bd98ab36ede1bd2735d1defc04bb20a29a64f8704d1e8fca1c7881a00de"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/10-intake-tests.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/10-intake-tests.md",
+      "bytes": 2668,
+      "sha256": "72ca24f0c0d6b687c7f0773a229969fc741a87d09014d12983536053c7749d77"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/11-licenses-and-status.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/11-licenses-and-status.md",
+      "bytes": 3898,
+      "sha256": "3985b0a60bcbcebac64cbc5d5132d9ec9154b00d7c1bce76030ba289916b90a0"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/a1-registry.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/a1-registry.md",
+      "bytes": 3045,
+      "sha256": "22e26898ab0f7e67c4f6a56c7a5d9cc39ad43b95ff4a5ae1724310d0197ef615"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/a2-sources.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/a2-sources.md",
+      "bytes": 14392,
+      "sha256": "a406f3c91a531164ff4e83b82a5a3c3ce01769f21b66183804739a8957216a4a"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "docs/research/reference/a3-implementation-prompt.md",
+      "archived_path": "docs/history/open-source-reference-v0.1/docs/research/reference/a3-implementation-prompt.md",
+      "bytes": 1249,
+      "sha256": "4f8c243a81822653de6d598f7a4bade0a6ee8bf6bada631ae35cdda03a098b04"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "document-previews/codex_desktop.png",
+      "archived_path": "docs/history/open-source-reference-v0.1/document-previews/codex_desktop.png",
+      "bytes": 277119,
+      "sha256": "d65c48dcf355975e42bf36c51a1f8ecc23a45bb9026ef3776022f0746fe37830"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "document-previews/cover_mobile.png",
+      "archived_path": "docs/history/open-source-reference-v0.1/document-previews/cover_mobile.png",
+      "bytes": 135149,
+      "sha256": "ece1a0a26141316e2a1d7282b60e195c58fb31c227ab5449d2785be0e71fc05a"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "document-previews/defaults_mobile.png",
+      "archived_path": "docs/history/open-source-reference-v0.1/document-previews/defaults_mobile.png",
+      "bytes": 75872,
+      "sha256": "9ca23685ef99d91d35da7e61e181efd925692edb46d4e9ca206fa0845ffb8306"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "reference-intake-cases.json",
+      "archived_path": "docs/history/open-source-reference-v0.1/reference-intake-cases.json",
+      "bytes": 4406,
+      "sha256": "96a7cf58571a77266207dbeaea69e515bb255228537c1142d429ef492bc01468"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "reference-registry.json",
+      "archived_path": "docs/history/open-source-reference-v0.1/reference-registry.json",
+      "bytes": 32008,
+      "sha256": "329af239a947317ea275f0493ca9a521e015b657314693485c37c7d32ecfc769"
+    },
+    {
+      "basis": "OS-REF_v0.1",
+      "original_relative_path": "tools/build_reference.py",
+      "archived_path": "docs/history/open-source-reference-v0.1/tools/build_reference.py",
+      "bytes": 74760,
+      "sha256": "733507e9866edb9185081b3425c7e1cc05e023284cc05b56e215f002fa655262"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "00-master-design-book.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/00-master-design-book.md",
+      "bytes": 24089,
+      "sha256": "b709b894af0bed99fdd609096933daccc2694e804bfe8a898e447cd203979a07"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "CHANGELOG.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/CHANGELOG.md",
+      "bytes": 6332,
+      "sha256": "9aa0617cc1ce6ec9f013b8911a8265ae4bc960a028217ed82eb6374f9548f894"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "adr/0001-voice-v02-foundation.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/adr/0001-voice-v02-foundation.md",
+      "bytes": 1584,
+      "sha256": "6807a889c5f3f060abda19a99f5214e0d814a6ca5d58e193435d0f774268d321"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "adr/0002-communication-act-first.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/adr/0002-communication-act-first.md",
+      "bytes": 1534,
+      "sha256": "7916b9242ffb90c20d32a4f2c27c608c618377138e89127ddf47e5dab0ddb799"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "adr/0003-constrained-choice-and-review.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/adr/0003-constrained-choice-and-review.md",
+      "bytes": 1709,
+      "sha256": "4d88f4808e25d9c3c8f706759747cac7f53751afb73a279576ecf769e748484d"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "adr/0004-unified-presentation-permit-snapshot.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/adr/0004-unified-presentation-permit-snapshot.md",
+      "bytes": 4007,
+      "sha256": "d21278f5b19b8b90f2d249a113ba12727d19c9f4e58510b8f1aceda39a8d77e1"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "adr/0005-semantic-scope-incremental-generation.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/adr/0005-semantic-scope-incremental-generation.md",
+      "bytes": 4171,
+      "sha256": "494a944320873ae1485c04d24c2b7358986a03a37ba1ca1f5c7bf0fe9f473c19"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "adr/0006-interruption-retention-and-restart.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/adr/0006-interruption-retention-and-restart.md",
+      "bytes": 4817,
+      "sha256": "d3e6806658009e8dfe123d12dbf8ac7de4c399592298cd8140f4de2e3d73ce46"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "adr/0007-decision-backends-and-codex-preference.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/adr/0007-decision-backends-and-codex-preference.md",
+      "bytes": 2079,
+      "sha256": "b3742500987096419fea2d38f35afa1041db0d33aff8b50de19adf23793dc58c"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "adr/0008-controlled-images-codex-first.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/adr/0008-controlled-images-codex-first.md",
+      "bytes": 2029,
+      "sha256": "a38e1892f8d7a993ad175659235308369e98d6e5dd4b20bbcafbc6400947e6af"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "appendices/A1-decision-register.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/appendices/A1-decision-register.md",
+      "bytes": 8825,
+      "sha256": "40a65b4b49b647834ee6ac29068c5c9e6e2bc9660c6bd16f1187f3fdc1aa033c"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "appendices/A2-requirements-and-tests.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/appendices/A2-requirements-and-tests.md",
+      "bytes": 21127,
+      "sha256": "5ac1dee0acb151574e3c770870b8f31bca14d60dd0327e6fb681974f65275899"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "appendices/A3-contract-and-change-index.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/appendices/A3-contract-and-change-index.md",
+      "bytes": 8477,
+      "sha256": "f7bb2ffa86bf703db6fa8f2e134ffb398bac28f680281c3dfefded308dac35b0"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "appendices/acceptance-catalog.json",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/appendices/acceptance-catalog.json",
+      "bytes": 52969,
+      "sha256": "46f74724e4a4a2760d841915beb165468dee6565690058d63b89d1c720b4d0b2"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/01-state-and-authority.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/01-state-and-authority.md",
+      "bytes": 9009,
+      "sha256": "b31e442534ad9a43cac5b15ba59eb8ef20ca133c216789ff076a61c066564457"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/02-decisions-and-response-contract.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/02-decisions-and-response-contract.md",
+      "bytes": 13377,
+      "sha256": "55e3bb0b07ca05f89a25d8c3aa567489edff49bb150caee74b4b97d9253719a0"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/03-turn-plan-and-completion.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/03-turn-plan-and-completion.md",
+      "bytes": 14140,
+      "sha256": "6dd39c1f2a0d0a4e0993b16ec72c711667dcc6cc60ae4aff18b6d3e93acd2ca3"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/04-permits-interruption-and-recovery.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/04-permits-interruption-and-recovery.md",
+      "bytes": 17522,
+      "sha256": "4085f681733c36de087914ac1a77965b0de33e02b00dfa5f4ea7ac03f408f90e"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/05-voice-runtime-v02.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/05-voice-runtime-v02.md",
+      "bytes": 11753,
+      "sha256": "c1575890f35d8e27bb61f39676dd648cf668a3cdf62b5fdbf9906678658334bc"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/06-character-memory-and-scene.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/06-character-memory-and-scene.md",
+      "bytes": 11331,
+      "sha256": "f0deec28d5a6ba57c5ad10aaf696d65dbb8925f60ba55920830829e4e96a9289"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/07-routines-and-failure-paths.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/07-routines-and-failure-paths.md",
+      "bytes": 11514,
+      "sha256": "4a53a139b4d34ed44e6b950781422eb05d172caff09bc4b6480565e90fc33d82"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/08-evaluation-delivery-and-implementation.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/08-evaluation-delivery-and-implementation.md",
+      "bytes": 11323,
+      "sha256": "8658dd25c2118bdd6d617fd84d8cb16cd16a67bbcb20a75043ae93ccb671a71e"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "modules/09-provider-auth-usage-and-codex.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/modules/09-provider-auth-usage-and-codex.md",
+      "bytes": 13346,
+      "sha256": "ccc200d0024be58583a81b5b1cb36e3242295918de3a4886f981a2fafb036a99"
+    },
+    {
+      "basis": "ARCH-05_chapters",
+      "original_relative_path": "pending/implementation-and-access-gates.md",
+      "archived_path": "docs/history/edition-v0.5/architecture-source/pending/implementation-and-access-gates.md",
+      "bytes": 2098,
+      "sha256": "d974c55e32959d1dee6b93097c684f36cb17606c950fffb6d8a7846ff8b692fe"
+    }
+  ],
+  "new_research": false,
+  "new_product_decisions": false,
+  "github_written": false,
+  "models_called": false
+}

@@ -1,0 +1,30 @@
+{
+  "feature": "OBS-02",
+  "spec": "specs/features/OBS-02-async-error-locators/spec.md",
+  "requirements": [
+    {
+      "id": "OBS02-001",
+      "tests": [
+        "tests/contracts/test_async_error_locators.py::test_async_http_error_locator_matches_origin_log_not_poll_or_active_request",
+        "tests/contracts/test_async_error_locators.py::test_missing_or_malformed_origins_never_create_fabricated_locator",
+        "tests/contracts/test_async_error_locators.py::test_semantic_input_review_exception_keeps_actual_origin_locator"
+      ]
+    },
+    {
+      "id": "OBS02-002",
+      "tests": [
+        "tests/contracts/test_async_error_locators.py::test_tts_stream_and_snapshot_keep_same_logged_locator",
+        "tests/contracts/test_async_error_locators.py::test_microphone_error_retains_safe_locator_from_actual_logged_context",
+        "tests/contracts/test_async_error_locators.py::test_playback_failure_snapshot_matches_its_logged_receipt_context"
+      ]
+    },
+    {
+      "id": "OBS02-003",
+      "tests": [
+        "tests/contracts/test_async_error_locators.py::test_late_failure_cannot_replace_cleared_or_new_turn_locator",
+        "tests/contracts/test_async_error_locators.py::test_stale_media_failure_never_overwrites_new_generation_locator",
+        "tests/contracts/test_async_error_locators.py::test_public_mapper_discards_malformed_error_metadata"
+      ]
+    }
+  ]
+}

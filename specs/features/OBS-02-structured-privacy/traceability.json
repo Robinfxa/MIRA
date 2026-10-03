@@ -1,0 +1,29 @@
+{
+  "feature": "OBS-02",
+  "spec": "specs/features/OBS-02-structured-privacy/spec.md",
+  "requirements": [
+    {
+      "id": "OBS02-001",
+      "tests": [
+        "tests/contracts/test_diagnostics_structured_privacy.py::test_generation_context_cannot_launder_rejected_credential_envelope",
+        "tests/contracts/test_diagnostics_structured_privacy.py::test_structured_credential_envelopes_and_ambiguous_records_fail_closed",
+        "tests/contracts/test_diagnostics_structured_privacy.py::test_export_revalidates_legacy_approved_structured_records"
+      ]
+    },
+    {
+      "id": "OBS02-002",
+      "tests": [
+        "tests/contracts/test_diagnostics_structured_privacy.py::test_review_has_depth_node_and_byte_budgets",
+        "tests/contracts/test_diagnostics_structured_privacy.py::test_flat_credential_patterns_complete_within_bounded_work"
+      ]
+    },
+    {
+      "id": "OBS02-003",
+      "tests": [
+        "tests/contracts/test_diagnostics_structured_privacy.py::test_json_escaped_injected_secrets_and_assignments_are_redacted",
+        "tests/contracts/test_diagnostics_structured_privacy.py::test_safe_plain_and_logical_json_content_are_preserved",
+        "tests/contracts/test_diagnostics_structured_privacy.py::test_unknown_review_and_unreviewed_audio_stay_ineligible"
+      ]
+    }
+  ]
+}

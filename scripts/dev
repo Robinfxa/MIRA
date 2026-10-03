@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Portable archive invocation: sh scripts/dev [--python /path/to/ready/python]
+set -eu
+cd "$(dirname "$0")/.."
+exec python3 tools/dev.py "$@"

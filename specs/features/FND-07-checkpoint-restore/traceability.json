@@ -1,0 +1,32 @@
+{
+  "feature": "FND-07",
+  "spec": "specs/features/FND-07-checkpoint-restore/spec.md",
+  "requirements": [
+    {
+      "id": "FND07-001",
+      "tests": [
+        "tests/unit/test_quality_restore_checkpoint.py::test_corrupt_integrity_never_creates_final_destination",
+        "tests/unit/test_quality_restore_checkpoint.py::test_traversal_cannot_change_owned_sibling_sentinel",
+        "tests/unit/test_quality_restore_checkpoint.py::test_ambiguous_or_nonportable_member_paths_fail_before_final_output",
+        "tests/unit/test_quality_restore_checkpoint.py::test_windows_device_and_forbidden_names_fail_closed_on_every_host",
+        "tests/unit/test_quality_restore_checkpoint.py::test_actual_directory_count_is_bounded_before_zipfile_allocation",
+        "tests/unit/test_quality_restore_checkpoint.py::test_directory_byte_cap_precedes_zipfile_allocation",
+        "tests/unit/test_quality_restore_checkpoint.py::test_dot_path_is_rejected_during_path_validation",
+        "tests/unit/test_quality_restore_checkpoint.py::test_unsupported_zip_layout_is_rejected_before_output"
+      ]
+    },
+    {
+      "id": "FND07-002",
+      "tests": [
+        "tests/unit/test_quality_restore_checkpoint.py::test_second_member_integrity_failure_leaves_no_partial_final_directory",
+        "tests/unit/test_quality_restore_checkpoint.py::test_existing_destination_is_never_modified"
+      ]
+    },
+    {
+      "id": "FND07-003",
+      "tests": [
+        "tests/unit/test_quality_restore_checkpoint.py::test_valid_restore_preserves_hashes_and_modes"
+      ]
+    }
+  ]
+}

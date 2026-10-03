@@ -1,0 +1,2058 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "MIRA Foundation",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/diagnostics-status": {
+      "get": {
+        "summary": "Diagnostics Status",
+        "operationId": "diagnostics_status_api_v1_diagnostics_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiagnosticsStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions": {
+      "post": {
+        "summary": "Create Session",
+        "operationId": "create_session_api_v1_sessions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSessionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}": {
+      "get": {
+        "summary": "Get Session",
+        "operationId": "get_session_api_v1_sessions__session_id__get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Session",
+        "operationId": "delete_session_api_v1_sessions__session_id__delete",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/inputs": {
+      "post": {
+        "summary": "Submit Input",
+        "operationId": "submit_input_api_v1_sessions__session_id__inputs_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InputRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/stop": {
+      "post": {
+        "summary": "Stop Session",
+        "operationId": "stop_session_api_v1_sessions__session_id__stop_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StopRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/receipts": {
+      "post": {
+        "summary": "Record Receipt",
+        "operationId": "record_receipt_api_v1_sessions__session_id__receipts_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/audio-progress": {
+      "post": {
+        "summary": "Record Audio Progress",
+        "operationId": "record_audio_progress_api_v1_sessions__session_id__audio_progress_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AudioProgressRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/events": {
+      "get": {
+        "summary": "Events",
+        "operationId": "events_api_v1_sessions__session_id__events_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditEventView"
+                  },
+                  "title": "Response Events Api V1 Sessions  Session Id  Events Get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/voice-capabilities": {
+      "get": {
+        "summary": "Voice Capabilities",
+        "operationId": "voice_capabilities_api_v1_voice_capabilities_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoiceCapabilities"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/speech/{effect_id}/stream": {
+      "post": {
+        "summary": "Speech Stream",
+        "operationId": "speech_stream_api_v1_sessions__session_id__speech__effect_id__stream_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "effect_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Effect Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpeechStreamRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/x-ndjson": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SpeechAudioFrame"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SpeechCompleteFrame"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SpeechErrorFrame"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AudioProgressRequest": {
+        "properties": {
+          "effect_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Effect Id"
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Digest"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Output Epoch"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Activity Seq"
+          },
+          "presentation_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Presentation Seq"
+          },
+          "sample_rate_hz": {
+            "type": "integer",
+            "maximum": 48000.0,
+            "minimum": 8000.0,
+            "title": "Sample Rate Hz"
+          },
+          "rendered_samples": {
+            "type": "integer",
+            "maximum": 14400000.0,
+            "minimum": 0.0,
+            "title": "Rendered Samples"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AudioStatus"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "effect_id",
+          "digest",
+          "output_epoch",
+          "activity_seq",
+          "presentation_seq",
+          "sample_rate_hz",
+          "rendered_samples",
+          "status"
+        ],
+        "title": "AudioProgressRequest"
+      },
+      "AudioProgressView": {
+        "properties": {
+          "effect_id": {
+            "type": "string",
+            "title": "Effect Id"
+          },
+          "digest": {
+            "type": "string",
+            "title": "Digest"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "title": "Output Epoch"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "title": "Activity Seq"
+          },
+          "presentation_seq": {
+            "type": "integer",
+            "title": "Presentation Seq"
+          },
+          "sample_rate_hz": {
+            "type": "integer",
+            "title": "Sample Rate Hz"
+          },
+          "rendered_samples": {
+            "type": "integer",
+            "title": "Rendered Samples"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AudioStatus"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "effect_id",
+          "digest",
+          "output_epoch",
+          "activity_seq",
+          "presentation_seq",
+          "sample_rate_hz",
+          "rendered_samples",
+          "status"
+        ],
+        "title": "AudioProgressView"
+      },
+      "AudioStatus": {
+        "type": "string",
+        "enum": [
+          "rendered",
+          "completed",
+          "interrupted",
+          "failed"
+        ],
+        "title": "AudioStatus"
+      },
+      "AuditEventView": {
+        "properties": {
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "state_revision": {
+            "type": "integer",
+            "title": "State Revision"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "title": "Output Epoch"
+          },
+          "occurred_at": {
+            "type": "string",
+            "title": "Occurred At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "sequence",
+          "kind",
+          "state_revision",
+          "output_epoch",
+          "occurred_at"
+        ],
+        "title": "AuditEventView"
+      },
+      "CreateSessionRequest": {
+        "properties": {
+          "client_instance_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Client Instance Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "client_instance_id"
+        ],
+        "title": "CreateSessionRequest"
+      },
+      "CreateSessionResponse": {
+        "properties": {
+          "session": {
+            "$ref": "#/components/schemas/SessionView"
+          },
+          "session_token": {
+            "type": "string",
+            "title": "Session Token"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "session",
+          "session_token"
+        ],
+        "title": "CreateSessionResponse"
+      },
+      "DiagnosticsStatusResponse": {
+        "properties": {
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          },
+          "recording_active": {
+            "type": "boolean",
+            "title": "Recording Active"
+          },
+          "notice": {
+            "type": "string",
+            "title": "Notice"
+          },
+          "dropped_events": {
+            "type": "integer",
+            "title": "Dropped Events"
+          },
+          "dropped_recordings": {
+            "type": "integer",
+            "title": "Dropped Recordings"
+          },
+          "io_failures": {
+            "type": "integer",
+            "title": "Io Failures"
+          },
+          "pending_records": {
+            "type": "integer",
+            "title": "Pending Records"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "available",
+          "recording_active",
+          "notice",
+          "dropped_events",
+          "dropped_recordings",
+          "io_failures",
+          "pending_records"
+        ],
+        "title": "DiagnosticsStatusResponse"
+      },
+      "EffectKind": {
+        "type": "string",
+        "enum": [
+          "subtitle",
+          "speech",
+          "pose",
+          "scene",
+          "media"
+        ],
+        "title": "EffectKind"
+      },
+      "EffectView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/EffectKind"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "digest": {
+            "type": "string",
+            "title": "Digest"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "title": "Output Epoch"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "title": "Activity Seq"
+          },
+          "cue_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cue Id"
+          },
+          "cue_speech_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cue Speech Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "value",
+          "digest",
+          "output_epoch",
+          "activity_seq"
+        ],
+        "title": "EffectView"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "request_id"
+        ],
+        "title": "ErrorResponse"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status",
+            "default": "ok"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "mock",
+              "replay",
+              "rehearsal",
+              "injected"
+            ],
+            "title": "Mode",
+            "default": "mock"
+          },
+          "schema_version": {
+            "type": "string",
+            "title": "Schema Version",
+            "default": "0.1.0-foundation"
+          },
+          "live_llm": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Llm",
+            "default": false
+          },
+          "live_audio": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Audio",
+            "default": false
+          },
+          "live_images": {
+            "type": "boolean",
+            "title": "Live Images",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "HealthResponse"
+      },
+      "InputRequest": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Activity Seq"
+          },
+          "presentation_cutoff": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Presentation Cutoff"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "activity_seq",
+          "presentation_cutoff",
+          "text"
+        ],
+        "title": "InputRequest"
+      },
+      "Phase": {
+        "type": "string",
+        "enum": [
+          "idle",
+          "thinking",
+          "ready",
+          "stopped",
+          "error"
+        ],
+        "title": "Phase"
+      },
+      "ReceiptRequest": {
+        "properties": {
+          "effect_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Effect Id"
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Digest"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Output Epoch"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Activity Seq"
+          },
+          "presentation_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Presentation Seq"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "effect_id",
+          "digest",
+          "output_epoch",
+          "activity_seq",
+          "presentation_seq"
+        ],
+        "title": "ReceiptRequest"
+      },
+      "SessionView": {
+        "properties": {
+          "schema_version": {
+            "type": "string",
+            "const": "0.1.0-foundation",
+            "title": "Schema Version",
+            "default": "0.1.0-foundation"
+          },
+          "session_id": {
+            "type": "string",
+            "title": "Session Id"
+          },
+          "client_instance_id": {
+            "type": "string",
+            "title": "Client Instance Id"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "title": "Activity Seq"
+          },
+          "input_epoch": {
+            "type": "integer",
+            "title": "Input Epoch"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "title": "Output Epoch"
+          },
+          "permit_revision": {
+            "type": "integer",
+            "title": "Permit Revision"
+          },
+          "phase": {
+            "$ref": "#/components/schemas/Phase"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "sealed": {
+            "type": "boolean",
+            "title": "Sealed"
+          },
+          "active_grants": {
+            "items": {
+              "$ref": "#/components/schemas/EffectView"
+            },
+            "type": "array",
+            "title": "Active Grants"
+          },
+          "presented_effects": {
+            "items": {
+              "$ref": "#/components/schemas/EffectView"
+            },
+            "type": "array",
+            "title": "Presented Effects"
+          },
+          "audio_progress": {
+            "items": {
+              "$ref": "#/components/schemas/AudioProgressView"
+            },
+            "type": "array",
+            "title": "Audio Progress"
+          },
+          "last_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error"
+          },
+          "last_error_diagnostic_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 34,
+                "minLength": 34,
+                "pattern": "^h_[0-9a-f]{32}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Error Diagnostic Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "session_id",
+          "client_instance_id",
+          "revision",
+          "activity_seq",
+          "input_epoch",
+          "output_epoch",
+          "permit_revision",
+          "phase",
+          "request_id",
+          "sealed",
+          "active_grants",
+          "presented_effects",
+          "audio_progress",
+          "last_error"
+        ],
+        "title": "SessionView"
+      },
+      "SpeechStreamRequest": {
+        "properties": {
+          "digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Digest"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Output Epoch"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Activity Seq"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "digest",
+          "output_epoch",
+          "activity_seq"
+        ],
+        "title": "SpeechStreamRequest"
+      },
+      "StopRequest": {
+        "properties": {
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Activity Seq"
+          },
+          "presentation_cutoff": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Presentation Cutoff"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "activity_seq",
+          "presentation_cutoff"
+        ],
+        "title": "StopRequest"
+      },
+      "VoiceCapabilities": {
+        "properties": {
+          "generation_mode": {
+            "type": "string",
+            "enum": [
+              "mock",
+              "replay",
+              "rehearsal",
+              "injected"
+            ],
+            "title": "Generation Mode"
+          },
+          "speech_enabled": {
+            "type": "boolean",
+            "title": "Speech Enabled"
+          },
+          "microphone_enabled": {
+            "type": "boolean",
+            "title": "Microphone Enabled"
+          },
+          "speech_sample_rate_hz": {
+            "type": "integer",
+            "const": 24000,
+            "title": "Speech Sample Rate Hz",
+            "default": 24000
+          },
+          "microphone_sample_rate_hz": {
+            "type": "integer",
+            "const": 16000,
+            "title": "Microphone Sample Rate Hz",
+            "default": 16000
+          },
+          "qualification": {
+            "type": "string",
+            "enum": [
+              "injected_unverified",
+              "unavailable",
+              "offline_fixture"
+            ],
+            "title": "Qualification"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "generation_mode",
+          "speech_enabled",
+          "microphone_enabled",
+          "qualification"
+        ],
+        "title": "VoiceCapabilities"
+      },
+      "SpeechAudioFrame": {
+        "additionalProperties": false,
+        "properties": {
+          "effect_id": {
+            "title": "Effect Id",
+            "type": "string"
+          },
+          "digest": {
+            "title": "Digest",
+            "type": "string"
+          },
+          "output_epoch": {
+            "title": "Output Epoch",
+            "type": "integer"
+          },
+          "activity_seq": {
+            "title": "Activity Seq",
+            "type": "integer"
+          },
+          "stream_id": {
+            "title": "Stream Id",
+            "type": "string"
+          },
+          "type": {
+            "const": "audio",
+            "default": "audio",
+            "title": "Type",
+            "type": "string"
+          },
+          "sequence": {
+            "title": "Sequence",
+            "type": "integer"
+          },
+          "first_sample": {
+            "title": "First Sample",
+            "type": "integer"
+          },
+          "sample_rate_hz": {
+            "const": 24000,
+            "default": 24000,
+            "title": "Sample Rate Hz",
+            "type": "integer"
+          },
+          "pcm_base64": {
+            "title": "Pcm Base64",
+            "type": "string"
+          }
+        },
+        "required": [
+          "effect_id",
+          "digest",
+          "output_epoch",
+          "activity_seq",
+          "stream_id",
+          "sequence",
+          "first_sample",
+          "pcm_base64"
+        ],
+        "title": "SpeechAudioFrame",
+        "type": "object"
+      },
+      "SpeechCompleteFrame": {
+        "additionalProperties": false,
+        "properties": {
+          "effect_id": {
+            "title": "Effect Id",
+            "type": "string"
+          },
+          "digest": {
+            "title": "Digest",
+            "type": "string"
+          },
+          "output_epoch": {
+            "title": "Output Epoch",
+            "type": "integer"
+          },
+          "activity_seq": {
+            "title": "Activity Seq",
+            "type": "integer"
+          },
+          "stream_id": {
+            "title": "Stream Id",
+            "type": "string"
+          },
+          "type": {
+            "const": "complete",
+            "default": "complete",
+            "title": "Type",
+            "type": "string"
+          },
+          "total_samples": {
+            "title": "Total Samples",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "effect_id",
+          "digest",
+          "output_epoch",
+          "activity_seq",
+          "stream_id",
+          "total_samples"
+        ],
+        "title": "SpeechCompleteFrame",
+        "type": "object"
+      },
+      "SpeechErrorFrame": {
+        "additionalProperties": false,
+        "properties": {
+          "effect_id": {
+            "title": "Effect Id",
+            "type": "string"
+          },
+          "digest": {
+            "title": "Digest",
+            "type": "string"
+          },
+          "output_epoch": {
+            "title": "Output Epoch",
+            "type": "integer"
+          },
+          "activity_seq": {
+            "title": "Activity Seq",
+            "type": "integer"
+          },
+          "stream_id": {
+            "title": "Stream Id",
+            "type": "string"
+          },
+          "type": {
+            "const": "error",
+            "default": "error",
+            "title": "Type",
+            "type": "string"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "diagnostic_id": {
+            "anyOf": [
+              {
+                "maxLength": 34,
+                "minLength": 34,
+                "pattern": "^h_[0-9a-f]{32}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Diagnostic Id"
+          }
+        },
+        "required": [
+          "effect_id",
+          "digest",
+          "output_epoch",
+          "activity_seq",
+          "stream_id",
+          "code"
+        ],
+        "title": "SpeechErrorFrame",
+        "type": "object"
+      },
+      "MicrophoneStart": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "start",
+            "title": "Type",
+            "type": "string"
+          },
+          "session_token": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Session Token",
+            "type": "string"
+          },
+          "stream_id": {
+            "format": "uuid",
+            "title": "Stream Id",
+            "type": "string"
+          },
+          "activity_seq": {
+            "minimum": 0,
+            "title": "Activity Seq",
+            "type": "integer"
+          },
+          "input_epoch": {
+            "minimum": 0,
+            "title": "Input Epoch",
+            "type": "integer"
+          },
+          "sample_rate_hz": {
+            "const": 16000,
+            "title": "Sample Rate Hz",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "type",
+          "session_token",
+          "stream_id",
+          "activity_seq",
+          "input_epoch",
+          "sample_rate_hz"
+        ],
+        "title": "MicrophoneStart",
+        "type": "object"
+      },
+      "MicrophoneAudio": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "audio",
+            "title": "Type",
+            "type": "string"
+          },
+          "sequence": {
+            "maximum": 6100,
+            "minimum": 1,
+            "title": "Sequence",
+            "type": "integer"
+          },
+          "first_sample": {
+            "maximum": 960000,
+            "minimum": 0,
+            "title": "First Sample",
+            "type": "integer"
+          },
+          "pcm_base64": {
+            "maxLength": 16000,
+            "minLength": 4,
+            "title": "Pcm Base64",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "sequence",
+          "first_sample",
+          "pcm_base64"
+        ],
+        "title": "MicrophoneAudio",
+        "type": "object"
+      },
+      "MicrophoneControl": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "enum": [
+              "finish",
+              "cancel"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "MicrophoneControl",
+        "type": "object"
+      },
+      "MicrophoneReady": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "ready",
+            "default": "ready",
+            "title": "Type",
+            "type": "string"
+          },
+          "stream_id": {
+            "title": "Stream Id",
+            "type": "string"
+          },
+          "activity_seq": {
+            "title": "Activity Seq",
+            "type": "integer"
+          },
+          "input_epoch": {
+            "title": "Input Epoch",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "stream_id",
+          "activity_seq",
+          "input_epoch"
+        ],
+        "title": "MicrophoneReady",
+        "type": "object"
+      },
+      "MicrophoneTranscript": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "transcript",
+            "default": "transcript",
+            "title": "Type",
+            "type": "string"
+          },
+          "stream_id": {
+            "title": "Stream Id",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "is_final": {
+            "title": "Is Final",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "stream_id",
+          "revision",
+          "text",
+          "is_final"
+        ],
+        "title": "MicrophoneTranscript",
+        "type": "object"
+      },
+      "MicrophoneComplete": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "complete",
+            "default": "complete",
+            "title": "Type",
+            "type": "string"
+          },
+          "stream_id": {
+            "title": "Stream Id",
+            "type": "string"
+          },
+          "revision": {
+            "title": "Revision",
+            "type": "integer"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "had_final": {
+            "title": "Had Final",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "stream_id",
+          "revision",
+          "text",
+          "had_final"
+        ],
+        "title": "MicrophoneComplete",
+        "type": "object"
+      },
+      "MicrophoneError": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "error",
+            "default": "error",
+            "title": "Type",
+            "type": "string"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "diagnostic_id": {
+            "anyOf": [
+              {
+                "maxLength": 34,
+                "minLength": 34,
+                "pattern": "^h_[0-9a-f]{32}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Diagnostic Id"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "MicrophoneError",
+        "type": "object"
+      }
+    }
+  }
+}

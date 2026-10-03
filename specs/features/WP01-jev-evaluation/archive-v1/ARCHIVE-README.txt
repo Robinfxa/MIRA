@@ -1,0 +1,1 @@
+Original v1 artifact bytes captured before cue-schema compatibility migration. Paths in release-manifest.v1.json artifact_sha256 resolve relative to this archive root. Source_sha256 remains a historical source receipt, not current runtime admission. No scored live evaluation or holdout observation occurred.

@@ -1,0 +1,43 @@
+{
+  "scope": "Offline static documentation at desktop/mobile simulated browser viewports. Network requests blocked; NOT real-device or product verification.",
+  "passed": true,
+  "viewports": [
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "chapters": 28,
+      "navLinks": 28,
+      "missing": [],
+      "tables": 68,
+      "viewport_label": "desktop",
+      "passed": true,
+      "filter_ic01_matches": 9,
+      "filter_empty_works": true,
+      "filter_reset_works": true
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "chapters": 28,
+      "navLinks": 28,
+      "missing": [],
+      "tables": 68,
+      "viewport_label": "mobile",
+      "passed": true,
+      "mobile_nav_works": true,
+      "mobile_link_works": true
+    }
+  ],
+  "screenshots": [
+    "document-previews/codex_source_desktop.png",
+    "document-previews/codex_source_mobile.png",
+    "document-previews/cover_desktop.png",
+    "document-previews/cover_mobile.png",
+    "document-previews/voice_reuse_desktop.png",
+    "document-previews/voice_reuse_mobile.png",
+    "document-previews/work_package_desktop.png",
+    "document-previews/work_package_mobile.png"
+  ],
+  "product_tests_executed": false,
+  "real_device_tests_executed": false
+}

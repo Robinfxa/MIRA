@@ -1,0 +1,650 @@
+{
+  "scope": "Local documentation consistency, immutable input archives, approved decision preservation, reference/test mappings and reproducible exports. NOT product/upstream/account/legal/performance validation.",
+  "passed": true,
+  "checks": [
+    {
+      "check": "edition_v06",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "confirmed_decisions_exactly_retained",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "last_product_decision_unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "integration_instruction_exact",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_extra_adoption",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "false:product_tests_run",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "false:provider_calls_run",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "false:github_written",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "false:credentials_read",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "false:upstream_tests_run",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "false:external_sources_refetched_in_this_edition",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_new_online_sources",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/snapshots/character-scene-research.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/snapshots/companion-research.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/snapshots/mira-memory-persona-v0.1.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/snapshots/requirements.pdf",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/snapshots/voice-peer-amendments.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/snapshots/voice-v0.2.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/history/grill-01.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/history/grill-02.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/history/grill-03.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/history/g03-generation-argument-v0.1.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/history/g04-interruption-argument-v0.1.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/history/g05-g06-joint-argument-v0.1.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/codex-plan-usage-evidence-2026-10-02.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/opensource/reference-registry.json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/reference/opensource/reference-intake-cases.source.json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/history/open-source-reference-v0.1/MIRA_开源实现借鉴书_v0.1.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source:docs/history/edition-v0.5/MIRA_架构全书_v0.5.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/MIRA_开源实现借鉴书_v0.1.html",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/MIRA_开源实现借鉴书_v0.1.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/README.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/baseline/MIRA_架构全书_v0.5.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/baseline-manifest.json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/checks/build-summary.txt",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/checks/document-check.json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/checks/layout-check.json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/00-overview.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/01-requirements-map.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/02-codex.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/03-realtime.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/04-character.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/05-memory-and-state.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/06-evaluation.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/07-dont-copy-defaults.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/08-integration-stack.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/09-work-packages.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/10-intake-tests.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/11-licenses-and-status.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/a1-registry.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/a2-sources.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/docs/research/reference/a3-implementation-prompt.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/document-previews/codex_desktop.png",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/document-previews/cover_mobile.png",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/document-previews/defaults_mobile.png",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/reference-intake-cases.json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/reference-registry.json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/open-source-reference-v0.1/tools/build_reference.py",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/00-master-design-book.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/CHANGELOG.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/adr/0001-voice-v02-foundation.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/adr/0002-communication-act-first.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/adr/0003-constrained-choice-and-review.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/adr/0004-unified-presentation-permit-snapshot.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/adr/0005-semantic-scope-incremental-generation.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/adr/0006-interruption-retention-and-restart.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/adr/0007-decision-backends-and-codex-preference.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/adr/0008-controlled-images-codex-first.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/appendices/A1-decision-register.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/appendices/A2-requirements-and-tests.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/appendices/A3-contract-and-change-index.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/appendices/acceptance-catalog.json",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/01-state-and-authority.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/02-decisions-and-response-contract.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/03-turn-plan-and-completion.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/04-permits-interruption-and-recovery.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/05-voice-runtime-v02.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/06-character-memory-and-scene.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/07-routines-and-failure-paths.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/08-evaluation-delivery-and-implementation.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/modules/09-provider-auth-usage-and-codex.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "archive:docs/history/edition-v0.5/architecture-source/pending/implementation-and-access-gates.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "eight_adrs",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "adr_unchanged:0007-decision-backends-and-codex-preference.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "adr_unchanged:0001-voice-v02-foundation.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "adr_unchanged:0005-semantic-scope-incremental-generation.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "adr_unchanged:0008-controlled-images-codex-first.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "adr_unchanged:0004-unified-presentation-permit-snapshot.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "adr_unchanged:0002-communication-act-first.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "adr_unchanged:0003-constrained-choice-and-review.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "adr_unchanged:0006-interruption-retention-and-restart.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "ten_modules",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:07-routines-and-failure-paths.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:05-voice-runtime-v02.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:03-turn-plan-and-completion.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:06-character-memory-and-scene.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:08-evaluation-delivery-and-implementation.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:02-decisions-and-response-contract.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:09-provider-auth-usage-and-codex.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:01-state-and-authority.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reuse_section:04-permits-interruption-and-recovery.md",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "164_unique_ids",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "146_original_exact_objects",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "all_not_run",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "18_RI_scenarios_assertions_exact",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "all_test_ids_in_A2",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reference_registry_unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "16_projects_41_sources",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "10_key_source_projects",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_upstream_claim_promoted",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "all_sources_scope_present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "all_project_commits_present",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "IC01_not_silently_resolved",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "G03_A_maintained",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_auto_paid_fallback",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "G04_semantic_resume_stays_off",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RI_trace18",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "related_cases_exist",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "eight_work_packages",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "source_baseline_matches",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "current_relative_links_resolve",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "balanced_fences",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "no_tool_tokens",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "no_stale_current_counts_or_research_claims",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "29_anchor_ids_28_parts_and_toc",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "toc_resolves",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_distributed_fonts",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "reproducible_exports",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "product_tests_executed": false,
+  "upstream_tests_executed": false,
+  "provider_calls_executed": false,
+  "github_written": false
+}
