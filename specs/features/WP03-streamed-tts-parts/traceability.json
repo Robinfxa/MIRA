@@ -1,0 +1,23 @@
+{
+  "feature": "WP03-STREAMED-TTS-PARTS",
+  "spec": "specs/features/WP03-streamed-tts-parts/spec.md",
+  "requirements": [
+    {
+      "id": "WP03STREAMEDTTSPARTS-001",
+      "tests": [
+        "tests/contracts/test_google_tts_stream_parts.py::test_non_inline_parts_do_not_terminate_or_become_audio",
+        "tests/contracts/test_google_tts_stream_parts.py::test_text_only_completed_stream_reports_empty_audio_after_exhaustion"
+      ]
+    },
+    {
+      "id": "WP03STREAMEDTTSPARTS-002",
+      "tests": [
+        "tests/contracts/test_google_tts_stream_parts.py::test_stop_on_text_never_allows_later_audio",
+        "tests/contracts/test_google_tts_stream_parts.py::test_present_malformed_inline_data_is_not_silently_skipped",
+        "tests/contracts/test_google_tts_stream_parts.py::test_text_then_audio_without_finish_still_fails_incomplete",
+        "tests/contracts/test_google_tts_stream_parts.py::test_timeout_after_non_audio_keeps_only_safe_observed_part_facts",
+        "tests/contracts/test_google_tts_stream_parts.py::test_cancel_while_waiting_after_text_reaps_without_audio"
+      ]
+    }
+  ]
+}

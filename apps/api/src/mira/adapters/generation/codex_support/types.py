@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import math
+import hashlib
+import json
 import re
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -26,6 +28,29 @@ class CodexGenerationError(RuntimeError):
 
 
 @dataclass(frozen=True, slots=True)
+class ApprovedDevelopmentContext:
+    """Trusted, explicit approval of one existing development context, not an endpoint.
+
+    No loader, HTTP or user prompt constructs this. Fingerprints come from a
+    separately approved native-client preflight; they cannot authorize a new route.
+    The existing home mode is checked unchanged, never tightened or relaxed here.
+    """
+    route_value_sha256: str
+    observed_home_mode: int
+    managed_environment_sha256: str
+
+    def __post_init__(self):
+        if (type(self.route_value_sha256) is not str
+                or not re.fullmatch(r'[a-f0-9]{64}', self.route_value_sha256)
+                or type(self.managed_environment_sha256) is not str
+                or not re.fullmatch(r'[a-f0-9]{64}', self.managed_environment_sha256)
+                or type(self.observed_home_mode) is not int
+                or not 0 <= self.observed_home_mode <= 0o777
+                or self.observed_home_mode & 0o022):
+            raise ValueError('codex_development_approval_invalid')
+
+
+@dataclass(frozen=True, slots=True)
 class CodexRuntime:
     executable: Path
     codex_home: Path
@@ -37,8 +62,13 @@ class CodexRuntime:
     expected_config_sha256: str | None = None
     # Caller must explicitly verify applicable managed policy controls are preserved.
     policy_environment_confirmed: bool = False
+    development_context: ApprovedDevelopmentContext | None = None
 
     def __post_init__(self):
+        if self.development_context is not None:
+            if (type(self.development_context) is not ApprovedDevelopmentContext
+                    or self.expected_config_sha256 is None):
+                raise ValueError('codex_development_approval_invalid')
         if type(self.policy_environment_confirmed) is not bool:
             raise ValueError('codex_policy_environment_invalid')
         if any(not isinstance(path, Path) or not path.is_absolute() or '..' in path.parts
@@ -52,9 +82,15 @@ class CodexRuntime:
                 r'[a-f0-9]{64}', self.expected_config_sha256):
             raise ValueError('codex_config_pin_invalid')
         if (not isinstance(self.environment, Mapping)
-                or any(key not in _ENV_KEYS or type(value) is not str or '\0' in value
+                or any(type(key) is not str or '\0' in key or type(value) is not str or '\0' in value
+                       or (self.development_context is None and key not in _ENV_KEYS)
                        for key, value in self.environment.items())):
             raise ValueError('codex_environment_invalid')
+        if self.development_context is not None:
+            fingerprint = hashlib.sha256(json.dumps(dict(self.environment), sort_keys=True,
+                separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+            if fingerprint != self.development_context.managed_environment_sha256:
+                raise ValueError('codex_development_approval_invalid')
         object.__setattr__(self, 'environment', MappingProxyType(dict(self.environment)))
 
 

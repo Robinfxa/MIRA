@@ -1,0 +1,21 @@
+{
+  "feature": "WP01-CODEX-SPOKEN-CAPTION",
+  "spec": "specs/features/WP01-codex-spoken-caption/spec.md",
+  "requirements": [
+    {
+      "id": "WP01CODEXSPOKENCAPTION-001",
+      "tests": [
+        "tests/contracts/test_codex_spoken_caption.py::test_speech_without_explicit_caption_is_rejected",
+        "tests/contracts/test_codex_spoken_caption.py::test_spoken_reply_requires_one_explicit_corresponding_caption",
+        "tests/contracts/test_codex_spoken_caption.py::test_spoken_reply_rejects_multiple_captions"
+      ]
+    },
+    {
+      "id": "WP01CODEXSPOKENCAPTION-002",
+      "tests": [
+        "tests/contracts/test_codex_spoken_caption.py::test_visual_only_subtitle_remains_valid_without_speech",
+        "tests/contracts/test_codex_spoken_caption.py::test_visual_controls_remain_valid_without_speech"
+      ]
+    }
+  ]
+}

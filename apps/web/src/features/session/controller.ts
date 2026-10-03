@@ -21,7 +21,16 @@ type CapturePort = Pick<MicrophoneCapture, 'start' | 'stop' | 'close'>;
 export interface ControllerOptions {
   readonly createPlayback?: (options: PlaybackOptions) => PlaybackPort;
   readonly createCapture?: (options: CaptureOptions) => CapturePort;
+  /** Short local fence for facts already issued when a new generation starts. */
+  readonly factDrainTimeoutMs?: number;
 }
+export type SessionInputOutcome =
+  | { readonly status: 'submitted' }
+  | { readonly status: 'not-sent'; readonly text: string; readonly reason: 'history-failed' | 'history-timeout' }
+  | { readonly status: 'superseded' }
+  | { readonly status: 'closed' }
+  | { readonly status: 'unknown' }
+  | { readonly status: 'ignored' };
 interface SpeechRun {
   readonly effect: EffectView;
   readonly generation: number;
@@ -44,7 +53,7 @@ interface MicrophoneRun {
   released: boolean;
   transport: MicrophoneStream | null;
   setup: Promise<void>;
-  finishing: Promise<void> | null;
+  finishing: Promise<SessionInputOutcome | undefined> | null;
 }
 interface VisualPreparationRun {
   readonly effect: EffectView;
@@ -52,8 +61,31 @@ interface VisualPreparationRun {
   readonly gate: PresentationGate;
   readonly abort: AbortController;
 }
+interface FactAcknowledgement {
+  readonly sequence: number;
+  readonly status: 'saved' | 'failed' | 'closed';
+}
+interface FactDelivery {
+  readonly sequence: number;
+  readonly presentationSequence: number;
+  readonly generation: number;
+  readonly acknowledgement: Promise<FactAcknowledgement>;
+}
+interface FactSnapshot {
+  readonly throughSequence: number;
+  readonly presentationCutoff: number;
+  readonly pending: readonly FactDelivery[];
+}
+interface FailedFact {
+  readonly sequence: number;
+  readonly presentationSequence: number;
+}
+type FactDrainResult = 'saved' | 'failed' | 'timeout' | 'superseded' | 'closed';
 const MEDIA_PREPARATION_LIMIT = 4;
 const MEDIA_PREPARATION_ERROR = '旅行插画暂时无法显示，请稍后重试或继续聊天。';
+const FACT_DRAIN_TIMEOUT_MS = 1500;
+const FACT_HISTORY_FAILED = 'Earlier presentation history could not be confirmed, so this input was not sent. Start a fresh session before continuing.';
+const FACT_HISTORY_TIMEOUT = 'Earlier presentation history is still waiting to be saved, so this input was not sent. Wait briefly, then retry.';
 
 /** One gate, one playback sink and one microphone. Every continuation carries local causality. */
 export class SessionController {
@@ -65,6 +97,7 @@ export class SessionController {
   private connecting = false;
   private closed = false;
   private generation = 0;
+  private generationAbort = new AbortController();
   private readonly lifetime = new AbortController();
   private activityRequest: AbortController | null = null;
   private pollRequest: AbortController | null = null;
@@ -78,10 +111,18 @@ export class SessionController {
   private unlocked = false;
   private facts: Promise<void> = Promise.resolve();
   private pendingFacts = 0;
+  private factSequence = 0;
+  private failedFact: FailedFact | null = null;
+  private readonly factDeliveries = new Map<number, FactDelivery>();
+  private readonly factDrainTimeoutMs: number;
   private closePromise: Promise<void> | null = null;
 
   constructor(private readonly api: SessionTransport, private readonly effects: EffectExecutor,
     private readonly view: SessionViewPort, private readonly config: PublicConfig, options: ControllerOptions = {}) {
+    this.factDrainTimeoutMs = options.factDrainTimeoutMs ?? FACT_DRAIN_TIMEOUT_MS;
+    if (!Number.isSafeInteger(this.factDrainTimeoutMs) || this.factDrainTimeoutMs < 1 || this.factDrainTimeoutMs > 30000) {
+      throw new RangeError('Fact drain timeout must be between 1 and 30000 milliseconds');
+    }
     this.playback = (options.createPlayback ?? (settings => new CancelSafePlayback(settings)))({
       isAuthorized: origin => !this.closed && this.gate?.isAuthorized(origin) === true,
       onFact: fact => this.playbackFact(fact),
@@ -217,6 +258,10 @@ export class SessionController {
   /** Block and physically disconnect before any network cancellation or new request. */
   private interrupt(reason: AudioStopReason): number {
     const generation = ++this.generation;
+    // A barrier belongs to exactly one local turn. Stop, close, failure or a newer input
+    // releases that waiter immediately, even if a transport ignores cancellation.
+    this.generationAbort.abort();
+    this.generationAbort = new AbortController();
     this.cancelVisualPreparations();
     this.rehearsalInput = null; this.view.rehearsalInput?.('stopped');
     this.gate?.block();
@@ -242,18 +287,32 @@ export class SessionController {
       else this.view.error('Audio could not start. Text input is still available; try again from a user gesture.');
     }).catch(error => { if (this.current(generation)) this.report(error); });
   }
-  async input(text: string): Promise<void> {
-    if (!this.gate || this.closed || !text.trim()) return;
+  async input(text: string): Promise<SessionInputOutcome> {
+    if (!text.trim()) return { status: 'ignored' };
+    if (this.closed || !this.gate) return { status: 'closed' };
     const generation = this.interrupt('new-input');
+    const generationSignal = this.generationAbort.signal;
     this.reportedError = null; this.view.error('');
     const id = crypto.randomUUID(), basis = this.gate.beginInput(id);
+    const factSnapshot = this.captureFactSnapshot(basis.presentation_cutoff);
     this.effects.prepareInput();
     if (this.capabilities?.speech_enabled !== false) this.unlock(generation); // invoked in the gesture, never after a fetch/permission await
+    const drain = await this.drainFactSnapshot(factSnapshot, generation, generationSignal);
+    if (drain === 'closed' || this.closed) return { status: 'closed' };
+    if (drain === 'superseded' || !this.current(generation)) return { status: 'superseded' };
+    if (drain !== 'saved') {
+      this.fail(new Error(drain === 'timeout' ? FACT_HISTORY_TIMEOUT : FACT_HISTORY_FAILED));
+      return { status: 'not-sent', text, reason: drain === 'timeout' ? 'history-timeout' : 'history-failed' };
+    }
     const abort = new AbortController(); this.activityRequest = abort;
     try {
       const snapshot = await this.api.input({...basis, request_id: id, text}, abort.signal);
-      if (this.current(generation)) this.install(snapshot);
-    } catch (error) { if (this.current(generation)) this.fail(error); }
+      if (this.current(generation)) { this.install(snapshot); return { status: 'submitted' }; }
+      return this.closed ? { status: 'closed' } : { status: 'superseded' };
+    } catch (error) {
+      if (this.current(generation)) { this.fail(error); return { status: 'unknown' }; }
+      return this.closed ? { status: 'closed' } : { status: 'superseded' };
+    }
   }
   async stop(): Promise<void> {
     if (!this.gate || this.closed) return;
@@ -311,19 +370,94 @@ export class SessionController {
       else if (fact.stage === 'completed') queueMicrotask(() => { if (this.current(run.generation)) this.startSpeech(); });
     }
   }
+  private captureFactSnapshot(presentationCutoff: number): FactSnapshot {
+    const throughSequence = this.factSequence;
+    return {
+      throughSequence,
+      presentationCutoff,
+      pending: [...this.factDeliveries.values()].filter(delivery =>
+        delivery.sequence <= throughSequence && delivery.presentationSequence <= presentationCutoff),
+    };
+  }
+
+  private noteFailedFact(sequence: number, presentationSequence: number): void {
+    if (this.failedFact === null || sequence < this.failedFact.sequence) {
+      this.failedFact = { sequence, presentationSequence };
+    }
+  }
+
+  private async drainFactSnapshot(snapshot: FactSnapshot, generation: number,
+      signal: AbortSignal): Promise<FactDrainResult> {
+    if (this.closed) return 'closed';
+    if (!this.current(generation) || signal.aborted) return 'superseded';
+    if (this.failedFact !== null && this.failedFact.sequence <= snapshot.throughSequence
+      && this.failedFact.presentationSequence <= snapshot.presentationCutoff) return 'failed';
+    if (snapshot.pending.length === 0) return 'saved';
+
+    return new Promise<FactDrainResult>(resolve => {
+      let settled = false;
+      let remaining = snapshot.pending.length;
+      const timer = setTimeout(() => finish('timeout'), this.factDrainTimeoutMs);
+      const onAbort = (): void => finish(this.closed ? 'closed' : 'superseded');
+      const finish = (result: FactDrainResult): void => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        signal.removeEventListener('abort', onAbort);
+        resolve(result);
+      };
+      signal.addEventListener('abort', onAbort, { once: true });
+      if (signal.aborted) { onAbort(); return; }
+      for (const delivery of snapshot.pending) {
+        void delivery.acknowledgement.then(ack => {
+          if (settled) return;
+          if (ack.status === 'failed') { finish('failed'); return; }
+          if (ack.status === 'closed') { finish(this.closed ? 'closed' : 'failed'); return; }
+          if (--remaining === 0) {
+            finish(this.failedFact !== null && this.failedFact.sequence <= snapshot.throughSequence
+              && this.failedFact.presentationSequence <= snapshot.presentationCutoff
+              ? 'failed' : 'saved');
+          }
+        });
+      }
+    });
+  }
+
   private enqueueFact(fact: ReceiptRequest | AudioProgressRequest, audio: boolean, generation = this.generation): void {
-    if (++this.pendingFacts > 4096) { this.pendingFacts--; this.fail(new Error('Presentation history delivery is full. Close and create a new session.')); return; }
-    // Serialize facts so terminal audio cannot overtake a prior rendered counter.
-    // New input/stop does not cancel established facts; its cutoff fences late delivery.
-    this.facts = this.facts.then(async () => {
-      if (this.closed) return;
-      if (audio) await this.api.audioProgress(fact as AudioProgressRequest);
-      else await this.api.receipt(fact);
-    }).catch(error => {
-      if (this.current(generation)) this.fail(error);
-      // Preserve the new activity's actionable failure/locator, if it has one.
-      else if (!this.closed && this.reportedError === null) this.view.error('An earlier presentation fact could not be saved. History may be incomplete.');
-    }).finally(() => { this.pendingFacts--; });
+    const sequence = ++this.factSequence;
+    if (++this.pendingFacts > 4096) {
+      this.pendingFacts--;
+      this.noteFailedFact(sequence, fact.presentation_seq);
+      this.fail(new Error('Presentation history delivery is full. Close and create a new session.'));
+      return;
+    }
+    // Keep terminal audio behind earlier rendered counters. Each acknowledgement retains its
+    // immutable issue sequence, presentation sequence and owning local generation.
+    const acknowledgement = this.facts.then(async (): Promise<FactAcknowledgement> => {
+      try {
+        if (this.closed) return { sequence, status: 'closed' };
+        if (audio) await this.api.audioProgress(fact as AudioProgressRequest);
+        else await this.api.receipt(fact);
+        return { sequence, status: 'saved' };
+      } catch (error) {
+        this.noteFailedFact(sequence, fact.presentation_seq);
+        if (this.current(generation)) this.fail(error);
+        // Preserve the new activity's actionable failure/locator, if it has one.
+        else if (!this.closed && this.reportedError === null) this.view.error('An earlier presentation fact could not be saved. History may be incomplete.');
+        return { sequence, status: 'failed' };
+      } finally { this.pendingFacts--; }
+    });
+    this.facts = acknowledgement.then(() => undefined);
+    const delivery: FactDelivery = {
+      sequence,
+      presentationSequence: fact.presentation_seq,
+      generation,
+      acknowledgement,
+    };
+    this.factDeliveries.set(sequence, delivery);
+    void acknowledgement.then(() => {
+      if (this.factDeliveries.get(sequence) === delivery) this.factDeliveries.delete(sequence);
+    });
   }
 
   /** User-controlled fixed input rehearsal. No capture, STT, PCM input or speech-recognition claim. */
@@ -346,7 +480,7 @@ export class SessionController {
     }).catch(error => { if (this.current(generation) && this.rehearsalInput === run) this.fail(error); });
     await run.ready;
   }
-  async finishRehearsalInput(): Promise<void> {
+  async finishRehearsalInput(): Promise<SessionInputOutcome | undefined> {
     const run = this.rehearsalInput;
     if (!run || run.released || !this.current(run.generation)) return;
     run.released = true;
@@ -354,7 +488,7 @@ export class SessionController {
     await run.ready;
     if (this.rehearsalInput !== run || !this.current(run.generation)) return;
     this.rehearsalInput = null; this.view.rehearsalInput?.('stopped');
-    await this.input('照片里有什么');
+    return this.input('照片里有什么');
   }
 
   async startMicrophone(): Promise<void> {
@@ -396,13 +530,13 @@ export class SessionController {
     if (run.queue.length >= 100 || run.queuedBytes + chunk.pcm16le.length > 65536) throw new Error('Microphone startup queue exceeded its bound');
     run.queue.push({...chunk, pcm16le: chunk.pcm16le.slice()}); run.queuedBytes += chunk.pcm16le.length;
   }
-  async finishMicrophone(): Promise<void> {
+  async finishMicrophone(): Promise<SessionInputOutcome | undefined> {
     const run = this.microphone;
     if (!run || !this.activeMicrophone(run)) return;
     if (run.finishing) return run.finishing;
     run.released = true;
     this.capture.stop(); this.view.microphone?.('finishing'); this.effects.setPhase?.('thinking');
-    run.finishing = (async () => {
+    run.finishing = (async (): Promise<SessionInputOutcome | undefined> => {
       await run.setup;
       if (!this.activeMicrophone(run) || !run.transport) return;
       const result = await run.transport.finish();
@@ -415,8 +549,8 @@ export class SessionController {
         this.view.error('No reliable speech was recognized. Try again or use text input.');
         return;
       }
-      await this.input(text);
-    })().catch(error => { if (this.activeMicrophone(run)) this.fail(error); });
+      return this.input(text);
+    })().catch(error => { if (this.activeMicrophone(run)) this.fail(error); return undefined; });
     return run.finishing;
   }
 

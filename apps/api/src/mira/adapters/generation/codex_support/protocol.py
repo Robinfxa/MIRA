@@ -53,7 +53,16 @@ def _verify_config(result, runtime):
     features = config.get('features')
     _require(type(features) is dict and all(features.get(flag) is False
                                            for flag in DISABLED_FEATURES), 'codex_config_drift')
-    _require(features.get('respect_system_proxy') is True, 'codex_config_drift')
+    development = runtime.development_context
+    _require(features.get('respect_system_proxy') is (None if development else True),
+             'codex_config_drift')
+    if development is not None:
+        _require((config.get('orchestrator') or {}).get('mcp', {}).get('enabled') is False
+                 and (config.get('cloud') or {}).get('skills', {}).get('enabled') is False,
+                 'codex_config_drift')
+        route = config.get('openai_base_url')
+        _require(type(route) is str and hashlib.sha256(route.encode()).hexdigest()
+                 == development.route_value_sha256, 'codex_config_drift')
     _require(type(config.get('mcp_servers')) is dict and not config['mcp_servers'],
              'codex_config_drift')
     _require(config.get('web_search') == 'disabled', 'codex_config_drift')
@@ -61,10 +70,14 @@ def _verify_config(result, runtime):
              and config.get('model_provider') in (None, 'openai')
              and config.get('forced_login_method') in (None, 'chatgpt'), 'codex_config_drift')
     # Never accept caller-customized backend routes or executable hooks, even under a digest.
-    _require(config.get('chatgpt_base_url') in (None, 'https://chatgpt.com/backend-api/'),
+    _require(config.get('chatgpt_base_url') in (None, 'https://chatgpt.com/backend-api',
+                                                       'https://chatgpt.com/backend-api/'),
              'codex_config_drift')
-    for field in ('hooks', 'notify', 'model_providers', 'model_instructions_file',
-                  'openai_base_url', 'experimental_thread_store_endpoint'):
+    fields = ('hooks', 'notify', 'model_providers', 'model_instructions_file',
+              'experimental_thread_store_endpoint')
+    if development is None:
+        fields += ('openai_base_url',)
+    for field in fields:
         _require(config.get(field) in (None, {}, [], ''), 'codex_config_drift')
 
 
@@ -80,6 +93,7 @@ class Session:
         self._open_messages: dict[str, str] = {}
         self._messages: dict[str, str] = {}
         self.completed = False
+        self._approved_initial_effort = None
 
     def _bind_thread(self, value):
         value = _identifier(value)
@@ -136,7 +150,10 @@ class Session:
         _require(result.get('codexHome') == str(self.runtime.codex_home), 'codex_home_drift')
         _require(type(result.get('userAgent')) is str and bool(result['userAgent']))
         await self.transport.send({'method': 'initialized'})
-        _verify_config(await self._request('config/read', {'includeLayers': False}), self.runtime)
+        config_result = await self._request('config/read', {'includeLayers': False})
+        _verify_config(config_result, self.runtime)
+        self._approved_initial_effort = config_result['config'].get('model_reasoning_effort')
+        del config_result
         account = (await self._request('account/read', {'refreshToken': False})).get('account')
         _require(type(account) is dict and account.get('type') == 'chatgpt',
                  'codex_subscription_required')
@@ -157,6 +174,7 @@ class Session:
                  and result.get('approvalPolicy') == 'never'
                  and result.get('approvalsReviewer') == 'user'
                  and result.get('sandbox', {}).get('type') == 'readOnly'
+                 and result['sandbox'].get('networkAccess', False) is False
                  and result.get('instructionSources') == []
                  and result.get('runtimeWorkspaceRoots') == []
                  and result.get('serviceTier') in (None, 'default'), 'codex_thread_isolation_drift')
@@ -231,6 +249,49 @@ class Session:
         method, params = message.get('method'), message.get('params')
         _require(type(method) is str and type(params) is dict)
         _require(not ({'result', 'error', 'id'} & set(message)))
+        if method in ('configWarning', 'deprecationNotice'):
+            allowed = ({'summary', 'details', 'path', 'range'} if method == 'configWarning'
+                       else {'summary', 'details'})
+            _require(set(params) <= allowed and type(params.get('summary')) is str)
+            _require(params.get('details') is None or type(params['details']) is str)
+            return  # Diagnostic bodies are never retained, rendered or logged.
+        if method == 'account/rateLimits/updated':
+            _require(set(params) == {'rateLimits'} and type(params['rateLimits']) is dict)
+            return
+        if method == 'turn/moderationMetadata':
+            _require(set(params) == {'threadId', 'turnId', 'metadata'})
+            self._turn_identity(params)
+            return  # Opaque vendor metadata is not application review approval.
+        if method == 'thread/settings/updated':
+            _require(set(params) <= {'threadId', 'threadSettings', 'turnId'})
+            _require(params.get('threadId') == self.thread_id, 'codex_thread_mismatch')
+            if 'turnId' in params:
+                _require(params['turnId'] == self.turn_id, 'codex_turn_mismatch')
+            settings = params.get('threadSettings')
+            _require(type(settings) is dict
+                     and settings.get('model') == MODEL
+                     and settings.get('modelProvider') == 'openai'
+                     and settings.get('cwd') == str(self.runtime.runtime_cwd)
+                     and settings.get('approvalPolicy') == 'never'
+                     and settings.get('approvalsReviewer') == 'user'
+                     and type(settings.get('sandboxPolicy')) is dict
+                     and settings['sandboxPolicy'].get('type') == 'readOnly'
+                     and settings['sandboxPolicy'].get('networkAccess', False) is False
+                     and settings.get('serviceTier') in (None, 'default'),
+                     'codex_thread_isolation_drift')
+            mode = settings.get('collaborationMode')
+            _require(type(mode) is dict and set(mode) == {'mode', 'settings'}
+                     and mode.get('mode') == 'default', 'codex_thread_isolation_drift')
+            nested = mode.get('settings')
+            allowed_efforts = ((None, 'low') if self.turn_id is not None
+                               else (None, 'low', self._approved_initial_effort))
+            _require(type(nested) is dict
+                     and set(nested) <= {'model', 'reasoning_effort', 'developer_instructions'}
+                     and nested.get('model') == MODEL
+                     and nested.get('developer_instructions') in (None, '')
+                     and nested.get('reasoning_effort') in allowed_efforts,
+                     'codex_thread_isolation_drift')
+            return
         if method == 'account/updated':
             _require(params.get('authMode') == 'chatgpt', 'codex_subscription_required')
             return
@@ -265,11 +326,28 @@ class Session:
                      'codex_turn_mismatch')
             _require(turn.get('status') == 'completed' and turn.get('error') is None,
                      'codex_turn_not_completed')
-            _require(turn.get('itemsView', 'full') == 'full', 'codex_incomplete_output')
+            view = turn.get('itemsView', 'full')
+            _require(view in ('full', 'notLoaded', 'summary'), 'codex_incomplete_output')
             items = turn.get('items')
             _require(type(items) is list)
-            for item in items:
-                self._item(item, complete=True, snapshot=True)
+            if view in ('notLoaded', 'summary'):
+                # Sparse terminal payloads are not a new authoritative output source.
+                # Every candidate must already have completed in the live item stream.
+                _require(bool(self._messages) and not self._open_messages,
+                         'codex_incomplete_output')
+                if view == 'notLoaded':
+                    _require(not items, 'codex_incomplete_output')
+                else:
+                    for item in items:
+                        _require(type(item) is dict, 'codex_incomplete_output')
+                        item_id = _identifier(item.get('id'))
+                        _require(item.get('type') == self._items.get(item_id)
+                                 and (item.get('type') != 'agentMessage'
+                                      or item_id in self._messages), 'codex_incomplete_output')
+                        # Display-summary text is deliberately ignored, never substituted.
+            else:
+                for item in items:
+                    self._item(item, complete=True, snapshot=True)
             self.completed = True
             return
         if method in _IGNORED_TURN_EVENTS:

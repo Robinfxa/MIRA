@@ -27,7 +27,7 @@ targets = ["tests/unit/test_transitions.py", "tests/unit/test_audio_transitions.
 [[lanes]]
 name = "env"
 kind = "pytest"
-targets = ["tests/unit/test_service_configuration.py", "tests/unit/test_api_environment.py", "tests/unit/test_provider_matrix.py", "tests/unit/test_mira_auth.py"]
+targets = ["tests/unit/test_service_configuration.py", "tests/unit/test_api_environment.py", "tests/unit/test_provider_matrix.py", "tests/unit/test_mira_auth.py", "tests/unit/test_google_voice_smoke.py"]
 
 [[lanes]]
 name = "config"
@@ -146,3 +146,7 @@ lanes = ["env", "providers", "tooling"]
 [[rules]]
 paths = ["scripts/dev", "tools/dev.py", "tools/bootstrap.py", "setup.py"]
 lanes = ["tooling", "package", "smoke"]
+
+[[rules]]
+paths = ["tools/google_voice_smoke.py"]
+lanes = ["env", "providers"]

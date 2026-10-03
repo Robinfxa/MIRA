@@ -21,8 +21,10 @@ AUTHOR_INSTRUCTIONS = (
     'access environments, or narrate process. Return only one JSON object with effects. '
     'Each effect has only kind and value. speech is spoken text; subtitle is visible text; '
     'they are separate effects and neither grants permission for the other. '
-    'Return one bounded cue: at most one speech and, when speech is included, at most one '
-    'explicit subtitle for that speech. Include authored controls for this same cue only. '
+    'Return one bounded cue: at most one speech and, when speech is included, exactly one '
+    'separately authored subtitle corresponding to that same speech cue. Do not omit or '
+    'infer a caption from speech; the independent reviewer evaluates both effects. '
+    'Include authored controls for this same cue only. '
     'Do not return multiple speech segments or future-cue captions or controls. '
     'pose and scene select only the listed authored controls. media is unavailable. '
     'All values are plain data, never executable code, paths, URLs, markup or effect IDs. '
@@ -133,7 +135,7 @@ def parse_effects(texts: list[str], limits: CodexLimits) -> tuple[EffectProposal
             effects.append(EffectProposal(EffectKind(kind), value))
     speech_count = sum(effect.kind == EffectKind.SPEECH for effect in effects)
     subtitle_count = sum(effect.kind == EffectKind.SUBTITLE for effect in effects)
-    if speech_count > 1 or (speech_count and subtitle_count > 1):
+    if speech_count > 1 or (speech_count and subtitle_count != 1):
         raise CodexGenerationError('codex_effects_invalid')
     if not 1 <= len(effects) <= 8:
         raise CodexGenerationError('codex_effects_invalid')

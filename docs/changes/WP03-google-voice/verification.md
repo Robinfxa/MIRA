@@ -76,3 +76,55 @@ worker. The director independently installed and pinned the SDK dependencies.
   end-to-end 3–5-minute experience remain untested. Local Stop must precede network cancellation.
 
 Next owner can use `integration.md` for exact constructor wiring and bounded live-smoke admission.
+
+## Live synthetic connectivity addendum — 2026-10-03 17:15 UTC
+
+This addendum supersedes the earlier statement that no paid request occurred. Seven provider
+attempts are now represented in the private ignored ledger; unknown reservations were not
+released or reconciled without usage evidence. No microphone or private user audio was used.
+
+| Attempt | Result | Reserved max (USD, pre-tax) |
+| --- | --- | ---: |
+| Initial TTS | Tool review was canceled; no HTTP result, retained as unknown | 0.026624 |
+| Cancel-slot TTS | HTTP 400, `invalid_input`; no packet or cancel | 0.026624 |
+| Minimal TTS | HTTP 200, `unsupported_audio`; response media facts were not captured then | 0.303104 |
+| Initial STT | gRPC `unavailable` during TLS/proxy setup; no transcript | 0.008000 |
+| Recovery TTS | HTTP 200, part type `text`, finish `STOP`, no `inlineData`; `non_audio_part` | 0.303104 |
+| Fixture STT | Completed once with a synthetic Flite English fixture; see below | 0.008000 |
+| Text-diagnostic TTS | HTTP 200 followed by client timeout at the 30-second bound; no validated audio or response-part diagnostics | 0.303104 |
+
+The ledger's conservative maximum reservation is **$0.978560 before tax**. The final TTS
+report recorded a timeout; its full $0.303104 reservation remains unknown and consumed. No
+further request was dispatched. Google Cloud documents that SKU prices exclude taxes and that
+taxes may depend on billing location; the billing read remained unavailable, so an all-in
+under-$1 amount cannot be established. [Google Cloud tax guidance](https://docs.cloud.google.com/billing/docs/resources/vat-overview)
+
+The one successful STT attempt used the project-owned offline synthetic `greeting` fixture,
+`en-US`, `chirp_3`, `us`, 24 kHz mono PCM, 147,240 samples (6.135 seconds), fixture PCM SHA-256
+`67179120b348ae05195453fab63199b3e458474311a57791afae51a833c8c924`. The STT stream produced
+one partial and one final revision; the final matched the fixture caption. The raw transcript was
+not persisted. This verifies a bounded synthetic English STT stream only, not Chinese quality,
+microphone capture, acoustic performance or device playback.
+
+The 17:12 TTS diagnostic kept the approved exact model, global endpoint, Kore voice and minimal
+official body (`responseModalities: ["AUDIO"]`, no optional `responseFormat` or token cap). The
+earlier HTTP200 first observed text part was not a MIME/PCM decoder failure. The client closed the stream at that part, so later events are unknown. Its
+provider text, `modelVersion` and usage metadata had already been discarded, so they remain
+unknown. The bounded text/model/usage diagnostic path was implemented and exercised offline;
+the later live call timed out before a response part exposed those facts. No cause is inferred.
+
+For gRPC, bootstrap now accepts explicitly supplied `ssl_channel_credentials`; the approved
+one-shot path builds those from the existing managed CA bundle while retaining normal chain and
+hostname verification. It does not edit system/environment trust or disable TLS. Synthetic
+valid/invalid CA and SDK transport-injection tests passed; the successful fixture stream also
+demonstrated one live STT path through that explicit trust injection.
+
+Focused checks after these changes: `py_compile` plus the selected Google speech contract,
+smoke and voice-factory integration tests reported **82 passed, 36 deselected**. This is not a
+whole-repository release result; the director owns wider quality checks. Sanitized private
+receipts are under ignored `var/mission/google-setup/`:
+
+- `recovery-tts-stt-20261003T1646Z.json`
+- `recovery-stt-20261003T1654Z.json`
+- `text-diagnostic-tts-only-20261003T1711Z.json`
+- `live-smoke-ledger.json`

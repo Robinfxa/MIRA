@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import Any, Protocol
 
 from mira.adapters.speech.errors import (
-    SpeechProviderError,
+    ProviderErrorDetails, SafeAudioDiagnostic, SpeechProviderError, parse_provider_error_details,
     close_stream,
     http_error,
     raise_if_cancelled,
@@ -42,6 +42,7 @@ class GeminiTtsOptions:
     timeout_seconds: float = 60
     max_text_characters: int = 16000
     max_audio_samples: int = 24000 * 180
+    capture_provider_text_diagnostics: bool = False
 
     def __post_init__(self):
         if not isinstance(self.project_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,62}", self.project_id):
@@ -52,6 +53,8 @@ class GeminiTtsOptions:
             raise ValueError("Select an explicitly supported prebuilt voice")
         if self.style is not None and (not isinstance(self.style, str) or not self.style.strip() or len(self.style) > 1000):
             raise ValueError("Speech style must be bounded nonblank text")
+        if type(self.capture_provider_text_diagnostics) is not bool:
+            raise ValueError("Text diagnostic capture must be explicitly enabled or disabled")
         if not 0 < self.timeout_seconds <= 300 or not 0 < self.max_text_characters <= 32000 or not 0 < self.max_audio_samples <= 24000 * 300:
             raise ValueError("TTS requires bounded request and audio limits")
 
@@ -85,6 +88,7 @@ class GoogleGeminiTtsBackend:
         stream = self.transport.stream(url=self.options.url, body=body,
                                        timeout_seconds=self.options.timeout_seconds)
         sample_cursor, stopped = 0, False
+        last_non_audio_details: SafeAudioDiagnostic | None = None
         try:
             async for chunk in stream:
                 raise_if_cancelled()
@@ -105,19 +109,47 @@ class GoogleGeminiTtsBackend:
                     raise SpeechProviderError("invalid_response")
                 finish = candidate.get("finishReason")
                 if finish and finish != "STOP":
-                    raise SpeechProviderError("blocked" if finish in {"SAFETY", "BLOCKLIST", "PROHIBITED_CONTENT"} else "incomplete_stream")
+                    raise SpeechProviderError(
+                        "blocked" if finish in {"SAFETY", "BLOCKLIST", "PROHIBITED_CONTENT"} else "incomplete_stream",
+                        audio_details=self._safe_audio_details(
+                            {}, None, finish, model_version=chunk.get("modelVersion"),
+                            usage_metadata=chunk.get("usageMetadata"),
+                            capture_text=self.options.capture_provider_text_diagnostics,
+                            approved_text=approved_text, project_id=self.options.project_id,
+                        ),
+                    )
                 content = candidate.get("content", {})
                 if not isinstance(content, dict) or not isinstance(content.get("parts", []), list):
                     raise SpeechProviderError("invalid_response")
-                for response_part in content.get("parts", []):
+                for part_index, response_part in enumerate(content.get("parts", [])):
                     if not isinstance(response_part, dict):
                         raise SpeechProviderError("invalid_response")
-                    inline = response_part.get("inlineData")
-                    if inline is None:
-                        raise SpeechProviderError("unsupported_audio")
+                    if "inlineData" not in response_part:
+                        # The documented streaming sample emits only inline audio.
+                        # Other parts never become dialogue or sound. Keep bounded
+                        # facts for a later empty/failed stream, not the raw part.
+                        last_non_audio_details = self._safe_audio_details(
+                                response_part, part_index, finish,
+                                model_version=chunk.get("modelVersion"),
+                                usage_metadata=chunk.get("usageMetadata"),
+                                response_text=response_part.get("text"),
+                                capture_text=self.options.capture_provider_text_diagnostics,
+                                approved_text=approved_text, project_id=self.options.project_id,
+                            )
+                        continue
                     if stopped:
                         raise SpeechProviderError("invalid_response")
-                    pcm = self._decode_pcm(inline)
+                    try:
+                        pcm = self._decode_pcm(response_part["inlineData"])
+                    except SpeechProviderError as error:
+                        raise SpeechProviderError(error.code, audio_details=self._safe_audio_details(
+                            response_part, part_index, finish,
+                            model_version=chunk.get("modelVersion"),
+                            usage_metadata=chunk.get("usageMetadata"),
+                            response_text=response_part.get("text"),
+                            capture_text=self.options.capture_provider_text_diagnostics,
+                            approved_text=approved_text, project_id=self.options.project_id,
+                        )) from None
                     if not pcm:
                         continue
                     if sample_cursor + len(pcm) // 2 > self.options.max_audio_samples:
@@ -127,11 +159,15 @@ class GoogleGeminiTtsBackend:
                     sample_cursor += len(pcm) // 2
                 stopped = stopped or finish == "STOP"
             if not sample_cursor:
-                raise SpeechProviderError("empty_audio")
+                raise SpeechProviderError("empty_audio", audio_details=last_non_audio_details)
             if not stopped:
                 raise SpeechProviderError("incomplete_stream")
         except Exception as error:
-            raise safe_error(error) from None
+            safe = safe_error(error)
+            if safe.audio_details is None and last_non_audio_details is not None:
+                safe = SpeechProviderError(safe.code, details=safe.details,
+                                          audio_details=last_non_audio_details)
+            raise safe from None
         finally:
             await close_stream(stream, preserve_error=sys.exc_info()[0] is not None)
 
@@ -152,6 +188,129 @@ class GoogleGeminiTtsBackend:
         if len(pcm) % 2 or (pcm[:4] == b"RIFF" and pcm[8:12] == b"WAVE"):
             raise SpeechProviderError("invalid_audio")
         return pcm
+
+    @staticmethod
+    def _safe_audio_details(part: dict[str, Any], part_index: int | None,
+                            finish_reason: Any = None, *, model_version: Any = None,
+                            usage_metadata: Any = None, response_text: Any = None,
+                            capture_text: bool = False, approved_text: str | None = None,
+                            project_id: str | None = None) -> SafeAudioDiagnostic:
+        """Keep only allowlisted metadata and decode facts; never retain audio bytes."""
+        from mira.adapters.speech.errors import _SAFE_PART_TYPES, _SAFE_FINISH_REASONS, _SAFE_MEDIA_MIME
+
+        part_types = tuple(sorted(key for key in part if key in _SAFE_PART_TYPES))[:8]
+        inline = part.get("inlineData") if isinstance(part, dict) else None
+        mime_type = None
+        params: list[str] = []
+        sample_rate = channels = None
+        codec = None
+        data_chars = None
+        validation_reason = None
+        pcm_byte_count = None
+        wav_header = None
+        if isinstance(inline, dict):
+            mime = inline.get("mimeType")
+            mime_tokens: list[str] = []
+            if isinstance(mime, str):
+                mime_tokens = mime.lower().replace(" ", "").split(";")
+                candidate = mime_tokens[0]
+                if _SAFE_MEDIA_MIME.fullmatch(candidate):
+                    mime_type = candidate
+                for token in mime_tokens[1:]:
+                    if "=" not in token:
+                        continue
+                    key, value = token.split("=", 1)
+                    if key not in {"codec", "rate", "channels"}:
+                        continue
+                    if key not in params:
+                        params.append(key)
+                    if key == "rate" and value.isdigit():
+                        rate = int(value)
+                        if 1000 <= rate <= 384000:
+                            sample_rate = rate
+                    elif key == "channels" and value.isdigit():
+                        channel_count = int(value)
+                        if 1 <= channel_count <= 8:
+                            channels = channel_count
+                    elif key == "codec":
+                        codec = value if value in {"pcm", "alaw", "mulaw"} else "unknown"
+            encoded = inline.get("data")
+            if isinstance(encoded, str) and len(encoded) <= 2 * 1024 * 1024:
+                data_chars = len(encoded)
+            if not isinstance(mime, str):
+                validation_reason = "unsupported_mime_type"
+            elif mime_tokens[0] != "audio/l16":
+                validation_reason = "unsupported_mime_type"
+            elif any(p not in {"codec=pcm", "rate=24000", "channels=1"}
+                     for p in mime_tokens[1:]):
+                validation_reason = "unsupported_mime_parameter"
+            elif not isinstance(encoded, str):
+                validation_reason = "missing_audio_data"
+            elif len(encoded) > 2 * 1024 * 1024:
+                validation_reason = "audio_data_too_large"
+            else:
+                try:
+                    decoded = base64.b64decode(encoded, validate=True)
+                except (ValueError, binascii.Error):
+                    validation_reason = "invalid_base64"
+                else:
+                    pcm_byte_count = len(decoded)
+                    wav_header = decoded[:4] == b"RIFF" and decoded[8:12] == b"WAVE"
+                    if wav_header:
+                        validation_reason = "wav_header"
+                    elif len(decoded) % 2:
+                        validation_reason = "odd_pcm_bytes"
+        elif "inlineData" not in part:
+            validation_reason = "non_audio_part"
+        safe_finish = finish_reason if isinstance(finish_reason, str) and finish_reason in _SAFE_FINISH_REASONS else None
+        safe_model_version = (model_version if isinstance(model_version, str)
+                              and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,95}", model_version) else None)
+        usage = usage_metadata if isinstance(usage_metadata, dict) else {}
+        input_tokens = GoogleGeminiTtsBackend._safe_token_count(usage.get("promptTokenCount"))
+        output_tokens = GoogleGeminiTtsBackend._safe_token_count(usage.get("candidatesTokenCount"))
+        total_tokens = GoogleGeminiTtsBackend._safe_token_count(usage.get("totalTokenCount"))
+        excerpt = (GoogleGeminiTtsBackend._safe_synthetic_response_excerpt(
+            response_text, approved_text=approved_text, project_id=project_id,
+        ) if capture_text else None)
+        return SafeAudioDiagnostic(
+            part_index=part_index, part_type_names=part_types, mime_type=mime_type,
+            mime_param_names=tuple(params), sample_rate_hz=sample_rate, channels=channels,
+            codec=codec, audio_data_chars=data_chars, candidate_finish_reason=safe_finish,
+            validation_reason=validation_reason, pcm_byte_count=pcm_byte_count, wav_header=wav_header,
+            model_version=safe_model_version, input_token_count=input_tokens,
+            output_token_count=output_tokens, total_token_count=total_tokens,
+            response_text_excerpt=excerpt,
+        )
+
+    @staticmethod
+    def _safe_token_count(value: Any) -> int | None:
+        return value if type(value) is int and 0 <= value <= 1_000_000 else None
+
+    @staticmethod
+    def _safe_synthetic_response_excerpt(value: Any, *, approved_text: str | None,
+                                         project_id: str | None) -> str | None:
+        """Redact bounded provider text for this fixed synthetic smoke only."""
+        if not isinstance(value, str) or not value:
+            return None
+        excerpt = value[:2048]
+        if approved_text:
+            excerpt = excerpt.replace(approved_text, "[synthetic-prompt-redacted]")
+        if project_id and len(project_id) >= 3:
+            excerpt = re.sub(re.escape(project_id), "[project-id-redacted]", excerpt, flags=re.I)
+        redactions = (
+            (r"(?i)\bbearer\s+[^\s,;]+", "[credential-redacted]"),
+            (r"\bya29\.[A-Za-z0-9._~+/-]+", "[credential-redacted]"),
+            (r"\bAIza[A-Za-z0-9_-]{20,}", "[credential-redacted]"),
+            (r"(?i)\b(?:access[_ -]?token|refresh[_ -]?token|client[_ -]?secret|password|api[_ -]?key)\b\s*[:=]\s*[^\s,;]+", "[credential-redacted]"),
+            (r"(?i)https?://[^\s]+", "[url-redacted]"),
+            (r"\b(?:projects|locations|publishers|models|endpoints|recognizers)/[A-Za-z0-9_.-]+", "[resource-redacted]"),
+            (r"\b[A-Za-z0-9_-]{40,}\b", "[opaque-value-redacted]"),
+        )
+        for pattern, replacement in redactions:
+            excerpt = re.sub(pattern, replacement, excerpt)
+        excerpt = "".join(ch if ch in "\t\n\r" or ord(ch) >= 32 else " " for ch in excerpt)
+        excerpt = excerpt[:512]
+        return excerpt or None
 
 
 class GoogleGeminiTtsRestTransport:
@@ -192,7 +351,15 @@ class GoogleGeminiTtsRestTransport:
                                            timeout=timeout_seconds,
                                            follow_redirects=False) as response:
                 if response.status_code != 200:
-                    raise http_error(response.status_code)
+                    remaining = max(0.001, deadline - asyncio.get_running_loop().time())
+                    try:
+                        async with asyncio.timeout(remaining):
+                            details = await self._read_provider_error(response, response.status_code)
+                    except TimeoutError:
+                        details = ProviderErrorDetails(
+                            http_status=response.status_code, body_capture_status="timeout",
+                        )
+                    raise http_error(response.status_code, details=details)
                 if response.headers.get("content-type", "").split(";", 1)[0].lower() != "text/event-stream":
                     raise SpeechProviderError("invalid_response")
                 if response.headers.get("content-encoding", "identity").lower() != "identity":
@@ -213,6 +380,33 @@ class GoogleGeminiTtsRestTransport:
                     await close_stream(events, preserve_error=sys.exc_info()[0] is not None)
         except Exception as error:
             raise safe_error(error) from None
+
+    async def _read_provider_error(self, response: Any, status: int) -> ProviderErrorDetails:
+        """Read at most 8 KiB and retain only allowlisted provider error facts."""
+        body = bytearray()
+        truncated = False
+        try:
+            async for chunk in response.aiter_bytes():
+                if not isinstance(chunk, bytes):
+                    return parse_provider_error_details(status, bytes(body), truncated=truncated,
+                                                        capture_status="unavailable")
+                remaining = 8192 - len(body)
+                if len(chunk) > remaining:
+                    body.extend(chunk[:remaining])
+                    truncated = True
+                    break
+                body.extend(chunk)
+                if len(body) >= 8192:
+                    truncated = True
+                    break
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            name = type(error).__name__.lower()
+            capture_status = "timeout" if "timeout" in name else "unavailable"
+            return parse_provider_error_details(status, bytes(body), truncated=truncated,
+                                                capture_status=capture_status)
+        return parse_provider_error_details(status, bytes(body), truncated=truncated)
 
     async def _events(self, chunks: AsyncIterator[bytes]) -> AsyncGenerator[dict[str, Any], None]:
         pending = bytearray()

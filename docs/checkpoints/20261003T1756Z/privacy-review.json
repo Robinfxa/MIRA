@@ -1,0 +1,91 @@
+{
+  "reviewed": [
+    {
+      "path": "AI_USAGE.md",
+      "category": "email",
+      "lines": [
+        43
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "0fce01cc9e177d0b8742f698653454dd42ef16777fe6fde12109e7b8f62516a5"
+    },
+    {
+      "path": "tests/contracts/test_diagnostics_recording.py",
+      "category": "credential_token",
+      "lines": [
+        45,
+        49
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "e942bbc7e291d648e5c3fdae839011c32c0df8f1347f0d03497f091af10e5ad2"
+    },
+    {
+      "path": "tests/contracts/test_diagnostics_recording.py",
+      "category": "private_key",
+      "lines": [
+        60
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "e942bbc7e291d648e5c3fdae839011c32c0df8f1347f0d03497f091af10e5ad2"
+    },
+    {
+      "path": "tests/contracts/test_diagnostics_recording.py",
+      "category": "credential_assignment",
+      "lines": [
+        109,
+        110,
+        136
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "e942bbc7e291d648e5c3fdae839011c32c0df8f1347f0d03497f091af10e5ad2"
+    },
+    {
+      "path": "tests/contracts/test_diagnostics_runtime.py",
+      "category": "credential_token",
+      "lines": [
+        150
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "f57f111bf7f283d3022cff83f9b568cbbb8c219a2d9ff015db92294c733f64bd"
+    },
+    {
+      "path": "tests/unit/test_configuration.py",
+      "category": "credential_assignment",
+      "lines": [
+        108
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "b251bda12b83219a53638307ecf0961e251bee91fa3ae784bc7266d0fbbd195c"
+    },
+    {
+      "path": "tests/unit/test_quality_plan.py",
+      "category": "email",
+      "lines": [
+        115
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "33fab811bbb0f52d537e34b5b5220c201136570b0b64c58da7b5fda4f06927ea"
+    },
+    {
+      "path": "tests/unit/test_service_configuration.py",
+      "category": "credential_assignment",
+      "lines": [
+        93
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "5021cd86fdab828cb78cfca86e21404fc5135d3546806cf4279a05043f93b9e1"
+    },
+    {
+      "path": "tests/web/diagnostics-status.test.mjs",
+      "category": "credential_token",
+      "lines": [
+        16
+      ],
+      "resolution": "Same bytes as previously manually reviewed synthetic fixture/example.",
+      "sha256": "362c80a1df613fa8424b50afcff7850d6cbbf8c315dabc7bad221d2e77d65ebb"
+    }
+  ],
+  "unreviewed_findings": 0,
+  "supplemental_findings": [],
+  "real_credentials_read": false
+}

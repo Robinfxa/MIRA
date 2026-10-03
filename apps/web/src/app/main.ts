@@ -14,6 +14,7 @@ const status = element('[data-status]');
 const diagnostic = element('[data-diagnostic]');
 const error = element('[data-error]');
 const ptt = element<HTMLButtonElement>('[data-ptt]');
+const messageInput = element<HTMLInputElement>('[name=message]');
 const voiceHint = element('[data-voice-hint]');
 const recordingBanner = element('[data-recording-notice]');
 const rehearsalButton = element<HTMLButtonElement>('[data-rehearsal-input]');
@@ -28,7 +29,18 @@ const diagnosticsWatcher = watchDiagnosticsStatus(config, value => {
 });
 let microphoneAvailable = false;
 let held: string | null = null;
+let gestureInputRevision = 0;
+let rehearsalInputRevision = 0;
+let messageRevision = 0;
 let closed = false;
+messageInput.addEventListener('input', () => { messageRevision++; });
+function restoreNotSent(outcome: {status?: string; text?: string} | undefined, revision: number,
+    expectedText?: string): void {
+  if (outcome?.status !== 'not-sent' || typeof outcome.text !== 'string'
+    || messageRevision !== revision || messageInput.value !== '') return;
+  if (expectedText !== undefined && outcome.text !== expectedText) return;
+  messageInput.value = outcome.text;
+}
 function defaultVoiceHint(): string {
   return microphoneAvailable ? '按住说话，松开后等待可靠转写。停止会立即释放麦克风。' : '麦克风识别未配置或浏览器不支持。可以继续用文字。';
 }
@@ -82,10 +94,14 @@ function releaseGesture(cancel: boolean): void {
   if (held === null) return;
   held = null;
   if (cancel) void controller.stop();
-  else void controller.finishMicrophone();
+  else {
+    const revision = gestureInputRevision;
+    void controller.finishMicrophone().then(outcome => restoreNotSent(outcome, revision));
+  }
 }
 function startGesture(identity: string): void {
   if (closed || ptt.disabled || held !== null || rehearsalHeld !== null) return;
+  gestureInputRevision = ++messageRevision;
   held = identity;
   error.textContent = '';
   void controller.startMicrophone();
@@ -123,10 +139,14 @@ function releaseRehearsal(cancel: boolean): void {
   if (rehearsalHeld === null) return;
   rehearsalHeld = null;
   if (cancel) void controller.stop();
-  else void controller.finishRehearsalInput();
+  else {
+    const revision = rehearsalInputRevision;
+    void controller.finishRehearsalInput().then(outcome => restoreNotSent(outcome, revision));
+  }
 }
 function startRehearsal(identity: string): void {
   if (closed || !rehearsalAvailable || rehearsalButton.disabled || held !== null || rehearsalHeld !== null) return;
+  rehearsalInputRevision = ++messageRevision;
   error.textContent = '';
   void controller.startRehearsalInput();
   rehearsalHeld = identity;
@@ -163,25 +183,27 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 
 element<HTMLFormElement>('form').addEventListener('submit', event => {
   event.preventDefault();
-  const input = element<HTMLInputElement>('[name=message]');
-  if (!input.value.trim()) return;
+  const text = messageInput.value;
+  if (!text.trim()) return;
   error.textContent = '';
   held = null; rehearsalHeld = null;
-  void controller.input(input.value);
-  input.value = '';
+  const revision = ++messageRevision;
+  messageInput.value = '';
+  void controller.input(text).then(outcome => restoreNotSent(outcome, revision, text));
 });
 element('[data-stop]').addEventListener('click', () => { held = null; rehearsalHeld = null; void controller.stop(); });
 for (const button of document.querySelectorAll<HTMLButtonElement>('[data-command]')) {
   button.addEventListener('click', () => {
-    error.textContent = ''; held = null; rehearsalHeld = null;
+    error.textContent = ''; held = null; rehearsalHeld = null; messageRevision++;
     void controller.input(button.dataset.command ?? '');
   });
 }
 element('[data-close]').addEventListener('click', () => {
+  messageRevision++;
   closed = true; held = null; rehearsalHeld = null; ptt.disabled = true; rehearsalButton.disabled = true;
   diagnosticsWatcher.close();
   element<HTMLFieldSetElement>('fieldset').disabled = true;
   void controller.close().then(() => { status.textContent = 'closed · 刷新可新建'; });
 });
-window.addEventListener('pagehide', () => { closed = true; held = null; rehearsalHeld = null; diagnosticsWatcher.close(); void controller.close(); });
+window.addEventListener('pagehide', () => { closed = true; held = null; rehearsalHeld = null; messageRevision++; diagnosticsWatcher.close(); void controller.close(); });
 void controller.connect().catch(() => { error.textContent = '连接失败。请刷新后重试；未启动任何语音。'; });

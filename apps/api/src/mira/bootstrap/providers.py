@@ -73,7 +73,8 @@ class GoogleVoiceProviders:
 
 def create_google_voice(settings: SpeechSettings, *, credentials,
                         token_provider: Callable[[], Awaitable[str]],
-                        authorized: bool = False, http_client=None) -> GoogleVoiceProviders:
+                        authorized: bool = False, http_client=None,
+                        stt_ssl_channel_credentials=None) -> GoogleVoiceProviders:
     """Compose only after the caller has obtained capability/data/spend approval.
 
     Never discovers ADC, reads credentials, refreshes a literal token, or enables
@@ -94,6 +95,7 @@ def create_google_voice(settings: SpeechSettings, *, credentials,
     # Keep optional vendor imports and client construction inside this admitted factory.
     from google.api_core.client_options import ClientOptions
     from google.cloud.speech_v2 import SpeechAsyncClient
+    from google.cloud.speech_v2.services.speech.transports.grpc_asyncio import SpeechGrpcAsyncIOTransport
     from google.cloud.speech_v2.types import cloud_speech
     import httpx
     from mira.adapters.speech.google_stt_v2 import (
@@ -110,8 +112,20 @@ def create_google_voice(settings: SpeechSettings, *, credentials,
     tts_options = GeminiTtsOptions(project_id=settings.project_id, voice=settings.tts_voice,
                                    model=settings.tts_model, location=settings.tts_location,
                                    style=settings.tts_style)
-    stt_client = SpeechAsyncClient(credentials=credentials, client_options=ClientOptions(
-        api_endpoint=stt_options.endpoint, quota_project_id=settings.quota_project_id))
+    if stt_ssl_channel_credentials is None:
+        stt_client = SpeechAsyncClient(credentials=credentials, client_options=ClientOptions(
+            api_endpoint=stt_options.endpoint, quota_project_id=settings.quota_project_id))
+    else:
+        # GAPIC's documented async gRPC transport accepts an explicit SSL channel
+        # credential. It still performs normal CA and hostname verification; a
+        # caller-supplied channel is deliberately not accepted here because that
+        # would bypass this trust input and its ownership/lifecycle boundary.
+        stt_transport = SpeechGrpcAsyncIOTransport(
+            credentials=credentials, host=stt_options.endpoint,
+            quota_project_id=settings.quota_project_id,
+            ssl_channel_credentials=stt_ssl_channel_credentials,
+        )
+        stt_client = SpeechAsyncClient(transport=stt_transport)
     owns_http_client = http_client is None
     if http_client is None:
         http_client = httpx.AsyncClient(trust_env=False, follow_redirects=False)

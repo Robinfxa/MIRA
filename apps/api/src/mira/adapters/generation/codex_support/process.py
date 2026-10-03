@@ -5,6 +5,7 @@ import asyncio
 import hashlib
 import os
 import signal
+import stat
 from contextlib import suppress
 from pathlib import Path
 
@@ -27,7 +28,13 @@ def _validate_runtime(runtime: CodexRuntime) -> None:
         raise CodexGenerationError('codex_runtime_not_empty')
     for directory in (runtime.codex_home, runtime.runtime_cwd):
         metadata = directory.stat()
-        if metadata.st_mode & 0o077 or metadata.st_uid != os.getuid():
+        permitted_mode = not (metadata.st_mode & 0o077)
+        if directory == runtime.codex_home and runtime.development_context is not None:
+            permitted_mode = (stat.S_IMODE(metadata.st_mode)
+                              == runtime.development_context.observed_home_mode)
+            if runtime.environment.get('CODEX_HOME') != str(directory):
+                raise CodexGenerationError('codex_development_home_drift')
+        if not permitted_mode or metadata.st_uid != os.getuid():
             raise CodexGenerationError('codex_runtime_permissions')
     digest = hashlib.sha256()
     with runtime.executable.open('rb') as source:
@@ -37,10 +44,14 @@ def _validate_runtime(runtime: CodexRuntime) -> None:
         raise CodexGenerationError('codex_executable_drift')
 
 
-def _argv() -> tuple[str, ...]:
-    args = ['-c', 'features.respect_system_proxy=true', 'app-server', '--listen', 'stdio://']
+def _argv(runtime: CodexRuntime | None = None) -> tuple[str, ...]:
+    development = runtime is not None and runtime.development_context is not None
+    args = [] if development else ['-c', 'features.respect_system_proxy=true']
+    args += ['app-server', '--listen', 'stdio://']
     for feature in DISABLED_FEATURES:
         args += ['--disable', feature]
+    if development:
+        args += ['-c', 'orchestrator.mcp.enabled=false', '-c', 'cloud.skills.enabled=false']
     return (*args, '-c', 'web_search="disabled"')
 
 
@@ -179,12 +190,29 @@ class StdioProcessTransport:
                 self._queue.get_nowait()
 
 
+def _process_environment(runtime: CodexRuntime) -> dict[str, str]:
+    if runtime.development_context is None:
+        environment = dict(runtime.environment)
+        environment['CODEX_HOME'] = str(runtime.codex_home)
+        return environment
+    # Preserve the already-approved managed context, never discover/copy auth files.
+    # Caller input cannot substitute a different environment or home.
+    if runtime.environment.get('CODEX_HOME') != str(runtime.codex_home):
+        raise CodexGenerationError('codex_development_home_drift')
+    forbidden = ('CODEX_API_KEY', 'OPENAI_API_KEY', 'OPENAI_BASE_URL', 'CODEX_ACCESS_TOKEN',
+                 'CODEX_REFRESH_TOKEN_URL_OVERRIDE', 'TYPESAFE_API_KEY')
+    if any(key in runtime.environment for key in forbidden):
+        raise CodexGenerationError('codex_development_environment_drift')
+    if not runtime.environment.get('HTTPS_PROXY') or not runtime.environment.get('SSL_CERT_FILE'):
+        raise CodexGenerationError('codex_policy_environment_unverified')
+    return dict(runtime.environment)
+
+
 async def open_stdio(runtime: CodexRuntime, limits: CodexLimits) -> StdioProcessTransport:
     try:
         await asyncio.to_thread(_validate_runtime, runtime)
-        environment = dict(runtime.environment)
-        environment['CODEX_HOME'] = str(runtime.codex_home)
-        return await StdioProcessTransport._spawn(runtime.executable, _argv(), runtime.runtime_cwd,
+        environment = _process_environment(runtime)
+        return await StdioProcessTransport._spawn(runtime.executable, _argv(runtime), runtime.runtime_cwd,
                                                    environment, limits)
     except CodexGenerationError:
         raise

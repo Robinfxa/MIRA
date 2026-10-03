@@ -1,0 +1,41 @@
+{
+  "feature": "ENV-04",
+  "spec": "specs/features/ENV-04-approved-development-context/spec.md",
+  "requirements": [
+    {
+      "id": "ENV04-001",
+      "tests": [
+        "tests/contracts/test_codex_development_context.py::test_exact_approved_development_context_accepts_structured_candidate_only",
+        "tests/contracts/test_codex_development_context.py::test_development_context_drift_fails_closed",
+        "tests/contracts/test_codex_development_context.py::test_development_home_binding_cannot_be_substituted",
+        "tests/contracts/test_codex_development_context.py::test_development_auth_or_route_override_is_rejected",
+        "tests/contracts/test_codex_development_context.py::test_present_empty_auth_or_route_override_is_still_rejected",
+        "tests/contracts/test_codex_development_context.py::test_exact_official_chatgpt_default_without_trailing_slash_is_supported",
+        "tests/contracts/test_codex_development_context.py::test_chatgpt_default_spelling_does_not_allow_arbitrary_route"
+      ]
+    },
+    {
+      "id": "ENV04-002",
+      "tests": [
+        "tests/contracts/test_codex_development_context.py::test_development_argv_preserves_managed_proxy_and_disables_cloud_capabilities",
+        "tests/contracts/test_codex_development_context.py::test_development_inherits_exact_managed_environment_without_custom_overrides",
+        "tests/contracts/test_codex_development_context.py::test_default_profile_still_rejects_existing_custom_route"
+      ]
+    },
+    {
+      "id": "ENV04-003",
+      "tests": [
+        "tests/contracts/test_codex_development_context.py::test_pinned_metadata_is_discarded_without_candidate_bypass",
+        "tests/contracts/test_codex_development_context.py::test_thread_settings_model_drift_remains_forbidden",
+        "tests/contracts/test_codex_development_context.py::test_moderation_metadata_identity_drift_fails_closed",
+        "tests/contracts/test_codex_development_context.py::test_thread_start_network_access_expansion_is_rejected",
+        "tests/contracts/test_codex_development_context.py::test_thread_settings_network_access_expansion_is_rejected",
+        "tests/contracts/test_codex_development_context.py::test_collaboration_mode_context_drift_is_rejected",
+        "tests/contracts/test_codex_development_context.py::test_not_loaded_terminal_uses_only_already_completed_streamed_output",
+        "tests/contracts/test_codex_development_context.py::test_sparse_or_partial_terminal_never_invents_completed_output",
+        "tests/contracts/test_codex_development_context.py::test_summary_terminal_uses_completed_events_not_display_summary",
+        "tests/contracts/test_codex_development_context.py::test_summary_cannot_introduce_unseen_or_changed_item"
+      ]
+    }
+  ]
+}

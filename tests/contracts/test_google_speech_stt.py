@@ -1,5 +1,6 @@
 """Synthetic STT V2 streaming contract; no SDK credentials are discovered."""
 import asyncio
+from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
 
 import pytest
@@ -206,6 +207,7 @@ async def test_grpc_status_mapping_without_error_text(name, code):
 @pytest.mark.asyncio
 async def test_real_google_sdk_request_and_async_client_seam_without_network(monkeypatch):
     import google.auth
+    import grpc
     import grpc.aio
     from google.auth.credentials import AnonymousCredentials
     from google.cloud.speech_v2 import SpeechAsyncClient
@@ -234,10 +236,14 @@ async def test_real_google_sdk_request_and_async_client_seam_without_network(mon
             self.closed = True
 
     channel = NoNetworkChannel()
+    channel_args = {}
+    tls_credential = grpc.ssl_channel_credentials(root_certificates=_synthetic_root_ca())
     transport = SpeechGrpcAsyncIOTransport(
         credentials=AnonymousCredentials(), host="us-speech.googleapis.com",
-        channel=lambda *args, **kwargs: channel,
+        ssl_channel_credentials=tls_credential,
+        channel=lambda *args, **kwargs: (channel_args.update(kwargs) or channel),
     )
+    assert channel_args["ssl_credentials"] is tls_credential
     client = SpeechAsyncClient(transport=transport)
     requests, options = [], {}
 
@@ -266,6 +272,24 @@ async def test_real_google_sdk_request_and_async_client_seam_without_network(mon
     assert options["retry"] is None and rpc.cancelled
     await client.transport.close()
     assert channel.closed
+
+
+def _synthetic_root_ca() -> bytes:
+    """Ephemeral in-test CA fixture; never installed or used outside loopback tests."""
+    from cryptography import x509
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import rsa
+    from cryptography.x509.oid import NameOID
+
+    key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "synthetic-test-root")])
+    now = datetime.now(timezone.utc)
+    cert = (x509.CertificateBuilder().subject_name(name).issuer_name(name)
+            .public_key(key.public_key()).serial_number(x509.random_serial_number())
+            .not_valid_before(now - timedelta(minutes=1)).not_valid_after(now + timedelta(days=1))
+            .add_extension(x509.BasicConstraints(ca=True, path_length=None), critical=True)
+            .sign(key, hashes.SHA256()))
+    return cert.public_bytes(serialization.Encoding.PEM)
 
 
 @pytest.mark.asyncio
@@ -299,3 +323,49 @@ async def test_stt_suppressed_transport_cancellation_cannot_emit_late_transcript
     with pytest.raises(asyncio.CancelledError):
         await task
     assert transport.closed
+
+
+@pytest.mark.asyncio
+async def test_voice_factory_passes_explicit_tls_roots_into_sdk_transport(monkeypatch):
+    import google.cloud.speech_v2
+    from google.cloud.speech_v2.services.speech import transports
+    from mira.bootstrap.providers import create_google_voice
+    from mira.config.service_settings import SpeechSettings
+
+    observed = {}
+    tls_credential = object()
+
+    class FakeGrpcTransport:
+        def __init__(self, **kwargs):
+            observed["transport"] = kwargs
+            self._kwargs = kwargs
+            self._unary_unary_interceptors = []
+
+        async def close(self):
+            observed["transport_closed"] = True
+
+    class FakeSpeechClient:
+        def __init__(self, *, transport=None, **kwargs):
+            observed["client_transport"] = transport
+            observed["client_kwargs"] = kwargs
+            self.transport = transport
+
+    class FakeHttpClient:
+        async def aclose(self):
+            observed["http_closed"] = True
+
+    async def token_provider():
+        raise AssertionError("Offline composition must not request tokens")
+
+    monkeypatch.setattr(transports.grpc_asyncio, "SpeechGrpcAsyncIOTransport", FakeGrpcTransport)
+    monkeypatch.setattr(google.cloud.speech_v2, "SpeechAsyncClient", FakeSpeechClient)
+    voice = create_google_voice(
+        SpeechSettings(project_id="mira-test", tts_voice="Kore"), credentials=object(),
+        token_provider=token_provider, authorized=True, http_client=FakeHttpClient(),
+        stt_ssl_channel_credentials=tls_credential,
+    )
+    assert observed["transport"]["host"] == "us-speech.googleapis.com"
+    assert observed["transport"]["ssl_channel_credentials"] is tls_credential
+    assert observed["client_transport"] is not None
+    await voice.close()
+    assert observed["transport_closed"] is True
