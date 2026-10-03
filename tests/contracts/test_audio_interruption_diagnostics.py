@@ -37,7 +37,7 @@ class Generate:
 
 class HeldReview:
     def __init__(self):
-        self.entered = {1: asyncio.Event(), 2: asyncio.Event()}
+        self.entered = {epoch: asyncio.Event() for epoch in (1, 2, 3)}
 
     async def review(self, context, candidate):
         if context.output_epoch != 1 or context.accepted_prefix:
@@ -145,23 +145,36 @@ async def test_interruption_distinguishes_unknown_playback_from_revoked_work(sta
 async def test_known_cause_survives_late_interruption_without_cancelling_new_branch(action):
     async with ready_actor() as parts:
         reason = CancellationReason.USER_STOP if action == "stop" else CancellationReason.SUPERSEDED
+        terminal = replace(parts.progress, presentation_seq=2, status=AudioStatus.INTERRUPTED)
         if action == "stop":
             await parts.actor.stop(activity_seq=2, cutoff=2)
             newer = ()
         else:
-            await parts.actor.submit(request_id=str(uuid4()), activity_seq=2, cutoff=2,
+            request_id = str(uuid4())
+            with pytest.raises(DomainError) as pending:
+                await parts.actor.submit(request_id=request_id, activity_seq=2, cutoff=2,
+                                         text="Synthetic new input")
+            assert pending.value.code == "history_pending"
+            # Missing history revokes old authority without accepting this request.
+            await finish_cancelled_work(parts)
+            stopped = await parts.actor.snapshot()
+            assert stopped.activity_seq == 1 and stopped.user_inputs == ("Synthetic input",)
+            await parts.actor.audio_progress(terminal)
+            await parts.actor.submit(request_id=request_id, activity_seq=2, cutoff=2,
                                      text="Synthetic new input")
             async with asyncio.timeout(1):
-                await parts.review.entered[2].wait()
+                await parts.review.entered[3].wait()
             newer = tuple(task for task in parts.actor._tasks if task not in parts.tasks)
             assert len(newer) == 1
         await finish_cancelled_work(parts)
         before = await parts.actor.snapshot()
-        terminal = replace(parts.progress, presentation_seq=2, status=AudioStatus.INTERRUPTED)
         events_before = tuple(parts.sink.events)
         state = await parts.actor.audio_progress(terminal)
-        assert state == replace(before, revision=before.revision + 1,
-                               audio_progress=before.audio_progress + (terminal,))
+        if action == "stop":
+            assert state == replace(before, revision=before.revision + 1,
+                                   audio_progress=before.audio_progress + (terminal,))
+        else:
+            assert state is before  # Already acknowledged prefix fact is idempotent.
         assert not cancelled(parts.sink.events, DiagnosticStage.PLAYBACK)
         for stage in (DiagnosticStage.GENERATION, DiagnosticStage.OUTPUT_REVIEW,
                       DiagnosticStage.TTS, DiagnosticStage.STT):

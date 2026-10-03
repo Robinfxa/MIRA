@@ -1,0 +1,44 @@
+{
+  "feature": "OBS-04",
+  "spec": "specs/features/OBS-04-reviewed-audio-staging/spec.md",
+  "requirements": [
+    {
+      "id": "OBS04-001",
+      "tests": [
+        "tests/contracts/test_diagnostics_audio_review.py::test_mode_requires_visible_explicit_opt_in_and_off_wipes_pending_buffer",
+        "tests/contracts/test_diagnostics_audio_review.py::test_new_input_cancels_prior_candidate_and_close_disables_sink",
+        "tests/contracts/test_diagnostics_audio_review.py::test_cancel_and_recording_mode_cycle_invalidate_old_approvals"
+      ]
+    },
+    {
+      "id": "OBS04-002",
+      "tests": [
+        "tests/contracts/test_diagnostics_audio_review.py::test_pcm_staging_is_bounded_transient_and_not_saved_before_review",
+        "tests/contracts/test_diagnostics_audio_review.py::test_invalid_or_oversize_pcm_fails_closed_and_wipes_buffer",
+        "tests/contracts/test_diagnostics_audio_review.py::test_expired_review_is_wiped_and_reported",
+        "tests/contracts/test_diagnostics_audio_review.py::test_limits_and_owner_fields_reject_unbounded_or_missing_values"
+      ]
+    },
+    {
+      "id": "OBS04-003",
+      "tests": [
+        "tests/contracts/test_diagnostics_audio_review.py::test_review_exposes_exact_readonly_pcm_digest_and_owner_binding",
+        "tests/contracts/test_diagnostics_audio_review.py::test_buffer_mutation_digest_mismatch_and_repeated_submit_cannot_save"
+      ]
+    },
+    {
+      "id": "OBS04-004",
+      "tests": [
+        "tests/contracts/test_diagnostics_audio_review.py::test_explicit_exact_buffer_approval_queues_one_private_raw_record",
+        "tests/contracts/test_diagnostics_audio_review.py::test_persistence_needs_explicit_consent_and_actionable_sink_acceptance",
+        "tests/contracts/test_diagnostics_audio_review.py::test_known_credential_bytes_remain_blocked_by_existing_privacy_filter"
+      ]
+    },
+    {
+      "id": "OBS04-005",
+      "tests": [
+        "tests/contracts/test_diagnostics_audio_review.py::test_audio_review_does_not_emit_ordinary_events_or_authorize_raw_export"
+      ]
+    }
+  ]
+}

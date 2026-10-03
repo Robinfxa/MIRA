@@ -23,18 +23,31 @@ from tools import jev_smoke as smoke
 LEDGER_RELATIVE = "var/mission/jev-live-budget.json"
 LOCK_RELATIVE = "var/mission/jev-live-budget.lock"
 MAX_ATTEMPTS = 20
+LEGACY_POLICY_ID = "jev-evaluation-legacy-20-001-v1"
+APPROVED_CONTINUATION_POLICY_ID = "jev-zh-approved-continuation-20261003-v1"
+CONTINUATION_MAX_ATTEMPTS = 35
+CONTINUATION_TOTAL_LIMIT = Decimal("0.05")
 
 
 def utc_now():
     return datetime.now(UTC).isoformat()
 
 
-def load_ledger(root):
+def load_ledger(root, *, continuation=False):
     # Never initialize/reset the approved global budget, even if its file is missing.
     ledger = support.read_json(root / LEDGER_RELATIVE)
-    if (ledger.get("maximum_attempts") != MAX_ATTEMPTS
+    expected_attempts = CONTINUATION_MAX_ATTEMPTS if continuation else MAX_ATTEMPTS
+    expected_usd = CONTINUATION_TOTAL_LIMIT if continuation else smoke.TOTAL_LIMIT
+    allowed_old_ledger = (continuation and ledger.get("maximum_attempts") == MAX_ATTEMPTS
+                          and type(ledger.get("maximum_attempts")) is int
+                          and Decimal(ledger.get("maximum_usd", "NaN")) == smoke.TOTAL_LIMIT
+                          and ledger.get("budget_policy_id") in (None, LEGACY_POLICY_ID))
+    if ((ledger.get("maximum_attempts") != expected_attempts and not allowed_old_ledger)
             or type(ledger.get("maximum_attempts")) is not int
-            or Decimal(ledger.get("maximum_usd", "NaN")) != smoke.TOTAL_LIMIT
+            or (Decimal(ledger.get("maximum_usd", "NaN")) != expected_usd and not allowed_old_ledger)
+            or (continuation and ledger.get("budget_policy_id") not in
+                (None, LEGACY_POLICY_ID, APPROVED_CONTINUATION_POLICY_ID))
+            or (not continuation and ledger.get("budget_policy_id") not in (None, LEGACY_POLICY_ID))
             or type(ledger.get("attempts")) is not list):
         raise support.EvaluationStop("ledger_invalid")
     for attempt in ledger["attempts"]:
@@ -42,6 +55,21 @@ def load_ledger(root):
         if not value.is_finite() or value < Decimal("0.00001"):
             raise support.EvaluationStop("ledger_invalid")
     return ledger
+
+
+def _upgrade_ledger_for_continuation(root, ledger):
+    """Widen only the recorded ceiling under the existing global lock; retain every row."""
+    if ledger.get("maximum_attempts") == MAX_ATTEMPTS:
+        if len(ledger["attempts"]) > CONTINUATION_MAX_ATTEMPTS or charged(ledger) > CONTINUATION_TOTAL_LIMIT:
+            raise support.EvaluationStop("local_budget_exhausted")
+        ledger["maximum_attempts"] = CONTINUATION_MAX_ATTEMPTS
+        ledger["maximum_usd"] = str(CONTINUATION_TOTAL_LIMIT)
+        ledger["budget_policy_id"] = APPROVED_CONTINUATION_POLICY_ID
+        smoke.save(root / LEDGER_RELATIVE, ledger)
+    elif (ledger.get("maximum_attempts") != CONTINUATION_MAX_ATTEMPTS
+            or Decimal(ledger.get("maximum_usd", "NaN")) != CONTINUATION_TOTAL_LIMIT
+            or ledger.get("budget_policy_id") != APPROVED_CONTINUATION_POLICY_ID):
+        raise support.EvaluationStop("ledger_invalid")
 
 
 def charged(ledger):
@@ -70,7 +98,8 @@ def request_shape(payload, track, case, snap, candidate=None, contract=None):
 
 
 async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
-                    report_path=None, max_cases=16, budget_root=None):
+                    report_path=None, max_cases=16, budget_root=None,
+                    approved_continuation=False, approved_diagnostic_repeat=False):
     """Injected transport entry point. Tests use temporary roots/ledgers only.
 
     Main is the only credential-aware caller. All adapters remain uncalibrated.
@@ -80,8 +109,21 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
     root, manifest_path = Path(root), Path(manifest_path)
     budget_root = root if budget_root is None else Path(budget_root)
     manifest, plan, selected = support.validate_manifest(root, manifest_path, manifest_sha256)
+    policy_id = manifest.get("budget_policy_id", LEGACY_POLICY_ID)
+    continuation = policy_id == APPROVED_CONTINUATION_POLICY_ID
+    diagnostic_only = manifest.get("diagnostic_only") is True
+    if (continuation and approved_continuation is not True) or (
+            not continuation and approved_continuation is not False):
+        raise support.EvaluationStop("continuation_policy_approval_mismatch")
+    if (diagnostic_only and approved_diagnostic_repeat is not True) or (
+            not diagnostic_only and approved_diagnostic_repeat is not False):
+        raise support.EvaluationStop("diagnostic_repeat_review_mismatch")
+    if policy_id not in {LEGACY_POLICY_ID, APPROVED_CONTINUATION_POLICY_ID}:
+        raise support.EvaluationStop("budget_policy_invalid")
     if type(max_cases) is not int or not 1 <= max_cases <= 16:
         raise support.EvaluationStop("attempt_limit_invalid")
+    if diagnostic_only and max_cases != 1:
+        raise support.EvaluationStop("diagnostic_attempt_limit_invalid")
     if report_path is not None:
         report_path = Path(report_path)
         if report_path.exists() or report_path.resolve() in {
@@ -97,6 +139,12 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
         "manifest_sha256": manifest_sha256, "source_sha256": support.digest(manifest["file_sha256"]),
         "production_calibration_admitted": False, "calibration_ref": None,
         "concurrency": 1, "retries": 0, "attempted_requests": 0,
+        "budget_policy_id": policy_id,
+        "diagnostic_only": diagnostic_only,
+        "metric_scope": ("single_case_diagnostic_repeat_not_for_quality_aggregation" if diagnostic_only
+                         else "registered_development_diagnostic"),
+        "timeout_seconds": 30 if continuation else 10,
+        "timeout_change_from_existing_default_seconds": 10 if continuation else 0,
         "status": "running", "results": rows,
         "evidence_class": "synthetic_development_diagnostic_not_admission",
         "interval_scope": "descriptive_only_nonrandom_correlated_synthetic_cases",
@@ -115,9 +163,11 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
             raise support.EvaluationStop("global_budget_locked") from None
-        ledger = load_ledger(budget_root)
+        ledger = load_ledger(budget_root, continuation=continuation)
         if any(a.get("evaluation_run_id") == manifest["run_id"] for a in ledger["attempts"]):
             raise support.EvaluationStop("run_already_attempted")
+        if continuation:
+            _upgrade_ledger_for_continuation(budget_root, ledger)
         persist()
         for index, (track, case) in enumerate(selected[:max_cases]):
             row = rows[index]
@@ -136,9 +186,11 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
                     if support.digest(case) != row["case_sha256"]:
                         raise support.EvaluationStop("case_binding_mismatch")
                     binding, question_hash = request_shape(payload, track, case, snap, candidate, contract)
-                    ledger = load_ledger(budget_root)
-                    if (len(ledger["attempts"]) >= MAX_ATTEMPTS
-                            or charged(ledger) + smoke.PER_ATTEMPT_RESERVE > smoke.TOTAL_LIMIT):
+                    ledger = load_ledger(budget_root, continuation=continuation)
+                    max_attempts = CONTINUATION_MAX_ATTEMPTS if continuation else MAX_ATTEMPTS
+                    total_limit = CONTINUATION_TOTAL_LIMIT if continuation else smoke.TOTAL_LIMIT
+                    if (len(ledger["attempts"]) >= max_attempts
+                            or charged(ledger) + smoke.PER_ATTEMPT_RESERVE > total_limit):
                         raise support.EvaluationStop("local_budget_exhausted")
                     attempt = {"case": case["id"], "evaluation_run_id": manifest["run_id"],
                         "started_at": utc_now(), "budget_charge_usd": str(smoke.PER_ATTEMPT_RESERVE),
@@ -157,7 +209,11 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
                         trace["http_status"] = response.status_code
                     try:
                         dimensions, usage = support.inspect_response(response, payload, track)
-                    except Exception:
+                    except Exception as error:
+                        trace["validation_diagnostic"] = support.safe_response_diagnostics(
+                            response, payload, track, error)
+                        if (type(error) is support.EvaluationStop and error.args == ("http_error",)):
+                            raise
                         raise support.EvaluationStop("response_invalid") from None
                     trace.update(raw_answers=dimensions, usage=usage)
                     support.validate_manifest(root, manifest_path, manifest_sha256)
@@ -170,11 +226,13 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
             try:
                 if track == "input":
                     result = await support.jev_input.JevInputDecisionBackend(transport=bounded_transport,
-                        model=support.MODEL, calibration_ref=None, request_limit=1).observe(snap)
+                        model=support.MODEL, calibration_ref=None, request_limit=1,
+                        timeout_seconds=30 if continuation else 10).observe(snap)
                     row.update(runtime_status=result.status.value, runtime_reason=result.reason_code)
                 else:
                     result = await support.jev.JevReviewBackend(transport=bounded_transport,
                         model=support.MODEL, calibration_ref=None, request_limit=1,
+                        timeout_seconds=30 if continuation else 10,
                         contract_resolver=lambda *_: contract).review_detailed(snap.context, candidate)
                     row.update(runtime_status=result.observation.verdict.value,
                                runtime_reason=result.observation.reason_code)
@@ -201,6 +259,8 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
                        response_valid=trace.get("response_valid", False))
             if "http_status" in trace:
                 row["http_status"] = trace["http_status"]
+            if "validation_diagnostic" in trace:
+                row["validation_diagnostic"] = trace["validation_diagnostic"]
             if "usage" in trace:
                 usage = trace["usage"]
                 row["usage"] = usage
@@ -226,9 +286,10 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
                 report["status"] = "unsafe_qualified_result"
             else:
                 four = [r for r in rows if r["case_id"] in plan["first_four_compatible"]]
-                if all(r["dispatched"] and r.get("thresholded_semantic_result") == "unknown" for r in four):
+                if four and all(r["dispatched"] and r.get("thresholded_semantic_result") == "unknown"
+                                for r in four):
                     report["status"] = "compatible_coverage_futility"
-                elif charged(ledger) > smoke.TOTAL_LIMIT:
+                elif charged(ledger) > (CONTINUATION_TOTAL_LIMIT if continuation else smoke.TOTAL_LIMIT):
                     report["status"] = "local_budget_exhausted"
             persist()
             if report["status"] != "running":
@@ -250,6 +311,10 @@ def main(argv=None):
     parser.add_argument("--manifest", type=Path)
     parser.add_argument("--manifest-sha256")
     parser.add_argument("--approved-config-root", type=Path)
+    parser.add_argument("--approved-continuation", action="store_true",
+                        help="require the frozen 2026-10-03 approved continuation policy")
+    parser.add_argument("--root-reviewed-diagnostic-repeat", action="store_true",
+                        help="require explicit review of a frozen one-case diagnostic repeat")
     parser.add_argument("--max-cases", type=int, choices=range(1, 17), default=16)
     args = parser.parse_args(argv)
     if not args.allow_live:
@@ -276,6 +341,8 @@ def main(argv=None):
             datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ") + ".json")
         report = asyncio.run(run_batch(root=ROOT, budget_root=config_root, manifest_path=args.manifest,
             manifest_sha256=args.manifest_sha256, transport_factory=live_transport,
+            approved_continuation=args.approved_continuation,
+            approved_diagnostic_repeat=args.root_reviewed_diagnostic_repeat,
             report_path=report_path, max_cases=args.max_cases))
         print(json.dumps(report, ensure_ascii=False, allow_nan=False))
         return 0 if report["status"] in {"completed", "attempt_limit_reached"} else 2

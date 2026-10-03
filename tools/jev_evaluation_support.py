@@ -19,6 +19,9 @@ from mira.domain.models import AudioProgress, AudioStatus, Effect, EffectKind
 
 MODEL = "jev-1.13.0"
 QUESTION_SETS = {"input": "mira-input-v1", "output": "mira-output-v1"}
+LEGACY_BUDGET_POLICY_ID = "jev-evaluation-legacy-20-001-v1"
+CONTINUATION_BUDGET_POLICY_ID = "jev-zh-approved-continuation-20261003-v1"
+DIAGNOSTIC_CASE_ID = "out_old_boundary_voice"
 THRESHOLDS = {
     "input_yes_probability": 0.99, "input_no_probability": 0.01,
     "input_referent_probability": 0.99, "input_referent_confidence": 0.985,
@@ -138,6 +141,8 @@ def validate_manifest(root: Path, path: Path, expected_sha: str):
             or manifest.get("origin") != SYSTEMONE_URL
             or manifest.get("production_calibration_admitted") is not False
             or manifest.get("question_sets") != QUESTION_SETS
+            or manifest.get("budget_policy_id", LEGACY_BUDGET_POLICY_ID) not in
+                {LEGACY_BUDGET_POLICY_ID, CONTINUATION_BUDGET_POLICY_ID}
             or not IDENTIFIER.fullmatch(manifest.get("run_id", ""))):
         raise EvaluationStop("manifest_contract_invalid")
     files = manifest["file_sha256"]
@@ -159,7 +164,11 @@ def validate_manifest(root: Path, path: Path, expected_sha: str):
             or plan["question_sets"] != list(QUESTION_SETS.values())
             or plan["holdout_first_run"] is not False
             or plan["production_calibration_admitted"] is not False
+            or plan.get("budget_policy_id", LEGACY_BUDGET_POLICY_ID) !=
+                manifest.get("budget_policy_id", LEGACY_BUDGET_POLICY_ID)
             or manifest["selected"] != plan["ordered_first_run"]
+            or (manifest.get("budget_policy_id") == CONTINUATION_BUDGET_POLICY_ID
+                and plan.get("timeout_seconds") != 30)
             or not 1 <= len(manifest["selected"]) <= 16):
         raise EvaluationStop("preregistration_mismatch")
     cases = {}
@@ -215,7 +224,15 @@ def validate_manifest(root: Path, path: Path, expected_sha: str):
                 raise EvaluationStop("gold_coverage_invalid")
         selected.append((track, case))
     four = plan["first_four_compatible"]
-    if (len(four) != len(set(four)) or len(four) != 4 or not set(four) <= seen
+    if manifest.get("diagnostic_only") is True:
+        diagnostic_item = manifest.get("diagnostic_case_id")
+        if (manifest.get("budget_policy_id") != CONTINUATION_BUDGET_POLICY_ID
+                or plan.get("diagnostic_only") is not True or four != [] or len(selected) != 1
+                or selected[0][1]["id"] != DIAGNOSTIC_CASE_ID or diagnostic_item != DIAGNOSTIC_CASE_ID
+                or selected[0][0] != "output"):
+            raise EvaluationStop("diagnostic_manifest_invalid")
+    elif (manifest.get("diagnostic_only") not in (None, False) or "diagnostic_case_id" in manifest
+            or len(four) != len(set(four)) or len(four) != 4 or not set(four) <= seen
             or any(cases[c][0] != "output" or cases[c][1]["gold_class"] != "compatible" for c in four)):
         raise EvaluationStop("futility_registration_invalid")
     return manifest, plan, selected
@@ -236,6 +253,265 @@ def inspect_response(response, payload, track):
     parsed = json.loads(response.body)
     dimensions = {key.rsplit(":", 1)[-1]: answer for key, answer in parsed["answers"].items()}
     return dimensions, usage
+
+
+_OUTPUT_PARSER_REASONS = frozenset({
+    "body_size", "response_shape", "model_mismatch", "answer_coverage", "usage_shape",
+    "answer_shape", "probabilities", "choice_not_maximum", "inconsistent_confidence",
+    "duplicate_key", "nonfinite_number",
+})
+_INPUT_PARSER_REASONS = frozenset({
+    "response_size", "response_shape", "usage_shape", "noul_shape", "choice_shape",
+    "choice_distribution", "choice_confidence", "duplicate_key", "nonfinite",
+})
+_COMMON_PARSER_REASONS = frozenset({
+    "http_error", "json_decode", "invalid_utf8", "unclassified_parser_failure",
+})
+
+
+def _safe_parser_reason(error, track):
+    """Return fixed parser codes only; never persist arbitrary exception text."""
+    if type(error) is json.JSONDecodeError:
+        return "json_decode"
+    if type(error) is UnicodeDecodeError:
+        return "invalid_utf8"
+    message = error.args[0] if isinstance(error, ValueError) and len(error.args) == 1 else None
+    if type(message) is str and message in _COMMON_PARSER_REASONS:
+        return message
+    allowed = _OUTPUT_PARSER_REASONS if track == "output" else _INPUT_PARSER_REASONS
+    return message if type(message) is str and message in allowed else "unclassified_parser_failure"
+
+
+def _safe_parser_field(reason, answer_facts=()):
+    fixed = {
+        "body_size": "body", "response_size": "body", "json_decode": "json",
+        "http_error": "http_status",
+        "invalid_utf8": "json", "duplicate_key": "json", "nonfinite_number": "json",
+        "nonfinite": "json", "response_shape": "response", "model_mismatch": "model",
+        "answer_coverage": "answers", "usage_shape": "usage", "unclassified_parser_failure": "unknown",
+    }
+    if reason in fixed:
+        return fixed[reason]
+    predicates = {
+        "answer_shape": lambda f: f.get("expected_type") == "choice" and (
+            f.get("wire_type") != "object" or f.get("answer_type_matches") is False
+            or f.get("selected_choice_known") is False or f.get("confidence") is None
+            or f.get("unexpected_field_count", 0) > 0),
+        "probabilities": lambda f: f.get("expected_type") == "choice" and (
+            f.get("probability_field_count") != f.get("expected_probability_count")
+            or f.get("known_probability_field_count") != f.get("expected_probability_count")
+            or f.get("valid_probability_count") != f.get("expected_probability_count")
+            or f.get("probability_sum") is None
+            or (f.get("probability_sum") is not None and not math.isclose(
+                f["probability_sum"], 1, abs_tol=0.00001))),
+        "choice_not_maximum": lambda f: f.get("selected_is_maximum") is False,
+        "inconsistent_confidence": lambda f: f.get("confidence_consistent") is False,
+        "noul_shape": lambda f: f.get("expected_type") == "noul" and (
+            f.get("wire_type") != "object" or f.get("answer_type_matches") is False
+            or f.get("unexpected_field_count", 0) > 0 or f.get("noul_probability") is None),
+        "choice_shape": lambda f: f.get("expected_type") == "choice" and (
+            f.get("wire_type") != "object" or f.get("answer_type_matches") is False
+            or f.get("selected_choice_known") is False or f.get("confidence") is None
+            or f.get("unexpected_field_count", 0) > 0),
+        "choice_distribution": lambda f: f.get("expected_type") == "choice" and (
+            f.get("probability_field_count") != f.get("expected_probability_count")
+            or f.get("known_probability_field_count") != f.get("expected_probability_count")
+            or f.get("valid_probability_count") != f.get("expected_probability_count")
+            or f.get("probability_sum") is None
+            or (f.get("probability_sum") is not None and not math.isclose(
+                f["probability_sum"], 1, abs_tol=0.00001))),
+        "choice_confidence": lambda f: f.get("expected_type") == "choice" and (
+            f.get("selected_is_maximum") is False or f.get("confidence_consistent") is False),
+    }
+    predicate = predicates.get(reason)
+    if predicate:
+        match = next((f for f in answer_facts if predicate(f)), None)
+        if match:
+            return "answers." + match["suffix"]
+        return "answers"
+    return "unknown"
+
+
+def _wire_type(value):
+    if value is None:
+        return "null"
+    if type(value) is bool:
+        return "boolean"
+    if type(value) in (int, float):
+        return "number"
+    if type(value) is str:
+        return "string"
+    if type(value) is dict:
+        return "object"
+    if type(value) is list:
+        return "array"
+    return "other"
+
+
+def _bounded_probability(value):
+    return (type(value) in (int, float) and math.isfinite(value) and 0 <= value <= 1)
+
+
+def _known_question_map(payload, track):
+    """Extract only registered question suffix/type pairs; omit nonce and prompt bytes."""
+    try:
+        request = json.loads(payload, object_pairs_hook=unique)
+        questions = request.get("questions") if type(request) is dict else None
+        if type(questions) is not dict:
+            return {}
+        known = (set(jev_input.INPUT_PREDICATES) | {"referent"} if track == "input" else
+                 {*(f"o{i}" for i in range(1, 7)), *(f"effect_{i}" for i in range(8))})
+        result = {}
+        for key, question in questions.items():
+            suffix = key.rsplit(":", 1)[-1] if type(key) is str else ""
+            if suffix in known and type(question) is dict:
+                qtype = question.get("type")
+                if qtype in {"noul", "choice"}:
+                    result[key] = {"suffix": suffix, "type": qtype,
+                                   "criteria": question.get("criteria") if type(question.get("criteria")) is dict else {}}
+        return result
+    except Exception:
+        return {}
+
+
+def _input_answer_reason(answer, question):
+    if question["type"] == "noul":
+        if (type(answer) is not dict or set(answer) != {"type", "noul"}
+                or answer.get("type") != "noul" or not _bounded_probability(answer.get("noul"))):
+            return "noul_shape"
+        return None
+    criteria = question["criteria"]
+    if (type(answer) is not dict
+            or set(answer) != {"type", "choice", "confidence", "probabilities"}
+            or answer.get("type") != "choice" or type(answer.get("choice")) is not str
+            or answer.get("choice") not in criteria or not _bounded_probability(answer.get("confidence"))):
+        return "choice_shape"
+    probabilities = answer["probabilities"]
+    if (type(probabilities) is not dict or set(probabilities) != set(criteria)
+            or not all(_bounded_probability(value) for value in probabilities.values())
+            or not math.isclose(sum(probabilities.values()), 1, abs_tol=0.00001)):
+        return "choice_distribution"
+    choice, confidence = answer["choice"], answer["confidence"]
+    if (probabilities[choice] < max(probabilities.values())
+            or not jev._choice_confidence_consistent(probabilities, confidence)):
+        return "choice_confidence"
+    return None
+
+
+def _answer_facts(answer, question):
+    facts = {"present": answer is not _MISSING, "expected_type": question["type"]}
+    if answer is _MISSING:
+        return facts
+    facts["wire_type"] = _wire_type(answer)
+    if type(answer) is not dict:
+        return facts
+    allowed = ({"type", "noul"} if question["type"] == "noul" else
+               {"type", "choice", "confidence", "probabilities"})
+    facts["field_count"] = len(answer)
+    facts["unexpected_field_count"] = sum(key not in allowed for key in answer)
+    facts["answer_type_matches"] = answer.get("type") == question["type"]
+    if question["type"] == "noul":
+        value = answer.get("noul", _MISSING)
+        facts["noul_probability"] = value if _bounded_probability(value) else None
+        return facts
+    confidence = answer.get("confidence", _MISSING)
+    facts["confidence"] = confidence if _bounded_probability(confidence) else None
+    criteria = question["criteria"]
+    facts["expected_probability_count"] = len(criteria)
+    choice = answer.get("choice", _MISSING)
+    facts["selected_choice_known"] = type(choice) is str and choice in criteria
+    probabilities = answer.get("probabilities", _MISSING)
+    if type(probabilities) is not dict:
+        facts["probability_field_count"] = None
+        return facts
+    valid_values = [value for name, value in probabilities.items()
+                    if name in criteria and _bounded_probability(value)]
+    facts["probability_field_count"] = len(probabilities)
+    facts["known_probability_field_count"] = sum(key in criteria for key in probabilities)
+    facts["valid_probability_count"] = len(valid_values)
+    exact_distribution = (set(probabilities) == set(criteria) and len(valid_values) == len(criteria))
+    facts["probability_sum"] = sum(valid_values) if exact_distribution else None
+    facts["maximum_probability"] = max(valid_values) if valid_values else None
+    if facts["selected_choice_known"]:
+        selected_probability = probabilities.get(choice, _MISSING)
+        facts["selected_probability"] = selected_probability if _bounded_probability(selected_probability) else None
+        facts["selected_is_maximum"] = (facts["selected_probability"] is not None and bool(valid_values)
+                                         and facts["selected_probability"] >= max(valid_values))
+    if (len(probabilities) == len(criteria) and set(probabilities) == set(criteria)
+            and len(valid_values) == len(criteria) and facts["confidence"] is not None):
+        facts["confidence_consistent"] = jev._choice_confidence_consistent(
+            probabilities, facts["confidence"])
+    return facts
+
+
+class _Missing:
+    pass
+
+
+_MISSING = _Missing()
+
+
+def safe_response_diagnostics(response, payload, track, error):
+    """Summarize a failed validation with bounded facts and no provider strings/body."""
+    body = response.body if type(response) is jev.JevHttpResponse and type(response.body) is bytes else None
+    reason = _safe_parser_reason(error, track)
+    questions = _known_question_map(payload, track)
+    summary = {
+        "parser_reason": reason,
+        "response_bytes": len(body) if body is not None else None,
+        "response_sha256": sha(body) if body is not None else None,
+        "known_questions": [{"suffix": meta["suffix"], "type": meta["type"]}
+                            for _, meta in sorted(questions.items(), key=lambda item: item[1]["suffix"])],
+    }
+    if body is None or len(body) > jev.MAX_RESPONSE_BYTES or reason in {
+            "duplicate_key", "nonfinite_number", "nonfinite", "json_decode", "invalid_utf8",
+            "body_size", "response_size"}:
+        summary["parser_field"] = _safe_parser_field(reason)
+        return summary
+    try:
+        document = json.loads(body.decode("utf-8"))
+    except Exception:
+        return summary
+    if type(document) is not dict:
+        summary["top_level_wire_type"] = _wire_type(document)
+        summary["parser_field"] = _safe_parser_field(reason)
+        return summary
+    top_allowed = {"model", "answers", "usage"}
+    summary.update(top_level_field_count=len(document),
+        unexpected_top_level_field_count=sum(key not in top_allowed for key in document),
+        expected_top_level_fields_present={key: key in document for key in sorted(top_allowed)},
+        model_wire_type=_wire_type(document.get("model", _MISSING)))
+    model = document.get("model", _MISSING)
+    summary["model_matches_requested"] = type(model) is str and model == MODEL
+    answers = document.get("answers", _MISSING)
+    if type(answers) is dict:
+        expected_keys = set(questions)
+        summary["answer_count"] = len(answers)
+        summary["unexpected_answer_key_count"] = sum(key not in expected_keys for key in answers)
+        summary["missing_question_suffixes"] = sorted(
+            meta["suffix"] for key, meta in questions.items() if key not in answers)
+        answer_facts = []
+        for key, question in sorted(questions.items(), key=lambda item: item[1]["suffix"]):
+            answer = answers.get(key, _MISSING)
+            facts = {"suffix": question["suffix"], **_answer_facts(answer, question)}
+            answer_facts.append(facts)
+        summary["answer_facts"] = answer_facts
+    elif answers is not _MISSING:
+        summary["answers_wire_type"] = _wire_type(answers)
+    usage = document.get("usage", _MISSING)
+    if type(usage) is dict:
+        summary["usage_field_count"] = len(usage)
+        summary["unexpected_usage_field_count"] = sum(
+            key not in {"input_tokens", "output_tokens"} for key in usage)
+        for name in ("input_tokens", "output_tokens"):
+            value = usage.get(name, _MISSING)
+            summary[name] = value if type(value) is int and 0 <= value <= 64_000 else None
+    elif usage is not _MISSING:
+        summary["usage_wire_type"] = _wire_type(usage)
+    summary["parser_field"] = _safe_parser_field(reason, summary.get("answer_facts", ()))
+    if reason == "response_shape" and summary.get("model_matches_requested") is False:
+        summary["parser_field"] = "model"
+    return summary
 
 
 def score(case, track, dimensions):

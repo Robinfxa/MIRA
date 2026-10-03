@@ -86,8 +86,16 @@ def test_audio_history_has_hard_bound_and_duplicates_still_work():
 def test_late_completed_fact_does_not_change_new_branch():
     state, speech, _ = issued()
     state = stop(state, activity_seq=2, cutoff=1)
+    # The new branch cannot capture context before the cutoff fact is known.
+    with pytest.raises(DomainError) as pending:
+        begin_input(state, activity_seq=3, cutoff=1, request_id="new", text="again")
+    assert pending.value.code == "history_pending"
+    terminal = progress(speech, status=AudioStatus.COMPLETED)
+    state = record_audio_progress(state, terminal)
     state = begin_input(state, activity_seq=3, cutoff=1, request_id="new", text="again")
-    late = record_audio_progress(state, progress(speech, status=AudioStatus.COMPLETED))
+    # A duplicate delayed delivery is still history-only and cannot revive speech.
+    late = record_audio_progress(state, terminal)
+    assert late is state
     assert late.phase == state.phase == "thinking"
     assert late.active_grants == () and late.output_epoch == 3
     assert late.permit_revision == state.permit_revision

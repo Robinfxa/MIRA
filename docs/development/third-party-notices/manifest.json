@@ -1,0 +1,1870 @@
+{
+  "title": "MIRA third-party notice bundle (source-distribution preparation)",
+  "reviewed_at": "2026-10-03",
+  "scope": "Copies of installed license/notice texts for the exact Python pins in docs/development/ATTRIBUTION-INVENTORY.json and TypeScript 5.8.3, plus notice texts nested in the installed pip/setuptools distributions. Project asset records below are references only.",
+  "basis": {
+    "inventory": "../ATTRIBUTION-INVENTORY.json",
+    "inventory_reviewed_at": "2026-10-03",
+    "python_environment": "Existing isolated .venv313 (Python 3.13.5); installed metadata matches all 46 dev.lock name/version pins, with no additional installed distributions observed.",
+    "python_pin_counts": {
+      "dev_pins": 46,
+      "runtime_pins": 35,
+      "development_build_only_pins": 11
+    },
+    "source_lock_hashes": {
+      "requirements/runtime.lock": {
+        "inventory_sha256": "ba2fcfba0f979a5fade6b0df6ca1eca0ba8f4e194a2e84181e96e3693e717bdd",
+        "observed_sha256": "ba2fcfba0f979a5fade6b0df6ca1eca0ba8f4e194a2e84181e96e3693e717bdd",
+        "matches_inventory": true
+      },
+      "requirements/dev.lock": {
+        "inventory_sha256": "1690dc3d5da7fa1e3bec0af5759b0af94aaa8dd9f5202c02547d635a2f04940b",
+        "observed_sha256": "1690dc3d5da7fa1e3bec0af5759b0af94aaa8dd9f5202c02547d635a2f04940b",
+        "matches_inventory": true
+      },
+      "package-lock.json": {
+        "inventory_sha256": "11eb6a6d54ee8efaa04bf644199536d124ad1738b4efbec2957baad1612226f0",
+        "observed_sha256": "11eb6a6d54ee8efaa04bf644199536d124ad1738b4efbec2957baad1612226f0",
+        "matches_inventory": true
+      }
+    }
+  },
+  "python_distributions": [
+    {
+      "name": "annotated-doc",
+      "version": "0.0.4",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/fastapi/annotated-doc",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/annotated_doc-0.0.4.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/annotated_doc-0.0.4.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/annotated-doc/0.0.4/licenses/LICENSE",
+          "sha256": "fff170779a6acbf65abdb405c087f1cee1786691e4a96a4034517e4a504a0cdf",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.7.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/annotated-types/annotated-types",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/annotated_types-0.7.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "MIT (license file and MIT classifier; no metadata License field)",
+      "license_declaration_evidence": "No License/License-Expression; MIT OSI classifier plus included LICENSE",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/annotated_types-0.7.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/annotated-types/0.7.0/licenses/LICENSE",
+          "sha256": "fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d",
+          "status": "copied",
+          "license_summary": "MIT (license file and MIT classifier; no metadata License field)"
+        }
+      ]
+    },
+    {
+      "name": "anyio",
+      "version": "4.13.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/agronholm/anyio",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/anyio-4.13.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/anyio-4.13.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/anyio/4.13.0/licenses/LICENSE",
+          "sha256": "5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "certifi",
+      "version": "2026.5.20",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/certifi/python-certifi",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/certifi-2026.5.20.dist-info/METADATA",
+      "installed_metadata_license": "MPL-2.0",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "MPL-2.0",
+      "license_declaration_evidence": "METADATA License: MPL-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/certifi-2026.5.20.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/certifi/2026.5.20/licenses/LICENSE",
+          "sha256": "e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7",
+          "status": "copied",
+          "license_summary": "MPL-2.0"
+        }
+      ]
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/python-cffi/cffi",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/cffi-2.1.1.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT-0",
+      "inventory_license_summary": "MIT-0",
+      "license_declaration_evidence": "METADATA License-Expression: MIT-0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/cffi-2.1.1.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/cffi/2.1.1/licenses/LICENSE",
+          "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63",
+          "status": "copied",
+          "license_summary": "MIT-0"
+        }
+      ]
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.2",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/jawah/charset_normalizer",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/charset_normalizer-3.5.2.dist-info/METADATA",
+      "installed_metadata_license": "MIT",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/charset_normalizer-3.5.2.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/charset-normalizer/3.5.2/licenses/LICENSE",
+          "sha256": "6d0d41bfe170ac6c7dc248c9a63e254d0fb45a60d50a8257d0af92c6e249b887",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "click",
+      "version": "8.1.8",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pallets/click/",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/click-8.1.8.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "BSD 3-Clause terms (license file and generic BSD classifier; no metadata License field)",
+      "license_declaration_evidence": "No License/License-Expression; generic BSD OSI classifier plus included LICENSE.txt",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/click-8.1.8.dist-info/LICENSE.txt",
+          "bundle_path": "licenses/python/click/8.1.8/LICENSE.txt",
+          "sha256": "9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d",
+          "status": "copied",
+          "license_summary": "BSD 3-Clause terms (license file and generic BSD classifier; no metadata License field)"
+        }
+      ]
+    },
+    {
+      "name": "coverage",
+      "version": "7.13.3",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://coverage.readthedocs.io/en/7.13.3",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/coverage-7.13.3.dist-info/METADATA",
+      "installed_metadata_license": "Apache-2.0",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License: Apache-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/coverage-7.13.3.dist-info/licenses/LICENSE.txt",
+          "bundle_path": "licenses/python/coverage/7.13.3/licenses/LICENSE.txt",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        }
+      ]
+    },
+    {
+      "name": "cryptography",
+      "version": "50.0.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pyca/cryptography/",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/cryptography-50.0.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "Apache-2.0 OR BSD-3-Clause",
+      "inventory_license_summary": "Apache-2.0 OR BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0 OR BSD-3-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/cryptography-50.0.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/cryptography/50.0.0/licenses/LICENSE",
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb",
+          "status": "copied",
+          "license_summary": "Apache-2.0 OR BSD-3-Clause"
+        },
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+          "bundle_path": "licenses/python/cryptography/50.0.0/licenses/LICENSE.APACHE",
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe",
+          "status": "copied",
+          "license_summary": "Apache-2.0 OR BSD-3-Clause"
+        },
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/cryptography-50.0.0.dist-info/licenses/LICENSE.BSD",
+          "bundle_path": "licenses/python/cryptography/50.0.0/licenses/LICENSE.BSD",
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb",
+          "status": "copied",
+          "license_summary": "Apache-2.0 OR BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "name": "fastapi",
+      "version": "0.128.2",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/fastapi/fastapi",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/fastapi-0.128.2.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/fastapi-0.128.2.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/fastapi/0.128.2/licenses/LICENSE",
+          "sha256": "4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "google-api-core",
+      "version": "2.40.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/googleapis/google-cloud-python",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/google_api_core-2.40.0.dist-info/METADATA",
+      "installed_metadata_license": "Apache 2.0",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "Apache 2.0",
+      "license_declaration_evidence": "METADATA License: Apache 2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/google_api_core-2.40.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/google-api-core/2.40.0/licenses/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "status": "copied",
+          "license_summary": "Apache 2.0"
+        }
+      ]
+    },
+    {
+      "name": "google-auth",
+      "version": "2.59.1",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-auth",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/google_auth-2.59.1.dist-info/METADATA",
+      "installed_metadata_license": "Apache 2.0",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "Apache 2.0",
+      "license_declaration_evidence": "METADATA License: Apache 2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/google_auth-2.59.1.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/google-auth/2.59.1/licenses/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "status": "copied",
+          "license_summary": "Apache 2.0"
+        }
+      ]
+    },
+    {
+      "name": "google-cloud-speech",
+      "version": "2.40.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-speech",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/google_cloud_speech-2.40.0.dist-info/METADATA",
+      "installed_metadata_license": "Apache-2.0",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License: Apache-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/google_cloud_speech-2.40.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/google-cloud-speech/2.40.0/licenses/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        }
+      ]
+    },
+    {
+      "name": "googleapis-common-protos",
+      "version": "1.75.5",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/googleapis/google-cloud-python/tree/main/packages/googleapis-common-protos",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/googleapis_common_protos-1.75.5.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "Apache-2.0",
+      "inventory_license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/googleapis_common_protos-1.75.5.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/googleapis-common-protos/1.75.5/licenses/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        }
+      ]
+    },
+    {
+      "name": "grpcio",
+      "version": "1.84.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/grpc/grpc",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/grpcio-1.84.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "Apache-2.0",
+      "inventory_license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/grpcio-1.84.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/grpcio/1.84.0/licenses/LICENSE",
+          "sha256": "58c86a3f2b5cca0ebdf9ed3e7f4e6dc38e3b38796d8c3dc92064c62a4e39d0dd",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        }
+      ]
+    },
+    {
+      "name": "grpcio-status",
+      "version": "1.84.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://grpc.io",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/grpcio_status-1.84.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "Apache-2.0",
+      "inventory_license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/grpcio_status-1.84.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/grpcio-status/1.84.0/licenses/LICENSE",
+          "sha256": "58c86a3f2b5cca0ebdf9ed3e7f4e6dc38e3b38796d8c3dc92064c62a4e39d0dd",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        }
+      ]
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/python-hyper/h11",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/h11-0.16.0.dist-info/METADATA",
+      "installed_metadata_license": "MIT",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/h11-0.16.0.dist-info/licenses/LICENSE.txt",
+          "bundle_path": "licenses/python/h11/0.16.0/licenses/LICENSE.txt",
+          "sha256": "37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/encode/httpcore",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/httpcore-1.0.9.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "BSD-3-Clause",
+      "inventory_license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/httpcore-1.0.9.dist-info/licenses/LICENSE.md",
+          "bundle_path": "licenses/python/httpcore/1.0.9/licenses/LICENSE.md",
+          "sha256": "fdcb59154c74cbaba16a11242f7740bea9f23d6feb5547917d8c5f94a80392a5",
+          "status": "copied",
+          "license_summary": "BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/encode/httpx",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/httpx-0.28.1.dist-info/METADATA",
+      "installed_metadata_license": "BSD-3-Clause",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License: BSD-3-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/httpx-0.28.1.dist-info/licenses/LICENSE.md",
+          "bundle_path": "licenses/python/httpx/0.28.1/licenses/LICENSE.md",
+          "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d",
+          "status": "copied",
+          "license_summary": "BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "name": "idna",
+      "version": "3.17",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/kjd/idna",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/idna-3.17.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "BSD-3-Clause",
+      "inventory_license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/idna-3.17.dist-info/licenses/LICENSE.md",
+          "bundle_path": "licenses/python/idna/3.17/licenses/LICENSE.md",
+          "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04",
+          "status": "copied",
+          "license_summary": "BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pytest-dev/iniconfig",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/iniconfig-2.3.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/iniconfig-2.3.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/iniconfig/2.3.0/licenses/LICENSE",
+          "sha256": "3409fa91f7ace557894632676656e32264fe5ef7581535725dc9a23774551bd4",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "opentelemetry-api",
+      "version": "1.45.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/open-telemetry/opentelemetry-python",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/opentelemetry_api-1.45.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "Apache-2.0",
+      "inventory_license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/opentelemetry_api-1.45.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/opentelemetry-api/1.45.0/licenses/LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        }
+      ]
+    },
+    {
+      "name": "packaging",
+      "version": "25.0",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pypa/packaging",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/packaging-25.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "Either Apache-2.0 or BSD-2-Clause; included LICENSE says contributions are under both",
+      "license_declaration_evidence": "No License/License-Expression; generic Apache/BSD classifiers; included LICENSE plus LICENSE.APACHE and LICENSE.BSD",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/packaging-25.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/packaging/25.0/licenses/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+          "status": "copied",
+          "license_summary": "Either Apache-2.0 or BSD-2-Clause; included LICENSE says contributions are under both"
+        },
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/packaging-25.0.dist-info/licenses/LICENSE.APACHE",
+          "bundle_path": "licenses/python/packaging/25.0/licenses/LICENSE.APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "status": "copied",
+          "license_summary": "Either Apache-2.0 or BSD-2-Clause; included LICENSE says contributions are under both"
+        },
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/packaging-25.0.dist-info/licenses/LICENSE.BSD",
+          "bundle_path": "licenses/python/packaging/25.0/licenses/LICENSE.BSD",
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+          "status": "copied",
+          "license_summary": "Either Apache-2.0 or BSD-2-Clause; included LICENSE says contributions are under both"
+        }
+      ]
+    },
+    {
+      "name": "pip",
+      "version": "26.2.1",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pypa/pip",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/LICENSE.txt",
+          "bundle_path": "licenses/python/pip/26.2.1/licenses/LICENSE.txt",
+          "sha256": "634300a669d49aeae65b12c6c48c924c51a4cdf3d1ff086dc3456dc8bcaa2104",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://pypi.org/project/pluggy/",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pluggy-1.6.0.dist-info/METADATA",
+      "installed_metadata_license": "MIT",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pluggy-1.6.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pluggy/1.6.0/licenses/LICENSE",
+          "sha256": "d6b65e6c213a5d0b577911d34d6e5949b9f59d76c238c5071a2f3fc16cfb2606",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "proto-plus",
+      "version": "1.29.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/googleapis/google-cloud-python",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/proto_plus-1.29.0.dist-info/METADATA",
+      "installed_metadata_license": "Apache 2.0",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "Apache 2.0",
+      "license_declaration_evidence": "METADATA License: Apache 2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/proto_plus-1.29.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/proto-plus/1.29.0/licenses/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "status": "copied",
+          "license_summary": "Apache 2.0"
+        }
+      ]
+    },
+    {
+      "name": "protobuf",
+      "version": "7.36.2",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://developers.google.com/protocol-buffers/",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/protobuf-7.36.2.dist-info/METADATA",
+      "installed_metadata_license": "3-Clause BSD License",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "3-Clause BSD License",
+      "license_declaration_evidence": "METADATA License: 3-Clause BSD License",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/protobuf-7.36.2.dist-info/LICENSE",
+          "bundle_path": "licenses/python/protobuf/7.36.2/LICENSE",
+          "sha256": "6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d",
+          "status": "copied",
+          "license_summary": "3-Clause BSD License"
+        }
+      ]
+    },
+    {
+      "name": "pyasn1",
+      "version": "0.6.4",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pyasn1/pyasn1",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pyasn1-0.6.4.dist-info/METADATA",
+      "installed_metadata_license": "BSD-2-Clause",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "BSD-2-Clause",
+      "license_declaration_evidence": "METADATA License: BSD-2-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pyasn1-0.6.4.dist-info/licenses/LICENSE.rst",
+          "bundle_path": "licenses/python/pyasn1/0.6.4/licenses/LICENSE.rst",
+          "sha256": "2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd",
+          "status": "copied",
+          "license_summary": "BSD-2-Clause"
+        }
+      ]
+    },
+    {
+      "name": "pyasn1_modules",
+      "version": "0.4.2",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pyasn1/pyasn1-modules",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pyasn1_modules-0.4.2.dist-info/METADATA",
+      "installed_metadata_license": "BSD",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "BSD (generic metadata label; included text contains the 3-clause non-endorsement condition)",
+      "license_declaration_evidence": "METADATA License: BSD",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pyasn1_modules-0.4.2.dist-info/licenses/LICENSE.txt",
+          "bundle_path": "licenses/python/pyasn1-modules/0.4.2/licenses/LICENSE.txt",
+          "sha256": "2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd",
+          "status": "copied",
+          "license_summary": "BSD (generic metadata label; included text contains the 3-clause non-endorsement condition)"
+        }
+      ]
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/eliben/pycparser",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pycparser-3.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "BSD-3-Clause",
+      "inventory_license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pycparser-3.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pycparser/3.0/licenses/LICENSE",
+          "sha256": "0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1",
+          "status": "copied",
+          "license_summary": "BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.4",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pydantic/pydantic",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pydantic-2.13.4.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pydantic-2.13.4.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pydantic/2.13.4/licenses/LICENSE",
+          "sha256": "a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.4",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pydantic/pydantic/tree/main/pydantic-core",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pydantic_core-2.46.4.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pydantic_core-2.46.4.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pydantic-core/2.46.4/licenses/LICENSE",
+          "sha256": "2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "Pygments",
+      "version": "2.20.0",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pygments/pygments",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pygments-2.20.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "BSD-2-Clause",
+      "inventory_license_summary": "BSD-2-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-2-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pygments-2.20.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pygments/2.20.0/licenses/LICENSE",
+          "sha256": "a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17",
+          "status": "copied",
+          "license_summary": "BSD-2-Clause"
+        }
+      ]
+    },
+    {
+      "name": "PyJWT",
+      "version": "2.13.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/jpadilla/pyjwt",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pyjwt-2.13.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pyjwt-2.13.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pyjwt/2.13.0/licenses/LICENSE",
+          "sha256": "797a7a20231d4c433e9f1911db1731d06b5828b98f499819a034f7c0f56f5ce5",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "pytest",
+      "version": "9.0.2",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pytest-dev/pytest",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pytest-9.0.2.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pytest-9.0.2.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pytest/9.0.2/licenses/LICENSE",
+          "sha256": "ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "pytest-asyncio",
+      "version": "1.3.0",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pytest-dev/pytest-asyncio",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pytest_asyncio-1.3.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "Apache-2.0",
+      "inventory_license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pytest_asyncio-1.3.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pytest-asyncio/1.3.0/licenses/LICENSE",
+          "sha256": "a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        }
+      ]
+    },
+    {
+      "name": "pytest-cov",
+      "version": "7.0.0",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pytest-dev/pytest-cov",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/pytest_cov-7.0.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/pytest_cov-7.0.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/pytest-cov/7.0.0/licenses/LICENSE",
+          "sha256": "835586ae156766a24e3c103fbc55d9af6b1a16df57ca932c97482a2737fd83d5",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.2",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/theskumar/python-dotenv",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/python_dotenv-1.2.2.dist-info/METADATA",
+      "installed_metadata_license": "BSD-3-Clause",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License: BSD-3-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/python_dotenv-1.2.2.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/python-dotenv/1.2.2/licenses/LICENSE",
+          "sha256": "80619b7049f08c81683ad0e01f08f257a840652dd71ee83146d36658c7d2c2b9",
+          "status": "copied",
+          "license_summary": "BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/psf/requests",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/requests-2.34.2.dist-info/METADATA",
+      "installed_metadata_license": "Apache-2.0",
+      "installed_metadata_license_expression": null,
+      "inventory_license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License: Apache-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/requests-2.34.2.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/requests/2.34.2/licenses/LICENSE",
+          "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        },
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/requests-2.34.2.dist-info/licenses/NOTICE",
+          "bundle_path": "licenses/python/requests/2.34.2/licenses/NOTICE",
+          "sha256": "f5110972dedad2b4e9d314518daf3b7d72d6e02e499acd802181de6f74571dcc",
+          "status": "copied",
+          "license_summary": "Apache-2.0"
+        }
+      ]
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pypa/setuptools",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools-84.0.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/setuptools-84.0.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/setuptools/84.0.0/licenses/LICENSE",
+          "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "starlette",
+      "version": "0.50.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/Kludex/starlette",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/starlette-0.50.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "BSD-3-Clause",
+      "inventory_license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/starlette-0.50.0.dist-info/licenses/LICENSE.md",
+          "bundle_path": "licenses/python/starlette/0.50.0/licenses/LICENSE.md",
+          "sha256": "dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf",
+          "status": "copied",
+          "license_summary": "BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/python/typing_extensions",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/typing_extensions-4.16.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "PSF-2.0",
+      "inventory_license_summary": "PSF-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: PSF-2.0",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/typing_extensions-4.16.0.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/typing-extensions/4.16.0/licenses/LICENSE",
+          "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf",
+          "status": "copied",
+          "license_summary": "PSF-2.0"
+        }
+      ]
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.2",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pydantic/typing-inspection",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/typing_inspection-0.4.2.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/typing_inspection-0.4.2.dist-info/licenses/LICENSE",
+          "bundle_path": "licenses/python/typing-inspection/0.4.2/licenses/LICENSE",
+          "sha256": "804b59b25f2c31bd278f9202a19ae49a3945aa2664387e2d0a128c7cacc61ec3",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "urllib3",
+      "version": "2.8.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/urllib3/urllib3",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/urllib3-2.8.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/urllib3-2.8.0.dist-info/licenses/LICENSE.txt",
+          "bundle_path": "licenses/python/urllib3/2.8.0/licenses/LICENSE.txt",
+          "sha256": "130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.48.0",
+      "lock_class": "runtime",
+      "relationship_to_mira": "runtime dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/Kludex/uvicorn",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/uvicorn-0.48.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "BSD-3-Clause",
+      "inventory_license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/uvicorn-0.48.0.dist-info/licenses/LICENSE.md",
+          "bundle_path": "licenses/python/uvicorn/0.48.0/licenses/LICENSE.md",
+          "sha256": "efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371",
+          "status": "copied",
+          "license_summary": "BSD-3-Clause"
+        }
+      ]
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "lock_class": "development/build only",
+      "relationship_to_mira": "development/build-only dependency",
+      "redistributed_implementation_in_current_source_tree": false,
+      "distribution_source": "https://github.com/pypa/wheel",
+      "installed_metadata_path": ".venv313/lib/python3.13/site-packages/wheel-0.48.0.dist-info/METADATA",
+      "installed_metadata_license": null,
+      "installed_metadata_license_expression": "MIT",
+      "inventory_license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files": [
+        {
+          "source_path": ".venv313/lib/python3.13/site-packages/wheel-0.48.0.dist-info/licenses/LICENSE.txt",
+          "bundle_path": "licenses/python/wheel/0.48.0/licenses/LICENSE.txt",
+          "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+          "status": "copied",
+          "license_summary": "MIT"
+        }
+      ]
+    }
+  ],
+  "typescript": {
+    "name": "typescript",
+    "version": "5.8.3",
+    "relationship_to_mira": "development dependency (TypeScript compiler); compiler implementation is not part of the MIRA source tree",
+    "redistributed_implementation_in_current_source_tree": false,
+    "distribution_source": "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz",
+    "installed_package_metadata_path": "node_modules/typescript/package.json",
+    "lock_metadata_path": "package-lock.json packages[\"node_modules/typescript\"]",
+    "license": "Apache-2.0",
+    "files": [
+      {
+        "source_path": "node_modules/typescript/LICENSE.txt",
+        "bundle_path": "licenses/typescript/5.8.3/LICENSE.txt",
+        "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47",
+        "status": "copied"
+      },
+      {
+        "source_path": "node_modules/typescript/ThirdPartyNoticeText.txt",
+        "bundle_path": "licenses/typescript/5.8.3/ThirdPartyNoticeText.txt",
+        "sha256": "1af3c68039c57e539422da82a4faada506ce6d0ea6f90e0b699d02dbcdb7a90c",
+        "status": "copied"
+      }
+    ],
+    "integrity_gap": "package-lock.json has no npm integrity field; copied files identify installed local 5.8.3 content only."
+  },
+  "nested_vendor_notices": {
+    "scope_note": "These are notice files for components bundled inside locally installed pip 26.2.1 and setuptools 84.0.0. They are not additional top-level MIRA dependency pins and do not indicate that the vendored component implementations are shipped in this source tree.",
+    "files": [
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/cachecontrol/LICENSE.txt",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/cachecontrol/LICENSE.txt",
+        "sha256": "86eeee87be2a43f3ff1f56496f451f69243926f025fedbb033666c304c4c161b",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "cachecontrol",
+        "vendored_version_from_vendor_txt": "0.14.4",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/certifi/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/certifi/LICENSE",
+        "sha256": "e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "certifi",
+        "vendored_version_from_vendor_txt": "2026.6.17",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/distlib/LICENSE.txt",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/distlib/LICENSE.txt",
+        "sha256": "808e10c8a6ab8deb149ff9b3fb19f447a808094606d712a9ca57fead3552599d",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "distlib",
+        "vendored_version_from_vendor_txt": "0.4.2",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/distro/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/distro/LICENSE",
+        "sha256": "cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "distro",
+        "vendored_version_from_vendor_txt": "1.9.0",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/idna/LICENSE.md",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/idna/LICENSE.md",
+        "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "idna",
+        "vendored_version_from_vendor_txt": "3.18",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/msgpack/COPYING",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/msgpack/COPYING",
+        "sha256": "492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "msgpack",
+        "vendored_version_from_vendor_txt": "1.1.2",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/packaging/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/packaging/LICENSE",
+        "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "packaging",
+        "vendored_version_from_vendor_txt": "26.2",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.APACHE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/packaging/LICENSE.APACHE",
+        "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "packaging",
+        "vendored_version_from_vendor_txt": "26.2",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/packaging/LICENSE.BSD",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/packaging/LICENSE.BSD",
+        "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "packaging",
+        "vendored_version_from_vendor_txt": "26.2",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/pkg_resources/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/pkg_resources/LICENSE",
+        "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "pkg_resources",
+        "vendored_version_from_vendor_txt": null,
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "vendored_version_status": "No version entry for this component in pip’s vendor.txt.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/platformdirs/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/platformdirs/LICENSE",
+        "sha256": "29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "platformdirs",
+        "vendored_version_from_vendor_txt": "4.10.0",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/pygments/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/pygments/LICENSE",
+        "sha256": "a9d66f1d526df02e29dce73436d34e56e8632f46c275bbdffc70569e882f9f17",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "pygments",
+        "vendored_version_from_vendor_txt": "2.20.0",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/pyproject_hooks/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/pyproject_hooks/LICENSE",
+        "sha256": "1b22b049b5267d6dfc23a67bf4a84d8ec04b9fdfb1a51d360e42b4342c8b4154",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "pyproject_hooks",
+        "vendored_version_from_vendor_txt": "1.2.0",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/requests/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/requests/LICENSE",
+        "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "requests",
+        "vendored_version_from_vendor_txt": "2.34.2",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/resolvelib/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/resolvelib/LICENSE",
+        "sha256": "f388fd38cad13112c1dc0f669bbe80e7f84541edbafb72f3030d2ca7642c3c9d",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "resolvelib",
+        "vendored_version_from_vendor_txt": "1.2.1",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/rich/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/rich/LICENSE",
+        "sha256": "deed7c17a4318158190a3ea239cc879a5a50271cebb98ae7025f48fbe58dca15",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "rich",
+        "vendored_version_from_vendor_txt": "14.2.0",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/tomli/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/tomli/LICENSE",
+        "sha256": "b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "tomli",
+        "vendored_version_from_vendor_txt": "2.4.1",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/tomli_w/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/tomli_w/LICENSE",
+        "sha256": "b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "tomli_w",
+        "vendored_version_from_vendor_txt": "1.2.0",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/truststore/LICENSE",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/truststore/LICENSE",
+        "sha256": "33be7b7e8fa4fd19b1760e1a8ed8a668bdab852c91b692dd41424bcb725a9fca",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "truststore",
+        "vendored_version_from_vendor_txt": "0.10.4",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/pip-26.2.1.dist-info/licenses/src/pip/_vendor/urllib3/LICENSE.txt",
+        "bundle_path": "licenses/python/pip/26.2.1/vendored/urllib3/LICENSE.txt",
+        "sha256": "130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686",
+        "status": "copied",
+        "embedded_in": "pip 26.2.1 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "urllib3",
+        "vendored_version_from_vendor_txt": "2.7.0",
+        "relationship_to_mira": "notice for pip’s transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Official vendored license text copied; pip packages a vendor.txt version record where present but no per-component METADATA beside this notice path, so no license label was normalized here.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/autocommand-2.2.2.dist-info/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/autocommand-2.2.2.dist-info/LICENSE",
+        "sha256": "ade78d04982d69972d444a8e14a94f87a2334dd3855cc80348ea8e240aa0df2d",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "autocommand",
+        "vendored_version_from_nested_metadata": "2.2.2",
+        "installed_metadata_license": "LGPLv3",
+        "installed_metadata_license_expression": null,
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/autocommand-2.2.2.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/backports.tarfile-1.2.0.dist-info/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/backports.tarfile-1.2.0.dist-info/LICENSE",
+        "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "backports.tarfile",
+        "vendored_version_from_nested_metadata": "1.2.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": null,
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/backports.tarfile-1.2.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "No License or License-Expression field in this nested distribution METADATA; installed license text copied, license label left unresolved.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/importlib_metadata-8.7.1.dist-info/licenses/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/importlib_metadata-8.7.1.dist-info/licenses/LICENSE",
+        "sha256": "458502e12d97bbf64438606a20044aa85eb05fb0a8a807bb35dbec253fd1fc04",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "importlib_metadata",
+        "vendored_version_from_nested_metadata": "8.7.1",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "Apache-2.0",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/importlib_metadata-8.7.1.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/jaraco.text-4.0.0.dist-info/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/jaraco.text-4.0.0.dist-info/LICENSE",
+        "sha256": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "jaraco.text",
+        "vendored_version_from_nested_metadata": "4.0.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": null,
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/jaraco.text-4.0.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "No License or License-Expression field in this nested distribution METADATA; installed license text copied, license label left unresolved.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/jaraco_context-6.1.0.dist-info/licenses/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/jaraco_context-6.1.0.dist-info/licenses/LICENSE",
+        "sha256": "9755a18519666e5f0f4cae3daad3d7012bcae48a600b31237d75e9fe134e6683",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "jaraco.context",
+        "vendored_version_from_nested_metadata": "6.1.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "MIT",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/jaraco_context-6.1.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/jaraco_functools-4.4.0.dist-info/licenses/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/jaraco_functools-4.4.0.dist-info/licenses/LICENSE",
+        "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "jaraco.functools",
+        "vendored_version_from_nested_metadata": "4.4.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "MIT",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/jaraco_functools-4.4.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/more_itertools-10.8.0.dist-info/licenses/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/more_itertools-10.8.0.dist-info/licenses/LICENSE",
+        "sha256": "09f1c8c9e941af3e584d59641ea9b87d83c0cb0fd007eb5ef391a7e2643c1a46",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "more-itertools",
+        "vendored_version_from_nested_metadata": "10.8.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "MIT",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/more_itertools-10.8.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/packaging-26.0.dist-info/licenses/LICENSE",
+        "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "packaging",
+        "vendored_version_from_nested_metadata": "26.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "Apache-2.0 OR BSD-2-Clause",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/packaging-26.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.APACHE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/packaging-26.0.dist-info/licenses/LICENSE.APACHE",
+        "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "packaging",
+        "vendored_version_from_nested_metadata": "26.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "Apache-2.0 OR BSD-2-Clause",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/packaging-26.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/packaging-26.0.dist-info/licenses/LICENSE.BSD",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/packaging-26.0.dist-info/licenses/LICENSE.BSD",
+        "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "packaging",
+        "vendored_version_from_nested_metadata": "26.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "Apache-2.0 OR BSD-2-Clause",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/packaging-26.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/platformdirs-4.4.0.dist-info/licenses/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/platformdirs-4.4.0.dist-info/licenses/LICENSE",
+        "sha256": "29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "platformdirs",
+        "vendored_version_from_nested_metadata": "4.4.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "MIT",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/platformdirs-4.4.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/tomli-2.4.0.dist-info/licenses/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/tomli-2.4.0.dist-info/licenses/LICENSE",
+        "sha256": "b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "tomli",
+        "vendored_version_from_nested_metadata": "2.4.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "MIT",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/tomli-2.4.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+        "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "wheel",
+        "vendored_version_from_nested_metadata": "0.46.3",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "MIT",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/wheel-0.46.3.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      },
+      {
+        "source_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/zipp-3.23.0.dist-info/licenses/LICENSE",
+        "bundle_path": "licenses/python/setuptools/84.0.0/vendored/zipp-3.23.0.dist-info/licenses/LICENSE",
+        "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+        "status": "copied",
+        "embedded_in": "setuptools 84.0.0 distribution",
+        "top_level_lock_entry": false,
+        "vendored_component": "zipp",
+        "vendored_version_from_nested_metadata": "3.23.0",
+        "installed_metadata_license": null,
+        "installed_metadata_license_expression": "MIT",
+        "installed_metadata_path": ".venv313/lib/python3.13/site-packages/setuptools/_vendor/zipp-3.23.0.dist-info/METADATA",
+        "relationship_to_mira": "notice for setuptools’ transitive bundled component; no component implementation copied into MIRA source tree",
+        "license_metadata_status": "Metadata license field preserved as observed; installed license text copied.",
+        "redistributed_implementation_in_current_source_tree": false
+      }
+    ]
+  },
+  "project_content_references": {
+    "authored_svg_art": [
+      {
+        "path": "apps/web/public/scene/cafe-night.svg",
+        "content_role": "runtime scene background",
+        "relationship_to_mira": "project content present in the source tree; not a third-party dependency notice",
+        "provenance_reference": "Original hand-authored project SVG; no external artwork/font/model identified.",
+        "inventory_license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred.",
+        "inventory_sha256": "3c3dcfb31b9126ab3ee511dd1e241fd2d714babcfd100651346fd162913cbf96",
+        "observed_source_sha256": "3c3dcfb31b9126ab3ee511dd1e241fd2d714babcfd100651346fd162913cbf96",
+        "source_hash_matches_inventory": true,
+        "license_text_copied_here": false,
+        "provenance_source_documents": [
+          "apps/web/public/scene/ORIGINAL-ASSETS.md",
+          "docs/changes/WP04-character-scene/design.md"
+        ]
+      },
+      {
+        "path": "apps/web/public/scene/trip-memory.svg",
+        "content_role": "runtime illustrated travel artifact",
+        "relationship_to_mira": "project content present in the source tree; not a third-party dependency notice",
+        "provenance_reference": "Original hand-authored project SVG; described as an illustration, not a photo or generated runtime image.",
+        "inventory_license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred.",
+        "inventory_sha256": "e6571c45bb27bcc010854ffed0077837a225959d8224437b2b6234a5b0d8745e",
+        "observed_source_sha256": "e6571c45bb27bcc010854ffed0077837a225959d8224437b2b6234a5b0d8745e",
+        "source_hash_matches_inventory": true,
+        "license_text_copied_here": false,
+        "provenance_source_documents": [
+          "apps/web/public/scene/ORIGINAL-ASSETS.md",
+          "docs/changes/WP04-character-scene/design.md"
+        ]
+      },
+      {
+        "path": "apps/web/index.html",
+        "content_role": "inline original adult MIRA character SVG (.mira-character)",
+        "relationship_to_mira": "project content present in the source tree; not a third-party dependency notice",
+        "provenance_reference": "Original hand-authored inline SVG; source file also contains non-art HTML, so hash is for container file.",
+        "inventory_license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred.",
+        "inventory_sha256": "212c72a380dd9e16b44cbdc66feaa9bf4c22f383a3fe486250e528accf899c72",
+        "observed_source_sha256": "d3cb0335572228acb5108000e074274f65f5411a69ac8c753dbffd9ef627d14d",
+        "source_hash_matches_inventory": false,
+        "license_text_copied_here": false,
+        "provenance_source_documents": [
+          "apps/web/public/scene/ORIGINAL-ASSETS.md",
+          "docs/changes/WP04-character-scene/design.md"
+        ]
+      },
+      {
+        "path": "docs/changes/WP04-character-scene/previews/mira-character.svg",
+        "content_role": "review-only character-art preview; reproduces inline character artwork",
+        "relationship_to_mira": "project content present in the source tree; not a third-party dependency notice",
+        "provenance_reference": "Original project character geometry per WP04 design/provenance notes; not a runtime dependency.",
+        "inventory_license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred.",
+        "inventory_sha256": "0c3a7f85a59cc829f5ee7ad48d52764c0a7731eb4304cf07a434748063aa3bbf",
+        "observed_source_sha256": "0c3a7f85a59cc829f5ee7ad48d52764c0a7731eb4304cf07a434748063aa3bbf",
+        "source_hash_matches_inventory": true,
+        "license_text_copied_here": false,
+        "provenance_source_documents": [
+          "apps/web/public/scene/ORIGINAL-ASSETS.md",
+          "docs/changes/WP04-character-scene/design.md"
+        ]
+      },
+      {
+        "path": "docs/changes/WP04-character-scene/previews/expressions-study.svg",
+        "content_role": "review-only expression contact-sheet SVG",
+        "relationship_to_mira": "project content present in the source tree; not a third-party dependency notice",
+        "provenance_reference": "Original project expression study per WP04 design notes; embeds character variants as SVG data.",
+        "inventory_license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred.",
+        "inventory_sha256": "070af7d67f7d9a6df4107668570482be129ee3c5abc96b6708daa7c0dc11464b",
+        "observed_source_sha256": "070af7d67f7d9a6df4107668570482be129ee3c5abc96b6708daa7c0dc11464b",
+        "source_hash_matches_inventory": true,
+        "license_text_copied_here": false,
+        "provenance_source_documents": [
+          "apps/web/public/scene/ORIGINAL-ASSETS.md",
+          "docs/changes/WP04-character-scene/design.md"
+        ]
+      }
+    ],
+    "generated_speech": {
+      "fixture_manifest": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/manifest.json",
+      "voice": "CMU Flite cmu_us_slt `slt`",
+      "synthetic": true,
+      "offline_only": true,
+      "generation_description": "Original AI-assisted captions, synthesized locally by FFmpeg flite source with installed CMU slt voice; mono 24kHz PCM16; no cloud provider, credential, download, or recording.",
+      "files": [
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/greeting.pcm",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "67179120b348ae05195453fab63199b3e458474311a57791afae51a833c8c924",
+          "observed_source_sha256": "67179120b348ae05195453fab63199b3e458474311a57791afae51a833c8c924",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/greeting.wav",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "fb83f6049dd767cd227670e84683712a770eba9813d4448a6cef471d3a543a3f",
+          "observed_source_sha256": "fb83f6049dd767cd227670e84683712a770eba9813d4448a6cef471d3a543a3f",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/camera.pcm",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "12c1bd0d4f703f451bdb5960839ed6be2e0040a4a3d055c5687189a73a672207",
+          "observed_source_sha256": "12c1bd0d4f703f451bdb5960839ed6be2e0040a4a3d055c5687189a73a672207",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/camera.wav",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "097e9fde93feed0532826407c5376b85a9a5f4e353c540c3027bb4cfdfaa0224",
+          "observed_source_sha256": "097e9fde93feed0532826407c5376b85a9a5f4e353c540c3027bb4cfdfaa0224",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/photo.pcm",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "2110b6df6af0ce3e66a4385aaae378877628615c36022d4504a3d661c92ee094",
+          "observed_source_sha256": "2110b6df6af0ce3e66a4385aaae378877628615c36022d4504a3d661c92ee094",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/photo.wav",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "4001355cca0b829849562cb983797c3bea5a1d095540024ab7b323263badaacc",
+          "observed_source_sha256": "4001355cca0b829849562cb983797c3bea5a1d095540024ab7b323263badaacc",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/detail.pcm",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "dfb3a0aae2233d3aa576f7acc8dc4b0400a5d4e41be046d26392942a4c28ee97",
+          "observed_source_sha256": "dfb3a0aae2233d3aa576f7acc8dc4b0400a5d4e41be046d26392942a4c28ee97",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/detail.wav",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "babbe4f8c32f3ad040e248414f836b5c04768c4ec73778e89bec10de347e640e",
+          "observed_source_sha256": "babbe4f8c32f3ad040e248414f836b5c04768c4ec73778e89bec10de347e640e",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/absent.pcm",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "4ca0eec8af49d8581d30663ef177856a14b5fbae962dbc813163ebf0070533c6",
+          "observed_source_sha256": "4ca0eec8af49d8581d30663ef177856a14b5fbae962dbc813163ebf0070533c6",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/absent.wav",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "4554a740229b3ce8049ab083822b1cd166a0e685adee7f3e2ca26bd16bc7c87d",
+          "observed_source_sha256": "4554a740229b3ce8049ab083822b1cd166a0e685adee7f3e2ca26bd16bc7c87d",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/story.pcm",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "1aecda9aebe8822a3380b0dfededdfc65a7581060f8d16bc8b6c48a49f745abe",
+          "observed_source_sha256": "1aecda9aebe8822a3380b0dfededdfc65a7581060f8d16bc8b6c48a49f745abe",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/story.wav",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "525490c6b72ccdde876635a33999d1f49f802781335932457631c53991f8a7ed",
+          "observed_source_sha256": "525490c6b72ccdde876635a33999d1f49f802781335932457631c53991f8a7ed",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/rain.pcm",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "364c040c10f647249e85874519b4ab5e1dec6236a1f1dfecf1a07ae533acc29d",
+          "observed_source_sha256": "364c040c10f647249e85874519b4ab5e1dec6236a1f1dfecf1a07ae533acc29d",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/rain.wav",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "8b6f5514847c03ac86d7e8e86d29bc63e4692647115f0187faa7eda9189521d1",
+          "observed_source_sha256": "8b6f5514847c03ac86d7e8e86d29bc63e4692647115f0187faa7eda9189521d1",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/warm.pcm",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "353003a070953a1391a98b765a92179fd0e6575078c26d506fad0741c2fcc4a1",
+          "observed_source_sha256": "353003a070953a1391a98b765a92179fd0e6575078c26d506fad0741c2fcc4a1",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        },
+        {
+          "path": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/warm.wav",
+          "content_role": "generated synthetic rehearsal speech output",
+          "relationship_to_mira": "project content present in the source tree; not Flite or voice implementation",
+          "inventory_sha256": "8451770dd44648fe91a0676799ea67ce0c31b9c590052120293296d792b9eee8",
+          "observed_source_sha256": "8451770dd44648fe91a0676799ea67ce0c31b9c590052120293296d792b9eee8",
+          "source_hash_matches_inventory": true,
+          "license_text_copied_here": false
+        }
+      ],
+      "provenance_references": {
+        "flite_upstream_copying": "https://github.com/festvox/flite/blob/master/COPYING",
+        "cmu_slt_voice_source": "https://github.com/festvox/flite/blob/master/lang/cmu_us_slt/cmu_us_slt.c",
+        "local_installed_notice_path": "/usr/share/doc/libflite1/copyright",
+        "inventory_notice_sha256": "77d13a5e6cbe7277b4721033f9ad15707241c2832baa8c74ec823c9ee5ebf71c",
+        "observed_local_notice_sha256": "77d13a5e6cbe7277b4721033f9ad15707241c2832baa8c74ec823c9ee5ebf71c",
+        "flite_binary_sha256": "490ffd91ee67acbe4279a6b736dafdacba7a88211985960282e27c0d2d7c6eaf",
+        "voice_binary_sha256": "bc025b00db2d651a244f66e85d80a234284921e8d141d96e3189d75839a7980a",
+        "package_manager_version_metadata": "unavailable in the DEMO-02 evidence; exact package release not established",
+        "inventory_scoped_assessment": "The reviewed installed notice and upstream files describe permissive CMU software/voice licensing; no separate restriction on newly synthesized output was found in those reviewed sources. Scoped provenance review only, not legal advice or an exclusivity claim."
+      },
+      "redistribution_boundary": "Only generated PCM/WAV output is in the project. Flite software and CMU voice binaries are not copied into the repository; software/voice binary obligations should be revisited if those binaries are ever redistributed.",
+      "ffmpeg_boundary": "FFmpeg 7.1.5-0+deb13u1 was a local generation tool, not included. The pinned FFmpeg binary/package license/build-configuration record is absent; do not claim its binary redistribution has been cleared.",
+      "license_text_copied_here": false,
+      "provenance_source_documents": [
+        "docs/changes/DEMO-02-offline-speech-assets/README.md",
+        "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/manifest.json"
+      ]
+    }
+  },
+  "evidence_gaps": [
+    "requirements/dev.lock and requirements/runtime.lock pin versions but contain no wheel hashes; the installed environment comparison verifies metadata/version closure, not exact wheel bytes across platforms.",
+    "package-lock.json pins TypeScript 5.8.3 and records its registry tarball URL but omits npm integrity; exact tarball bytes are therefore not fixed by the frozen lock.",
+    "Several Python packages use legacy or generic license metadata rather than an SPDX expression. Their exact included license files are listed; annotated-types and click lack a METADATA License/License-Expression field, packaging has only generic Apache/BSD classifiers, and pyasn1-modules declares only generic BSD.",
+    "pluggy has no upstream project/repository URL in its installed METADATA; its source column falls back to the PyPI project/release page.",
+    "pip and setuptools are development/build-only pins whose distributions contain bundled vendored components and per-component notices. These notices are present in the local installed metadata, not expanded as 46 additional top-level locks; preserve and review them if redistributing those tool distributions/environments.",
+    "No consolidated third-party NOTICE/license bundle for the Python dependency set is present in the checked source tree. Applicability depends on what a future distribution actually bundles; this inventory is not itself a redistribution bundle.",
+    "MIRA project-wide license remains unspecified. The project-authorship notes are provenance claims, not an independent originality assessment or a license selection for the project/AI-assisted art/captions.",
+    "DEMO-02 records no Flite package-manager metadata; FFmpeg and Flite/voice binary redistribution evidence is incomplete because those binaries are not included and were not assessed for redistribution.",
+    "No legal clearance or license conclusion for the whole project is made."
+  ],
+  "source_tree_drift": [
+    {
+      "path": "apps/web/index.html",
+      "inventory_sha256": "212c72a380dd9e16b44cbdc66feaa9bf4c22f383a3fe486250e528accf899c72",
+      "observed_source_sha256": "d3cb0335572228acb5108000e074274f65f5411a69ac8c753dbffd9ef627d14d",
+      "note": "Observed source file hash differs from the inventory hash. The recorded inventory hash is for the whole apps/web/index.html container, not a separately computed SVG-fragment hash; re-review the modified file before relying on this provenance record."
+    }
+  ],
+  "interpretation_limits": [
+    "This is a copied-text and provenance manifest, not a project-license choice, legal advice, or legal clearance.",
+    "The source tree currently contains dependency declarations and project assets, not the installed Python or TypeScript package implementations. Actual obligations depend on the exact release contents.",
+    "Preserve each copied text in its package-specific directory. Do not infer a missing SPDX expression or convert generic/legacy license metadata into a stronger statement."
+  ]
+}

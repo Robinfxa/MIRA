@@ -1,0 +1,100 @@
+{
+  "adjudication": "specs/features/WP01-jev-evaluation/adjudication.v2.json",
+  "budget_policy_id": "jev-zh-approved-continuation-20261003-v1",
+  "corpora": {
+    "input": "specs/features/WP01-jev-evaluation/input-additions.v2.zh.json",
+    "output": "specs/features/WP01-jev-evaluation/output-candidates.v2.zh.json"
+  },
+  "file_sha256": {
+    "apps/api/src/mira/adapters/review/jev.py": "9bf65ad6ab86a64a58cb5ae652ac893c41df66ca0da88d427393486ba8b69e8a",
+    "apps/api/src/mira/adapters/review/jev_input.py": "a02973601f32ccde968869935f6e927d11d943a9a1997bb27f526260caee502e",
+    "apps/api/src/mira/adapters/review/jev_support/http.py": "c8a4b2b2711f66077215d5933cdffb478b180f074fed4fdaba51cddef1a7d344",
+    "apps/api/src/mira/application/contracts.py": "b87f3358490f9ad46d560fdceac67c8dd88a1c9cd449fa33441ef4dc1039ca7d",
+    "apps/api/src/mira/application/decision_contracts.py": "9466837797bfe656480f7f68464a84f02d04d32cf8d8f2c3f206cba8e0d13ec2",
+    "apps/api/src/mira/config/loader.py": "56caa086cc213d9de81d0723c82480cbed40d691f559456608eff5c7f15a8727",
+    "apps/api/src/mira/config/service_settings.py": "4c083057f34ff7583aa3769b6872cf17e9b32b1e771dc5286f253e9a5ef62440",
+    "apps/api/src/mira/config/settings.py": "0b1cfa5794418a35ef78a771003a0b703c0dd49f701553cd6abd4fcd36c0018e",
+    "apps/api/src/mira/domain/models.py": "113b1c5fb4b34d103e43f519134d9595407b61dbdb7482b10f63e9c7424955f1",
+    "apps/api/src/mira/domain/transitions.py": "384389391712293be9a05807602ca80ff11b44c7710f94a7e6847204d24fe35d",
+    "docs/mission/jev-evaluation-continuation-20261003.md": "3c537685d0c28ec6dd250c532dd934ab3c4693659eb2e8027d7c57293053e550",
+    "specs/features/WP01-jev-evaluation/adjudication.v2.json": "a592eb00d081a6d4bab3d20d408f771748c9ceb1877d4d707fb7c676af39d7b5",
+    "specs/features/WP01-jev-evaluation/input-additions.v2.zh.json": "0b7535da9798ba82830340a3e08426a039071976c2ded400fe6a8724de144c58",
+    "specs/features/WP01-jev-evaluation/output-candidates.v2.zh.json": "7cfaf41ffea793334d769d1898ae0c0e44e08b26701ae0e34d70bdd021b99d68",
+    "specs/features/WP01-jev-evaluation/preregistration.continuation-20261003.v1.json": "58c37c0074d8b969eac4aaf6b3c0673cc47acd614dbf03ced3978d08a43bfdcb",
+    "tools/jev_evaluate.py": "c60ae82d828010fbcd02711b5024c4d12a5fb5f45990b3cc9a13120d76a18748",
+    "tools/jev_evaluation_support.py": "567e0ae2bd26da87a5c2e3928c39efc67f9e5649d01f760ae86ed7b846de63b6",
+    "tools/jev_smoke.py": "8c02ee32b3d4740469d5a2309718c4608f0ff4bc446aa505efd1547dcee6ad8d"
+  },
+  "model": "jev-1.13.0",
+  "origin": "https://api.typesafe.ai/v1/systemone",
+  "preregistration": "specs/features/WP01-jev-evaluation/preregistration.continuation-20261003.v1.json",
+  "production_calibration_admitted": false,
+  "question_sets": {
+    "input": "mira-input-v1",
+    "output": "mira-output-v1"
+  },
+  "run_id": "jev-zh-v2-cont-20261003T1740Z",
+  "schema_version": 1,
+  "selected": [
+    {
+      "case_id": "in_simultaneous",
+      "track": "input"
+    },
+    {
+      "case_id": "in_quoted_rule",
+      "track": "input"
+    },
+    {
+      "case_id": "out_partial_honest",
+      "track": "output"
+    },
+    {
+      "case_id": "in_old_boundary",
+      "track": "input"
+    },
+    {
+      "case_id": "in_raw_share",
+      "track": "input"
+    },
+    {
+      "case_id": "out_old_boundary_voice",
+      "track": "output"
+    },
+    {
+      "case_id": "out_old_boundary_subtitle",
+      "track": "output"
+    },
+    {
+      "case_id": "in_partial_audio",
+      "track": "input"
+    },
+    {
+      "case_id": "in_accepted_only",
+      "track": "input"
+    },
+    {
+      "case_id": "out_hidden_speech",
+      "track": "output"
+    },
+    {
+      "case_id": "out_subtitle_pose",
+      "track": "output"
+    },
+    {
+      "case_id": "out_deictic_ambiguity",
+      "track": "output"
+    },
+    {
+      "case_id": "out_injection_safe",
+      "track": "output"
+    },
+    {
+      "case_id": "v2_out_cross_effect_age_conflict",
+      "track": "output"
+    },
+    {
+      "case_id": "v2_out_prefix_identity_conflict",
+      "track": "output"
+    }
+  ]
+}

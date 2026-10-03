@@ -1,0 +1,36 @@
+{
+  "feature": "WP10",
+  "spec": "specs/features/WP10-server-history-prefix/spec.md",
+  "requirements": [
+    {
+      "id": "WP10-001",
+      "tests": [
+        "tests/unit/test_history_pending.py::test_input_requires_complete_global_prefix",
+        "tests/unit/test_history_pending.py::test_interior_sequence_gap_blocks_input_until_shared_audio_fact_arrives",
+        "tests/unit/test_history_pending.py::test_fact_above_cutoff_does_not_fill_a_missing_prefix_slot",
+        "tests/unit/test_history_pending.py::test_large_cutoff_is_checked_without_range_iteration",
+        "tests/integration/test_history_pending_http.py::test_delayed_photo_receipt_blocks_http_input_then_exact_retry_uses_photo"
+      ]
+    },
+    {
+      "id": "WP10-002",
+      "tests": [
+        "tests/unit/test_history_pending.py::test_pending_input_revokes_uncooperative_old_branch_without_consuming_retry"
+      ]
+    },
+    {
+      "id": "WP10-003",
+      "tests": [
+        "tests/unit/test_history_pending.py::test_pending_input_revokes_uncooperative_old_branch_without_consuming_retry",
+        "tests/integration/test_history_pending_http.py::test_delayed_photo_receipt_blocks_http_input_then_exact_retry_uses_photo"
+      ]
+    },
+    {
+      "id": "WP10-004",
+      "tests": [
+        "tests/unit/test_history_pending.py::test_stop_does_not_wait_for_prefix_and_late_fact_is_history_only",
+        "tests/unit/test_history_pending.py::test_input_requires_complete_global_prefix"
+      ]
+    }
+  ]
+}

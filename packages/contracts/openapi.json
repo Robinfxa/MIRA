@@ -777,6 +777,449 @@
         }
       }
     },
+    "/api/v1/sessions/{session_id}/reviewed-audio": {
+      "get": {
+        "summary": "Reviewed Audio Status",
+        "operationId": "reviewed_audio_status_api_v1_sessions__session_id__reviewed_audio_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewedAudioStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/reviewed-audio/recording": {
+      "post": {
+        "summary": "Set Reviewed Audio Recording",
+        "operationId": "set_reviewed_audio_recording_api_v1_sessions__session_id__reviewed_audio_recording_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewedAudioRecordingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewedAudioActionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/reviewed-audio/streams/{stream_id}/review": {
+      "post": {
+        "summary": "Request Reviewed Audio",
+        "operationId": "request_reviewed_audio_api_v1_sessions__session_id__reviewed_audio_streams__stream_id__review_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "stream_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Stream Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewedAudioReviewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/reviewed-audio/reviews/{review_id}/preview": {
+      "get": {
+        "summary": "Preview Reviewed Audio",
+        "operationId": "preview_reviewed_audio_api_v1_sessions__session_id__reviewed_audio_reviews__review_id__preview_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{32}$",
+              "title": "Review Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/reviewed-audio/reviews/{review_id}/confirm": {
+      "post": {
+        "summary": "Confirm Reviewed Audio",
+        "operationId": "confirm_reviewed_audio_api_v1_sessions__session_id__reviewed_audio_reviews__review_id__confirm_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{32}$",
+              "title": "Review Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewedAudioConfirmRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewedAudioActionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/voice-capabilities": {
       "get": {
         "summary": "Voice Capabilities",
@@ -1369,6 +1812,18 @@
             "minLength": 1,
             "pattern": "\\S",
             "title": "Text"
+          },
+          "source_audio_stream_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Audio Stream Id"
           }
         },
         "additionalProperties": false,
@@ -1430,6 +1885,262 @@
           "presentation_seq"
         ],
         "title": "ReceiptRequest"
+      },
+      "ReviewedAudioActionResponse": {
+        "properties": {
+          "scope": {
+            "type": "string",
+            "const": "application",
+            "title": "Scope",
+            "default": "application"
+          },
+          "scope_notice": {
+            "type": "string",
+            "title": "Scope Notice"
+          },
+          "ok": {
+            "type": "boolean",
+            "title": "Ok"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "recording_active": {
+            "type": "boolean",
+            "title": "Recording Active"
+          },
+          "accepted_for_queue": {
+            "type": "boolean",
+            "title": "Accepted For Queue",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "scope_notice",
+          "ok",
+          "code",
+          "message",
+          "recording_active"
+        ],
+        "title": "ReviewedAudioActionResponse"
+      },
+      "ReviewedAudioConfirmRequest": {
+        "properties": {
+          "reviewed_digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Reviewed Digest"
+          },
+          "review": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "rejected",
+              "uncertain"
+            ],
+            "title": "Review"
+          },
+          "persist_consent": {
+            "type": "boolean",
+            "title": "Persist Consent"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reviewed_digest",
+          "review",
+          "persist_consent"
+        ],
+        "title": "ReviewedAudioConfirmRequest"
+      },
+      "ReviewedAudioRecordingRequest": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "consent": {
+            "type": "boolean",
+            "title": "Consent",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "ReviewedAudioRecordingRequest"
+      },
+      "ReviewedAudioReviewResponse": {
+        "properties": {
+          "scope": {
+            "type": "string",
+            "const": "application",
+            "title": "Scope",
+            "default": "application"
+          },
+          "scope_notice": {
+            "type": "string",
+            "title": "Scope Notice"
+          },
+          "review_id": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{32}$",
+            "title": "Review Id"
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Digest"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "audio_input",
+              "audio_output"
+            ],
+            "title": "Kind"
+          },
+          "sample_rate_hz": {
+            "type": "integer",
+            "enum": [
+              16000,
+              24000,
+              48000
+            ],
+            "title": "Sample Rate Hz"
+          },
+          "byte_count": {
+            "type": "integer",
+            "maximum": 524288.0,
+            "minimum": 2.0,
+            "title": "Byte Count"
+          },
+          "expires_in_seconds": {
+            "type": "number",
+            "maximum": 60.0,
+            "minimum": 0.0,
+            "title": "Expires In Seconds"
+          },
+          "preview_path": {
+            "type": "string",
+            "title": "Preview Path"
+          },
+          "notice": {
+            "type": "string",
+            "title": "Notice"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "scope_notice",
+          "review_id",
+          "digest",
+          "kind",
+          "sample_rate_hz",
+          "byte_count",
+          "expires_in_seconds",
+          "preview_path",
+          "notice"
+        ],
+        "title": "ReviewedAudioReviewResponse"
+      },
+      "ReviewedAudioStatusResponse": {
+        "properties": {
+          "scope": {
+            "type": "string",
+            "const": "application",
+            "title": "Scope",
+            "default": "application"
+          },
+          "recording_active": {
+            "type": "boolean",
+            "title": "Recording Active"
+          },
+          "has_pending_audio": {
+            "type": "boolean",
+            "title": "Has Pending Audio"
+          },
+          "staged_bytes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Staged Bytes"
+          },
+          "max_audio_bytes": {
+            "type": "integer",
+            "maximum": 524288.0,
+            "minimum": 2.0,
+            "title": "Max Audio Bytes"
+          },
+          "expires_in_seconds": {
+            "type": "number",
+            "maximum": 60.0,
+            "minimum": 0.0,
+            "title": "Expires In Seconds"
+          },
+          "pending_stream_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pending Stream Id"
+          },
+          "pending_kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "audio_input",
+                  "audio_output"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pending Kind"
+          },
+          "input_completion_ready": {
+            "type": "boolean",
+            "title": "Input Completion Ready"
+          },
+          "notice": {
+            "type": "string",
+            "title": "Notice"
+          },
+          "scope_notice": {
+            "type": "string",
+            "title": "Scope Notice"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "recording_active",
+          "has_pending_audio",
+          "staged_bytes",
+          "max_audio_bytes",
+          "expires_in_seconds",
+          "input_completion_ready",
+          "notice",
+          "scope_notice"
+        ],
+        "title": "ReviewedAudioStatusResponse"
       },
       "SessionView": {
         "properties": {

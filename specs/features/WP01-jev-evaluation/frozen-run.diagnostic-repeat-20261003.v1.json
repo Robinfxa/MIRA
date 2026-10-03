@@ -1,0 +1,48 @@
+{
+  "adjudication": "specs/features/WP01-jev-evaluation/adjudication.v2.json",
+  "budget_policy_id": "jev-zh-approved-continuation-20261003-v1",
+  "corpora": {
+    "input": "specs/features/WP01-jev-evaluation/input-additions.v2.zh.json",
+    "output": "specs/features/WP01-jev-evaluation/output-candidates.v2.zh.json"
+  },
+  "diagnostic_case_id": "out_old_boundary_voice",
+  "diagnostic_only": true,
+  "diagnostic_purpose": "One separately reviewed repeat to capture newly sanitized parser reason, field, size/hash and bounded structure for this new response only; prior cause remains unknown.",
+  "file_sha256": {
+    "apps/api/src/mira/adapters/review/jev.py": "9bf65ad6ab86a64a58cb5ae652ac893c41df66ca0da88d427393486ba8b69e8a",
+    "apps/api/src/mira/adapters/review/jev_input.py": "a02973601f32ccde968869935f6e927d11d943a9a1997bb27f526260caee502e",
+    "apps/api/src/mira/adapters/review/jev_support/http.py": "c8a4b2b2711f66077215d5933cdffb478b180f074fed4fdaba51cddef1a7d344",
+    "apps/api/src/mira/application/contracts.py": "b87f3358490f9ad46d560fdceac67c8dd88a1c9cd449fa33441ef4dc1039ca7d",
+    "apps/api/src/mira/application/decision_contracts.py": "9466837797bfe656480f7f68464a84f02d04d32cf8d8f2c3f206cba8e0d13ec2",
+    "apps/api/src/mira/config/loader.py": "56caa086cc213d9de81d0723c82480cbed40d691f559456608eff5c7f15a8727",
+    "apps/api/src/mira/config/service_settings.py": "4c083057f34ff7583aa3769b6872cf17e9b32b1e771dc5286f253e9a5ef62440",
+    "apps/api/src/mira/config/settings.py": "0b1cfa5794418a35ef78a771003a0b703c0dd49f701553cd6abd4fcd36c0018e",
+    "apps/api/src/mira/domain/models.py": "113b1c5fb4b34d103e43f519134d9595407b61dbdb7482b10f63e9c7424955f1",
+    "apps/api/src/mira/domain/transitions.py": "ccaac1661ea59f8520e91c0de43269020ad18624157d13355c1c53f6d2feb58c",
+    "docs/mission/jev-response-validation-diagnostic-repeat-20261003.md": "d1b29afa23206e7685be9641e36710d7caa52e5c586030a15bc2f7a48caeea13",
+    "specs/features/WP01-jev-evaluation/adjudication.v2.json": "a592eb00d081a6d4bab3d20d408f771748c9ceb1877d4d707fb7c676af39d7b5",
+    "specs/features/WP01-jev-evaluation/input-additions.v2.zh.json": "0b7535da9798ba82830340a3e08426a039071976c2ded400fe6a8724de144c58",
+    "specs/features/WP01-jev-evaluation/output-candidates.v2.zh.json": "7cfaf41ffea793334d769d1898ae0c0e44e08b26701ae0e34d70bdd021b99d68",
+    "specs/features/WP01-jev-evaluation/preregistration.diagnostic-repeat-20261003.v1.json": "4e7654698072d7873d7c370e61d8748f1fd7a8cca5afd5a3a6820a1ba9f937ed",
+    "tools/jev_evaluate.py": "eb810ef4b1a81dd49950b9ef5d00e33866a9df42a07cec58f5b70f18f5c8c6b5",
+    "tools/jev_evaluation_support.py": "8f35651fe9c360646a76832dd796da71d9a8689f85c6c22fb754aeb747a6c784",
+    "tools/jev_smoke.py": "8c02ee32b3d4740469d5a2309718c4608f0ff4bc446aa505efd1547dcee6ad8d"
+  },
+  "model": "jev-1.13.0",
+  "origin": "https://api.typesafe.ai/v1/systemone",
+  "preregistration": "specs/features/WP01-jev-evaluation/preregistration.diagnostic-repeat-20261003.v1.json",
+  "previous_terminal_run_id": "jev-zh-v2-cont-20261003T1740Z",
+  "production_calibration_admitted": false,
+  "question_sets": {
+    "input": "mira-input-v1",
+    "output": "mira-output-v1"
+  },
+  "run_id": "jev-zh-v2-response-validation-repeat-20261003T1800Z",
+  "schema_version": 1,
+  "selected": [
+    {
+      "case_id": "out_old_boundary_voice",
+      "track": "output"
+    }
+  ]
+}

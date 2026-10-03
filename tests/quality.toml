@@ -37,7 +37,7 @@ targets = ["tests/unit/test_configuration.py"]
 [[lanes]]
 name = "actor"
 kind = "pytest"
-targets = ["tests/unit/test_actor.py", "tests/integration/test_replay_actor.py"]
+targets = ["tests/unit/test_actor.py", "tests/integration/test_replay_actor.py", "tests/unit/test_history_pending.py"]
 
 [[lanes]]
 name = "providers"
@@ -47,7 +47,7 @@ targets = ["tests/contracts/test_*.py"]
 [[lanes]]
 name = "http"
 kind = "pytest"
-targets = ["tests/integration/test_http.py", "tests/integration/test_replay_http.py", "tests/integration/test_audio_progress.py", "tests/integration/test_voice_http.py", "tests/integration/test_rehearsal_http.py"]
+targets = ["tests/integration/test_http.py", "tests/integration/test_replay_http.py", "tests/integration/test_audio_progress.py", "tests/integration/test_voice_http.py", "tests/integration/test_rehearsal_http.py", "tests/integration/test_reviewed_audio_http.py", "tests/integration/test_history_pending_http.py"]
 
 [[lanes]]
 name = "tooling"

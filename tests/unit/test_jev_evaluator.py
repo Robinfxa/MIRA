@@ -91,6 +91,7 @@ class SyntheticTransport:
     def __init__(self, frozen, mode="gold", callback=None):
         self.frozen, self.mode, self.callback = frozen, mode, callback
         self.requests = []
+        self.kwargs_seen = []
         self.response = None
 
     async def __call__(self, payload, **kwargs):
@@ -99,13 +100,15 @@ class SyntheticTransport:
         assert request["model"] == "jev-1.13.0"
         assert len(payload) <= 16 * 1024
         case = cases_by_id(self.frozen)[manifest["selected"][len(self.requests)]["case_id"]]
-        ledger = runner.load_ledger(root)
+        ledger = runner.load_ledger(root,
+            continuation=manifest.get("budget_policy_id") == runner.APPROVED_CONTINUATION_POLICY_ID)
         assert ledger["attempts"][-1]["budget_charge_usd"] == "0.0029568000"
         assert len(ledger["attempts"]) == 5 + len(self.requests)
         with (root / runner.LOCK_RELATIVE).open("a") as lock:
             with pytest.raises(BlockingIOError):
                 fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         self.requests.append(request)
+        self.kwargs_seen.append(kwargs)
         if self.callback:
             self.callback(request)
         if self.mode == "timeout":
@@ -166,6 +169,31 @@ async def execute(frozen, transport=None, max_cases=16, report=True):
     return result, transport
 
 
+def continuation_manifest(frozen):
+    root, path, manifest = frozen
+    plan_path = manifest["preregistration"]
+    plan = support.read_json(root / plan_path)
+    selected = [item for item in plan["ordered_first_run"] if item["case_id"] != "out_pending_honest"]
+    plan.update(budget_policy_id=runner.APPROVED_CONTINUATION_POLICY_ID,
+        ordered_first_run=selected,
+        first_four_compatible=["out_partial_honest", "out_old_boundary_subtitle",
+                               "out_subtitle_pose", "out_injection_safe"],
+        timeout_seconds=30)
+    plan["budget_snapshot"] = {"maximum_attempts": 35, "attempts_consumed": 4,
+        "aggregate_effective_limit_usd": "0.05", "operational_per_attempt_reserve_usd": "0.0029568",
+        "reserve_before_dispatch": True, "concurrency": 1, "automatic_retries": 0,
+        "unknown_usage_keeps_full_reserve": True}
+    (root / plan_path).write_bytes(support.canonical_bytes(plan))
+    manifest["run_id"] = "offline-approved-continuation-test"
+    manifest["budget_policy_id"] = runner.APPROVED_CONTINUATION_POLICY_ID
+    manifest["selected"] = selected
+    manifest["file_sha256"][plan_path] = support.sha((root / plan_path).read_bytes())
+    for name in ("tools/jev_evaluate.py", "tools/jev_evaluation_support.py"):
+        manifest["file_sha256"][name] = support.sha((root / name).read_bytes())
+    path.write_bytes(support.canonical_bytes(manifest))
+    return frozen
+
+
 def test_frozen_sources_dtos_adjudication_and_question_sets_match(frozen):
     root, path, manifest = frozen
     _, plan, selected = support.validate_manifest(root, path, support.sha(path.read_bytes()))
@@ -173,6 +201,21 @@ def test_frozen_sources_dtos_adjudication_and_question_sets_match(frozen):
     assert all(case["partition"] == "development" for _, case in selected)
     assert len(plan["first_four_compatible"]) == 4
     assert support.REQUIRED_SOURCES <= manifest["file_sha256"].keys()
+
+
+def test_continuation_manifest_excludes_timed_out_case_and_keeps_original_order(frozen):
+    root, path, _ = continuation_manifest(frozen)
+    _, plan, selected = support.validate_manifest(root, path, support.sha(path.read_bytes()))
+    assert len(selected) == 15
+    assert all(case["id"] != "out_pending_honest" for _, case in selected)
+    assert [case["id"] for _, case in selected] == [
+        "in_simultaneous", "in_quoted_rule", "out_partial_honest", "in_old_boundary",
+        "in_raw_share", "out_old_boundary_voice", "out_old_boundary_subtitle",
+        "in_partial_audio", "in_accepted_only", "out_hidden_speech", "out_subtitle_pose",
+        "out_deictic_ambiguity", "out_injection_safe", "v2_out_cross_effect_age_conflict",
+        "v2_out_prefix_identity_conflict"]
+    assert plan["first_four_compatible"] == ["out_partial_honest", "out_old_boundary_subtitle",
+        "out_subtitle_pose", "out_injection_safe"]
 
 
 @pytest.mark.asyncio
@@ -194,6 +237,7 @@ async def test_exact_wire_full_context_and_real_runtime_stays_uncalibrated(froze
             assert request["state"] == case["snapshot"]
             assert row["would_allow_if_admitted"] is None
             assert row["runtime_status"] == "unknown"
+    assert transport.kwargs_seen[0]["timeout_seconds"] == 10
     assert result["production_calibration_admitted"] is False
     assert result["calibration_ref"] is None
     assert result["global_attempts"] == 20
@@ -212,6 +256,17 @@ async def test_uncertain_or_invalid_response_stops_and_retains_full_reservation(
     assert "SECRET-SENTINEL" not in json.dumps(result)
     assert "SECRET-SENTINEL" not in (frozen[0] / "report.json").read_text()
     assert "raw_answers" not in result["results"][0]
+    if mode in {"malformed", "wrong_model", "missing_question", "unknown_usage", "bad_confidence", "http_error"}:
+        diagnostic = result["results"][0]["validation_diagnostic"]
+        assert diagnostic["parser_reason"] in {
+            "http_error", "json_decode", "model_mismatch", "answer_coverage", "usage_shape",
+            "inconsistent_confidence",
+        }
+        assert len(diagnostic["response_sha256"]) == 64
+        assert diagnostic["known_questions"]
+        assert "SECRET-SENTINEL" not in json.dumps(diagnostic)
+    else:
+        assert "validation_diagnostic" not in result["results"][0]
 
 
 @pytest.mark.asyncio
@@ -323,6 +378,232 @@ async def test_same_frozen_run_cannot_be_retried(frozen):
     with pytest.raises(support.EvaluationStop, match="run_already_attempted"):
         await execute(frozen, report=False)
     assert len(runner.load_ledger(frozen[0])["attempts"]) == 5
+
+
+@pytest.mark.asyncio
+async def test_explicit_continuation_retains_history_reserves_before_call_and_uses_approved_caps(frozen):
+    frozen = continuation_manifest(frozen)
+    root, _, _ = frozen
+    before = (root / runner.LEDGER_RELATIVE).read_bytes()
+    transport = SyntheticTransport(frozen)
+    # The frozen manifest alone is insufficient; the caller must explicitly approve this policy.
+    with pytest.raises(support.EvaluationStop, match="continuation_policy_approval_mismatch"):
+        await runner.run_batch(root=root, manifest_path=frozen[1],
+            manifest_sha256=support.sha(frozen[1].read_bytes()),
+            transport_factory=lambda: transport, max_cases=1)
+    assert not transport.requests and (root / runner.LEDGER_RELATIVE).read_bytes() == before
+
+
+@pytest.mark.asyncio
+async def test_approved_continuation_preserves_ledger_and_reserves_under_35_and_005_caps(frozen):
+    frozen = continuation_manifest(frozen)
+    root, path, _ = frozen
+    before = copy.deepcopy(runner.load_ledger(root)["attempts"])
+    transport = SyntheticTransport(frozen)
+    result = await runner.run_batch(root=root, manifest_path=path,
+        manifest_sha256=support.sha(path.read_bytes()), transport_factory=lambda: transport,
+        max_cases=1, approved_continuation=True)
+    ledger = runner.load_ledger(root, continuation=True)
+    assert result["attempted_requests"] == len(transport.requests) == 1, (result["results"][0], ledger["attempts"][-1])
+    assert transport.kwargs_seen[0]["timeout_seconds"] == 30
+    assert result["timeout_seconds"] == 30
+    assert result["timeout_change_from_existing_default_seconds"] == 10
+    assert ledger["maximum_attempts"] == 35 and Decimal(ledger["maximum_usd"]) == Decimal("0.05")
+    assert ledger["budget_policy_id"] == runner.APPROVED_CONTINUATION_POLICY_ID
+    assert ledger["attempts"][:len(before)] == before
+    assert ledger["attempts"][-1]["budget_charge_usd"] != "0.0029568"
+    assert len(ledger["attempts"]) == 5
+
+
+@pytest.mark.asyncio
+async def test_approved_continuation_cannot_retry_same_run_and_timeout_keeps_one_reserve(frozen):
+    frozen = continuation_manifest(frozen)
+    root, path, _ = frozen
+    transport = SyntheticTransport(frozen, "timeout")
+    kwargs = dict(root=root, manifest_path=path, manifest_sha256=support.sha(path.read_bytes()),
+        transport_factory=lambda: transport, report_path=None, max_cases=15, approved_continuation=True)
+    result = await runner.run_batch(**kwargs)
+    assert result["attempted_requests"] == len(transport.requests) == 1
+    ledger_before_retry = (root / runner.LEDGER_RELATIVE).read_bytes()
+    assert runner.load_ledger(root, continuation=True)["attempts"][-1]["budget_charge_usd"] == "0.0029568000"
+    with pytest.raises(support.EvaluationStop, match="run_already_attempted"):
+        await runner.run_batch(**kwargs)
+    assert (root / runner.LEDGER_RELATIVE).read_bytes() == ledger_before_retry
+
+
+@pytest.mark.asyncio
+async def test_continuation_35_attempt_ceiling_blocks_before_dispatch(frozen):
+    frozen = continuation_manifest(frozen)
+    root, path, _ = frozen
+    ledger = runner.load_ledger(root)
+    ledger["attempts"] = [{"case": f"prior-{i}", "budget_charge_usd": "0.00001", "status": "done"}
+                          for i in range(35)]
+    smoke.save(root / runner.LEDGER_RELATIVE, ledger)
+    transport = SyntheticTransport(frozen)
+    result = await runner.run_batch(root=root, manifest_path=path,
+        manifest_sha256=support.sha(path.read_bytes()), transport_factory=lambda: transport,
+        max_cases=1, approved_continuation=True)
+    assert not transport.requests and result["attempted_requests"] == 0
+    assert result["global_attempts"] == 35
+    assert result["status"] == "local_budget_exhausted"
+
+
+@pytest.mark.asyncio
+async def test_continuation_005_aggregate_cap_blocks_full_reserve_before_dispatch(frozen):
+    frozen = continuation_manifest(frozen)
+    root, path, _ = frozen
+    ledger = runner.load_ledger(root)
+    ledger["attempts"] = [{"case": f"prior-{i}", "budget_charge_usd": "0.0029568", "status": "unknown"}
+                          for i in range(16)]
+    smoke.save(root / runner.LEDGER_RELATIVE, ledger)
+    transport = SyntheticTransport(frozen)
+    result = await runner.run_batch(root=root, manifest_path=path,
+        manifest_sha256=support.sha(path.read_bytes()), transport_factory=lambda: transport,
+        max_cases=1, approved_continuation=True)
+    assert not transport.requests and result["attempted_requests"] == 0
+    assert Decimal(result["global_reserved_or_charged_usd"]) == Decimal("0.0473088")
+    assert result["status"] == "local_budget_exhausted"
+
+
+def _diagnostic_fixture(track="output"):
+    prefix = "0" * 32 + ":" + "a" * 64
+    suffix = "o1" if track == "output" else "speech_restriction"
+    question = ({"type": "choice", "criteria": {"allow": "", "reject": "", "unknown": ""}}
+                if track == "output" else {"type": "noul", "criteria": {"true": "", "false": ""}})
+    key = prefix + ":" + suffix
+    payload = support.canonical_bytes({"state": {}, "model": support.MODEL, "questions": {key: question}})
+    if track == "output":
+        answer = {"type": "choice", "choice": "allow", "confidence": 1.0,
+                  "probabilities": {"allow": 1.0, "reject": 0.0, "unknown": 0.0}}
+    else:
+        answer = {"type": "noul", "noul": 0.5}
+    body = support.canonical_bytes({"model": support.MODEL, "answers": {key: answer},
+                                    "usage": {"input_tokens": 17, "output_tokens": 8}})
+    return payload, key, body
+
+
+def _diagnose_body(track, body):
+    payload, _, _ = _diagnostic_fixture(track)
+    response = support.jev.JevHttpResponse(200, body)
+    with pytest.raises(Exception) as caught:
+        support.inspect_response(response, payload, track)
+    return support.safe_response_diagnostics(response, payload, track, caught.value)
+
+
+def _diagnostic_document(track="output"):
+    payload, key, body = _diagnostic_fixture(track)
+    return payload, key, json.loads(body)
+
+
+def test_unknown_exception_diagnostics_never_copy_untrusted_exception_text():
+    payload, _, body = _diagnostic_fixture("output")
+    secret = "SECRET-SENTINEL-unclassified-provider-detail"
+    response = support.jev.JevHttpResponse(200, body)
+    diagnostic = support.safe_response_diagnostics(response, payload, "output", RuntimeError(secret))
+    assert diagnostic["parser_reason"] == "unclassified_parser_failure"
+    assert diagnostic["parser_field"] == "unknown"
+    assert secret not in json.dumps(diagnostic)
+
+
+@pytest.mark.parametrize("mutation,expected_reason,expected_field", [
+    ("response_shape", "response_shape", "response"),
+    ("model_mismatch", "model_mismatch", "model"),
+    ("answer_coverage", "answer_coverage", "answers"),
+    ("usage_shape", "usage_shape", "usage"),
+    ("answer_shape", "answer_shape", "answers.o1"),
+    ("probabilities", "probabilities", "answers.o1"),
+    ("choice_not_maximum", "choice_not_maximum", "answers.o1"),
+    ("inconsistent_confidence", "inconsistent_confidence", "answers.o1"),
+])
+def test_output_parser_failure_diagnostics_are_allowlisted_and_dimension_scoped(mutation, expected_reason,
+                                                                                expected_field):
+    payload, key, document = _diagnostic_document()
+    secret = "SECRET-SENTINEL-never-export"
+    if mutation == "response_shape":
+        document[secret] = {"credential": secret}
+    elif mutation == "model_mismatch":
+        document["model"] = secret
+    elif mutation == "answer_coverage":
+        document["answers"] = {secret: document["answers"][key]}
+    elif mutation == "usage_shape":
+        document["usage"] = {"input_tokens": 10, "output_tokens": secret}
+    elif mutation == "answer_shape":
+        document["answers"][key][secret] = {"value": secret}
+    elif mutation == "probabilities":
+        document["answers"][key]["probabilities"][secret] = 0.0
+    elif mutation == "choice_not_maximum":
+        document["answers"][key]["probabilities"] = {"allow": 0.4, "reject": 0.6, "unknown": 0.0}
+        document["answers"][key]["confidence"] = 0.4
+    elif mutation == "inconsistent_confidence":
+        document["answers"][key]["confidence"] = 0.5
+    diag = _diagnose_body("output", support.canonical_bytes(document))
+    serialized = json.dumps(diag, ensure_ascii=False)
+    assert diag["parser_reason"] == expected_reason
+    assert diag["parser_field"] == expected_field
+    assert diag["known_questions"] == [{"suffix": "o1", "type": "choice"}]
+    assert len(diag["response_sha256"]) == 64 and diag["response_bytes"] > 0
+    assert "0" * 32 not in serialized and "a" * 64 not in serialized
+    assert secret not in serialized
+    if mutation == "answer_shape":
+        assert diag["answer_facts"][0]["unexpected_field_count"] == 1
+    if mutation == "probabilities":
+        assert diag["answer_facts"][0]["known_probability_field_count"] == 3
+    if mutation == "usage_shape":
+        assert diag["output_tokens"] is None
+
+
+@pytest.mark.parametrize("raw,expected_reason", [
+    (b'{"model":"secret","model":"jev-1.13.0"}', "duplicate_key"),
+    (b'{"model":NaN}', "nonfinite_number"),
+    (b"not-json", "json_decode"),
+    (b"\xff", "invalid_utf8"),
+    (b" " * (64 * 1024 + 1), "body_size"),
+])
+def test_unstructured_parser_failures_keep_only_reason_length_hash_and_known_questions(raw, expected_reason):
+    diag = _diagnose_body("output", raw)
+    assert diag["parser_reason"] == expected_reason
+    assert diag["parser_field"] in {"json", "body"}
+    assert diag["known_questions"] == [{"suffix": "o1", "type": "choice"}]
+    assert diag["response_bytes"] == len(raw)
+    assert len(diag["response_sha256"]) == 64
+    assert "secret" not in json.dumps(diag).lower()
+
+
+@pytest.mark.parametrize("mutation,expected_reason", [
+    ("noul_shape", "noul_shape"),
+    ("choice_shape", "choice_shape"),
+    ("choice_distribution", "choice_distribution"),
+    ("choice_confidence", "choice_confidence"),
+])
+def test_input_parser_failure_diagnostics_preserve_only_known_question_facts(mutation, expected_reason):
+    prefix = "0" * 32 + ":" + "a" * 64
+    key = prefix + ":referent"
+    question = {"type": "choice", "criteria": {"none": "", "ambiguous": "", "photo-1": ""}}
+    payload = support.canonical_bytes({"state": {}, "model": support.MODEL, "questions": {key: question}})
+    answer = {"type": "choice", "choice": "photo-1", "confidence": 1.0,
+              "probabilities": {"none": 0.0, "ambiguous": 0.0, "photo-1": 1.0}}
+    if mutation == "noul_shape":
+        key = prefix + ":speech_restriction"
+        payload = support.canonical_bytes({"state": {}, "model": support.MODEL,
+            "questions": {key: {"type": "noul", "criteria": {"true": "", "false": ""}}}})
+        answer = {"type": "noul", "noul": 0.5, "SECRET-SENTINEL": "private"}
+    elif mutation == "choice_shape":
+        answer["choice"] = "SECRET-SENTINEL"
+    elif mutation == "choice_distribution":
+        answer["probabilities"] = {"none": 1.0, "ambiguous": 0.0}
+    elif mutation == "choice_confidence":
+        answer["confidence"] = 0.5
+    body = support.canonical_bytes({"model": support.MODEL, "answers": {key: answer},
+        "usage": {"input_tokens": 17, "output_tokens": 8}})
+    response = support.jev.JevHttpResponse(200, body)
+    with pytest.raises(Exception) as caught:
+        support.inspect_response(response, payload, "input")
+    diag = support.safe_response_diagnostics(response, payload, "input", caught.value)
+    assert diag["parser_reason"] == expected_reason
+    assert diag["parser_field"] == ("answers.speech_restriction" if mutation == "noul_shape"
+                                     else "answers.referent")
+    assert "SECRET-SENTINEL" not in json.dumps(diag)
+    assert "0" * 32 not in json.dumps(diag) and "a" * 64 not in json.dumps(diag)
 
 
 @pytest.mark.parametrize("mutation", ["source", "question_set", "threshold", "label", "review",
@@ -667,3 +948,65 @@ def test_explicit_manifest_model_covers_unset_config_without_aliases(frozen, mon
     assert loads == [{"root": root, "env_file": root / ".env", "environ": {}}]
     assert len(transports) == (1 if expected_exit == 0 else 0)
     assert "object at" not in capsys.readouterr().out
+
+
+def diagnostic_repeat_manifest(frozen):
+    frozen = continuation_manifest(frozen)
+    root, path, manifest = frozen
+    plan_path = manifest["preregistration"]
+    plan = support.read_json(root / plan_path)
+    case_id = support.DIAGNOSTIC_CASE_ID
+    item = next(row for row in plan["ordered_first_run"] if row["case_id"] == case_id)
+    plan.update(diagnostic_only=True, ordered_first_run=[item], first_four_compatible=[],
+        diagnostic_purpose="one explicitly reviewed repeat to capture sanitized parser diagnostics",
+        live_execution_authorized=False)
+    (root / plan_path).write_bytes(support.canonical_bytes(plan))
+    manifest.update(run_id="offline-reviewed-diagnostic-repeat-test", diagnostic_only=True,
+        diagnostic_case_id=case_id, selected=[item])
+    manifest["file_sha256"][plan_path] = support.sha((root / plan_path).read_bytes())
+    for name in ("tools/jev_evaluate.py", "tools/jev_evaluation_support.py"):
+        manifest["file_sha256"][name] = support.sha((root / name).read_bytes())
+    path.write_bytes(support.canonical_bytes(manifest))
+    return frozen
+
+
+def test_diagnostic_repeat_manifest_pins_only_the_terminal_case(frozen):
+    root, path, manifest = diagnostic_repeat_manifest(frozen)
+    _, plan, selected = support.validate_manifest(root, path, support.sha(path.read_bytes()))
+    assert len(selected) == 1
+    assert selected[0][0] == "output" and selected[0][1]["id"] == "out_old_boundary_voice"
+    assert manifest["diagnostic_only"] is True
+    assert manifest["diagnostic_case_id"] == plan["ordered_first_run"][0]["case_id"]
+    assert plan["first_four_compatible"] == []
+
+
+@pytest.mark.asyncio
+async def test_single_diagnostic_repeat_requires_review_flag_and_stays_separate(frozen):
+    frozen = diagnostic_repeat_manifest(frozen)
+    root, path, _ = frozen
+    before = (root / runner.LEDGER_RELATIVE).read_bytes()
+    transport = SyntheticTransport(frozen)
+    kwargs = dict(root=root, manifest_path=path, manifest_sha256=support.sha(path.read_bytes()),
+        transport_factory=lambda: transport, report_path=None, max_cases=1, approved_continuation=True)
+    with pytest.raises(support.EvaluationStop, match="diagnostic_repeat_review_mismatch"):
+        await runner.run_batch(**kwargs)
+    assert not transport.requests and (root / runner.LEDGER_RELATIVE).read_bytes() == before
+    result = await runner.run_batch(**kwargs, approved_diagnostic_repeat=True)
+    assert result["attempted_requests"] == len(transport.requests) == 1
+    assert result["status"] == "completed"
+    assert result["diagnostic_only"] is True
+    assert result["metric_scope"] == "single_case_diagnostic_repeat_not_for_quality_aggregation"
+    assert result["results"][0]["case_id"] == "out_old_boundary_voice"
+    assert result["retries"] == 0
+
+
+@pytest.mark.asyncio
+async def test_diagnostic_repeat_enforces_single_attempt_limit(frozen):
+    frozen = diagnostic_repeat_manifest(frozen)
+    root, path, _ = frozen
+    transport = SyntheticTransport(frozen)
+    with pytest.raises(support.EvaluationStop, match="diagnostic_attempt_limit_invalid"):
+        await runner.run_batch(root=root, manifest_path=path,
+            manifest_sha256=support.sha(path.read_bytes()), transport_factory=lambda: transport,
+            max_cases=2, approved_continuation=True, approved_diagnostic_repeat=True)
+    assert not transport.requests and len(runner.load_ledger(root)["attempts"]) == 4
