@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const dist=process.env.MIRA_TEST_WEB_DIST?pathToFileURL(resolve(process.env.MIRA_TEST_WEB_DIST)+'/').href:new URL('../../apps/web/dist/',import.meta.url).href;
+const {parseSession}=await import(new URL('shared/protocol.js',dist));
+const speech={id:'s1',kind:'speech',value:'hello',digest:'a'.repeat(64),output_epoch:1,activity_seq:1};
+const progress={effect_id:'s1',digest:speech.digest,output_epoch:1,activity_seq:1,presentation_seq:1,sample_rate_hz:24000,rendered_samples:240,status:'rendered'};
+const session={schema_version:'0.1.0-foundation',session_id:'s',client_instance_id:'c',revision:2,activity_seq:1,input_epoch:1,output_epoch:1,permit_revision:2,phase:'ready',request_id:'r',sealed:false,active_grants:[speech],presented_effects:[],audio_progress:[progress],last_error:null};
+test('wire parser admits explicit speech and preserves typed immutable audio history',()=>{const result=parseSession(session);assert.equal(result.active_grants[0].kind,'speech');assert.equal(result.audio_progress[0].rendered_samples,240);assert.equal(Object.isFrozen(result.audio_progress[0]),true);});
+test('wire parser rejects forged audio status, invalid samples and invalid origins',()=>{for(const bad of [{status:'heard'},{sample_rate_hz:0},{rendered_samples:-1},{presentation_seq:0},{digest:'bad'},{rendered_samples:0,status:'completed'}])assert.throws(()=>parseSession({...session,active_grants:[],audio_progress:[{...progress,...bad}]}));});

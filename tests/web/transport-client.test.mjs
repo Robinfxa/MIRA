@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const dist=process.env.MIRA_TEST_WEB_DIST?pathToFileURL(resolve(process.env.MIRA_TEST_WEB_DIST)+'/').href:new URL('../../apps/web/dist/',import.meta.url).href;
+const {MiraApiClient}=await import(new URL('features/session/api-client.js',dist));
+const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return {promise,resolve};};
+const session={schema_version:'0.1.0-foundation',session_id:'s',client_instance_id:'c',revision:0,activity_seq:0,input_epoch:0,output_epoch:0,permit_revision:0,phase:'idle',request_id:null,sealed:false,active_grants:[],presented_effects:[],audio_progress:[],last_error:null};
+const created=()=>new Response(JSON.stringify({session,session_token:'capability-secret'}),{headers:{'content-type':'application/json'}});
+test('API close aborts pending create and deletes a returned late session without reconnecting',async()=>{const pending=deferred(),calls=[];const api=new MiraApiClient({apiBase:'/api/v1',pollIntervalMs:200},{fetch:async(url,options)=>{calls.push({url,options});return options.method==='POST'?pending.promise:new Response(null,{status:204});}});const start=api.create('c');await api.close();assert.equal(calls[0].options.signal.aborted,true);pending.resolve(created());await assert.rejects(start,/closed/);await Promise.resolve();assert.equal(calls[1].options.method,'DELETE');assert.equal(calls[1].options.headers['X-Mira-Session-Token'],'capability-secret');await assert.rejects(api.create('c'),/closed/);});
+test('API server cleanup failure is not reported as successful close',async()=>{const api=new MiraApiClient({apiBase:'/api/v1',pollIntervalMs:200},{fetch:async(_url,options)=>options.method==='POST'?created():new Response(null,{status:500})});await api.create('c');await assert.rejects(api.close(),/cleanup/);});
