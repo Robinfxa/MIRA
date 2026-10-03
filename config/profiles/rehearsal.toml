@@ -1,0 +1,11 @@
+# Explicit OFFLINE authored commands + prerecorded synthetic English audio.
+# No live models, recording, microphone or account credentials.
+[providers]
+generation = "rehearsal"
+review = "fixture"
+mock_delay_ms = 650
+allow_external_calls = false
+allow_paid_api = false
+[diagnostics]
+development_recording = false
+recording_consent = false

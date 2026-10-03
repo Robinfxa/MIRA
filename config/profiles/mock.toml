@@ -1,0 +1,4 @@
+# Zero-credential integration profile. This is not a live LLM profile.
+[providers]
+generation = "mock"
+review = "fixture"

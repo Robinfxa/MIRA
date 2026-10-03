@@ -1,0 +1,21 @@
+# Public, reviewed defaults only. Secrets belong exclusively in environment/dotenv.
+environment = "development"
+
+[http]
+host = "127.0.0.1"
+port = 8000
+allowed_origins = ["http://127.0.0.1:8000", "http://localhost:8000"]
+
+[runtime]
+timeout_seconds = 10.0
+max_sessions = 32
+max_turns = 64
+max_effects = 256
+journal_capacity = 2048
+
+[providers]
+generation = "mock"
+review = "fixture"
+mock_delay_ms = 500
+allow_external_calls = false
+allow_paid_api = false

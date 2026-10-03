@@ -1,0 +1,5 @@
+environment = "test"
+[providers]
+mock_delay_ms = 0
+[runtime]
+timeout_seconds = 1.0

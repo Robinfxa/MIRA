@@ -1,0 +1,5 @@
+# Fixed generation fixture, not a recorded live conversation or real model.
+[providers]
+generation = "replay"
+review = "fixture"
+replay_scenario = "photo-tour"
