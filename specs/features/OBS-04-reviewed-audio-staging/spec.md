@@ -42,9 +42,16 @@ newer input, mode-off, close, or repeated submit cannot reuse approval. Only an 
 attestation for the exact buffer may enter the save path. The UI displays kind, byte count, sample rate,
 duration and digest, then requires an explicit, user-started playback through the existing single
 audio owner. Playback is blocked while normal generation, microphone capture, scene preparation or
-character playback is active. The audition emits no character audio-progress fact, caption, history
-entry or JEV permission. The operator must review the actual clip, not just an ASR transcript; the
-module performs no spoken-secret or semantic detection and does not transform/redact audio.
+character playback is active. Lifecycle admission allows the exact fresh-session state (`idle`,
+unsealed, no request or grants/history, and zero revisions/epochs), an empty post-Stop state
+(`stopped`, unsealed, no request or current grants), or a completed response (`idle`, sealed, with a
+request identity and every current grant fully represented in `presented_effects`). The backend
+retains presented grants in `active_grants`, so their presence alone does not mean work is pending;
+speech appears in presented history only after completed audio progress. Generation/intermediate,
+error, unpresented, or inconsistent lifecycle states fail closed. The audition emits no character
+audio-progress fact, caption, history entry or JEV permission. The operator must review the actual
+clip, not just an ASR transcript; the module performs no spoken-secret or semantic detection and does
+not transform/redact audio.
 
 ### OBS04-004 — Private save needs separate per-buffer confirmation
 Given the exact-buffer review is still valid, when the operator explicitly confirms private local

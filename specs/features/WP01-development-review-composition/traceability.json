@@ -1,0 +1,39 @@
+{
+  "feature": "DEVCOMP",
+  "spec": "specs/features/WP01-development-review-composition/spec.md",
+  "requirements": [
+    {
+      "id": "DEVCOMP-001",
+      "tests": [
+        "tests/contracts/test_development_review_composition.py::test_factory_requires_explicit_exact_admission",
+        "tests/contracts/test_development_review_composition.py::test_default_factory_guard_remains_closed"
+      ]
+    },
+    {
+      "id": "DEVCOMP-002",
+      "tests": [
+        "tests/contracts/test_development_review_composition.py::test_factory_composes_real_adapters_without_io"
+      ]
+    },
+    {
+      "id": "DEVCOMP-003",
+      "tests": [
+        "tests/contracts/test_development_review_composition.py::test_actor_grants_valid_candidate_through_selected_synthetic_transports",
+        "tests/contracts/test_development_review_composition.py::test_actor_unknown_or_reject_never_grants"
+      ]
+    },
+    {
+      "id": "DEVCOMP-004",
+      "tests": [
+        "tests/contracts/test_development_review_composition.py::test_capture_prohibition_blocks_media_before_output_review",
+        "tests/contracts/test_development_review_composition.py::test_stop_cancels_delayed_review_without_resurrecting_authority"
+      ]
+    },
+    {
+      "id": "DEVCOMP-005",
+      "tests": [
+        "tests/contracts/test_development_review_composition.py::test_input_output_budgets_and_timeouts_are_independent_and_bounded"
+      ]
+    }
+  ]
+}

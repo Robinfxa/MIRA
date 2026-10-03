@@ -23,3 +23,9 @@ Eight original English Flite/slt clips total52.56seconds. The finite offline com
 - True browser/device behavior, microphone-to-response interruption, physical sound, current visual layout and a continuous3–5minute acceptance recording remain open. The retained browser/OS sandbox prevented static rendering; no security weakening or alternate loopback path was used.
 
 Latest remotely verified backup remains main54c1457cd897133e9ca0b3035fcd0a73ba8bef22. Prepared12:36/12:56 archives and this corrected candidate are not remotely published merely because local checks passed. No deployment or overall product acceptance is claimed.
+
+## Post-freeze release result (14:50 UTC)
+
+The immutable14:48 candidate passed1155 Python and185 Node tests across all12 release lanes, including wheel installation and actual local HTTP startup; all4496 capture-manifest file hashes remained unchanged. Its543-file privacy-filtered public projection was then archived, restored with the explicit-check helper under optimized Python, verified byte-for-byte/mode-for-mode, and passed the same1155/185/all12 suite. This paragraph is an additive report after the source freeze, not a claim that the frozen earlier wording already knew the outcome.
+
+Independent restore signoff confirmed42/42 cases at helper SHA3fdb4eeebf61f608401cdf4e17ef5be2f56f5d811eeda9f1d3b704d7ad8517aa. The ZIP64 restriction is specifically end-of-directory layouts; bounded small member ZIP64 local headers are accepted. Original archives remain unchanged. Publication is still pending.

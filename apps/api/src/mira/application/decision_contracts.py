@@ -10,6 +10,10 @@ from enum import StrEnum
 from typing import Literal
 
 from mira.application.contracts import CandidateRange, EffectProposal, GenerationContext
+from mira.application.choice_confidence import choice_confidence_consistent
+from mira.application.decision_policy import (
+    DecisionPolicyRef, USER_DEVELOPMENT_0_6_V1,
+)
 from mira.domain.models import AudioProgress, AudioStatus, Effect, EffectKind
 from mira.domain.transitions import MAX_AUDIO_SECONDS
 
@@ -129,6 +133,7 @@ class InputDecisionObservation:
     referent: ReferentObservation = ReferentObservation()
     question_set_revision: str = INPUT_QUESTION_SET
     calibration_ref: str | None = None
+    decision_policy_ref: DecisionPolicyRef | None = None
     request_digest: str | None = None
     model: str | None = None
     input_tokens: int | None = None
@@ -297,23 +302,34 @@ def valid_snapshot(snapshot: object) -> bool:
 
 
 def _usable_observation(snapshot: DecisionSnapshot, observation: object) -> bool:
+    # A user-selected policy reference is provenance, not calibration. It is a
+    # separate, allow-listed admission path with its own exact thresholds below.
+    development_policy = (type(observation) is InputDecisionObservation
+        and type(observation.decision_policy_ref) is DecisionPolicyRef
+        and observation.decision_policy_ref == DecisionPolicyRef.USER_DEVELOPMENT_0_6_V1)
+    calibration_admission = (type(observation) is InputDecisionObservation
+        and observation.decision_policy_ref is None
+        and _identifier(observation.calibration_ref))
     if (type(observation) is not InputDecisionObservation
             or observation.status != InputDecisionStatus.OBSERVED
             or observation.snapshot_id != snapshot.snapshot_id
             or observation.snapshot_digest != evidence_digest(snapshot)
             or observation.question_set_revision != INPUT_QUESTION_SET
-            or not _identifier(observation.calibration_ref)
+            or not (development_policy and observation.calibration_ref is None
+                    or calibration_admission)
             or not _text(observation.model, 160)
             or observation.unresolved_items != () or not _tuple(observation.predicates, 3)
             or len(observation.predicates) != 3):
         return False
     for item in observation.predicates:
+        yes_min = (USER_DEVELOPMENT_0_6_V1.noul_yes_probability_min if development_policy else 0.99)
+        no_max = (USER_DEVELOPMENT_0_6_V1.noul_no_probability_max if development_policy else 0.01)
         if (type(item) is not PredicateObservation or item.predicate not in INPUT_PREDICATES
                 or type(item.value) is not SemanticValue
                 or type(item.probability) not in (float, int) or not math.isfinite(item.probability)
                 or not 0 <= item.probability <= 1
-                or not (item.value == SemanticValue.YES and item.probability >= 0.99
-                        or item.value == SemanticValue.NO and item.probability <= 0.01)):
+                or not (item.value == SemanticValue.YES and item.probability >= yes_min
+                        or item.value == SemanticValue.NO and item.probability <= no_max)):
             return False
     if {item.predicate for item in observation.predicates} != set(INPUT_PREDICATES):
         return False
@@ -328,18 +344,21 @@ def _usable_observation(snapshot: DecisionSnapshot, observation: object) -> bool
     probabilities = {item.option: item.probability for item in referent.probabilities}
     expected_options = {"none", "ambiguous"} | {item.referent_id for item in snapshot.referents}
     selected = referent.referent_id if referent.status == "resolved" else "none"
+    referent_probability_min = (USER_DEVELOPMENT_0_6_V1.referent_probability_min
+                                if development_policy else 0.99)
+    referent_confidence_min = (USER_DEVELOPMENT_0_6_V1.referent_confidence_min
+                               if development_policy else 0.985)
     if not _identifier(selected):
         return False
     if (set(probabilities) != expected_options or len(probabilities) != len(referent.probabilities)
             or (referent.status == "none" and referent.referent_id is not None)
-            or selected not in probabilities or probabilities[selected] < 0.99
+            or selected not in probabilities or probabilities[selected] < referent_probability_min
             or not math.isclose(sum(probabilities.values()), 1, abs_tol=0.00001)
             or type(referent.confidence) not in (int, float)
-            or not math.isfinite(referent.confidence) or not 0.985 <= referent.confidence <= 1):
+            or not math.isfinite(referent.confidence)
+            or not referent_confidence_min <= referent.confidence <= 1):
         return False
-    count = len(probabilities)
-    if not math.isclose(referent.confidence,
-                        (probabilities[selected] - 1 / count) / (1 - 1 / count), abs_tol=0.0001):
+    if not choice_confidence_consistent(probabilities, referent.confidence):
         return False
     if referent.status == "resolved":
         controlled = next(item for item in snapshot.referents if item.referent_id == selected)

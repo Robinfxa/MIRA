@@ -593,8 +593,26 @@ export class SessionController {
   /** May audition only when ordinary generation, capture, presentation, and playback are idle. */
   canAuditionReviewedAudio(): boolean {
     const snapshot = this.snapshot;
-    return !this.closed && this.running && snapshot !== null && snapshot.sealed
-      && snapshot.active_grants.length === 0 && snapshot.phase !== 'thinking'
+    if (snapshot === null) return false;
+    // `sealed` closes an input's generation branch. The actual fresh-session contract is
+    // idle/unsealed with no request and zero activity; Stop is stopped/unsealed. A completed
+    // response is idle/sealed with a request identity and every current grant represented in
+    // presented history. The server records speech there only after COMPLETED audio progress.
+    const freshSession = snapshot.phase === 'idle' && !snapshot.sealed && snapshot.request_id === null
+      && snapshot.revision === 0 && snapshot.permit_revision === 0
+      && snapshot.activity_seq === 0 && snapshot.input_epoch === 0 && snapshot.output_epoch === 0
+      && snapshot.active_grants.length === 0 && snapshot.presented_effects.length === 0;
+    const stoppedSession = snapshot.phase === 'stopped' && !snapshot.sealed && snapshot.request_id === null
+      && snapshot.active_grants.length === 0;
+    const allGrantsPresented = snapshot.active_grants.every(grant => snapshot.presented_effects.some(presented =>
+      presented.id === grant.id && presented.kind === grant.kind && presented.value === grant.value
+        && presented.digest === grant.digest && presented.output_epoch === grant.output_epoch
+        && presented.activity_seq === grant.activity_seq && (presented.cue_id ?? null) === (grant.cue_id ?? null)
+        && (presented.cue_speech_id ?? null) === (grant.cue_speech_id ?? null)));
+    const completedSession = snapshot.phase === 'idle' && snapshot.sealed && snapshot.request_id !== null
+      && allGrantsPresented;
+    const sessionQuiescent = freshSession || stoppedSession || completedSession;
+    return !this.closed && this.running && sessionQuiescent
       && !this.speech && !this.microphone && !this.rehearsalInput
       && this.visualPreparations.size === 0 && this.activityRequest === null && this.playback.quiescent;
   }

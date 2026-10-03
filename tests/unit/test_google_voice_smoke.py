@@ -1,5 +1,7 @@
 """Offline lifecycle proof for the isolated Google smoke runner."""
 import json
+import os
+import stat
 import time
 
 import pytest
@@ -16,6 +18,8 @@ from tools.google_voice_smoke import (
     ADDITIONAL_TTS_KIND,
     RECOVERY_TTS_KIND,
     TTS_TEXT_DIAGNOSTIC_KIND,
+    TTS_FINAL_APPROVED_KIND,
+    APPROVED_FINAL_TTS_LIMIT_USD,
     OFFLINE_FLITE_FIXTURE_DIR,
     SharedLedger,
     make_readiness_receipt,
@@ -24,6 +28,7 @@ from tools.google_voice_smoke import (
     run_additional_official_tts,
     run_offline_english_fixture_stt,
     run_recovery_tts_stt,
+    run_final_approved_tts_only,
     _make_grpc_ca_credentials,
 )
 
@@ -583,4 +588,89 @@ async def test_text_diagnostic_followup_is_one_tts_only_and_scrubs_provider_exce
     assert json.loads(ledger_path.read_text(encoding="utf-8"))["reserved_total_usd"] == "0.978560"
     assert result["tts_only"] is True and result["response_text_diagnostics_enabled"] is True
     assert "token_count" in report_path.read_text(encoding="utf-8")
+    assert all(resource.closed for resource in resources)
+
+
+@pytest.mark.asyncio
+async def test_newly_approved_two_dollar_tts_only_gate_uses_60s_and_saves_private_pcm(tmp_path):
+    readiness_path, enabled_path = resume_receipts(tmp_path)
+    ledger_path, report_path = tmp_path / "ledger.json", tmp_path / "report.json"
+    prior_two_failed_slots(ledger_path)
+    diagnostic = SharedLedger(ledger_path).reserve(ADDITIONAL_TTS_KIND, TTS_FULL_RESERVE_USD)
+    SharedLedger(ledger_path).finish(diagnostic, "failed_unknown_usage", status_class="2xx",
+        http_status=200, provider_error="unsupported_audio", terminal_phase="terminal_failure")
+    original_stt = SharedLedger(ledger_path).reserve("stt_v2", STT_RESERVE_USD)
+    SharedLedger(ledger_path).finish(original_stt, "failed_unknown_usage", status_class="transport_error",
+        provider_error="unavailable", terminal_phase="terminal_failure")
+    recovery = SharedLedger(ledger_path).reserve(RECOVERY_TTS_KIND, TTS_FULL_RESERVE_USD)
+    SharedLedger(ledger_path).finish(recovery, "failed_unknown_usage", status_class="2xx",
+        http_status=200, provider_error="unsupported_audio", terminal_phase="terminal_failure",
+        audio_diagnostic={"part_index": 0, "part_type_names": ["text"], "mime_param_names": [],
+                          "candidate_finish_reason": "STOP", "validation_reason": "non_audio_part"})
+    completed_stt = SharedLedger(ledger_path).reserve("stt_v2", STT_RESERVE_USD)
+    SharedLedger(ledger_path).finish(completed_stt, "completed", status_class="2xx", sample_count=147240,
+        duration_seconds=6.135, terminal_phase="stt_completed")
+    old_tts = SharedLedger(ledger_path).reserve(TTS_TEXT_DIAGNOSTIC_KIND, TTS_FULL_RESERVE_USD)
+    SharedLedger(ledger_path).finish(old_tts, "failed_unknown_usage", status_class="2xx", http_status=200,
+        provider_error="timeout", terminal_phase="terminal_failure")
+
+    old_record = json.loads(ledger_path.read_text(encoding="utf-8"))
+    assert old_record["reserved_total_usd"] == "0.978560" and len(old_record["calls"]) == 7
+    # The legacy default remains $1 and must reject the same additional reservation.
+    with pytest.raises(SmokeBlocked, match="approval_reservation_exceeded"):
+        SharedLedger(ledger_path).reserve(TTS_FINAL_APPROVED_KIND, TTS_FULL_RESERVE_USD)
+    assert json.loads(ledger_path.read_text(encoding="utf-8")) == old_record
+
+    pcm = b"\x24\x00" * 2400
+    resources = []
+
+    class Tts:
+        def __init__(self, status_callback):
+            self.status_callback = status_callback
+            self.calls = []
+
+        def synthesize(self, text, stream_id):
+            self.calls.append((text, stream_id))
+            async def source():
+                self.status_callback(200)
+                yield AudioPacket(stream_id, 0, 24000, pcm)
+            return source()
+
+    class NeverStt:
+        async def transcribe(self, packets):
+            raise AssertionError("The approved path is TTS-only")
+            yield
+
+    tts_instances = []
+    def factory(status_callback, timeout_seconds):
+        assert timeout_seconds == 60
+        tts = Tts(status_callback)
+        tts_instances.append(tts)
+        resource = Resource()
+        resources.append(resource)
+        return tts, NeverStt(), [resource]
+
+    result = await run_final_approved_tts_only(
+        readiness_path, enabled_path, ledger_path, report_path,
+        project_id="offline-test", adc_dir=tmp_path, adapter_factory=factory,
+    )
+    record = json.loads(ledger_path.read_text(encoding="utf-8"))
+    assert len(record["calls"]) == 8 and record["calls"][-1]["kind"] == TTS_FINAL_APPROVED_KIND
+    assert record["calls"][-1]["state"] == "completed"
+    assert record["calls"][-1]["reserved_usd"] == format(TTS_FULL_RESERVE_USD, "f")
+    assert record["reserved_total_usd"] == "1.281664"
+    assert APPROVED_FINAL_TTS_LIMIT_USD == 2
+    assert len(tts_instances) == 1 and len(tts_instances[0].calls) == 1
+    assert tts_instances[0].calls[0][0] == SYNTHETIC_TEXT
+    pcm_path = report_path.with_suffix(".pcm")
+    assert pcm_path.read_bytes() == pcm
+    assert stat.S_IMODE(pcm_path.stat().st_mode) == 0o600
+    assert stat.S_IMODE(pcm_path.parent.stat().st_mode) == 0o700
+    assert result["tts_timeout_seconds"] == 60
+    assert result["audio_bytes"] == len(pcm) and result["sample_count"] == 2400
+    assert result["duration_seconds"] == 0.1
+    assert result["audio_sha256"] == __import__("hashlib").sha256(pcm).hexdigest()
+    assert result["audio_artifact_saved"] is True and result["played"] is False
+    assert not any(call["kind"] == "stt_v2" and call["call_id"] == "google-voice-9"
+                   for call in record["calls"])
     assert all(resource.closed for resource in resources)

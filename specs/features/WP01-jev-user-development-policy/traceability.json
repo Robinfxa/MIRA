@@ -1,0 +1,47 @@
+{
+  "feature": "JEVDEV06",
+  "spec": "specs/features/WP01-jev-user-development-policy/spec.md",
+  "requirements": [
+    {
+      "id": "JEVDEV06-001",
+      "tests": [
+        "tests/contracts/test_jev_user_development_policy.py::test_policy_is_typed_versioned_and_rejects_threshold_forgery",
+        "tests/contracts/test_jev_user_development_policy.py::test_development_observation_enters_contract_without_fake_calibration_and_keeps_bounds",
+        "tests/contracts/test_jev_user_development_policy.py::test_explicit_development_policy_runs_through_semantic_coordinator"
+      ]
+    },
+    {
+      "id": "JEVDEV06-002",
+      "tests": [
+        "tests/contracts/test_jev_user_development_policy.py::test_output_probability_boundaries_do_not_bypass_confidence",
+        "tests/contracts/test_jev_user_development_policy.py::test_output_confidence_boundaries_allow_without_calibration",
+        "tests/contracts/test_jev_user_development_policy.py::test_high_confidence_reject_and_unknown_labels_keep_their_meaning",
+        "tests/contracts/test_jev_user_development_policy.py::test_development_reject_label_survives_low_confidence",
+        "tests/contracts/test_jev_user_development_policy.py::test_selected_policy_does_not_override_speech_or_photography_prohibitions"
+      ]
+    },
+    {
+      "id": "JEVDEV06-003",
+      "tests": [
+        "tests/contracts/test_jev_user_development_policy.py::test_noul_thresholds_mean_prohibition_yes_and_absence_no",
+        "tests/contracts/test_jev_user_development_policy.py::test_referent_confidence_boundaries_preserve_supported_identity",
+        "tests/contracts/test_jev_user_development_policy.py::test_cent_grid_referent_validator_matches_adapter_intervals",
+        "tests/contracts/test_jev_user_development_policy.py::test_high_confidence_ambiguous_referent_never_becomes_resolved",
+        "tests/contracts/test_jev_user_development_policy.py::test_high_scoring_unpresented_referent_is_not_an_observation"
+      ]
+    },
+    {
+      "id": "JEVDEV06-004",
+      "tests": [
+        "tests/contracts/test_jev_user_development_policy.py::test_selected_policy_does_not_call_provider_after_local_stop",
+        "tests/contracts/test_jev_user_development_policy.py::test_semantic_coordinator_stop_still_preempts_both_selected_adapters",
+        "tests/contracts/test_jev_user_development_policy.py::test_selected_policy_cannot_allow_a_revoked_output_contract",
+        "tests/contracts/test_jev_user_development_policy.py::test_selected_policy_cannot_observe_a_snapshot_revoked_during_request",
+        "tests/contracts/test_jev_user_development_policy.py::test_selected_policy_does_not_override_speech_or_photography_prohibitions",
+        "tests/contracts/test_jev_input.py::test_snapshot_revoked_while_waiting_is_stale",
+        "tests/contracts/test_jev_review.py::test_contract_revocation_while_request_runs_cannot_allow",
+        "tests/contracts/test_decision_contracts.py::test_speech_restriction_and_exact_control_catalog_are_deterministic_bounds"
+      ]
+    }
+  ]
+}

@@ -34,6 +34,7 @@ STT_FIXTURE_LANGUAGE = "en-US"
 STT_SAMPLE_RATE_HZ = 24000
 STT_MAX_SECONDS = Decimal("30")
 USD_LIMIT = Decimal("1.00")
+APPROVED_FINAL_TTS_LIMIT_USD = Decimal("2.00")
 
 # Use the highest published standard rates among the checked current/announced
 # rates, not credits. This reserves $0.303104 per possible full-limit TTS call.
@@ -60,6 +61,7 @@ CALL_ORDER = ("tts_normal", "tts_cancel_after_first_packet", "stt_v2")
 ADDITIONAL_TTS_KIND = "tts_diagnostic_additional"
 RECOVERY_TTS_KIND = "tts_recovery_additional"
 TTS_TEXT_DIAGNOSTIC_KIND = "tts_text_diagnostic_followup"
+TTS_FINAL_APPROVED_KIND = "tts_final_approved_additional"
 ROOT = Path(__file__).resolve().parents[1]
 OFFLINE_FLITE_FIXTURE_DIR = ROOT / "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio"
 SAFE_PROVIDER_ERRORS = {
@@ -295,6 +297,32 @@ def _write_json_atomic(path: Path, data: dict[str, Any]) -> None:
             pass
 
 
+def _write_pcm_private(path: Path, pcm: bytes) -> None:
+    """Atomically keep only bounded synthetic PCM with private filesystem modes."""
+    if not isinstance(pcm, bytes) or not pcm or len(pcm) > STT_SAMPLE_RATE_HZ * 30 * 2:
+        raise SmokeBlocked("pcm_artifact_bounds_invalid")
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    os.chmod(path.parent, 0o700)
+    fd, tmp_name = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
+    try:
+        os.fchmod(fd, 0o600)
+        with os.fdopen(fd, "wb") as output:
+            output.write(pcm)
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(tmp_name, path)
+        dir_fd = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(dir_fd)
+        finally:
+            os.close(dir_fd)
+    finally:
+        try:
+            os.unlink(tmp_name)
+        except FileNotFoundError:
+            pass
+
+
 @dataclass(frozen=True, slots=True)
 class Reservation:
     call_id: str
@@ -305,13 +333,16 @@ class Reservation:
 class SharedLedger:
     """Atomic no-retry ledger; uncertain attempts remain reserved forever."""
 
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, *, budget_limit: Decimal = USD_LIMIT):
+        if not isinstance(budget_limit, Decimal) or not budget_limit.is_finite() or budget_limit <= 0:
+            raise SmokeBlocked("invalid_budget_limit")
         self.path = path
         self.lock_path = path.with_suffix(path.suffix + ".lock")
+        self.budget_limit = budget_limit
 
     def reserve(self, kind: str, amount: Decimal) -> Reservation:
         if kind not in {*CALL_ORDER, ADDITIONAL_TTS_KIND, RECOVERY_TTS_KIND,
-                        TTS_TEXT_DIAGNOSTIC_KIND} or not amount.is_finite() or amount <= 0:
+                        TTS_TEXT_DIAGNOSTIC_KIND, TTS_FINAL_APPROVED_KIND} or not amount.is_finite() or amount <= 0:
             raise SmokeBlocked("invalid_reservation")
         with self.lock_path.open("a+") as lock:
             os.chmod(self.lock_path, 0o600)
@@ -333,6 +364,7 @@ class SharedLedger:
                 "tts_diagnostic_additional": TTS_FULL_RESERVE_USD,
                 "tts_recovery_additional": TTS_FULL_RESERVE_USD,
                 "tts_text_diagnostic_followup": TTS_FULL_RESERVE_USD,
+                "tts_final_approved_additional": TTS_FULL_RESERVE_USD,
                 "stt_v2": STT_RESERVE_USD,
             }
             if amount != expected_amounts[kind]:
@@ -346,6 +378,7 @@ class SharedLedger:
                 or (len(calls) == 5 and calls[4].get("kind") == RECOVERY_TTS_KIND and kind == "stt_v2")
                 or (len(calls) == 6 and kind == TTS_TEXT_DIAGNOSTIC_KIND)
                 or (len(calls) == 7 and calls[6].get("kind") == TTS_TEXT_DIAGNOSTIC_KIND and kind == "stt_v2")
+                or (len(calls) == 7 and kind == TTS_FINAL_APPROVED_KIND)
             )
             if not sequence_ok or len(calls) >= 8:
                 raise SmokeBlocked("attempt_already_recorded_or_out_of_order")
@@ -353,7 +386,7 @@ class SharedLedger:
                 committed = sum((Decimal(c["reserved_usd"]) for c in calls), Decimal("0"))
             except (KeyError, ValueError, TypeError, ArithmeticError):
                 raise SmokeBlocked("ledger_invalid") from None
-            if committed + amount > USD_LIMIT:
+            if committed + amount > self.budget_limit:
                 raise SmokeBlocked("approval_reservation_exceeded")
             index = len(calls) + 1
             reservation = Reservation(f"google-voice-{index}", kind, amount)
@@ -1531,6 +1564,183 @@ async def run_recovery_tts_stt(readiness_path: Path, enable_receipt_path: Path,
         reporter.emit("resources_closed", state=reporter.record.get("state", "unknown"))
 
 
+async def run_final_approved_tts_only(readiness_path: Path, enable_receipt_path: Path,
+                                      ledger_path: Path, report_path: Path, *, project_id: str,
+                                      adc_dir: Path,
+                                      adapter_factory: Callable[[Callable[[int], None], int],
+                                                                tuple[Any, Any, Any]] | None = None
+                                      ) -> dict[str, Any]:
+    """Use the single newly approved TTS slot with a 60-second diagnostic deadline."""
+    import re
+    if not isinstance(project_id, str) or not re.fullmatch(PROJECT_ID_PATTERN, project_id):
+        raise SmokeBlocked("invalid_project_id")
+    billing = check_resume_readiness(readiness_path, enable_receipt_path, project_id=project_id)
+    prior = _ledger_calls(ledger_path)
+    expected_kinds = [
+        "tts_normal", "tts_cancel_after_first_packet", ADDITIONAL_TTS_KIND, "stt_v2",
+        RECOVERY_TTS_KIND, "stt_v2", TTS_TEXT_DIAGNOSTIC_KIND,
+    ]
+    expected_amounts = [
+        TTS_RESERVE_USD, TTS_RESERVE_USD, TTS_FULL_RESERVE_USD, STT_RESERVE_USD,
+        TTS_FULL_RESERVE_USD, STT_RESERVE_USD, TTS_FULL_RESERVE_USD,
+    ]
+    expected_facts = [
+        ("reserved_unknown_usage", None, None),
+        ("failed_unknown_usage", 400, "invalid_input"),
+        ("failed_unknown_usage", 200, "unsupported_audio"),
+        ("failed_unknown_usage", None, "unavailable"),
+        ("failed_unknown_usage", 200, "unsupported_audio"),
+        ("completed", None, None),
+        ("failed_unknown_usage", 200, "timeout"),
+    ]
+    if len(prior) != 7 or [item.get("kind") for item in prior] != expected_kinds:
+        raise SmokeBlocked("unexpected_final_attempt_sequence")
+    if (prior[4].get("audio_diagnostic", {}).get("validation_reason") != "non_audio_part"
+            or prior[5].get("status_class") != "2xx"
+            or prior[6].get("status_class") != "2xx"):
+        raise SmokeBlocked("final_attempt_evidence_mismatch")
+    for item, amount, facts in zip(prior, expected_amounts, expected_facts, strict=True):
+        state, status, error = facts
+        if (Decimal(item.get("reserved_usd", "0")) != amount
+                or item.get("attempt_count") != 1 or item.get("state") != state
+                or (status is not None and item.get("http_status") != status)
+                or (error is not None and item.get("provider_error") != error)):
+            raise SmokeBlocked("prior_attempt_evidence_mismatch")
+
+    prior_reserved = sum((Decimal(item["reserved_usd"]) for item in prior), Decimal("0"))
+    projected = prior_reserved + TTS_FULL_RESERVE_USD
+    if projected > APPROVED_FINAL_TTS_LIMIT_USD:
+        raise SmokeBlocked("approved_aggregate_reserve_exceeded")
+    audio_path = report_path.with_suffix(".pcm")
+    if audio_path.exists():
+        raise SmokeBlocked("pcm_artifact_already_exists")
+    reporter = DurableReporter(report_path, {
+        "project": "selected_project", "tts_model": TTS_MODEL, "tts_location": TTS_LOCATION,
+        "voice": TTS_VOICE, "request_mode": "official_minimal_streaming_tts",
+        "prior_reserved_usd": format(prior_reserved, "f"),
+        "tts_reserve_usd": format(TTS_FULL_RESERVE_USD, "f"),
+        "projected_pre_tax_reserve_usd": format(projected, "f"),
+        "approved_aggregate_limit_usd": format(APPROVED_FINAL_TTS_LIMIT_USD, "f"),
+        "taxes_and_fees_status": "unknown", "tts_timeout_seconds": 60,
+        "response_text_diagnostics_enabled": True, "automatic_retry": False,
+        "microphone_used": False, "stt_dispatched": False,
+        "raw_prompt_retained": False, "raw_response_text_retained": False,
+    })
+    ledger = SharedLedger(ledger_path, budget_limit=APPROVED_FINAL_TTS_LIMIT_USD)
+    statuses: list[int] = []
+    reservation: Reservation | None = None
+    stream = None
+    resources = None
+
+    def status_received(status: int) -> None:
+        statuses.append(status)
+        if reservation is not None:
+            ledger.set_phase(reservation, "http_status_received", http_status=status)
+        reporter.emit("tts_http_status_received", call=TTS_FINAL_APPROVED_KIND,
+                      state="reserved_unknown_usage", http_status=status)
+
+    try:
+        reporter.emit("preflight_verified", state="ready")
+        if adapter_factory is None:
+            tts, _stt, resources = _make_live_adapters(
+                billing, project_id=project_id, adc_dir=adc_dir,
+                on_http_status=status_received, tts_mode="official_minimal",
+                stt_language_code=STT_LANGUAGE, capture_tts_text_diagnostics=True,
+                tts_timeout_seconds=60,
+            )
+        else:
+            tts, _stt, resources = adapter_factory(status_received, 60)
+
+        # Persist the maximum full-output reservation before entering the model call.
+        reservation = ledger.reserve(TTS_FINAL_APPROVED_KIND, TTS_FULL_RESERVE_USD)
+        reporter.emit("tts_reserved", call=TTS_FINAL_APPROVED_KIND,
+                      state="reserved_unknown_usage", reserved_usd=format(TTS_FULL_RESERVE_USD, "f"))
+        ledger.set_phase(reservation, "dispatch_started")
+        reporter.emit("tts_dispatch_started", call=TTS_FINAL_APPROVED_KIND,
+                      state="reserved_unknown_usage")
+
+        from mira.application.ports.media import AudioPacket
+        stream_id = "google-smoke-final-approved"
+        stream = tts.synthesize(SYNTHETIC_TEXT, stream_id)
+        packets = []
+        terminal_error: Exception | None = None
+        try:
+            async for packet in stream:
+                if (not isinstance(packet, AudioPacket) or packet.stream_id != stream_id
+                        or packet.sample_rate_hz != STT_SAMPLE_RATE_HZ
+                        or not isinstance(packet.pcm, bytes) or not packet.pcm
+                        or len(packet.pcm) % 2):
+                    raise SmokeBlocked("invalid_tts_audio_packet")
+                packets.append(packet)
+        except asyncio.CancelledError:
+            ledger.set_phase(reservation, "interrupted_unknown")
+            reporter.emit("bundle_interrupted_unknown", call=TTS_FINAL_APPROVED_KIND, state="unknown")
+            raise
+        except Exception as error:
+            terminal_error = error
+
+        status = statuses[-1] if statuses else None
+        sample_count = sum(len(packet.pcm) // 2 for packet in packets)
+        tts_ok = (terminal_error is None and status == 200 and bool(packets)
+                  and sample_count <= 30 * STT_SAMPLE_RATE_HZ)
+        if tts_ok:
+            pcm = b"".join(packet.pcm for packet in packets)
+            pcm_digest = hashlib.sha256(pcm).hexdigest()
+            _write_pcm_private(audio_path, pcm)
+            duration = sample_count / STT_SAMPLE_RATE_HZ
+            ledger.finish(reservation, "completed", status_class="2xx", http_status=200,
+                          sample_count=sample_count, duration_seconds=duration,
+                          terminal_phase="tts_completed")
+            reporter.emit("tts_completed", call=TTS_FINAL_APPROVED_KIND, state="completed",
+                          http_status=200, first_packet_samples=sample_count,
+                          duration_seconds=duration, reserved_usd=format(TTS_FULL_RESERVE_USD, "f"))
+            reporter.record.update({
+                "audio_artifact_name": audio_path.name, "audio_bytes": len(pcm),
+                "audio_sha256": pcm_digest, "sample_rate_hz": STT_SAMPLE_RATE_HZ,
+                "sample_count": sample_count, "duration_seconds": round(duration, 3),
+                "audio_artifact_saved": True, "played": False,
+            })
+            reporter.record["state"] = "completed"
+        else:
+            detail = _safe_provider_details(terminal_error)
+            audio_detail = _safe_audio_details(terminal_error, project_id=project_id)
+            provider_error = _provider_error_code(terminal_error) or (
+                "unknown" if status == 200 else "unavailable")
+            http_status = detail.get("http_status", status)
+            ledger.finish(
+                reservation, "failed_unknown_usage", status_class=_status_class(http_status, terminal_error),
+                http_status=http_status, provider_error=provider_error,
+                terminal_phase="terminal_failure", provider_status=detail.get("provider_status"),
+                provider_reason=detail.get("provider_reason"), field_names=detail.get("field_names"),
+                diagnostic=detail.get("diagnostic"), body_bytes_read=detail.get("body_bytes_read"),
+                body_truncated=detail.get("body_truncated"),
+                body_capture_status=detail.get("body_capture_status"),
+                audio_diagnostic=audio_detail or None,
+            )
+            reporter.emit(
+                "tts_terminal_failure", call=TTS_FINAL_APPROVED_KIND,
+                state="failed_unknown_usage", http_status=http_status,
+                provider_error=provider_error, provider_status=detail.get("provider_status"),
+                provider_reason=detail.get("provider_reason"), field_names=detail.get("field_names"),
+                diagnostic=detail.get("diagnostic"), audio_diagnostic=audio_detail or None,
+            )
+            reporter.record["state"] = "failed_unknown_usage"
+
+        reporter.record["finalized_at_epoch"] = time.time()
+        reporter._flush()
+        reporter.emit("bundle_finalized", state=reporter.record["state"])
+        return reporter.record
+    finally:
+        if stream is not None:
+            try:
+                await stream.aclose()
+            except Exception:
+                pass
+        await _close_resources(resources)
+        if resources is not None:
+            reporter.emit("resources_closed", state=reporter.record.get("state", "unknown"))
+
+
 async def run_bundle(readiness_path: Path, ledger_path: Path, *, project_id: str, adc_dir: Path,
                      adapter_factory: Callable[[], tuple[Any, Any, Any]] | None = None) -> dict[str, Any]:
     """Run the authorized one-off bundle. No retries; ledger reservation precedes each call.
@@ -1691,8 +1901,11 @@ def _make_grpc_ca_credentials(ca_bundle: Path):
 def _make_live_adapters(readiness: dict[str, Any], *, project_id: str, adc_dir: Path,
                         on_http_status: Callable[[int], None] | None = None,
                         tts_mode: str = "capped", stt_language_code: str = STT_LANGUAGE,
-                        capture_tts_text_diagnostics: bool = False):
+                        capture_tts_text_diagnostics: bool = False,
+                        tts_timeout_seconds: int = 30):
     """Create one TTS + STT client from the explicitly-approved ADC file only."""
+    if type(tts_timeout_seconds) is not int or not 1 <= tts_timeout_seconds <= 120:
+        raise SmokeBlocked("invalid_tts_timeout")
     auth_dir = adc_dir
     adc = auth_dir / "application_default_credentials.json"
     if not adc.is_file():
@@ -1762,7 +1975,7 @@ def _make_live_adapters(readiness: dict[str, Any], *, project_id: str, adc_dir: 
 
     tts = GoogleGeminiTtsBackend(
         GeminiTtsOptions(project_id=project_id, voice=TTS_VOICE, location=TTS_LOCATION,
-                         model=TTS_MODEL, timeout_seconds=30,
+                         model=TTS_MODEL, timeout_seconds=tts_timeout_seconds,
                          max_audio_samples=STT_SAMPLE_RATE_HZ * 30,
                          capture_provider_text_diagnostics=capture_tts_text_diagnostics),
         TtsRequestPolicyTransport(GoogleGeminiTtsRestTransport(client, token_provider=token_provider,
@@ -1808,6 +2021,8 @@ def _cli() -> int:
                         help="Use the still-unspent approved STT slot after a recorded recovery TTS attempt")
     parser.add_argument("--followup-diagnostic-tts-only", action="store_true",
                         help="Use one approved bounded TTS diagnostic attempt without a new STT stream")
+    parser.add_argument("--approved-final-2usd-tts-only", action="store_true",
+                        help="Use the single approved final TTS slot with the explicit USD 2 aggregate cap and 60-second deadline")
     parser.add_argument("--recovery-tts-stt", action="store_true",
                         help="Use one newly approved minimal TTS attempt and one STT stream after the recorded attempts")
     parser.add_argument("--live", action="store_true", help="Required to invoke the approved one-off live test")
@@ -1816,7 +2031,14 @@ def _cli() -> int:
         print("offline_only: live calls require --live and a fresh verified readiness receipt")
         return 2
     try:
-        if args.followup_diagnostic_tts_only:
+        if args.approved_final_2usd_tts_only:
+            if args.enable_receipt is None or args.report is None:
+                raise SmokeBlocked("approved_final_tts_requires_enable_receipt_and_new_report")
+            result = asyncio.run(run_final_approved_tts_only(
+                args.readiness, args.enable_receipt, args.ledger, args.report,
+                project_id=args.project_id, adc_dir=args.adc_dir,
+            ))
+        elif args.followup_diagnostic_tts_only:
             if args.enable_receipt is None or args.report is None:
                 raise SmokeBlocked("followup_tts_requires_enable_receipt_and_new_report")
             result = asyncio.run(run_recovery_tts_stt(

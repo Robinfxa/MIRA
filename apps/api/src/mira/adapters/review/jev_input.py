@@ -1,8 +1,9 @@
 """Bounded TypeSafe input observations, never permissions or state mutations.
 
 The caller separately authorizes transmission, account and spend. Default budget is
-zero. A calibration reference must name completed admission for this exact question
-set, model and Chinese workload; a caller string is not evidence of quality.
+zero. Legacy calibration references remain distinct from the explicitly selected,
+versioned user-development policy; neither adapter text nor a caller string is evidence
+of statistical quality.
 """
 from __future__ import annotations
 
@@ -16,16 +17,22 @@ from collections.abc import Callable
 from dataclasses import asdict
 
 from mira.adapters.review.jev import (
-    JevHttpResponse, JevResponseError, JevTransport, _choice_confidence_consistent,
+    JevHttpResponse, JevResponseError, JevTransport,
 )
+from mira.application.choice_confidence import choice_confidence_consistent
 from mira.application.decision_contracts import (
     INPUT_PREDICATES, INPUT_QUESTION_SET, ChoiceProbability, DecisionSnapshot,
     InputDecisionObservation, InputDecisionStatus, PredicateObservation, ReferentObservation,
     SemanticValue, canonical_bytes, evidence_digest, valid_snapshot,
 )
+from mira.application.decision_policy import (
+    DecisionThresholdPolicy, USER_DEVELOPMENT_0_6_V1, is_supported_development_policy,
+)
 
 MAX_REQUEST_BYTES = 16 * 1024
 MAX_RESPONSE_BYTES = 64 * 1024
+# Historical calibrated-policy NOUL/referent thresholds. The explicit development
+# policy uses its own immutable values from the application policy module.
 YES_PROBABILITY = 0.99
 NO_PROBABILITY = 0.01
 REFERENT_PROBABILITY = 0.99
@@ -105,7 +112,8 @@ def _reject_constant(_value):
     raise ValueError("nonfinite")
 
 
-def _parse(body: bytes, model: str, questions: dict) -> tuple[tuple, ReferentObservation, dict]:
+def _parse(body: bytes, model: str, questions: dict,
+           decision_policy: DecisionThresholdPolicy | None = None) -> tuple[tuple, ReferentObservation, dict]:
     if type(body) is not bytes or len(body) > MAX_RESPONSE_BYTES:
         raise ValueError("response_size")
     response = json.loads(body.decode("utf-8"), object_pairs_hook=_unique_object,
@@ -127,8 +135,12 @@ def _parse(body: bytes, model: str, questions: dict) -> tuple[tuple, ReferentObs
                     or answer["type"] != "noul" or not _number(answer["noul"])):
                 raise ValueError("noul_shape")
             probability = answer["noul"]
-            value = (SemanticValue.YES if probability >= YES_PROBABILITY else SemanticValue.NO
-                     if probability <= NO_PROBABILITY else SemanticValue.UNKNOWN)
+            yes_threshold = (decision_policy.noul_yes_probability_min if decision_policy
+                             else YES_PROBABILITY)
+            no_threshold = (decision_policy.noul_no_probability_max if decision_policy
+                            else NO_PROBABILITY)
+            value = (SemanticValue.YES if probability >= yes_threshold else SemanticValue.NO
+                     if probability <= no_threshold else SemanticValue.UNKNOWN)
             predicates.append(PredicateObservation(key.rsplit(":", 1)[-1], value, probability))
         else:
             if (type(answer) is not dict
@@ -145,9 +157,13 @@ def _parse(body: bytes, model: str, questions: dict) -> tuple[tuple, ReferentObs
             choice, confidence = answer["choice"], answer["confidence"]
             probability = probabilities[choice]
             if (probability < max(probabilities.values())
-                    or not _choice_confidence_consistent(probabilities, confidence)):
+                    or not choice_confidence_consistent(probabilities, confidence)):
                 raise ValueError("choice_confidence")
-            certain = probability >= REFERENT_PROBABILITY and confidence >= REFERENT_CONFIDENCE
+            probability_min = (decision_policy.referent_probability_min if decision_policy
+                               else REFERENT_PROBABILITY)
+            confidence_min = (decision_policy.referent_confidence_min if decision_policy
+                              else REFERENT_CONFIDENCE)
+            certain = probability >= probability_min and confidence >= confidence_min
             status = (choice if choice in ("none", "ambiguous") else "resolved") if certain else "unknown"
             referent = ReferentObservation(
                 status, choice if status == "resolved" else None,
@@ -167,6 +183,7 @@ def _failure(snapshot: object, status: InputDecisionStatus, reason: str) -> Inpu
 class JevInputDecisionBackend:
     def __init__(
         self, *, transport: JevTransport, model: str, calibration_ref: str | None = None,
+        decision_policy: DecisionThresholdPolicy | None = None,
         request_limit: int = 0, timeout_seconds: float = 10,
         snapshot_is_current: Callable[[DecisionSnapshot], bool] | None = None,
     ) -> None:
@@ -176,11 +193,15 @@ class JevInputDecisionBackend:
                 or not math.isfinite(timeout_seconds) or not 0 < timeout_seconds <= 30
                 or (calibration_ref is not None and (type(calibration_ref) is not str
                     or _IDENTIFIER.fullmatch(calibration_ref) is None))
+                or (decision_policy is not None
+                    and not is_supported_development_policy(decision_policy))
+                or (calibration_ref is not None and decision_policy is not None)
                 or (snapshot_is_current is not None and not callable(snapshot_is_current))):
             raise ValueError("jev_input_configuration_invalid")
         self._transport = transport
         self._model = model
         self._calibration_ref = calibration_ref
+        self._decision_policy = decision_policy
         self._requests_remaining = request_limit
         self._timeout_seconds = timeout_seconds
         self._snapshot_is_current = snapshot_is_current
@@ -232,26 +253,41 @@ class JevInputDecisionBackend:
                       429: "rate_limited", 529: "overloaded"}.get(response.status_code, "http_error")
             return _failure(snapshot, InputDecisionStatus.UNAVAILABLE, "jev_input_" + suffix)
         try:
-            predicates, referent, usage = _parse(response.body, self._model, questions)
+            predicates, referent, usage = _parse(
+                response.body, self._model, questions, self._decision_policy)
         except (ValueError, TypeError, UnicodeError, OverflowError, RecursionError):
             return _failure(snapshot, InputDecisionStatus.INVALID, "jev_input_response_invalid")
         if not self._current(snapshot):
             return _failure(snapshot, InputDecisionStatus.STALE, "jev_input_snapshot_stale")
         values = {item.predicate: item.value for item in predicates}
+        if referent.status == "resolved":
+            supported_referent = next((item for item in snapshot.referents
+                                       if item.referent_id == referent.referent_id), None)
+            referent_was_presented = (supported_referent is not None and any(
+                fact.effect.id == supported_referent.presentation_effect_id
+                and fact.status == "presented" for fact in snapshot.presentation_facts))
+        else:
+            referent_was_presented = referent.status == "none"
         complete = (set(values) == set(INPUT_PREDICATES)
                     and all(value != SemanticValue.UNKNOWN for value in values.values())
                     and referent.status in ("none", "resolved")
+                    and referent_was_presented
                     and not (values["display_request"] == SemanticValue.YES
                              and referent.status != "resolved"))
-        if self._calibration_ref is None:
+        if self._decision_policy is None and self._calibration_ref is None:
             status, reason = InputDecisionStatus.UNKNOWN, "jev_input_not_calibrated"
         elif not complete:
             status, reason = InputDecisionStatus.UNKNOWN, "jev_input_semantic_unknown"
         else:
-            status, reason = InputDecisionStatus.OBSERVED, "jev_input_observed"
+            status = InputDecisionStatus.OBSERVED
+            reason = ("jev_input_user_development_0_6_v1_observed"
+                      if self._decision_policy is not None else "jev_input_observed")
         return InputDecisionObservation(
             snapshot.snapshot_id, evidence_digest(snapshot), status, reason, predicates, referent,
-            calibration_ref=self._calibration_ref, request_digest=binding, model=self._model,
+            calibration_ref=self._calibration_ref,
+            decision_policy_ref=(self._decision_policy.reference
+                                 if self._decision_policy is not None else None),
+            request_digest=binding, model=self._model,
             input_tokens=usage["input_tokens"], output_tokens=usage["output_tokens"],
             unresolved_items=() if status == InputDecisionStatus.OBSERVED else (snapshot.context.user_text,),
         )

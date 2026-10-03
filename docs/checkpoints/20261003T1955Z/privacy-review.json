@@ -1,0 +1,223 @@
+{
+  "reviewed": [
+    {
+      "path": "AI_USAGE.md",
+      "category": "email",
+      "lines": [
+        43
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "0fce01cc9e177d0b8742f698653454dd42ef16777fe6fde12109e7b8f62516a5"
+    },
+    {
+      "path": "docs/development/third-party-notices/licenses/python/h11/0.16.0/licenses/LICENSE.txt",
+      "category": "email",
+      "lines": [
+        3
+      ],
+      "resolution": "Hash-bound public vendor copyright contact in required unmodified license notice.",
+      "sha256": "37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361"
+    },
+    {
+      "path": "docs/development/third-party-notices/licenses/python/pip/26.2.1/vendored/msgpack/COPYING",
+      "category": "email",
+      "lines": [
+        1
+      ],
+      "resolution": "Hash-bound public vendor copyright contact in required unmodified license notice.",
+      "sha256": "492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427"
+    },
+    {
+      "path": "docs/development/third-party-notices/licenses/python/pip/26.2.1/vendored/resolvelib/LICENSE",
+      "category": "email",
+      "lines": [
+        1
+      ],
+      "resolution": "Hash-bound public vendor copyright contact in required unmodified license notice.",
+      "sha256": "f388fd38cad13112c1dc0f669bbe80e7f84541edbafb72f3030d2ca7642c3c9d"
+    },
+    {
+      "path": "docs/development/third-party-notices/licenses/python/pyasn1-modules/0.4.2/licenses/LICENSE.txt",
+      "category": "email",
+      "lines": [
+        1
+      ],
+      "resolution": "Hash-bound public vendor copyright contact in required unmodified license notice.",
+      "sha256": "2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd"
+    },
+    {
+      "path": "docs/development/third-party-notices/licenses/python/pyasn1/0.6.4/licenses/LICENSE.rst",
+      "category": "email",
+      "lines": [
+        1
+      ],
+      "resolution": "Hash-bound public vendor copyright contact in required unmodified license notice.",
+      "sha256": "2aad5fc00f705c4a1addb83eed10a6a75d286a3779f0cf8519d87e62bc4735fd"
+    },
+    {
+      "path": "docs/development/third-party-notices/licenses/python/setuptools/84.0.0/vendored/wheel-0.46.3.dist-info/licenses/LICENSE.txt",
+      "category": "email",
+      "lines": [
+        3
+      ],
+      "resolution": "Hash-bound public vendor copyright contact in required unmodified license notice.",
+      "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+    },
+    {
+      "path": "docs/development/third-party-notices/licenses/python/wheel/0.48.0/licenses/LICENSE.txt",
+      "category": "email",
+      "lines": [
+        3
+      ],
+      "resolution": "Hash-bound public vendor copyright contact in required unmodified license notice.",
+      "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+    },
+    {
+      "path": "tests/contracts/test_diagnostics_recording.py",
+      "category": "credential_token",
+      "lines": [
+        45,
+        49
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "e942bbc7e291d648e5c3fdae839011c32c0df8f1347f0d03497f091af10e5ad2"
+    },
+    {
+      "path": "tests/contracts/test_diagnostics_recording.py",
+      "category": "private_key",
+      "lines": [
+        60
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "e942bbc7e291d648e5c3fdae839011c32c0df8f1347f0d03497f091af10e5ad2"
+    },
+    {
+      "path": "tests/contracts/test_diagnostics_recording.py",
+      "category": "credential_assignment",
+      "lines": [
+        109,
+        110,
+        136
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "e942bbc7e291d648e5c3fdae839011c32c0df8f1347f0d03497f091af10e5ad2"
+    },
+    {
+      "path": "tests/contracts/test_diagnostics_runtime.py",
+      "category": "credential_token",
+      "lines": [
+        150
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "f57f111bf7f283d3022cff83f9b568cbbb8c219a2d9ff015db92294c733f64bd"
+    },
+    {
+      "path": "tests/unit/test_configuration.py",
+      "category": "credential_assignment",
+      "lines": [
+        108
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "b251bda12b83219a53638307ecf0961e251bee91fa3ae784bc7266d0fbbd195c"
+    },
+    {
+      "path": "tests/unit/test_quality_plan.py",
+      "category": "email",
+      "lines": [
+        115
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "33fab811bbb0f52d537e34b5b5220c201136570b0b64c58da7b5fda4f06927ea"
+    },
+    {
+      "path": "tests/unit/test_service_configuration.py",
+      "category": "credential_assignment",
+      "lines": [
+        93
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "5021cd86fdab828cb78cfca86e21404fc5135d3546806cf4279a05043f93b9e1"
+    },
+    {
+      "path": "tests/web/diagnostics-status.test.mjs",
+      "category": "credential_token",
+      "lines": [
+        16
+      ],
+      "resolution": "Byte-identical previously reviewed synthetic fixture/example.",
+      "sha256": "362c80a1df613fa8424b50afcff7850d6cbbf8c315dabc7bad221d2e77d65ebb"
+    }
+  ],
+  "unreviewed_findings": 0,
+  "supplemental_findings": [],
+  "real_credentials_read": false,
+  "vendor_notice_files_verified": 87,
+  "metadata_transformations": [
+    {
+      "path": "docs/changes/WP03-browser-audio/verification.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "1e36ed4317eff7e2a586766e49c1b15bd07babf4f076cc98027aa2beac65b2f4",
+      "public_sha256": "91c7498ac949e13a7677ad930010c3d23a6b67adb265f15c12a7310fb0e09d1e"
+    },
+    {
+      "path": "docs/changes/WP03-google-voice/verification.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "c63551971df7eceae55fffabff46780c410233ca485971a0d5419599ee550b37",
+      "public_sha256": "82a18cc1583ea697357d8ad0dc5b8f9bd207ac616a7fbf8e0dd6f21b99fa057c"
+    },
+    {
+      "path": "docs/development/TDD-SDD.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "e31a5f55edf59d3919e9dfbce7d97731502e4e93d46a070848add4aea78dd0ca",
+      "public_sha256": "7b7dd6c647d47247cd3cebc9d8e7379815c464a01472b11e9fb2c7e6edac0986"
+    },
+    {
+      "path": "docs/mission/integrated-audit-1104.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "90b596068a6473d5a060d1c2fde502da4945ac4a944147805ef690fd74592d6d",
+      "public_sha256": "efec9925313dc1415023e0f7afc69416eb09b3dcbcc3d83a841bc40786eaba6c"
+    },
+    {
+      "path": "docs/verification/checkpoint-restore-safety/verification.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "dc7941ea6c6c6bd1b99e6823d1d1342aee9b76417bd8b10378e0b3cf3155b2c0",
+      "public_sha256": "afb594477f10d4352fc55735e2b0f15587f42617e65ebdf87b631c2519cb6b83"
+    },
+    {
+      "path": "docs/verification/fresh-install/verification.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "9d88d153d59446262828fc97997b07b697d90a99d2f98eca60935b1ccf846d67",
+      "public_sha256": "730f2939322c01cfb68b8e672930668ab1da2b41259da9cceab7bb63f29db45f"
+    },
+    {
+      "path": "docs/verification/media-readiness-independent/audit.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "9de1367fc52715f203b63924822f79fec61377b3dc970eb63ac6688ce2bf78dc",
+      "public_sha256": "798f5a813ef3f05427e3b46dfc206ee25e8aa3e15eac8264f8eea928a686e926"
+    },
+    {
+      "path": "docs/verification/media-readiness-independent/postdecode-retry-rerun-20261003T1416Z/results.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "78123f9980c6a74856d2d00948d75bc101c9dca23582b434c2e0bdaf53f888e7",
+      "public_sha256": "11425cfc34b56dc501f0af1bd5c70b0f29e2b194877074af77962757d517769a"
+    },
+    {
+      "path": "docs/verification/server-history-barrier-assessment/assessment.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "532c38e574db999e1059fcfd545a68d0afaa789e006851a2f1d58a519b9bc059",
+      "public_sha256": "1d778c2b28e89771e92ea282189fa994e3f81c5ba52885032743dc26844b47ed"
+    },
+    {
+      "path": "docs/verification/wp07-cue-causality/verification.md",
+      "reason": "machine-specific absolute paths replaced with explicit placeholders; historical evidence otherwise unchanged",
+      "source_sha256": "9654e5143c6f864d10bdce0f08bbf2cbe6fc0107d47b7b659c42791ea7fad0e0",
+      "public_sha256": "c5dba4f9df9f137f7296eccfe7ee448675003615d5f5c1409e120126a78f3b3d"
+    },
+    {
+      "path": "docs/development/ATTRIBUTION-INVENTORY.json",
+      "reason": "machine-specific metadata paths replaced with explicit placeholders, attribution versions and license text unchanged",
+      "source_sha256": "aa9d570623eb5fbef0db87572ba5ec588667ae27e0fca73f8efd60f242115365",
+      "public_sha256": "35ef98665bf3bd4be452ab2ba38b772fd8966bf3332a091c5839d44d0be19b4b"
+    }
+  ]
+}
