@@ -84,3 +84,14 @@ def test_offline_builder_respects_declared_exact_build_requirements(monkeypatch,
     monkeypatch.setattr(verify_package, "ROOT", tmp_path)
     with pytest.raises(StartupError, match="build"):
         verify_package.check_builder(sys.executable)
+
+
+def test_release_local_package_lane_provisions_declared_web_compiler():
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text()
+    release_job = workflow.split("  release-local:", 1)[1]
+    assert "uses: actions/setup-node@v4" in release_job
+    assert "node-version: '22.16.0'" in release_job
+    assert "run: npm ci --ignore-scripts" in release_job
+    assert release_job.index("run: npm ci --ignore-scripts") < release_job.index(
+        "python tools/check.py --lane package smoke"
+    )
