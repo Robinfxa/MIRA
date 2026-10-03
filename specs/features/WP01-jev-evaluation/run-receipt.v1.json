@@ -1,0 +1,33 @@
+{
+  "created_at_utc": "2026-10-03T11:21:51.485160+00:00",
+  "python": "3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]",
+  "targeted_pytest_exit_code": 0,
+  "targeted_pytest_count": 93,
+  "full_affected_not_run_by_this_worker": true,
+  "live_calls": 0,
+  "source_matches_at_receipt": {
+    "apps/api/src/mira/adapters/review/jev.py": true,
+    "apps/api/src/mira/adapters/review/jev_input.py": true,
+    "apps/api/src/mira/application/decision_contracts.py": true,
+    "apps/api/src/mira/application/contracts.py": false,
+    "apps/api/src/mira/domain/models.py": true,
+    "tools/jev_smoke.py": true,
+    "docs/changes/WP01-jev-review/confidence-contract-correction.md": true,
+    "var/mission/jev-smoke/20261003T105657990481Z-postfix.json": true
+  },
+  "release_manifest_sha256": "c49a431231a65f010d7b440a418fea420086d89d98d5aaa9bd13f488f4c2ac57",
+  "test_file_identical_to_final_red": true,
+  "evidence_sha256": {
+    "001-red-integrity.txt": "8e89be646bb61131ae1dd6b5836111f72fac6f56776c77129729ad3b65a0ce8e",
+    "002-red-integrity.txt": "51f5550d86043279227c92b72199d4ee1f66d30623405f70c98442058ffe76c7",
+    "003-red-integrity.txt": "acacbfc3fa3b7dd515702769e6e29a212d3664729627b406e3468e78451ff748",
+    "003-red-test.sha256": "4102b2e51d70cea6511fc9cff6cedcd9d909f27e82773e05fcba72384a926e45",
+    "004-red-frozen-release.txt": "bb7294e3f2acb38b2a0bdd7298fef8adf1e3ed4f421866522d184b8302f32520",
+    "004-red-test.sha256": "4818c910344e351b7bfe1ed3cac652a38271cad00d4a74ccdb1b4e1e65df9e3b",
+    "005-green-corpus.junit.xml": "de59d21b70505df9ff7f02c1a3896d0205cbbf32e6dc3d57fa03114112a22491",
+    "005-green-corpus.txt": "49d996645014a62cf1b612d529b5ce6a1f976738b1b28c19ef95f7eaddb60eac",
+    "006-spec-links.txt": "e8771f22c3b24ec5c29cf7b2792049897eac15db7e5a22e2556382462c5858b5",
+    "007-lint.txt": "6130109e8ae2b5203511610fbea6e9b31f45332867128b6a69ba3aa2a5a8a21f"
+  },
+  "status": "targeted_offline_pass_with_concurrent_source_drift_requires_director_frozen_integration"
+}

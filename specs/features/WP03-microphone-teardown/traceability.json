@@ -1,0 +1,28 @@
+{
+  "feature": "WP03-MIC",
+  "spec": "specs/features/WP03-microphone-teardown/spec.md",
+  "requirements": [
+    {
+      "id": "WP03MIC-001",
+      "tests": [
+        "tests/contracts/test_microphone_teardown.py::test_microphone_invalidates_before_suspended_child_cleanup",
+        "tests/contracts/test_microphone_teardown.py::test_final_drain_keeps_reader_alive_and_never_revives"
+      ]
+    },
+    {
+      "id": "WP03MIC-002",
+      "tests": [
+        "tests/contracts/test_microphone_teardown.py::test_request_cancel_during_child_cleanup_still_reaps_provider",
+        "tests/contracts/test_microphone_teardown.py::test_repeated_outer_cancel_owns_socket_cleanup_until_it_exits",
+        "tests/contracts/test_microphone_teardown.py::test_resistant_providers_hold_capacity_until_actual_iterator_close"
+      ]
+    },
+    {
+      "id": "WP03MIC-003",
+      "tests": [
+        "tests/contracts/test_microphone_teardown.py::test_actor_revocation_clears_input_before_any_await",
+        "tests/contracts/test_microphone_teardown.py::test_cancelled_session_shutdown_keeps_provider_registered_until_reaped"
+      ]
+    }
+  ]
+}

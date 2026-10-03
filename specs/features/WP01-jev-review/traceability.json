@@ -1,0 +1,69 @@
+{
+  "feature": "WP01-JEV",
+  "spec": "specs/features/WP01-jev-review/spec.md",
+  "requirements": [
+    {
+      "id": "WP01JEV-001",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_exact_complete_review_covers_content_and_returns_usage",
+        "tests/contracts/test_jev_review.py::test_changed_candidate_cannot_reuse_contract_or_fixture_identity",
+        "tests/contracts/test_jev_review.py::test_changed_context_and_both_prefixes_invalidate_prior_contract",
+        "tests/contracts/test_jev_review.py::test_contract_revocation_while_request_runs_cannot_allow"
+      ]
+    },
+    {
+      "id": "WP01JEV-002",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_partial_answers_fail_closed",
+        "tests/contracts/test_jev_review.py::test_malformed_primitives_never_become_allow",
+        "tests/contracts/test_jev_review.py::test_prior_response_cannot_approve_even_identical_second_request",
+        "tests/contracts/test_jev_review.py::test_duplicate_answer_keys_are_not_last_value_wins"
+      ]
+    },
+    {
+      "id": "WP01JEV-003",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_semantic_reject_is_not_retried_or_replaced",
+        "tests/contracts/test_jev_review.py::test_chinese_policy_without_calibration_never_allows",
+        "tests/contracts/test_jev_review.py::test_uncertain_answers_stay_unknown",
+        "tests/contracts/test_jev_review.py::test_low_confidence_reject_label_is_unknown_not_substantive_rejection"
+      ]
+    },
+    {
+      "id": "WP01JEV-004",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_request_budget_is_consumed_once_without_retry",
+        "tests/contracts/test_jev_review.py::test_shared_budget_is_reserved_before_concurrent_awaits",
+        "tests/contracts/test_jev_review.py::test_actual_deadline_cancels_transport_and_consumes_attempt",
+        "tests/contracts/test_jev_review.py::test_cancellation_propagates_and_does_not_retry",
+        "tests/contracts/test_jev_review_http.py::test_redirect_never_sends_key_to_another_origin",
+        "tests/contracts/test_jev_review_http.py::test_stream_read_is_bounded_without_accumulating_whole_response"
+      ]
+    },
+    {
+      "id": "WP01JEV-005",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_controls_need_exact_trusted_coverage_and_model_review",
+        "tests/contracts/test_jev_review.py::test_media_never_uses_text_review_to_claim_pixel_approval",
+        "tests/contracts/test_jev_review.py::test_speech_is_reviewed_as_distinct_textual_effect_not_caption_permission",
+        "tests/contracts/test_jev_review.py::test_speech_constraint_violation_is_rejected_even_when_caption_would_be_fine"
+      ]
+    },
+    {
+      "id": "WP01JEV-006",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_exception_text_never_leaves_transport_boundary",
+        "tests/contracts/test_jev_review_http.py::test_real_transport_uses_only_fixed_origin_and_injected_bearer",
+        "tests/contracts/test_jev_review_http.py::test_http_errors_are_fixed_codes_and_not_logged"
+      ]
+    },
+    {
+      "id": "WP01JEV-007",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_missing_contract_never_calls_transport",
+        "tests/contracts/test_jev_review.py::test_default_budget_is_zero_even_with_injected_key_transport",
+        "tests/contracts/test_jev_review_http.py::test_construction_never_creates_http_client_or_reads_secret_files"
+      ]
+    }
+  ]
+}

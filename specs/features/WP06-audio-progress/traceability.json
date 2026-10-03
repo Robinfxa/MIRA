@@ -1,0 +1,97 @@
+{
+  "feature": "WP06",
+  "spec": "specs/features/WP06-audio-progress/spec.md",
+  "requirements": [
+    {
+      "id": "WP06-001",
+      "tests": [
+        "tests/integration/test_audio_progress.py::test_legacy_dom_receipt_cannot_claim_speech_was_rendered"
+      ]
+    },
+    {
+      "id": "WP06-002",
+      "tests": [
+        "tests/integration/test_audio_progress.py::test_duplicate_audio_fact_is_idempotent",
+        "tests/integration/test_audio_progress.py::test_audio_origin_mismatch_is_rejected",
+        "tests/unit/test_audio_transitions.py::test_audio_and_visual_sequences_share_one_namespace",
+        "tests/unit/test_audio_transitions.py::test_audio_history_has_hard_bound_and_duplicates_still_work",
+        "tests/integration/test_audio_progress.py::test_terminal_audio_record_cannot_be_rewritten"
+      ]
+    },
+    {
+      "id": "WP06-003",
+      "tests": [
+        "tests/integration/test_audio_progress.py::test_old_pre_stop_audio_fact_only_adds_history",
+        "tests/integration/test_audio_progress.py::test_audio_cutoff_cannot_erase_acknowledged_progress",
+        "tests/integration/test_audio_progress.py::test_new_generation_context_retains_only_explicit_partial_audio",
+        "tests/unit/test_audio_transitions.py::test_late_completed_fact_does_not_change_new_branch"
+      ]
+    },
+    {
+      "id": "WP06-004",
+      "tests": [
+        "tests/unit/test_audio_transitions.py::test_sealed_mixed_plan_needs_both_channels",
+        "tests/unit/test_audio_transitions.py::test_partial_terminal_is_retained_without_full_text_completion"
+      ]
+    },
+    {
+      "id": "WP06-005",
+      "tests": [
+        "tests/integration/test_voice_http.py::test_speech_stream_is_origin_bound_bounded_and_approved",
+        "tests/integration/test_voice_http.py::test_speech_rejects_arbitrary_text_mismatch_other_session_and_stale_grant",
+        "tests/integration/test_voice_http.py::test_bad_tts_packet_fails_without_emitting_audio"
+      ]
+    },
+    {
+      "id": "WP06-006",
+      "tests": [
+        "tests/integration/test_voice_http.py::test_microphone_requires_allowed_origin",
+        "tests/integration/test_voice_http.py::test_microphone_authentication_is_not_accepted_in_query",
+        "tests/integration/test_voice_http.py::test_microphone_invalid_chunk_closes_and_cancels_provider",
+        "tests/integration/test_voice_http.py::test_microphone_buffer_duration_pacing_and_capacity_are_bounded",
+        "tests/contracts/test_session_token_boundary.py::test_non_ascii_microphone_token_is_rejected_safely"
+      ]
+    },
+    {
+      "id": "WP06-007",
+      "tests": [
+        "tests/integration/test_voice_http.py::test_microphone_transcript_requires_explicit_turn_submission",
+        "tests/integration/test_voice_http.py::test_empty_or_interim_only_microphone_cannot_be_reliable_input",
+        "tests/integration/test_voice_http.py::test_microphone_cancel_during_final_drain_cancels_provider",
+        "tests/integration/test_voice_http.py::test_microphone_disconnect_during_final_drain_cancels_provider"
+      ]
+    },
+    {
+      "id": "WP06-008",
+      "tests": [
+        "tests/integration/test_voice_http.py::test_stop_drops_cancellation_resistant_late_tts_without_blocking",
+        "tests/integration/test_voice_http.py::test_late_generation_failure_cannot_cancel_new_microphone",
+        "tests/integration/test_voice_http.py::test_delete_session_cancels_microphone_and_removes_token_authority",
+        "tests/integration/test_voice_http.py::test_speech_http_response_disconnect_closes_provider_and_releases_operation",
+        "tests/integration/test_voice_http.py::test_terminal_audio_fact_independently_cancels_server_synthesis"
+      ]
+    },
+    {
+      "id": "WP06-009",
+      "tests": [
+        "tests/integration/test_voice_http.py::test_voice_capabilities_are_explicit_and_injection_is_not_live_proof",
+        "tests/integration/test_voice_http.py::test_speech_missing_provider_fails_clearly_without_mock_audio",
+        "tests/integration/test_voice_http.py::test_google_voice_factory_requires_explicit_admission_before_client_construction",
+        "tests/integration/test_voice_http.py::test_google_voice_factory_wires_exact_adapters_and_closes_owned_clients",
+        "tests/integration/test_voice_http.py::test_google_voice_factory_allows_optional_quota_and_caller_owned_http_client",
+        "tests/integration/test_voice_http.py::test_cli_websocket_ingress_is_bounded_without_access_logging",
+        "tests/integration/test_voice_http.py::test_voice_factory_constructs_on_application_loop_and_closes_once",
+        "tests/integration/test_voice_http.py::test_google_voice_construction_without_running_loop_fails_before_sdk_resources"
+      ]
+    },
+    {
+      "id": "WP06-010",
+      "tests": [
+        "tests/contracts/test_audio_context_projection.py::test_next_generation_uses_latest_cumulative_audio_fact_but_preserves_full_ledger",
+        "tests/contracts/test_audio_context_projection.py::test_semantic_snapshot_uses_same_latest_fact_without_inventing_heard_words",
+        "tests/contracts/test_audio_context_projection.py::test_projection_preserves_partial_terminal_status_and_other_effects",
+        "tests/contracts/test_audio_context_projection.py::test_projection_does_not_hide_conflicting_imported_effect_identity"
+      ]
+    }
+  ]
+}

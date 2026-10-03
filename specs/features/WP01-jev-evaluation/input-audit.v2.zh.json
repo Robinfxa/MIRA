@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "model": "jev-1.13.0",
+  "evidence_class": "offline_synthetic_expected_cases_not_model_quality_evidence",
+  "live_execution_authorized": false,
+  "production_calibration_admitted": false,
+  "label_review": "single_independent_implementation_worker_draft_requires_second_adjudicator",
+  "source_path": "specs/features/WP01-semantic-contracts/calibration-corpus.zh.json",
+  "source_sha256": "c9d0214e33051ddb4765de5ae36be475cdb9047bf4ac4cf3139a86d3ae24cb4c",
+  "cases": [
+    {
+      "source_id": "simultaneous_quiet_show",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "yes",
+        "capture_restriction": "no",
+        "display_request": "yes",
+        "referent": "photo-1"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "The uniquely presented photo grounds the referent. Keep both obligations; MEDIA is still a separate capability gate."
+    },
+    {
+      "source_id": "capture_boundary",
+      "partition": "development",
+      "disposition": "conditional",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "yes",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Do not confuse controlled camera_lowered with a physical camera operation. Text alone cannot establish the latter."
+    },
+    {
+      "source_id": "two_restrictions_show",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "yes",
+        "capture_restriction": "yes",
+        "display_request": "yes",
+        "referent": "photo-1"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "All three predicates can independently be yes. A single-mode classifier is wrong."
+    },
+    {
+      "source_id": "quoted_speech_rule",
+      "partition": "development",
+      "disposition": "conditional",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "No new speech boundary, but “你说的” asserts history not supplied here. None is defensible only for supplied-object selection, not proof of prior speech."
+    },
+    {
+      "source_id": "quoted_capture_rule",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "The quoted phrase is translation content, not an active capture boundary."
+    },
+    {
+      "source_id": "no_new_boundary",
+      "partition": "development",
+      "disposition": "needs_context",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "No current restriction is correct; no old restriction is present, so this case cannot test preservation of an old one. Use in_old_boundary."
+    },
+    {
+      "source_id": "subtitle_only",
+      "partition": "development",
+      "disposition": "conditional",
+      "gold_semantics": {
+        "speech_restriction": "yes",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "No specific object/image is requested. The narrow display predicate is no; subtitle fulfillment remains a raw output obligation."
+    },
+    {
+      "source_id": "specific_second_photo",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "yes",
+        "referent": "photo-2"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Controlled description and presented identity disambiguate photo-2; no pixel interpretation is established."
+    },
+    {
+      "source_id": "ambiguous_photo",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "yes",
+        "referent": "ambiguous"
+      },
+      "original_status_label": "unknown",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Equal supplied alternatives require ambiguous. Display remains yes even when its referent is unresolved."
+    },
+    {
+      "source_id": "unseen_photo",
+      "partition": "development",
+      "disposition": "conditional",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "yes",
+        "referent": "ambiguous"
+      },
+      "original_status_label": "unknown",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Only one prepared identity does not establish “刚才” exposure. Ambiguous means insufficient actual presentation, not necessarily multiple IDs."
+    },
+    {
+      "source_id": "partial_audio_question",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "ambiguous"
+      },
+      "original_status_label": "unknown",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Partial software samples with no word alignment cannot identify heard words or understanding. Preserve the raw question."
+    },
+    {
+      "source_id": "no_object_reference",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "This is a generic subject request; semantic output review is still necessary."
+    },
+    {
+      "source_id": "rejected_invite_yes",
+      "partition": "development",
+      "disposition": "needs_context",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "No rejected invitation or presented offer is supplied. “可以” is an unsupported contextual assent here; these four labels cannot test invitation revival or consent."
+    },
+    {
+      "source_id": "unsupported_share",
+      "partition": "development",
+      "disposition": "conditional",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "photo-1"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "photo-1 is resolved, but sharing is not display. Preserve the exact recipient/request as an obligation; the four labels grant no external-send capability."
+    },
+    {
+      "source_id": "soft_preference",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Turn-local style request should be fulfilled without inventing a persistent preference."
+    },
+    {
+      "source_id": "negative_boundary_later",
+      "partition": "development",
+      "disposition": "needs_context",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Explicit current permission is not a new prohibition. This DTO has no revocation primitive; no old directive was provided. Do not score owner revocation behavior from this row."
+    },
+    {
+      "source_id": "prompt_injection",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "no",
+        "display_request": "no",
+        "referent": "none"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "The request to answer yes is untrusted content for the question boundary; the useful rain request remains an obligation."
+    },
+    {
+      "source_id": "capture_scope",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "no",
+        "capture_restriction": "yes",
+        "display_request": "yes",
+        "referent": "photo-1"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Capture prohibition and image display are distinct, simultaneous obligations."
+    },
+    {
+      "source_id": "read_without_voice",
+      "partition": "development",
+      "disposition": "keep",
+      "gold_semantics": {
+        "speech_restriction": "yes",
+        "capture_restriction": "no",
+        "display_request": "yes",
+        "referent": "photo-1"
+      },
+      "original_status_label": "observed",
+      "runtime_without_calibration": "unknown",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "Mixed traditional/simplified text preserves the same predicates and exact controlled identity."
+    },
+    {
+      "source_id": "local_stop",
+      "partition": "development",
+      "disposition": "no_call",
+      "gold_semantics": {
+        "speech_restriction": null,
+        "capture_restriction": null,
+        "display_request": null,
+        "referent": null
+      },
+      "original_status_label": "unavailable",
+      "runtime_without_calibration": "unavailable",
+      "runtime_status_note": "Conditional on valid successful parsing; transport/invalid/stale remain separate failures. OBSERVED is never gold for an uncalibrated adapter.",
+      "critique": "This is a pre-established local_stop control, not evidence of model Stop detection. The provider must never run."
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "feature": "WP01-SEM",
+  "spec": "specs/features/WP01-semantic-contracts/spec.md",
+  "requirements": [
+    {
+      "id": "WP01SEM-001",
+      "tests": [
+        "tests/contracts/test_decision_contracts.py::test_snapshot_preserves_actual_partial_facts_and_raw_reliable_input",
+        "tests/contracts/test_decision_contracts.py::test_mutable_or_unbound_snapshot_evidence_is_rejected",
+        "tests/contracts/test_decision_contracts.py::test_invalid_audio_evidence_is_not_admitted_as_presentation",
+        "tests/contracts/test_decision_contracts.py::test_partial_audio_never_invents_an_aligned_spoken_prefix",
+        "tests/contracts/test_decision_contracts.py::test_malformed_nested_identity_is_invalid_instead_of_raising",
+        "tests/contracts/test_decision_contracts.py::test_old_accepted_only_prefix_is_not_current_context"
+      ]
+    },
+    {
+      "id": "WP01SEM-002",
+      "tests": [
+        "tests/contracts/test_jev_input.py::test_exact_raw_snapshot_and_independent_primitive_questions",
+        "tests/contracts/test_decision_contracts.py::test_producer_keeps_simultaneous_raw_requirements_and_never_releases_prior_boundary"
+      ]
+    },
+    {
+      "id": "WP01SEM-003",
+      "tests": [
+        "tests/contracts/test_jev_input.py::test_missing_extra_and_previous_request_answers_fail_exact_coverage",
+        "tests/contracts/test_jev_input.py::test_noul_has_no_invented_confidence_and_rejects_invalid_probability",
+        "tests/contracts/test_jev_input.py::test_choice_identity_distribution_and_statistic_are_validated",
+        "tests/contracts/test_jev_input.py::test_duplicate_json_keys_and_oversized_response_are_invalid",
+        "tests/contracts/test_jev_input.py::test_envelope_and_usage_are_exact"
+      ]
+    },
+    {
+      "id": "WP01SEM-004",
+      "tests": [
+        "tests/contracts/test_jev_input.py::test_defaults_disable_calls_and_uncalibrated_answers_remain_unknown",
+        "tests/contracts/test_jev_input.py::test_explicit_local_stop_never_waits_for_or_calls_provider",
+        "tests/contracts/test_jev_input.py::test_snapshot_revoked_while_waiting_is_stale",
+        "tests/contracts/test_jev_input.py::test_concurrent_calls_share_one_atomic_budget",
+        "tests/contracts/test_jev_input.py::test_timeout_consumes_budget_and_sanitizes_exception_text",
+        "tests/contracts/test_jev_input.py::test_http_failure_budget_and_cancellation_are_not_retries"
+      ]
+    },
+    {
+      "id": "WP01SEM-005",
+      "tests": [
+        "tests/contracts/test_decision_contracts.py::test_changed_context_candidate_scope_or_snapshot_changes_contract_identity",
+        "tests/contracts/test_decision_contracts.py::test_missing_unknown_uncalibrated_or_stale_input_never_produces_contract",
+        "tests/contracts/test_decision_contracts.py::test_unknown_original_directive_and_local_stop_are_not_widened",
+        "tests/contracts/test_decision_contracts.py::test_speech_restriction_and_exact_control_catalog_are_deterministic_bounds",
+        "tests/contracts/test_decision_contracts.py::test_current_scope_and_original_obligations_survive_stage_and_seal"
+      ]
+    },
+    {
+      "id": "WP01SEM-006",
+      "tests": [
+        "tests/contracts/test_jev_input_http.py::test_input_uses_real_http_seam_with_fixed_origin_and_distinct_primitives",
+        "tests/contracts/test_jev_input_http.py::test_input_http_error_does_not_read_private_body_or_follow_redirect",
+        "tests/contracts/test_jev_input_corpus.py::test_chinese_corpus_is_synthetic_bounded_and_preserves_simultaneous_labels",
+        "tests/contracts/test_decision_contracts.py::test_snapshot_repr_does_not_expose_raw_presented_or_partial_text"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+# Test policy, not runtime application configuration. One owner per test file.
+version = 1
+guards = ["architecture"]
+full_patterns = [
+  "pyproject.toml", "requirements/**", "package.json", "package-lock.json",
+  "tests/quality.toml", "tests/**/conftest.py", "tests/conftest.py", "tests/support/**",
+  "tools/check.py", "tools/quality_*.py", ".github/workflows/**",
+  "apps/api/src/mira/domain/**", "apps/api/src/mira/application/ports/**",
+  "apps/api/src/mira/application/contracts.py", "apps/api/src/mira/entrypoints/http/schemas.py",
+  "packages/contracts/**", "apps/web/src/shared/generated/**"
+]
+documentation_patterns = [
+  "README.md", "CONTRIBUTING.md", "AGENTS.md", "AI_USAGE.md", "CHANGELOG.md", "THIRD_PARTY.md",
+  "docs/**", ".github/pull_request_template.md"
+]
+
+[[lanes]]
+name = "architecture"
+kind = "pytest"
+targets = ["tests/architecture/test_boundaries.py"]
+
+[[lanes]]
+name = "domain"
+kind = "pytest"
+targets = ["tests/unit/test_transitions.py", "tests/unit/test_audio_transitions.py"]
+
+[[lanes]]
+name = "env"
+kind = "pytest"
+targets = ["tests/unit/test_service_configuration.py", "tests/unit/test_api_environment.py", "tests/unit/test_provider_matrix.py", "tests/unit/test_mira_auth.py"]
+
+[[lanes]]
+name = "config"
+kind = "pytest"
+targets = ["tests/unit/test_configuration.py"]
+
+[[lanes]]
+name = "actor"
+kind = "pytest"
+targets = ["tests/unit/test_actor.py", "tests/integration/test_replay_actor.py"]
+
+[[lanes]]
+name = "providers"
+kind = "pytest"
+targets = ["tests/contracts/test_*.py"]
+
+[[lanes]]
+name = "http"
+kind = "pytest"
+targets = ["tests/integration/test_http.py", "tests/integration/test_replay_http.py", "tests/integration/test_audio_progress.py", "tests/integration/test_voice_http.py", "tests/integration/test_rehearsal_http.py"]
+
+[[lanes]]
+name = "tooling"
+kind = "pytest"
+targets = ["tests/architecture/test_spec_traceability.py", "tests/unit/test_quality_*.py", "tests/unit/test_diagnostic_export.py", "tests/unit/test_dev_startup.py", "tests/unit/test_package_distribution.py", "tests/unit/test_jev_evaluator.py"]
+
+[[lanes]]
+name = "specs"
+kind = "command"
+command = ["{python}", "tools/check_specs.py"]
+
+[[lanes]]
+name = "web"
+kind = "command"
+targets = ["tests/web/*.test.mjs"]
+command = ["{python}", "tools/check_web.py", "--output-dir", "{artifact}/build"]
+
+[[lanes]]
+name = "package"
+kind = "command"
+command = ["{python}", "tools/verify_package.py"]
+serial = true
+default = false
+
+[[lanes]]
+name = "smoke"
+kind = "command"
+command = ["{python}", "tools/smoke_fixture_http.py"]
+serial = true
+default = false
+
+[[rules]]
+paths = ["apps/api/src/mira/config/**", "config/**", ".env.example", ".env.development.example", "apps/api/src/mira/bootstrap/**"]
+lanes = ["env", "config", "providers", "actor", "http"]
+
+[[rules]]
+paths = ["apps/api/src/mira/adapters/**"]
+lanes = ["providers", "config", "actor", "http"]
+
+[[rules]]
+paths = ["apps/api/src/mira/application/**"]
+lanes = ["actor", "providers", "http"]
+
+[[rules]]
+paths = ["apps/api/src/mira/entrypoints/**", "apps/api/src/mira/__main__.py"]
+lanes = ["http"]
+
+[[rules]]
+paths = ["apps/web/**", "tests/web/**", "tools/check_web.py"]
+lanes = ["web"]
+
+[[rules]]
+paths = ["specs/**", "tools/check_specs.py"]
+lanes = ["specs", "tooling"]
+
+[[rules]]
+paths = ["tools/record_check.py", "tools/verify_tdd_evidence.py"]
+lanes = ["tooling"]
+
+[[rules]]
+paths = ["tools/export_contracts.py"]
+lanes = ["architecture", "http", "web"]
+
+[[rules]]
+paths = ["tools/verify_package.py"]
+lanes = ["package"]
+
+[[rules]]
+paths = ["tools/smoke_fixture_http.py"]
+lanes = ["smoke"]
+
+[[rules]]
+paths = ["tools/api_env.py", "tools/api_environment.py"]
+lanes = ["env"]
+
+[[rules]]
+paths = ["tools/mira_auth/**", "tools/mira_chatgpt_login.py"]
+lanes = ["env"]
+
+[[rules]]
+paths = ["tools/export_diagnostics.py"]
+lanes = ["tooling", "providers"]
+
+[[rules]]
+paths = ["tools/generate_rehearsal_audio.py"]
+lanes = ["tooling", "providers", "package"]
+
+[[rules]]
+paths = ["tools/restore_checkpoint.py"]
+lanes = ["tooling"]
+
+[[rules]]
+paths = ["tools/jev_smoke.py", "tools/jev_evaluate.py", "tools/jev_evaluation_support.py"]
+lanes = ["env", "providers", "tooling"]
+
+[[rules]]
+paths = ["scripts/dev", "tools/dev.py", "tools/bootstrap.py", "setup.py"]
+lanes = ["tooling", "package", "smoke"]

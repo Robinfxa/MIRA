@@ -1,0 +1,45 @@
+{
+  "feature": "WP01-EVAL",
+  "spec": "specs/features/WP01-jev-evaluation/spec.md",
+  "requirements": [
+    {
+      "id": "WP01EVAL-001",
+      "tests": [
+        "tests/contracts/test_jev_evaluation_corpus.py::test_original_input_audit_is_complete_and_separates_gold_from_runtime",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_input_gold_does_not_invent_referents_or_erase_old_directives"
+      ]
+    },
+    {
+      "id": "WP01EVAL-002",
+      "tests": [
+        "tests/contracts/test_jev_evaluation_corpus.py::test_every_fixture_round_trips_application_dtos",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_output_dimensions_and_three_way_labels_cover_every_effect",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_output_wire_coverage_and_uncalibrated_no_allow"
+      ]
+    },
+    {
+      "id": "WP01EVAL-003",
+      "tests": [
+        "tests/contracts/test_jev_evaluation_corpus.py::test_evaluation_release_exists_and_is_frozen",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_holdout_family_and_content_separation_is_frozen",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_manifest_case_hashes_are_complete_and_tampering_is_detectable",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_original_v1_artifact_bytes_remain_verifiable_in_archive",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_v2_cue_schema_migration_preserves_v1_gold_and_partitions"
+      ]
+    },
+    {
+      "id": "WP01EVAL-004",
+      "tests": [
+        "tests/contracts/test_jev_evaluation_corpus.py::test_output_dimensions_and_three_way_labels_cover_every_effect",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_output_wire_coverage_and_uncalibrated_no_allow",
+        "tests/contracts/test_jev_evaluation_corpus.py::test_v2_selected_queue_is_adjudicated_and_o2_has_real_negative_coverage"
+      ]
+    },
+    {
+      "id": "WP01EVAL-005",
+      "tests": [
+        "tests/contracts/test_jev_evaluation_corpus.py::test_first_run_is_development_only_and_budget_requires_sequential_reservations"
+      ]
+    }
+  ]
+}

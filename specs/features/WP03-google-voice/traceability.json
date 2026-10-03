@@ -1,0 +1,63 @@
+{
+  "feature": "WP03-GOOGLE",
+  "spec": "specs/features/WP03-google-voice/spec.md",
+  "requirements": [
+    {
+      "id": "WP03GOOGLE-001",
+      "tests": [
+        "tests/contracts/test_google_speech_tts.py::test_exact_model_wire_and_contiguous_pcm",
+        "tests/contracts/test_google_speech_tts.py::test_unsupported_options_fail_locally"
+      ]
+    },
+    {
+      "id": "WP03GOOGLE-002",
+      "tests": [
+        "tests/contracts/test_google_speech_tts.py::test_bad_or_incomplete_audio_is_explicit",
+        "tests/contracts/test_google_speech_tts.py::test_audio_budget_is_enforced",
+        "tests/contracts/test_google_speech_tts.py::test_tts_does_not_retry_or_emit_after_stop"
+      ]
+    },
+    {
+      "id": "WP03GOOGLE-003",
+      "tests": [
+        "tests/contracts/test_google_speech_stt.py::test_config_first_audio_chunking_and_cumulative_revisions",
+        "tests/contracts/test_google_speech_stt.py::test_empty_input_opens_no_rpc",
+        "tests/contracts/test_google_speech_stt.py::test_malformed_input_fails_explicitly",
+        "tests/contracts/test_google_speech_stt.py::test_input_duration_limit"
+      ]
+    },
+    {
+      "id": "WP03GOOGLE-004",
+      "tests": [
+        "tests/contracts/test_google_speech_stt.py::test_config_first_audio_chunking_and_cumulative_revisions",
+        "tests/contracts/test_google_speech_stt.py::test_silence_is_empty_but_provider_failure_is_not",
+        "tests/contracts/test_google_speech_stt.py::test_invalid_transcript_order_or_response_is_explicit",
+        "tests/contracts/test_google_speech_stt.py::test_stt_interim_tail_is_not_successful_completion"
+      ]
+    },
+    {
+      "id": "WP03GOOGLE-005",
+      "tests": [
+        "tests/contracts/test_google_speech_stt.py::test_stt_cancellation_and_early_close",
+        "tests/contracts/test_google_speech_stt.py::test_early_close_closes_input_source",
+        "tests/contracts/test_google_speech_tts.py::test_tts_cancel_and_early_close_release_transport",
+        "tests/contracts/test_google_speech_tts.py::test_concrete_httpx_client_seam_is_offline_and_cancellable",
+        "tests/contracts/test_google_speech_tts.py::test_tts_suppressed_transport_cancellation_cannot_emit_late_audio",
+        "tests/contracts/test_google_speech_stt.py::test_stt_suppressed_transport_cancellation_cannot_emit_late_transcript"
+      ]
+    },
+    {
+      "id": "WP03GOOGLE-006",
+      "tests": [
+        "tests/contracts/test_google_speech_stt.py::test_grpc_bridge_uses_injected_client_and_cancels_rpc",
+        "tests/contracts/test_google_speech_stt.py::test_grpc_status_mapping_without_error_text",
+        "tests/contracts/test_google_speech_tts.py::test_rest_refreshes_injected_token_and_scopes_quota_project",
+        "tests/contracts/test_google_speech_tts.py::test_invalid_token_never_enters_http_headers",
+        "tests/contracts/test_google_speech_tts.py::test_rest_whole_stream_deadline_is_enforced",
+        "tests/contracts/test_google_speech_tts.py::test_rest_http_status_safe_mapping",
+        "tests/contracts/test_google_speech_stt.py::test_real_google_sdk_request_and_async_client_seam_without_network",
+        "tests/contracts/test_google_speech_tts.py::test_httpx_timeout_is_distinct_from_service_failure"
+      ]
+    }
+  ]
+}
