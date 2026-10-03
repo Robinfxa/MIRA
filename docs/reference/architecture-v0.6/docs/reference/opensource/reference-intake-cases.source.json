@@ -1,0 +1,128 @@
+[
+  {
+    "id": "RI-01",
+    "area": "相同ContextPacket走选定订阅carrier",
+    "assertion": "返回有序事件、明确终态，工具/日志不进入TTS",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-02",
+    "area": "断流、配额与认证失败",
+    "assertion": "非正常结束不被包装为G03正常封口；不自动调用付费API",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-03",
+    "area": "当前回应被两次连续输入替换",
+    "assertion": "旧carrier结果不获得新许可，SDK取消失败也不能复活",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-04",
+    "area": "Codex新请求上下文",
+    "assertion": "未播assistant尾部不进入可靠历史；线程隔离可检查",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-05",
+    "area": "图片成功与无图片结果",
+    "assertion": "获取真实字节和身份；空结果明确失败，不靠说明文字交付",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-06",
+    "area": "partial image与原生已显示提示",
+    "assertion": "未经D-M/许可不进入场景，也不提交曝光",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-07",
+    "area": "旧图迟到、验证后调包、隐藏后新许可",
+    "assertion": "stale拒绝、内容身份一致、隐藏政策优先",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-08",
+    "area": "框架语音链与MIRA主控同时存在",
+    "assertion": "只产生一次主回复和一条角色人声路径",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-09",
+    "area": "待图片台词进入连续TTS",
+    "assertion": "依赖未满足时不混入无法隔离的可播放音频；打断可止",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-10",
+    "area": "纯动作、audio_end与持续情绪",
+    "assertion": "无语音不等空TTS；口型止而合法affect保留",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-11",
+    "area": "动作自带声音与结束回调",
+    "assertion": "不旁路人声仲裁；取消后回调不推进剧情",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-12",
+    "area": "heard_response与partial回执",
+    "assertion": "可靠范围与未知分开；照片历史不被旧回复取消抹去",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-13",
+    "area": "Hindsight异步重试及删除",
+    "assertion": "同源幂等、当前纠正优先；关闭自动完整对话写入",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-14",
+    "area": "许可快照更新与重复",
+    "assertion": "保留合法音频不重播，新增图片不误停旧合法流",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-15",
+    "area": "S1停止→U2请求→S2停止→旧重新开启",
+    "assertion": "针对S1/U2的许可不能解除S2",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-16",
+    "area": "同一fixture真实/Mock执行",
+    "assertion": "经过相同Actor、许可、执行与回执，不另演计时剧本",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-17",
+    "area": "乱序、重复与损坏事件",
+    "assertion": "属性测试保留最小反例；失效分支未来呈现始终被挡",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  },
+  {
+    "id": "RI-18",
+    "area": "发布产物审计",
+    "assertion": "没有密钥或个人认证数据；包含分包与素材许可、启动和失败演示",
+    "status": "not_run",
+    "belongs_to": "reference_intake_not_architecture_146"
+  }
+]

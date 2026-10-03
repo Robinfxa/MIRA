@@ -1,0 +1,800 @@
+{
+  "schema_version": "1.0",
+  "status": "research_reference_not_install_lockfile",
+  "projects": [
+    {
+      "id": "R01",
+      "name": "CLIProxyAPI",
+      "repository": "router-for-me/CLIProxyAPI",
+      "repository_url": "https://github.com/router-for-me/CLIProxyAPI",
+      "review_commit": "2044a01f422998de79a5da8015141b878886534d",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "W01"
+      ],
+      "license_observed": "MIT",
+      "license_audit": "not_complete",
+      "recommended_action": "adapter-first",
+      "architecture_modules": "M09/M06",
+      "purpose": "订阅HTTP与生图首联调候选",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R02",
+      "name": "官方Codex",
+      "repository": "openai/codex",
+      "repository_url": "https://github.com/openai/codex",
+      "review_commit": "44dd77b71e88c78295736bffd3dc3b684c13be6d",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C07",
+        "C08",
+        "C09",
+        "W02",
+        "W03"
+      ],
+      "license_observed": "Apache-2.0",
+      "license_audit": "not_complete",
+      "recommended_action": "adapter",
+      "architecture_modules": "M09/M03/M06",
+      "purpose": "第一方承载与原生产物参考",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R03",
+      "name": "Pi provider层",
+      "repository": "earendil-works/pi",
+      "repository_url": "https://github.com/earendil-works/pi",
+      "review_commit": "9fba660cf1caca0ade5bea72269352416e595a19",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C10",
+        "C11",
+        "W04"
+      ],
+      "license_observed": "MIT",
+      "license_audit": "not_complete",
+      "recommended_action": "embedded-alternative",
+      "architecture_modules": "M09",
+      "purpose": "TypeScript嵌入式替代，不与CPA叠加",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R04",
+      "name": "Pipecat",
+      "repository": "pipecat-ai/pipecat",
+      "repository_url": "https://github.com/pipecat-ai/pipecat",
+      "review_commit": "cae1f51a4060b6acf679991e75374520069ef016",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C12",
+        "C13",
+        "W05"
+      ],
+      "license_observed": "BSD-2-Clause",
+      "license_audit": "not_complete",
+      "recommended_action": "adapter-first",
+      "architecture_modules": "M05/M04",
+      "purpose": "音频基础首联调候选",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R05",
+      "name": "LiveKit Agents",
+      "repository": "livekit/agents",
+      "repository_url": "https://github.com/livekit/agents",
+      "review_commit": "8de48c229655d10ca3df3274ba77c20eef50c6c1",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C14",
+        "W06"
+      ],
+      "license_observed": "Apache-2.0; models separate",
+      "license_audit": "not_complete",
+      "recommended_action": "alternative-and-pattern",
+      "architecture_modules": "M05/M04",
+      "purpose": "RTC/Agent替代与生命周期参考",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R06",
+      "name": "浏览器VAD",
+      "repository": "ricky0123/vad",
+      "repository_url": "https://github.com/ricky0123/vad",
+      "review_commit": null,
+      "evidence_level": "documentation_only",
+      "reviewed_sources": [
+        "W19"
+      ],
+      "license_observed": null,
+      "license_audit": "not_complete",
+      "recommended_action": "optional-library",
+      "architecture_modules": "M05",
+      "purpose": "可选自动活动检测，不能取代让话判断",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R07",
+      "name": "Charivo",
+      "repository": "zeikar/charivo",
+      "repository_url": "https://github.com/zeikar/charivo",
+      "review_commit": "62f3a4369643d4e132cfc25104a15422e1155c05",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C15",
+        "C16",
+        "W07"
+      ],
+      "license_observed": "MIT portions; Live2D composite",
+      "license_audit": "not_complete",
+      "recommended_action": "adapter-first",
+      "architecture_modules": "M06/M03",
+      "purpose": "渲染模块首联调，许可证分包",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R08",
+      "name": "AIRI",
+      "repository": "moeru-ai/airi",
+      "repository_url": "https://github.com/moeru-ai/airi",
+      "review_commit": "731123861093abfd7fc34c0654ba9f99206ab944",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C17",
+        "W08"
+      ],
+      "license_observed": "MIT; assets separate",
+      "license_audit": "not_complete",
+      "recommended_action": "mechanism",
+      "architecture_modules": "M05/M06",
+      "purpose": "顺序/取消/回调；不整仓接管",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R09",
+      "name": "Open-LLM-VTuber",
+      "repository": "Open-LLM-VTuber/Open-LLM-VTuber",
+      "repository_url": "https://github.com/Open-LLM-VTuber/Open-LLM-VTuber",
+      "review_commit": "992309c0aa19845960228f880013d4685fde93b5",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C18",
+        "W09"
+      ],
+      "license_observed": "MIT; assets separate",
+      "license_audit": "not_complete",
+      "recommended_action": "mechanism",
+      "architecture_modules": "M01/M04/M06",
+      "purpose": "中断历史与角色闭环参考",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R10",
+      "name": "three-vrm",
+      "repository": "pixiv/three-vrm",
+      "repository_url": "https://github.com/pixiv/three-vrm",
+      "review_commit": null,
+      "evidence_level": "documentation_only",
+      "reviewed_sources": [
+        "W12"
+      ],
+      "license_observed": "MIT; models separate",
+      "license_audit": "not_complete",
+      "recommended_action": "optional-alternative",
+      "architecture_modules": "M06",
+      "purpose": "独立3D资产路线",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R11",
+      "name": "Hindsight",
+      "repository": "vectorize-io/hindsight",
+      "repository_url": "https://github.com/vectorize-io/hindsight",
+      "review_commit": "f7dd3f4fd7420f7beec60c32c965e5e5cf7be066",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C19",
+        "W10"
+      ],
+      "license_observed": "MIT",
+      "license_audit": "not_complete",
+      "recommended_action": "explicit-sdk",
+      "architecture_modules": "M01/M06",
+      "purpose": "显式记忆SDK，不自动完整聊天入库",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R12",
+      "name": "XState",
+      "repository": "statelyai/xstate",
+      "repository_url": "https://github.com/statelyai/xstate",
+      "review_commit": "fbee62e7c1586315ed478c2fedf530d7e0ff5a3e",
+      "evidence_level": "key_source_read_at_pinned_commit",
+      "reviewed_sources": [
+        "C20",
+        "W11"
+      ],
+      "license_observed": "MIT",
+      "license_audit": "not_complete",
+      "recommended_action": "conditional-library",
+      "architecture_modules": "M01/M04",
+      "purpose": "TS后端适用，不强制跨语言",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R13",
+      "name": "ink",
+      "repository": "inkle/ink",
+      "repository_url": "https://github.com/inkle/ink",
+      "review_commit": null,
+      "evidence_level": "documentation_only",
+      "reviewed_sources": [
+        "W13"
+      ],
+      "license_observed": null,
+      "license_audit": "not_complete",
+      "recommended_action": "authoring-reference",
+      "architecture_modules": "M06",
+      "purpose": "复杂叙事作者工具，当前不必运行时引入",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R14",
+      "name": "MSW",
+      "repository": "mswjs/msw",
+      "repository_url": "https://github.com/mswjs/msw",
+      "review_commit": null,
+      "evidence_level": "documentation_only",
+      "reviewed_sources": [
+        "W14"
+      ],
+      "license_observed": "MIT",
+      "license_audit": "not_complete",
+      "recommended_action": "library",
+      "architecture_modules": "M08",
+      "purpose": "网络Mock和共享fixtures",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R15",
+      "name": "Playwright",
+      "repository": "microsoft/playwright",
+      "repository_url": "https://github.com/microsoft/playwright",
+      "review_commit": null,
+      "evidence_level": "documentation_only",
+      "reviewed_sources": [
+        "W15",
+        "W16"
+      ],
+      "license_observed": "Apache-2.0",
+      "license_audit": "not_complete",
+      "recommended_action": "library",
+      "architecture_modules": "M08",
+      "purpose": "浏览器测试/HAR/诊断",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    },
+    {
+      "id": "R16",
+      "name": "fast-check",
+      "repository": "dubzzz/fast-check",
+      "repository_url": "https://github.com/dubzzz/fast-check",
+      "review_commit": null,
+      "evidence_level": "documentation_only",
+      "reviewed_sources": [
+        "W17",
+        "W18"
+      ],
+      "license_observed": "MIT",
+      "license_audit": "not_complete",
+      "recommended_action": "library",
+      "architecture_modules": "M08",
+      "purpose": "属性测试/可控调度/反例",
+      "adoption_status": "recommended_not_integrated",
+      "upstream_tests_run": false,
+      "mira_integration_tests_run": false,
+      "account_verified": false,
+      "capability_limits": [
+        "以来源记录的已读范围为限",
+        "不将依赖默认行为提升为MIRA授权",
+        "代码可复用不等于账户/性能/许可已验收"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "C01",
+      "title": "router-for-me/CLIProxyAPI · internal/runtime/executor/codex_executor.go",
+      "url": "https://github.com/router-for-me/CLIProxyAPI/blob/2044a01f422998de79a5da8015141b878886534d/internal/runtime/executor/codex_executor.go",
+      "evidence": "source_read",
+      "review_scope": "完整短文件；CodexExecutor 壳层和无状态定位",
+      "git_blob_sha": "aeaee31e7255f29fe591476744abc29cdf0967f2",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C02",
+      "title": "router-for-me/CLIProxyAPI · internal/runtime/executor/codex_openai_images.go",
+      "url": "https://github.com/router-for-me/CLIProxyAPI/blob/2044a01f422998de79a5da8015141b878886534d/internal/runtime/executor/codex_openai_images.go",
+      "evidence": "source_read",
+      "review_scope": "读取1–275行；executeOpenAIImage、executeOpenAIImageStream及结果收集；另经代码检索定位partial_image分支，其余未通读",
+      "git_blob_sha": "65797a3ad4e135fc22772871d410aa2aa5e142c6",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C03",
+      "title": "router-for-me/CLIProxyAPI · internal/runtime/executor/codex_openai_images_test.go",
+      "url": "https://github.com/router-for-me/CLIProxyAPI/blob/2044a01f422998de79a5da8015141b878886534d/internal/runtime/executor/codex_openai_images_test.go",
+      "evidence": "source_read",
+      "review_scope": "读取1–120行；DirectOpenAIImageGenerationUsesImagesEndpoint合成上游测试，未执行",
+      "git_blob_sha": "5bcc970546cc7a6b0bac49aa5f9a48a3acfa1068",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C04",
+      "title": "router-for-me/CLIProxyAPI · internal/runtime/executor/codex_executor_auth.go",
+      "url": "https://github.com/router-for-me/CLIProxyAPI/blob/2044a01f422998de79a5da8015141b878886534d/internal/runtime/executor/codex_executor_auth.go",
+      "evidence": "source_search",
+      "review_scope": "代码检索定位Refresh和resolveCodexConfig；未通读",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C05",
+      "title": "router-for-me/CLIProxyAPI · internal/runtime/executor/codex_websockets_executor.go",
+      "url": "https://github.com/router-for-me/CLIProxyAPI/blob/2044a01f422998de79a5da8015141b878886534d/internal/runtime/executor/codex_websockets_executor.go",
+      "evidence": "source_search",
+      "review_scope": "代码检索定位CodexAutoExecutor.ExecuteStream及HTTP回退；未通读",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C06",
+      "title": "router-for-me/CLIProxyAPI · internal/config/disable_image_generation_mode.go",
+      "url": "https://github.com/router-for-me/CLIProxyAPI/blob/2044a01f422998de79a5da8015141b878886534d/internal/config/disable_image_generation_mode.go",
+      "evidence": "source_search",
+      "review_scope": "代码检索确认chat模式将生图限制在images端点；未通读",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C07",
+      "title": "openai/codex · sdk/typescript/src/thread.ts",
+      "url": "https://github.com/openai/codex/blob/44dd77b71e88c78295736bffd3dc3b684c13be6d/sdk/typescript/src/thread.ts",
+      "evidence": "source_read",
+      "review_scope": "读取1–205行（返回完整文件）；runStreamed、run、signal、outputSchema、local_image",
+      "git_blob_sha": "ead1767a9444a6f0ec568aabc890b3d07761b386",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C08",
+      "title": "openai/codex · codex-rs/ext/image-generation/src/tool.rs",
+      "url": "https://github.com/openai/codex/blob/44dd77b71e88c78295736bffd3dc3b684c13be6d/codex-rs/ext/image-generation/src/tool.rs",
+      "evidence": "source_read",
+      "review_scope": "读取1–280行；生图／编辑、started／failed／completed、真实结果与保存路径",
+      "git_blob_sha": "d2777fb2023782ad7508fc4bddc097d33fb96359",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C09",
+      "title": "openai/codex · codex-rs/ext/image-generation/src/artifact.rs",
+      "url": "https://github.com/openai/codex/blob/44dd77b71e88c78295736bffd3dc3b684c13be6d/codex-rs/ext/image-generation/src/artifact.rs",
+      "evidence": "source_read",
+      "review_scope": "完整文件；产物路径及已显示的原生UI提示",
+      "git_blob_sha": "6c6fce0f9812d88daf5a53880a77485c6eea6cb3",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C10",
+      "title": "earendil-works/pi · packages/ai/src/api/openai-codex-responses.ts",
+      "url": "https://github.com/earendil-works/pi/blob/9fba660cf1caca0ade5bea72269352416e595a19/packages/ai/src/api/openai-codex-responses.ts",
+      "evidence": "source_read",
+      "review_scope": "读取1–175行；共享Responses工具、Abort组合、状态、重试与额度错误分类",
+      "git_blob_sha": "9c1831a021301c36f1669c326eb6c925a68ab11c",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C11",
+      "title": "earendil-works/pi · legacy API aliases / fetch tests",
+      "url": "https://github.com/earendil-works/pi/blob/9fba660cf1caca0ade5bea72269352416e595a19/packages/ai/src/legacy-api-aliases.ts",
+      "evidence": "source_search",
+      "review_scope": "检索定位弃用旧导出与新api入口；另检索packages/ai/test/fetch-option.test.ts，未执行",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C12",
+      "title": "pipecat-ai/pipecat · src/pipecat/transports/base_output.py",
+      "url": "https://github.com/pipecat-ai/pipecat/blob/cae1f51a4060b6acf679991e75374520069ef016/src/pipecat/transports/base_output.py",
+      "evidence": "source_read",
+      "review_scope": "读取1–185行；BaseOutputTransport、分块、sender、stop／cancel",
+      "git_blob_sha": "9fa039a198dcd656f82a8d4347b3f13463a0818d",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C13",
+      "title": "pipecat-ai/pipecat · InterruptionFrame",
+      "url": "https://github.com/pipecat-ai/pipecat/blob/cae1f51a4060b6acf679991e75374520069ef016/src/pipecat/frames/frames.py",
+      "evidence": "source_search",
+      "review_scope": "检索InterruptionFrame继承SystemFrame；未通读完整文件",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C14",
+      "title": "livekit/agents · livekit-agents/livekit/agents/voice/speech_handle.py",
+      "url": "https://github.com/livekit/agents/blob/8de48c229655d10ca3df3274ba77c20eef50c6c1/livekit-agents/livekit/agents/voice/speech_handle.py",
+      "evidence": "source_read",
+      "review_scope": "读取1–195行；独立scheduled/authorize/done/interruption状态、任务、回调与exception语义",
+      "git_blob_sha": "a65f4eac026b40f39812fa7c7f96474ef64c3aab",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C15",
+      "title": "zeikar/charivo · packages/render/src/render-manager.ts",
+      "url": "https://github.com/zeikar/charivo/blob/62f3a4369643d4e132cfc25104a15422e1155c05/packages/render/src/render-manager.ts",
+      "evidence": "source_read",
+      "review_scope": "读取1–240行；事件生命周期、口型、表情释放、muteSound、订阅清理",
+      "git_blob_sha": "b93b68091aa5dda6bd673a51895178c4dcf1ee7b",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C16",
+      "title": "zeikar/charivo · packages/render-live2d/LICENSE.md",
+      "url": "https://github.com/zeikar/charivo/blob/62f3a4369643d4e132cfc25104a15422e1155c05/packages/render-live2d/LICENSE.md",
+      "evidence": "source_read",
+      "review_scope": "完整许可说明；MIT自有代码、Cubism Core专有许可、Framework/Samples独立许可及模型分离",
+      "git_blob_sha": "1df67581fe89cbd43f25fd67f582048fb3f963d0",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C17",
+      "title": "moeru-ai/airi · packages/pipelines-audio/src/speech-pipeline.ts",
+      "url": "https://github.com/moeru-ai/airi/blob/731123861093abfd7fc34c0654ba9f99206ab944/packages/pipelines-audio/src/speech-pipeline.ts",
+      "evidence": "source_read",
+      "review_scope": "读取1–205行；intent/owner停止、AbortSignal、有序合成结果、播放回调和null跳过路径",
+      "git_blob_sha": "f8f11ee0600da379dc4f9aca6502a4f6c6c6c1c7",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C18",
+      "title": "Open-LLM-VTuber/Open-LLM-VTuber · src/open_llm_vtuber/conversations/conversation_handler.py",
+      "url": "https://github.com/Open-LLM-VTuber/Open-LLM-VTuber/blob/992309c0aa19845960228f880013d4685fde93b5/src/open_llm_vtuber/conversations/conversation_handler.py",
+      "evidence": "source_read",
+      "review_scope": "读取70–165行；handle_individual_interrupt取消任务、heard_response和中断历史",
+      "git_blob_sha": "02780b486bcb13783bf9a3b04b2dcbb5d182665f",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C19",
+      "title": "vectorize-io/hindsight · hindsight-clients/python/hindsight_client/hindsight_client.py",
+      "url": "https://github.com/vectorize-io/hindsight/blob/f7dd3f4fd7420f7beec60c32c965e5e5cf7be066/hindsight-clients/python/hindsight_client/hindsight_client.py",
+      "evidence": "source_read",
+      "review_scope": "读取1–160行；维护型client、内容类型、异步retain幂等条件、容量重试",
+      "git_blob_sha": "10a224555b674ddd70f6a79762f3ea4e3db2c4ee",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "C20",
+      "title": "statelyai/xstate · packages/core/src/Mailbox.ts",
+      "url": "https://github.com/statelyai/xstate/blob/fbee62e7c1586315ed478c2fedf530d7e0ff5a3e/packages/core/src/Mailbox.ts",
+      "evidence": "source_read",
+      "review_scope": "完整短文件；入队、clear保留在处理节点与串行flush",
+      "git_blob_sha": "43a2a65e2ca52c3ebe2091496dc8541f16af97a1",
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W01",
+      "title": "CLIProxyAPI 项目首页／功能与许可",
+      "url": "https://github.com/router-for-me/CLIProxyAPI",
+      "evidence": "documentation_read",
+      "review_scope": "README、许可标识、OAuth／Responses／SDK与usage统计说明；未使用赞助商宣传作为依据",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W02",
+      "title": "Codex App Server 官方文档",
+      "url": "https://developers.openai.com/codex/app-server",
+      "evidence": "documentation_read",
+      "review_scope": "App Server 接入及事件／中断合同；重定向至learn.chatgpt.com",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W03",
+      "title": "Codex Image generation 官方文档",
+      "url": "https://developers.openai.com/codex/image-generation",
+      "evidence": "documentation_read",
+      "review_scope": "原生生图与使用额度说明；具体账户未验证",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W04",
+      "title": "Pi 当前项目入口",
+      "url": "https://github.com/earendil-works/pi",
+      "evidence": "documentation_read",
+      "review_scope": "从旧badlogic/pi-mono入口确认重定向；项目与MIT标识",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W05",
+      "title": "Pipecat 项目入口",
+      "url": "https://github.com/pipecat-ai/pipecat",
+      "evidence": "documentation_read",
+      "review_scope": "项目能力与BSD-2-Clause；具体源码见C12/C13",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W06",
+      "title": "LiveKit Agents 项目入口",
+      "url": "https://github.com/livekit/agents",
+      "evidence": "documentation_read",
+      "review_scope": "语音框架、Apache-2.0及模型许可区别；具体源码见C14",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W07",
+      "title": "Charivo 项目入口",
+      "url": "https://github.com/zeikar/charivo",
+      "evidence": "documentation_read",
+      "review_scope": "模块化接口示例与包级许可说明；具体源码见C15/C16",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W08",
+      "title": "AIRI 项目入口",
+      "url": "https://github.com/moeru-ai/airi",
+      "evidence": "documentation_read",
+      "review_scope": "产品及MIT许可；具体音频代码见C17",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W09",
+      "title": "Open-LLM-VTuber 项目入口",
+      "url": "https://github.com/Open-LLM-VTuber/Open-LLM-VTuber",
+      "evidence": "documentation_read",
+      "review_scope": "已有语音角色实现与MIT／素材许可分离；代码见C18",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W10",
+      "title": "Hindsight 项目入口",
+      "url": "https://github.com/vectorize-io/hindsight",
+      "evidence": "documentation_read",
+      "review_scope": "retain/recall/reflect与显式SDK、自动包装器区别；MIT；代码见C19",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W11",
+      "title": "XState 项目入口",
+      "url": "https://github.com/statelyai/xstate",
+      "evidence": "documentation_read",
+      "review_scope": "actors/statecharts与MIT；代码见C20",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W12",
+      "title": "three-vrm 项目入口",
+      "url": "https://github.com/pixiv/three-vrm",
+      "evidence": "documentation_read",
+      "review_scope": "VRM加载与渲染路线、MIT；本轮未审具体实现",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W13",
+      "title": "ink README",
+      "url": "https://github.com/inkle/ink/blob/master/README.md",
+      "evidence": "documentation_read",
+      "review_scope": "通过GitHub读取README 1–145行；编译器、运行时与inkjs分工；非固定commit",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W14",
+      "title": "MSW 项目入口",
+      "url": "https://github.com/mswjs/msw",
+      "evidence": "documentation_read",
+      "review_scope": "浏览器和Node网络层Mock、handler复用及MIT；非源码深审",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W15",
+      "title": "Playwright 项目入口",
+      "url": "https://github.com/microsoft/playwright",
+      "evidence": "documentation_read",
+      "review_scope": "浏览器测试及Apache-2.0；非源码深审",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W16",
+      "title": "Playwright Mock APIs",
+      "url": "https://playwright.dev/docs/mock",
+      "evidence": "documentation_read",
+      "review_scope": "HTTP路由、HAR录制与回放，非设备音频证明",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W17",
+      "title": "fast-check 项目入口",
+      "url": "https://github.com/dubzzz/fast-check",
+      "evidence": "documentation_read",
+      "review_scope": "属性测试与MIT；非源码深审",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W18",
+      "title": "fast-check Race conditions",
+      "url": "https://fast-check.dev/docs/advanced/race-conditions/",
+      "evidence": "documentation_read",
+      "review_scope": "可控异步调度与竞态测试；不是所有浏览器物理调度的枚举",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W19",
+      "title": "浏览器VAD项目",
+      "url": "https://github.com/ricky0123/vad",
+      "evidence": "documentation_read",
+      "review_scope": "MicVAD回调、Silero/ONNX Runtime底层；本轮未审实现或包级许可",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "W20",
+      "title": "TypeSafe 官方API合同",
+      "url": "https://docs.typesafe.ai/api",
+      "evidence": "documentation_read",
+      "review_scope": "state/questions、Noul/Choice/Score、返回、错误；这是服务文档，不当作开源模型证据",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    },
+    {
+      "id": "VH01",
+      "title": "ValueHermes 总设计书（私有方法参考）",
+      "url": "https://github.com/Robinfxa/ValueHermes/blob/f141ccf842ffed23d33dba73e4da99b5703ccff8/docs/architecture/00-master-design-book.md",
+      "evidence": "source_document_read",
+      "review_scope": "读取1–44行；外部机制登记、三态对照与不自动承诺；不分发私有正文",
+      "git_blob_sha": null,
+      "review_date": "2026-10-02"
+    }
+  ]
+}

@@ -1,0 +1,272 @@
+[
+  {
+    "id": "RI-01",
+    "work_packages": [
+      "WP01"
+    ],
+    "modules": [
+      "M03",
+      "M09"
+    ],
+    "related_existing_case_ids": [],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-02",
+    "work_packages": [
+      "WP01"
+    ],
+    "modules": [
+      "M03",
+      "M09"
+    ],
+    "related_existing_case_ids": [],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-03",
+    "work_packages": [
+      "WP01",
+      "WP06"
+    ],
+    "modules": [
+      "M04",
+      "M09"
+    ],
+    "related_existing_case_ids": [
+      "M12",
+      "M15"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-04",
+    "work_packages": [
+      "WP01",
+      "WP05"
+    ],
+    "modules": [
+      "M01",
+      "M09"
+    ],
+    "related_existing_case_ids": [
+      "M11",
+      "M13"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-05",
+    "work_packages": [
+      "WP02"
+    ],
+    "modules": [
+      "M06",
+      "M09"
+    ],
+    "related_existing_case_ids": [
+      "M08"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-06",
+    "work_packages": [
+      "WP02"
+    ],
+    "modules": [
+      "M06",
+      "M09"
+    ],
+    "related_existing_case_ids": [
+      "M09"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-07",
+    "work_packages": [
+      "WP02",
+      "WP06"
+    ],
+    "modules": [
+      "M04",
+      "M06"
+    ],
+    "related_existing_case_ids": [
+      "M12",
+      "M20"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-08",
+    "work_packages": [
+      "WP03"
+    ],
+    "modules": [
+      "M04",
+      "M05"
+    ],
+    "related_existing_case_ids": [],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-09",
+    "work_packages": [
+      "WP03"
+    ],
+    "modules": [
+      "M03",
+      "M05"
+    ],
+    "related_existing_case_ids": [],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-10",
+    "work_packages": [
+      "WP04"
+    ],
+    "modules": [
+      "M03",
+      "M06"
+    ],
+    "related_existing_case_ids": [
+      "M26",
+      "M27"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-11",
+    "work_packages": [
+      "WP04"
+    ],
+    "modules": [
+      "M04",
+      "M06"
+    ],
+    "related_existing_case_ids": [
+      "M14"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-12",
+    "work_packages": [
+      "WP05"
+    ],
+    "modules": [
+      "M01",
+      "M04"
+    ],
+    "related_existing_case_ids": [
+      "M09",
+      "M11",
+      "M13"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-13",
+    "work_packages": [
+      "WP05"
+    ],
+    "modules": [
+      "M01",
+      "M06"
+    ],
+    "related_existing_case_ids": [
+      "M16",
+      "M17",
+      "M23"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-14",
+    "work_packages": [
+      "WP06"
+    ],
+    "modules": [
+      "M04"
+    ],
+    "related_existing_case_ids": [],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-15",
+    "work_packages": [
+      "WP06"
+    ],
+    "modules": [
+      "M04"
+    ],
+    "related_existing_case_ids": [],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-16",
+    "work_packages": [
+      "WP07"
+    ],
+    "modules": [
+      "M08"
+    ],
+    "related_existing_case_ids": [
+      "M24",
+      "M25"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-17",
+    "work_packages": [
+      "WP07"
+    ],
+    "modules": [
+      "M04",
+      "M08"
+    ],
+    "related_existing_case_ids": [
+      "M12",
+      "M13",
+      "M15"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-18",
+    "work_packages": [
+      "WP08"
+    ],
+    "modules": [
+      "M08",
+      "M09"
+    ],
+    "related_existing_case_ids": [
+      "M20",
+      "M22"
+    ],
+    "relation": "编辑性相关性索引；非等价或替代覆盖",
+    "execution_status": "not_run"
+  }
+]

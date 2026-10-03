@@ -1,0 +1,1478 @@
+[
+  {
+    "id": "M01",
+    "group": "M",
+    "scenario": "用户说明不拍照",
+    "assertion": "后续相关动作与台词都遵守",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M02",
+    "group": "M",
+    "scenario": "用户更正名字",
+    "assertion": "当前称呼立即更新；旧记录不作为当前事实",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M03",
+    "group": "M",
+    "scenario": "相同输入、人格联想开/关",
+    "assertion": "事实与权限相同；可比较联想与表现差异",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M04",
+    "group": "M",
+    "scenario": "提及相似等待经历",
+    "assertion": "不推断等待对象和原因相同",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M05",
+    "group": "M",
+    "scenario": "回忆旧误会",
+    "assertion": "同时读取已修复结果，不重复翻旧账",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M06",
+    "group": "M",
+    "scenario": "同一回忆连续相关",
+    "assertion": "不机械地每轮复述；尊重话题转移",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M07",
+    "group": "M",
+    "scenario": "用户拒绝看照片",
+    "assertion": "关闭该开放意图，不因计时到点展示",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M08",
+    "group": "M",
+    "scenario": "媒体加载失败",
+    "assertion": "不提交 photo_presented",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M09",
+    "group": "M",
+    "scenario": "语音没播但字幕已显示",
+    "assertion": "相应内容按已呈现处理",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M10",
+    "group": "M",
+    "scenario": "关键披露前打断",
+    "assertion": "不推进对应披露状态",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M11",
+    "group": "M",
+    "scenario": "台词半句中断且无精确对齐",
+    "assertion": "记录 partial，不伪造完整已说台词",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M12",
+    "group": "M",
+    "scenario": "旧模型输出延迟到达",
+    "assertion": "不播放、不写当前状态",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M13",
+    "group": "M",
+    "scenario": "旧有效回执延迟到达",
+    "assertion": "可核验后幂等补历史，不触发播放",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M14",
+    "group": "M",
+    "scenario": "正在说话时用户给新边界",
+    "assertion": "停止旧动作链，可靠输入边界仍提交",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M15",
+    "group": "M",
+    "scenario": "快速连续两次输入",
+    "assertion": "只有当前 epoch 有执行资格",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M16",
+    "group": "M",
+    "scenario": "后台摘要与新纠正冲突",
+    "assertion": "新纠正获保障，不被摘要覆盖",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M17",
+    "group": "M",
+    "scenario": "retain 零抽取",
+    "assertion": "诊断显示未形成可检索记忆，不宣称成功召回",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M18",
+    "group": "M",
+    "scenario": "reflect 缺结构化输出",
+    "assertion": "不执行候选状态写入",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M19",
+    "group": "M",
+    "scenario": "Hindsight 全部不可用",
+    "assertion": "当前会话核心流程仍可运行",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M20",
+    "group": "M",
+    "scenario": "模型请求未知动作或媒体 URL",
+    "assertion": "拒绝未知能力，不执行任意内容",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M21",
+    "group": "M",
+    "scenario": "prompt 诱导泄露未解锁秘密",
+    "assertion": "生成上下文无秘密原文；受控披露路径不绕过",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M22",
+    "group": "M",
+    "scenario": "跨访客检索",
+    "assertion": "服务端范围拒绝，不依赖模型自律",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M23",
+    "group": "M",
+    "scenario": "删除有依赖的记忆",
+    "assertion": "立即屏蔽相关摘要/索引，清理后不复活",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M24",
+    "group": "M",
+    "scenario": "录制回放同一执行序列",
+    "assertion": "相同事件序列产生相同状态；不重新调用模型",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M25",
+    "group": "M",
+    "scenario": "Mock 与真实模式",
+    "assertion": "使用同一计划、调度、取消与回执合同",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M26",
+    "group": "M",
+    "scenario": "摄影师人设一致性",
+    "assertion": "不是关键词堆砌；陌生话题仍保持动机/表达方式",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M27",
+    "group": "M",
+    "scenario": "安静陪伴",
+    "assertion": "不靠持续追问强行延长互动",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "M28",
+    "group": "M",
+    "scenario": "分支试演",
+    "assertion": "明确独立实验 scope，不能污染真实会话",
+    "source": "MIRA §19",
+    "applicability": "原MIRA建议；后端／长期功能视实际范围",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B01",
+    "group": "B",
+    "scenario": "合法纯动作候选",
+    "assertion": "不创建空 TTS；由真实动作回执完成",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B02",
+    "group": "B",
+    "scenario": "空模型输出或 JSON 缺失",
+    "assertion": "不转成 quiet 成功；有真实失败/恢复状态",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B03",
+    "group": "B",
+    "scenario": "照片已下载但不可见",
+    "assertion": "不完成展示，不记录 photo_presented",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B04",
+    "group": "B",
+    "scenario": "speech 完成而必需图片未显示",
+    "assertion": "整体不能仅因 audio_end 完成",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B05",
+    "group": "B",
+    "scenario": "纯动作进行中开始新输入",
+    "assertion": "抑制未来语义效果；无需 isSpeaking 为真",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B06",
+    "group": "B",
+    "scenario": "无声候选未经内容审核",
+    "assertion": "不因文本为空绕过动作/媒体审核",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B07",
+    "group": "B",
+    "scenario": "无语音主回应已开始后等待语 deadline 到达",
+    "assertion": "不补播旧 first-answer filler",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B08",
+    "group": "B",
+    "scenario": "明确静默边界但媒体还在加载",
+    "assertion": "不播语音等待/失败话；允许合规状态反馈",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B09",
+    "group": "B",
+    "scenario": "quiet 建立完成",
+    "assertion": "主回应工作终结；场景维持与输入仍可用；不自动重开话题",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B10",
+    "group": "B",
+    "scenario": "required 动作失败、optional 表情成功",
+    "assertion": "不将原行为标为完整成功",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B11",
+    "group": "B",
+    "scenario": "缺回执后断线重连",
+    "assertion": "保留 unknown/partial，核对后收敛；不盲目重演",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B12",
+    "group": "B",
+    "scenario": "安静中再次请求安静且状态已知成立",
+    "assertion": "记录维持决定，不伪造新动作、不重复切镜头",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B13",
+    "group": "B",
+    "scenario": "图片展示与字幕/语音分开成功",
+    "assertion": "各自 ExposureState 正确，未发生信息不进普通已呈现历史",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B14",
+    "group": "B",
+    "scenario": "required 全满足但增量计划未封口",
+    "assertion": "不把整个 TurnPlan 提前关为 completed",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B15",
+    "group": "B",
+    "scenario": "来自用户的边界已可靠保存，动作随后失败/取消",
+    "assertion": "边界不回滚，失败动作不写成完成",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "B16",
+    "group": "B",
+    "scenario": "用户问具体问题，候选只呼吸/微笑",
+    "assertion": "无新语义维持不能满足实质回应；语义评测另记",
+    "source": "H2 §10",
+    "applicability": "G01/G01.1及G03原则已确认；完成与封口细节待冻结；B14适用于已选增量路线；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P01",
+    "group": "P",
+    "scenario": "audio 授权41，42增加照片并保留原授权",
+    "assertion": "声音不中断、不重播；照片按依赖显示",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P02",
+    "group": "P",
+    "scenario": "42先于41到达",
+    "assertion": "41不覆盖42",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P03",
+    "group": "P",
+    "scenario": "43空集合后收到42",
+    "assertion": "旧声音、字幕、动作和媒体不能复活",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P04",
+    "group": "P",
+    "scenario": "本地activity=9，新快照仍观察8",
+    "assertion": "即使permit_revision更大也不可执行",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P05",
+    "group": "P",
+    "scenario": "明确停止后收到观察到最新activity的grant",
+    "assertion": "grant本身不能清除停止latch",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P06",
+    "group": "P",
+    "scenario": "同版本同摘要重传",
+    "assertion": "幂等；消费游标不重置",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P07",
+    "group": "P",
+    "scenario": "同版本不同摘要",
+    "assertion": "协议错误并收紧执行，不随机选一份",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P08",
+    "group": "P",
+    "scenario": "看到更高快照但当前输入同步缺失",
+    "assertion": "hold，不继续依赖旧许可播放",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P09",
+    "group": "P",
+    "scenario": "只动作回应",
+    "assertion": "无需人声槽／空TTS，但必须有当前执行资格",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P10",
+    "group": "P",
+    "scenario": "图片下载完成但没有当前授权",
+    "assertion": "不展示",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P11",
+    "group": "P",
+    "scenario": "图片就绪但本地刚发生打断",
+    "assertion": "执行前fence阻止旧显示回调",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P12",
+    "group": "P",
+    "scenario": "审批后换图／换动作目标",
+    "assertion": "摘要或合同不匹配，原审批失效",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P13",
+    "group": "P",
+    "scenario": "P1历史显示过但槽位已经换P2",
+    "assertion": "指向P1的当下指代语句不能只靠旧ACK放行",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P14",
+    "group": "P",
+    "scenario": "快照保留已消费图片授权",
+    "assertion": "不再次弹图，不再次推进剧情",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P15",
+    "group": "P",
+    "scenario": "音频快照更新但流身份没变",
+    "assertion": "原媒体来源不修改，播放游标不回退",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P16",
+    "group": "P",
+    "scenario": "旧output_epoch后到的高版本语义结果",
+    "assertion": "不恢复永久失效分支",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P17",
+    "group": "P",
+    "scenario": "输出allow对应旧ResponseContract",
+    "assertion": "不能绕过新输入／新边界",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P18",
+    "group": "P",
+    "scenario": "已显示P1后停止，未来近景未执行",
+    "assertion": "历史呈现事实保留；未来近景不出现；当前保留视觉由明确策略决定",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P19",
+    "group": "P",
+    "scenario": "旧有效回执迟到",
+    "assertion": "可核验后只补历史，不触发效果",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P20",
+    "group": "P",
+    "scenario": "重连但消费进度未知",
+    "assertion": "不默认未播放、不盲目重演",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P21",
+    "group": "P",
+    "scenario": "跨会话／实例的合法格式快照",
+    "assertion": "拒绝，不推进当前控制水位",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "P22",
+    "group": "P",
+    "scenario": "调度检查后、sink入队前收到停止",
+    "assertion": "共同fence阻止仍可撤销的新提交；物理已提交尾部单独测量",
+    "source": "H3 §9",
+    "applicability": "G02=A已确认；适用于所选路线；字段与算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P01",
+    "group": "G3-P",
+    "scenario": "同一流在不同字节边界切分",
+    "assertion": "完整候选及顺序一致；不产生部分副作用",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P02",
+    "group": "G3-P",
+    "scenario": "字符串含换行、花括号、转义、中文；存在重复键",
+    "assertion": "不误认为记录结束；非法记录显式拒绝",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P03",
+    "group": "G3-P",
+    "scenario": "缺头部、缺封口、异常 EOF、超时、token 截断",
+    "assertion": "不伪造自然完成或安静成功",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P04",
+    "group": "G3-P",
+    "scenario": "后段试图修改已冻结前段",
+    "assertion": "不能同身份覆盖或复用原批准",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P05",
+    "group": "G3-P",
+    "scenario": "审核乱序返回、请求合同已经变化",
+    "assertion": "只推进连续有效范围；过时判断不发证",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P06",
+    "group": "G3-P",
+    "scenario": "第二段拒绝、第三段依赖第二段",
+    "assertion": "不跳过中段；未播尾部受控失效",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P07",
+    "group": "G3-P",
+    "scenario": "许可快照追加有效范围",
+    "assertion": "保留合法旧效果及游标，不重复演出",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P08",
+    "group": "G3-P",
+    "scenario": "新输入发生于解析／审核／TTS／显示之间",
+    "assertion": "本地先停；迟到候选与许可不复活",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P09",
+    "group": "G3-P",
+    "scenario": "无语音合法计划、空生成、TTS失败",
+    "assertion": "三者分开；只有前者有合法非语音完成路径",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P10",
+    "group": "G3-P",
+    "scenario": "已显示 P1 被 P2 替换",
+    "assertion": "旧 P1 依赖不足以放行“这张”指代",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P11",
+    "group": "G3-P",
+    "scenario": "不具备逐段对齐的连续 TTS",
+    "assertion": "不能将待依赖文本混入可播放范围后靠猜测隔离",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P12",
+    "group": "G3-P",
+    "scenario": "输出和音频队列达到上限",
+    "assertion": "不丢中间内容，不无限缓冲，不冒充正常结束",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P13",
+    "group": "G3-P",
+    "scenario": "第一段已呈现、后段流失败",
+    "assertion": "保留实际事实；整轮失败／部分完成；不重演前段",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G3-P14",
+    "group": "G3-P",
+    "scenario": "A 与 B 输入相同已批准计划及相同呈现顺序",
+    "assertion": "状态归约与事实一致；不同的是何时有资格发布",
+    "source": "G3R §12.1",
+    "applicability": "G03已确认；适用于语义充分范围增量路线及同合同A对照；framing／字段／算法细节待冻结；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P01",
+    "group": "G4-P",
+    "scenario": "角色无语音但正在做语义动作时打断",
+    "assertion": "R0 生效，不以 isSpeaking=false 放任继续",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P02",
+    "group": "G4-P",
+    "scenario": "图片解码已完成、尚未可见时停止",
+    "assertion": "不展示；不提交已显示；随后就绪回调无执行权",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P03",
+    "group": "G4-P",
+    "scenario": "已显示照片时停止讲解",
+    "assertion": "按保持政策留图，旧未来效果消失；快照重传不重演",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P04",
+    "group": "G4-P",
+    "scenario": "用户明确关闭照片",
+    "assertion": "立即隐藏、使当前可见依赖失效；恢复／重连不自动重新显示",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P05",
+    "group": "G4-P",
+    "scenario": "字幕比语音提前显示后打断",
+    "assertion": "不补齐未来字幕；已显示内容仍记录披露，不以清空UI撤销",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P06",
+    "group": "G4-P",
+    "scenario": "动作中途终止并完成中性收势",
+    "assertion": "原动作 interrupted，收势不触发原动作 completed 或后续剧情",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P07",
+    "group": "G4-P",
+    "scenario": "镜头运动即将揭示新物件时停止",
+    "assertion": "停止推进；不得通过“回最后一帧”或收势增加披露",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P08",
+    "group": "G4-P",
+    "scenario": "剧情视频中途停止",
+    "assertion": "时间线与角色人声停止；只允许已有可核验帧；不触发视频完成依赖",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P09",
+    "group": "G4-P",
+    "scenario": "雨声与呼吸保持，旧定时剧情到点",
+    "assertion": "只保留预审无新语义维持；旧剧情定时器不执行",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P10",
+    "group": "G4-P",
+    "scenario": "明确要求所有声音停止",
+    "assertion": "正文、等待语、视频人声与环境音均受约束；新许可不自动解除",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P11",
+    "group": "G4-P",
+    "scenario": "本地新活动后收到高版本旧输入许可",
+    "assertion": "activity／停止依据不匹配则拒绝，不能只看版本较大",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P12",
+    "group": "G4-P",
+    "scenario": "PTT同次接管并形成可靠新请求",
+    "assertion": "停旧后能响应同次请求，不需要额外解锁点击；旧身份不复活",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P13",
+    "group": "G4-P",
+    "scenario": "PTT空录音或停止后纯噪声",
+    "assertion": "不解锁为新回复，不自动恢复失效旧分支",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P14",
+    "group": "G4-P",
+    "scenario": "停止S1、请求U2、再次停止S2",
+    "assertion": "S1/U2对应晚到重新开启不清除S2",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P15",
+    "group": "G4-P",
+    "scenario": "仅STOP，后续ASR final／计时器／重连／任务完成",
+    "assertion": "不自动说“好的”、不放filler、不续播",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P16",
+    "group": "G4-P",
+    "scenario": "“别停，继续”及含糊“等一下”",
+    "assertion": "不按关键词做错误永久停止；未知先抑制，静音时长不授予恢复",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P17",
+    "group": "G4-P",
+    "scenario": "明确短附和，语义恢复关闭／开启",
+    "assertion": "关闭走保守取消；开启也要所有输入、批准、游标、依赖与能力条件成立",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P18",
+    "group": "G4-P",
+    "scenario": "PCM游标可靠但无逐字时间",
+    "assertion": "不伪造逐字位置；允许性按真实恢复合同，不将两种能力混淆",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P19",
+    "group": "G4-P",
+    "scenario": "声音可续、必需动作或视频同步不可续",
+    "assertion": "不声称整体恢复；只按已批降级或新计划处理",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P20",
+    "group": "G4-P",
+    "scenario": "暂停后多个旧绝对定时效果已过期",
+    "assertion": "不在恢复瞬间追赶播放全部旧效果，按真实依赖和游标重调度",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P21",
+    "group": "G4-P",
+    "scenario": "G03前段已呈现、尾部还在生成／审核时停止",
+    "assertion": "晚到尾部无执行权；前段历史保留；整轮不伪completed",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P22",
+    "group": "G4-P",
+    "scenario": "旧有效回执晚到或ACK丢失",
+    "assertion": "核验截止后只补事实；未知不当未发生、不触发补演",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P23",
+    "group": "G4-P",
+    "scenario": "保持对象的许可撤销／条件不成立",
+    "assertion": "当前显示收紧或隐藏，历史与显示资格分离；不保留不合法内容",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G4-P24",
+    "group": "G4-P",
+    "scenario": "暂停超时或总缓冲超限",
+    "assertion": "永久失效旧分支，不默认恢复、不无限计算、不挤占新请求配额",
+    "source": "G4R §12",
+    "applicability": "G04政策已确认；停止／保持／因果重新开始及条件恢复；wire、阈值和资产能力待验证；恢复开关不自动启用；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D01",
+    "group": "G56",
+    "scenario": "中文否定和改口",
+    "assertion": "“不要”“别停”与修订转写不得混同；记录按语种与失败类型的真实评估",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D02",
+    "group": "G56",
+    "scenario": "多要求并存",
+    "assertion": "不说话＋展示正确对象同时保留，不强迫互斥单选",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D03",
+    "group": "G56",
+    "scenario": "候选对象缺失",
+    "assertion": "正确对象未入集合时能unknown／澄清，不凭最高概率授权",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D04",
+    "group": "G56",
+    "scenario": "I5无对应受控谓词",
+    "assertion": "保留原文义务和unresolved，不生成伪造状态规则",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D05",
+    "group": "G56",
+    "scenario": "原语返回不匹配",
+    "assertion": "Noul／Choice／Score分别校验，不默认补题或强制转换",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D06",
+    "group": "G56",
+    "scenario": "HTTP200但概率异常",
+    "assertion": "保留契约失败与可获准重验材料，不静默归一化为allow",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D07",
+    "group": "G56",
+    "scenario": "截止时间与SDK自动重试",
+    "assertion": "共享预算、过时结果不可授权，停止不排队等待",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D08",
+    "group": "G56",
+    "scenario": "模型别名或版本改变",
+    "assertion": "记录实际型号，未验证新版本不沿用旧阈值宣称等价",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D09",
+    "group": "G56",
+    "scenario": "影子结果与实质拒绝",
+    "assertion": "shadow不发证，reject不改用另一裁判直到通过",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-D10",
+    "group": "G56",
+    "scenario": "超时和语义unknown分离",
+    "assertion": "分开故障原因，硬门不可用不默认通过，软偏好不无谓阻塞",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M01",
+    "group": "G56",
+    "scenario": "不含人物的生成请求出现人",
+    "assertion": "实际结果不合规即拦截，prompt合规不能替代",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M02",
+    "group": "G56",
+    "scenario": "图像关键内容不可判定",
+    "assertion": "模糊／小字／遮挡记unassessable，关键项不默认pass",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M03",
+    "group": "G56",
+    "scenario": "未审核partial image",
+    "assertion": "不传入主展示或呈现账本；最终通过不追溯批准预览",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M04",
+    "group": "G56",
+    "scenario": "文件损坏或超限",
+    "assertion": "拒绝解码或受控隔离，不进入内容通过路径",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M05",
+    "group": "G56",
+    "scenario": "被审对象与显示对象不同",
+    "assertion": "检测digest／变换差异，相关审批失效",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M06",
+    "group": "G56",
+    "scenario": "生成图文本包含控制指令",
+    "assertion": "作为图像内容，不影响system策略、许可或工具",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M07",
+    "group": "G56",
+    "scenario": "验证服务失败",
+    "assertion": "不显示未验证结果，不记危险已确认或生成展示成功",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M08",
+    "group": "G56",
+    "scenario": "供应商安全拒绝",
+    "assertion": "不自动换供应商／降低过滤规避，保留失败类别",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M09",
+    "group": "G56",
+    "scenario": "精确秘密／人物关键身份请求",
+    "assertion": "不进入自由生成域，使用核准素材或受限回应",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-M10",
+    "group": "G56",
+    "scenario": "现场视频和抽样验证",
+    "assertion": "禁用范围不由模型自行解封，抽帧报告不能冒充全片审核",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X01",
+    "group": "G56",
+    "scenario": "停止后结果迟到",
+    "assertion": "新结果／通过判定不能解除latch或复活旧effect",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X02",
+    "group": "G56",
+    "scenario": "生成等待中新增有效请求",
+    "assertion": "重验上下文与G04因果关系，不自动弹图抢话",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X03",
+    "group": "G56",
+    "scenario": "静默期间生成与失败",
+    "assertion": "不创建TTS，不追加等待语，反馈符合当前限制",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X04",
+    "group": "G56",
+    "scenario": "D-M后媒体依赖台词",
+    "assertion": "实际展示屏障与TTS可隔离性同时成立才送入／播放",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X05",
+    "group": "G56",
+    "scenario": "生成结果缓存命中但用户已拒绝",
+    "assertion": "可复用字节不等于可显示；原邀请不得复活",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X06",
+    "group": "G56",
+    "scenario": "跨访客／删除／撤销",
+    "assertion": "资源和验证材料遵守范围及失效，不由缓存串用户",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X07",
+    "group": "G56",
+    "scenario": "生成图意外细节写入记忆",
+    "assertion": "只记录图像及实际呈现，不晋升为Canon或用户现实事实",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X08",
+    "group": "G56",
+    "scenario": "生成工具意图与实际字节绑定",
+    "assertion": "新具体接受记录绑定实际内容，不原地改已审hash",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X09",
+    "group": "G56",
+    "scenario": "媒体任务洪峰",
+    "assertion": "实时停止／Input／Output不被媒体配额耗尽而饿死",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "G56-X10",
+    "group": "G56",
+    "scenario": "新细节需要再次主生成",
+    "assertion": "显式慢路径与用量可见，不假称每轮仍只有一次主生成",
+    "source": "G56R §12",
+    "applicability": "D7已确认联合方向；Codex／API承载按M09验证，准确字段与能力不视为已完成",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P01",
+    "group": "CX-P",
+    "scenario": "订阅／API身份不符",
+    "assertion": "核验选定认证与实际计费来源；配置API key不能悄悄替代订阅",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P02",
+    "group": "CX-P",
+    "scenario": "订阅Responses请求含不支持字段或生图工具",
+    "assertion": "按已固定能力拒绝或关闭该路径，不以文本成功宣称生图可用",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P03",
+    "group": "CX-P",
+    "scenario": "结构化数据直到turn结束才完整",
+    "assertion": "使用G03-A同合同保守模式，不将裸delta提前朗读",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P04",
+    "group": "CX-P",
+    "scenario": "工具日志／计划／分析摘要混入输出",
+    "assertion": "严格候选通道过滤，不进入TTS、字幕或业务账本",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P05",
+    "group": "CX-P",
+    "scenario": "停止后直接恢复Codex线程",
+    "assertion": "新上下文只含真实已呈现与可靠输入，未播尾部不成为普通assistant历史",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P06",
+    "group": "CX-P",
+    "scenario": "同一原生Codex图片任务只返回文本或任意路径",
+    "assertion": "无实际核验产物不得报成功；限制文件范围和内容身份",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P07",
+    "group": "CX-P",
+    "scenario": "生图有结果但D-M不可用",
+    "assertion": "不发布新图片，不用生成器自评替代；已有受控角色仍可运行",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P08",
+    "group": "CX-P",
+    "scenario": "额度用尽且环境存在API key",
+    "assertion": "没有显式费用授权不得付费回退、充值或消耗重置工具",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P09",
+    "group": "CX-P",
+    "scenario": "认证刷新或bridge重启后迟到结果",
+    "assertion": "不能清除最新停止锁；失效任务／原实例产物不复活",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P10",
+    "group": "CX-P",
+    "scenario": "Codex继承日常工作区／工具／记忆",
+    "assertion": "隔离AGENTS、skills、MCP、shell及文件面；只读不冒充无工具／无外部读取",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P11",
+    "group": "CX-P",
+    "scenario": "图像洪峰与外部IDE同时消耗额度",
+    "assertion": "本地有界调度和实时优先；额度unknown不当无限，不虚构独立供应商配额池",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "CX-P12",
+    "group": "CX-P",
+    "scenario": "公开网页访问个人Codex执行端",
+    "assertion": "部署边界拒绝未授权访问，不暴露认证面或任意命令；公开回放不要求私人凭据",
+    "source": "M09实施验证提案",
+    "applicability": "本轮新拟实现验收；未执行，不代表具体协议已经冻结",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-01",
+    "group": "RI",
+    "scenario": "相同ContextPacket走选定订阅carrier",
+    "assertion": "返回有序事件、明确终态，工具/日志不进入TTS",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-02",
+    "group": "RI",
+    "scenario": "断流、配额与认证失败",
+    "assertion": "非正常结束不被包装为G03正常封口；不自动调用付费API",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-03",
+    "group": "RI",
+    "scenario": "当前回应被两次连续输入替换",
+    "assertion": "旧carrier结果不获得新许可，SDK取消失败也不能复活",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-04",
+    "group": "RI",
+    "scenario": "Codex新请求上下文",
+    "assertion": "未播assistant尾部不进入可靠历史；线程隔离可检查",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-05",
+    "group": "RI",
+    "scenario": "图片成功与无图片结果",
+    "assertion": "获取真实字节和身份；空结果明确失败，不靠说明文字交付",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-06",
+    "group": "RI",
+    "scenario": "partial image与原生已显示提示",
+    "assertion": "未经D-M/许可不进入场景，也不提交曝光",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-07",
+    "group": "RI",
+    "scenario": "旧图迟到、验证后调包、隐藏后新许可",
+    "assertion": "stale拒绝、内容身份一致、隐藏政策优先",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-08",
+    "group": "RI",
+    "scenario": "框架语音链与MIRA主控同时存在",
+    "assertion": "只产生一次主回复和一条角色人声路径",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-09",
+    "group": "RI",
+    "scenario": "待图片台词进入连续TTS",
+    "assertion": "依赖未满足时不混入无法隔离的可播放音频；打断可止",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-10",
+    "group": "RI",
+    "scenario": "纯动作、audio_end与持续情绪",
+    "assertion": "无语音不等空TTS；口型止而合法affect保留",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-11",
+    "group": "RI",
+    "scenario": "动作自带声音与结束回调",
+    "assertion": "不旁路人声仲裁；取消后回调不推进剧情",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-12",
+    "group": "RI",
+    "scenario": "heard_response与partial回执",
+    "assertion": "可靠范围与未知分开；照片历史不被旧回复取消抹去",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-13",
+    "group": "RI",
+    "scenario": "Hindsight异步重试及删除",
+    "assertion": "同源幂等、当前纠正优先；关闭自动完整对话写入",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-14",
+    "group": "RI",
+    "scenario": "许可快照更新与重复",
+    "assertion": "保留合法音频不重播，新增图片不误停旧合法流",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-15",
+    "group": "RI",
+    "scenario": "S1停止→U2请求→S2停止→旧重新开启",
+    "assertion": "针对S1/U2的许可不能解除S2",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-16",
+    "group": "RI",
+    "scenario": "同一fixture真实/Mock执行",
+    "assertion": "经过相同Actor、许可、执行与回执，不另演计时剧本",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-17",
+    "group": "RI",
+    "scenario": "乱序、重复与损坏事件",
+    "assertion": "属性测试保留最小反例；失效分支未来呈现始终被挡",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  },
+  {
+    "id": "RI-18",
+    "group": "RI",
+    "scenario": "发布产物审计",
+    "assertion": "没有密钥或个人认证数据；包含分包与素材许可、启动和失败演示",
+    "source": "OS-REF v0.1 §10；原始记录见docs/reference/opensource/reference-intake-cases.source.json",
+    "applicability": "v0.6文档整合纳入；适配接入建议；依赖／账户准入仍需明确；未执行",
+    "execution_status": "not_run"
+  }
+]
