@@ -5,6 +5,7 @@ import type { PlaybackOptions, CaptureOptions, AudioStopReason, CapturedAudio, P
 import type { EffectExecutor } from '../presentation/ports.js';
 import { safeSessionError } from '../diagnostics/status.js';
 import { PresentationGate } from '../presentation/permit-gate.js';
+import { MiraHttpError } from './api-client.js';
 import type { MicrophoneStream, SessionTransport, VoiceCapabilities } from './ports.js';
 
 export interface SessionViewPort {
@@ -15,8 +16,10 @@ export interface SessionViewPort {
   capabilities?(value: VoiceCapabilities): void;
   rehearsalInput?(state: 'listening' | 'stopped'): void;
   microphone?(state: 'starting' | 'recording' | 'finishing' | 'stopped'): void;
+  reviewAudition?(state: 'starting' | 'playing' | 'stopped' | 'completed' | 'failed'): void;
 }
-type PlaybackPort = Pick<CancelSafePlayback, 'unlock' | 'open' | 'stop' | 'reconcileAuthorization' | 'close'>;
+type PlaybackPort = Pick<CancelSafePlayback, 'unlock' | 'open' | 'stop' | 'reconcileAuthorization' | 'close'
+  | 'audition' | 'stopAudition' | 'quiescent'>;
 type CapturePort = Pick<MicrophoneCapture, 'start' | 'stop' | 'close'>;
 export interface ControllerOptions {
   readonly createPlayback?: (options: PlaybackOptions) => PlaybackPort;
@@ -26,7 +29,7 @@ export interface ControllerOptions {
 }
 export type SessionInputOutcome =
   | { readonly status: 'submitted' }
-  | { readonly status: 'not-sent'; readonly text: string; readonly reason: 'history-failed' | 'history-timeout' }
+  | { readonly status: 'not-sent'; readonly text: string; readonly reason: 'history-failed' | 'history-timeout' | 'history-pending' }
   | { readonly status: 'superseded' }
   | { readonly status: 'closed' }
   | { readonly status: 'unknown' }
@@ -47,6 +50,7 @@ interface RehearsalInputRun {
 }
 interface MicrophoneRun {
   readonly generation: number;
+  readonly streamId: string;
   readonly abort: AbortController;
   readonly queue: CapturedAudio[];
   queuedBytes: number;
@@ -127,6 +131,7 @@ export class SessionController {
       isAuthorized: origin => !this.closed && this.gate?.isAuthorized(origin) === true,
       onFact: fact => this.playbackFact(fact),
       onError: error => { if (!this.closed) this.view.error(error.message); },
+      onAuditionState: state => { if (!this.closed) this.view.reviewAudition?.(state); },
     });
     this.capture = (options.createCapture ?? (settings => new MicrophoneCapture(settings)))({
       onChunk: chunk => this.captureChunk(chunk),
@@ -287,7 +292,7 @@ export class SessionController {
       else this.view.error('Audio could not start. Text input is still available; try again from a user gesture.');
     }).catch(error => { if (this.current(generation)) this.report(error); });
   }
-  async input(text: string): Promise<SessionInputOutcome> {
+  async input(text: string, sourceAudioStreamId?: string): Promise<SessionInputOutcome> {
     if (!text.trim()) return { status: 'ignored' };
     if (this.closed || !this.gate) return { status: 'closed' };
     const generation = this.interrupt('new-input');
@@ -306,13 +311,20 @@ export class SessionController {
     }
     const abort = new AbortController(); this.activityRequest = abort;
     try {
-      const snapshot = await this.api.input({...basis, request_id: id, text}, abort.signal);
+      const snapshot = await this.api.input({...basis, request_id: id, text,
+        ...(sourceAudioStreamId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(sourceAudioStreamId)
+          ? {source_audio_stream_id: sourceAudioStreamId} : {})}, abort.signal);
       if (this.current(generation)) { this.install(snapshot); return { status: 'submitted' }; }
       return this.closed ? { status: 'closed' } : { status: 'superseded' };
     } catch (error) {
+      if (this.current(generation) && error instanceof MiraHttpError
+        && error.status === 409 && error.code === 'history_pending') {
+        this.fail(new Error('上一轮可见内容尚未确认保存；本次输入未送出。请等待状态更新后重试。'));
+        return {status: 'not-sent', text, reason: 'history-pending'};
+      }
       if (this.current(generation)) { this.fail(error); return { status: 'unknown' }; }
       return this.closed ? { status: 'closed' } : { status: 'superseded' };
-    }
+    } finally { if (this.activityRequest === abort) this.activityRequest = null; }
   }
   async stop(): Promise<void> {
     if (!this.gate || this.closed) return;
@@ -325,6 +337,7 @@ export class SessionController {
       const snapshot = await this.api.stop(basis, abort.signal);
       if (this.current(generation)) this.install(snapshot);
     } catch (error) { if (this.current(generation)) this.fail(error); }
+    finally { if (this.activityRequest === abort) this.activityRequest = null; }
   }
 
   private startSpeech(): void {
@@ -477,7 +490,8 @@ export class SessionController {
       if (!this.current(generation) || this.rehearsalInput !== run) return;
       if (snapshot.activity_seq !== basis.activity_seq) throw new Error('Rehearsal input was superseded');
       this.install(snapshot);
-    }).catch(error => { if (this.current(generation) && this.rehearsalInput === run) this.fail(error); });
+    }).catch(error => { if (this.current(generation) && this.rehearsalInput === run) this.fail(error); })
+      .finally(() => { if (this.activityRequest === abort) this.activityRequest = null; });
     await run.ready;
   }
   async finishRehearsalInput(): Promise<SessionInputOutcome | undefined> {
@@ -499,7 +513,8 @@ export class SessionController {
     const basis = this.gate.stop();
     this.effects.prepareInput();
     this.unlock(generation);
-    const run: MicrophoneRun = {generation, abort: new AbortController(), queue: [], queuedBytes: 0,
+    const streamId = crypto.randomUUID();
+    const run: MicrophoneRun = {generation, streamId, abort: new AbortController(), queue: [], queuedBytes: 0,
       released: false, transport: null, setup: Promise.resolve(), finishing: null};
     this.microphone = run;
     this.activityRequest = run.abort;
@@ -510,7 +525,7 @@ export class SessionController {
       if (snapshot.activity_seq !== basis.activity_seq) throw new Error('Microphone stop acknowledgement was superseded');
       this.install(snapshot);
       if (!this.activeMicrophone(run)) return;
-      const transport = this.api.microphone({stream_id: crypto.randomUUID(), activity_seq: snapshot.activity_seq, input_epoch: snapshot.input_epoch}, run.abort.signal);
+      const transport = this.api.microphone({stream_id: streamId, activity_seq: snapshot.activity_seq, input_epoch: snapshot.input_epoch}, run.abort.signal);
       run.transport = transport;
       void transport.completion.catch(error => { if (this.activeMicrophone(run)) this.fail(error); });
       for (const chunk of run.queue) transport.send(chunk);
@@ -545,14 +560,62 @@ export class SessionController {
       const text = result.text.trim();
       const noise = /^\[(?:noise|silence|inaudible|music|静音|噪音)\]$/i.test(text);
       if (!result.had_final || !text || noise || !/[\p{L}\p{N}]/u.test(text)) {
+        if (this.activityRequest === run.abort) this.activityRequest = null;
         this.effects.setPhase?.('idle');
         this.view.error('No reliable speech was recognized. Try again or use text input.');
         return;
       }
-      return this.input(text);
+      if (this.activityRequest === run.abort) this.activityRequest = null;
+      const sourceStreamId = await this.reviewedAudioSourceForInput(run.streamId, result.had_final);
+      if (!this.current(run.generation)) return this.closed ? {status: 'closed'} : {status: 'superseded'};
+      return this.input(text, sourceStreamId);
     })().catch(error => { if (this.activeMicrophone(run)) this.fail(error); return undefined; });
     return run.finishing;
   }
+
+  private async reviewedAudioSourceForInput(streamId: string, hadFinal: boolean): Promise<string | undefined> {
+    if (!hadFinal || !this.api.reviewedAudioStatus) return undefined;
+    const generation = this.generation;
+    const localAbort = new AbortController();
+    const signal = AbortSignal.any([this.generationAbort.signal, localAbort.signal]);
+    this.activityRequest = localAbort;
+    try {
+      const status = await this.api.reviewedAudioStatus(signal);
+      if (!this.current(generation) || signal.aborted || !status.recording_active || status.input_completion_ready !== true
+        || status.pending_kind !== 'audio_input' || status.pending_stream_id !== streamId) return undefined;
+      return streamId;
+    } catch {
+      // A raw-audio staging failure must never block a valid final transcript.
+      return undefined;
+    } finally { if (this.activityRequest === localAbort) this.activityRequest = null; }
+  }
+
+  /** May audition only when ordinary generation, capture, presentation, and playback are idle. */
+  canAuditionReviewedAudio(): boolean {
+    const snapshot = this.snapshot;
+    return !this.closed && this.running && snapshot !== null && snapshot.sealed
+      && snapshot.active_grants.length === 0 && snapshot.phase !== 'thinking'
+      && !this.speech && !this.microphone && !this.rehearsalInput
+      && this.visualPreparations.size === 0 && this.activityRequest === null && this.playback.quiescent;
+  }
+
+  async auditionReviewedAudio(pcm16le: Uint8Array, sampleRateHz: number): Promise<boolean> {
+    if (!this.canAuditionReviewedAudio()) {
+      this.view.error('Wait until MIRA’s response, microphone capture, and scene preparation have finished before auditioning reviewed audio.');
+      return false;
+    }
+    if (!(pcm16le instanceof Uint8Array) || pcm16le.byteLength < 2 || pcm16le.byteLength > 512 * 1024
+      || pcm16le.byteLength % 2 !== 0 || ![16000, 24000, 48000].includes(sampleRateHz)) {
+      this.view.error('The reviewed audio does not match the supported bounded PCM format.');
+      return false;
+    }
+    const samples = new Int16Array(pcm16le.byteLength / 2);
+    const view = new DataView(pcm16le.buffer, pcm16le.byteOffset, pcm16le.byteLength);
+    for (let i = 0; i < samples.length; i++) samples[i] = view.getInt16(i * 2, true);
+    return this.playback.audition(samples, sampleRateHz);
+  }
+
+  stopReviewedAudioAudition(): void { this.playback.stopAudition(); }
 
   private async poll(): Promise<void> {
     if (!this.running || this.closed) return;

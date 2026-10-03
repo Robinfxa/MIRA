@@ -1,0 +1,871 @@
+{
+  "title": "MIRA attribution inventory",
+  "schema_version": 1,
+  "reviewed_at": "2026-10-03",
+  "scope": "Frozen 2026-10-03 12:56 source lock set; read-only attribution/provenance review. No installation, provider calls, credential reads, UI, or Git operation was performed.",
+  "frozen_lock_evidence": {
+    "snapshot": "<historical-source-snapshot>",
+    "locks": {
+      "requirements/runtime.lock": "ba2fcfba0f979a5fade6b0df6ca1eca0ba8f4e194a2e84181e96e3693e717bdd",
+      "requirements/dev.lock": "1690dc3d5da7fa1e3bec0af5759b0af94aaa8dd9f5202c02547d635a2f04940b",
+      "package-lock.json": "11eb6a6d54ee8efaa04bf644199536d124ad1738b4efbec2957baad1612226f0"
+    },
+    "dev_lock_sha256_matches_frozen_snapshot": true,
+    "package_lock_sha256_matches_frozen_snapshot": true,
+    "python_env": "Existing isolated .venv313 (Python 3.13.5); installed metadata matches all 46 dev.lock name/version pins, with no additional installed distributions observed.",
+    "python_counts": {
+      "dev_pins": 46,
+      "runtime_pins": 35,
+      "development_build_only_pins": 11
+    }
+  },
+  "python_distributions": [
+    {
+      "name": "annotated-doc",
+      "version": "0.0.4",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/fastapi/annotated-doc",
+      "source_evidence": "installed METADATA Project-URL (Repository)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "annotated_doc-0.0.4.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.7.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/annotated-types/annotated-types",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MIT (license file and MIT classifier; no metadata License field)",
+      "license_declaration_evidence": "No License/License-Expression; MIT OSI classifier plus included LICENSE",
+      "license_files_in_installed_distribution": [
+        "annotated_types-0.7.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": [
+        "MIT License"
+      ]
+    },
+    {
+      "name": "anyio",
+      "version": "4.13.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/agronholm/anyio",
+      "source_evidence": "installed METADATA Project-URL (Source code)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "anyio-4.13.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "certifi",
+      "version": "2026.5.20",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/certifi/python-certifi",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MPL-2.0",
+      "license_declaration_evidence": "METADATA License: MPL-2.0",
+      "license_files_in_installed_distribution": [
+        "certifi-2026.5.20.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": [
+        "Mozilla Public License 2.0 (MPL 2.0)"
+      ]
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/python-cffi/cffi",
+      "source_evidence": "installed METADATA Project-URL (Source Code)",
+      "license_summary": "MIT-0",
+      "license_declaration_evidence": "METADATA License-Expression: MIT-0",
+      "license_files_in_installed_distribution": [
+        "cffi-2.1.1.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.2",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/jawah/charset_normalizer",
+      "source_evidence": "installed METADATA Project-URL (Code)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License: MIT",
+      "license_files_in_installed_distribution": [
+        "charset_normalizer-3.5.2.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "click",
+      "version": "8.1.8",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/pallets/click/",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD 3-Clause terms (license file and generic BSD classifier; no metadata License field)",
+      "license_declaration_evidence": "No License/License-Expression; generic BSD OSI classifier plus included LICENSE.txt",
+      "license_files_in_installed_distribution": [
+        "click-8.1.8.dist-info/LICENSE.txt"
+      ],
+      "license_classifiers": [
+        "BSD License"
+      ]
+    },
+    {
+      "name": "coverage",
+      "version": "7.13.3",
+      "locked_in": "development/build only",
+      "distribution_source": "https://coverage.readthedocs.io/en/7.13.3",
+      "source_evidence": "installed METADATA Project-URL (Documentation)",
+      "license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License: Apache-2.0",
+      "license_files_in_installed_distribution": [
+        "coverage-7.13.3.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "cryptography",
+      "version": "50.0.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/pyca/cryptography/",
+      "source_evidence": "installed METADATA Project-URL (source)",
+      "license_summary": "Apache-2.0 OR BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0 OR BSD-3-Clause",
+      "license_files_in_installed_distribution": [
+        "cryptography-50.0.0.dist-info/licenses/LICENSE",
+        "cryptography-50.0.0.dist-info/licenses/LICENSE.APACHE",
+        "cryptography-50.0.0.dist-info/licenses/LICENSE.BSD"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "fastapi",
+      "version": "0.128.2",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/fastapi/fastapi",
+      "source_evidence": "installed METADATA Project-URL (Repository)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "fastapi-0.128.2.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "google-api-core",
+      "version": "2.40.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/googleapis/google-cloud-python",
+      "source_evidence": "installed METADATA Project-URL (Repository)",
+      "license_summary": "Apache 2.0",
+      "license_declaration_evidence": "METADATA License: Apache 2.0",
+      "license_files_in_installed_distribution": [
+        "google_api_core-2.40.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": [
+        "Apache Software License"
+      ]
+    },
+    {
+      "name": "google-auth",
+      "version": "2.59.1",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-auth",
+      "source_evidence": "installed METADATA Home-page",
+      "license_summary": "Apache 2.0",
+      "license_declaration_evidence": "METADATA License: Apache 2.0",
+      "license_files_in_installed_distribution": [
+        "google_auth-2.59.1.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": [
+        "Apache Software License"
+      ]
+    },
+    {
+      "name": "google-cloud-speech",
+      "version": "2.40.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-speech",
+      "source_evidence": "installed METADATA Home-page",
+      "license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License: Apache-2.0",
+      "license_files_in_installed_distribution": [
+        "google_cloud_speech-2.40.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": [
+        "Apache Software License"
+      ]
+    },
+    {
+      "name": "googleapis-common-protos",
+      "version": "1.75.5",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/googleapis/google-cloud-python/tree/main/packages/googleapis-common-protos",
+      "source_evidence": "installed METADATA Project-URL (Repository)",
+      "license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files_in_installed_distribution": [
+        "googleapis_common_protos-1.75.5.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "grpcio",
+      "version": "1.84.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/grpc/grpc",
+      "source_evidence": "installed METADATA Project-URL (Source Code)",
+      "license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files_in_installed_distribution": [
+        "grpcio-1.84.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "grpcio-status",
+      "version": "1.84.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://grpc.io",
+      "source_evidence": "installed METADATA Project-URL (Homepage)",
+      "license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files_in_installed_distribution": [
+        "grpcio_status-1.84.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/python-hyper/h11",
+      "source_evidence": "installed METADATA Home-page",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License: MIT",
+      "license_files_in_installed_distribution": [
+        "h11-0.16.0.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_classifiers": [
+        "MIT License"
+      ]
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/encode/httpcore",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files_in_installed_distribution": [
+        "httpcore-1.0.9.dist-info/licenses/LICENSE.md"
+      ],
+      "license_classifiers": [
+        "BSD License"
+      ]
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/encode/httpx",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License: BSD-3-Clause",
+      "license_files_in_installed_distribution": [
+        "httpx-0.28.1.dist-info/licenses/LICENSE.md"
+      ],
+      "license_classifiers": [
+        "BSD License"
+      ]
+    },
+    {
+      "name": "idna",
+      "version": "3.17",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/kjd/idna",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files_in_installed_distribution": [
+        "idna-3.17.dist-info/licenses/LICENSE.md"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "iniconfig",
+      "version": "2.3.0",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pytest-dev/iniconfig",
+      "source_evidence": "installed METADATA Project-URL (Homepage)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "iniconfig-2.3.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "opentelemetry-api",
+      "version": "1.45.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/open-telemetry/opentelemetry-python",
+      "source_evidence": "installed METADATA Project-URL (Repository)",
+      "license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files_in_installed_distribution": [
+        "opentelemetry_api-1.45.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "packaging",
+      "version": "25.0",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pypa/packaging",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "Either Apache-2.0 or BSD-2-Clause; included LICENSE says contributions are under both",
+      "license_declaration_evidence": "No License/License-Expression; generic Apache/BSD classifiers; included LICENSE plus LICENSE.APACHE and LICENSE.BSD",
+      "license_files_in_installed_distribution": [
+        "packaging-25.0.dist-info/licenses/LICENSE",
+        "packaging-25.0.dist-info/licenses/LICENSE.APACHE",
+        "packaging-25.0.dist-info/licenses/LICENSE.BSD"
+      ],
+      "license_classifiers": [
+        "Apache Software License",
+        "BSD License"
+      ]
+    },
+    {
+      "name": "pip",
+      "version": "26.2.1",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pypa/pip",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "pip-26.2.1.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "pluggy",
+      "version": "1.6.0",
+      "locked_in": "development/build only",
+      "distribution_source": "https://pypi.org/project/pluggy/",
+      "source_evidence": "PyPI project/release page; installed metadata had no upstream source URL",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License: MIT",
+      "license_files_in_installed_distribution": [
+        "pluggy-1.6.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": [
+        "MIT License"
+      ]
+    },
+    {
+      "name": "proto-plus",
+      "version": "1.29.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/googleapis/google-cloud-python",
+      "source_evidence": "installed METADATA Project-URL (Repository)",
+      "license_summary": "Apache 2.0",
+      "license_declaration_evidence": "METADATA License: Apache 2.0",
+      "license_files_in_installed_distribution": [
+        "proto_plus-1.29.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": [
+        "Apache Software License"
+      ]
+    },
+    {
+      "name": "protobuf",
+      "version": "7.36.2",
+      "locked_in": "runtime",
+      "distribution_source": "https://developers.google.com/protocol-buffers/",
+      "source_evidence": "installed METADATA Home-page",
+      "license_summary": "3-Clause BSD License",
+      "license_declaration_evidence": "METADATA License: 3-Clause BSD License",
+      "license_files_in_installed_distribution": [
+        "protobuf-7.36.2.dist-info/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "pyasn1",
+      "version": "0.6.4",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/pyasn1/pyasn1",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD-2-Clause",
+      "license_declaration_evidence": "METADATA License: BSD-2-Clause",
+      "license_files_in_installed_distribution": [
+        "pyasn1-0.6.4.dist-info/licenses/LICENSE.rst"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "pyasn1_modules",
+      "version": "0.4.2",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/pyasn1/pyasn1-modules",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD (generic metadata label; included text contains the 3-clause non-endorsement condition)",
+      "license_declaration_evidence": "METADATA License: BSD",
+      "license_files_in_installed_distribution": [
+        "pyasn1_modules-0.4.2.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_classifiers": [
+        "BSD License"
+      ]
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/eliben/pycparser",
+      "source_evidence": "installed METADATA Project-URL (Homepage)",
+      "license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files_in_installed_distribution": [
+        "pycparser-3.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.4",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/pydantic/pydantic",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "pydantic-2.13.4.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.4",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/pydantic/pydantic/tree/main/pydantic-core",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "pydantic_core-2.46.4.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "Pygments",
+      "version": "2.20.0",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pygments/pygments",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD-2-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-2-Clause",
+      "license_files_in_installed_distribution": [
+        "pygments-2.20.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "PyJWT",
+      "version": "2.13.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/jpadilla/pyjwt",
+      "source_evidence": "installed METADATA Project-URL (Homepage)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "pyjwt-2.13.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "pytest",
+      "version": "9.0.2",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pytest-dev/pytest",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "pytest-9.0.2.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "pytest-asyncio",
+      "version": "1.3.0",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pytest-dev/pytest-asyncio",
+      "source_evidence": "installed METADATA Project-URL (Source Code)",
+      "license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: Apache-2.0",
+      "license_files_in_installed_distribution": [
+        "pytest_asyncio-1.3.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "pytest-cov",
+      "version": "7.0.0",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pytest-dev/pytest-cov",
+      "source_evidence": "installed METADATA Project-URL (Sources)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "pytest_cov-7.0.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": [
+        "MIT License"
+      ]
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.2",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/theskumar/python-dotenv",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License: BSD-3-Clause",
+      "license_files_in_installed_distribution": [
+        "python_dotenv-1.2.2.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/psf/requests",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "Apache-2.0",
+      "license_declaration_evidence": "METADATA License: Apache-2.0",
+      "license_files_in_installed_distribution": [
+        "requests-2.34.2.dist-info/licenses/LICENSE",
+        "requests-2.34.2.dist-info/licenses/NOTICE"
+      ],
+      "license_classifiers": [
+        "Apache Software License"
+      ]
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pypa/setuptools",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "setuptools-84.0.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "starlette",
+      "version": "0.50.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/Kludex/starlette",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files_in_installed_distribution": [
+        "starlette-0.50.0.dist-info/licenses/LICENSE.md"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/python/typing_extensions",
+      "source_evidence": "installed METADATA Project-URL (Repository)",
+      "license_summary": "PSF-2.0",
+      "license_declaration_evidence": "METADATA License-Expression: PSF-2.0",
+      "license_files_in_installed_distribution": [
+        "typing_extensions-4.16.0.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.2",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/pydantic/typing-inspection",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "typing_inspection-0.4.2.dist-info/licenses/LICENSE"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "urllib3",
+      "version": "2.8.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/urllib3/urllib3",
+      "source_evidence": "installed METADATA Project-URL (Code)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "urllib3-2.8.0.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.48.0",
+      "locked_in": "runtime",
+      "distribution_source": "https://github.com/Kludex/uvicorn",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "BSD-3-Clause",
+      "license_declaration_evidence": "METADATA License-Expression: BSD-3-Clause",
+      "license_files_in_installed_distribution": [
+        "uvicorn-0.48.0.dist-info/licenses/LICENSE.md"
+      ],
+      "license_classifiers": []
+    },
+    {
+      "name": "wheel",
+      "version": "0.48.0",
+      "locked_in": "development/build only",
+      "distribution_source": "https://github.com/pypa/wheel",
+      "source_evidence": "installed METADATA Project-URL (Source)",
+      "license_summary": "MIT",
+      "license_declaration_evidence": "METADATA License-Expression: MIT",
+      "license_files_in_installed_distribution": [
+        "wheel-0.48.0.dist-info/licenses/LICENSE.txt"
+      ],
+      "license_classifiers": []
+    }
+  ],
+  "typescript": {
+    "name": "typescript",
+    "version": "5.8.3",
+    "locked_version": "5.8.3",
+    "distribution_source": "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz",
+    "upstream_source": "https://github.com/microsoft/TypeScript.git",
+    "license": "Apache-2.0",
+    "license_evidence": [
+      "package-lock.json packages[\"node_modules/typescript\"].license/resolved",
+      "node_modules/typescript/LICENSE.txt",
+      "node_modules/typescript/ThirdPartyNoticeText.txt"
+    ],
+    "redistribution_note": "The compiler is a devDependency; preserve its license and bundled third-party notice if redistributing the compiler package itself."
+  },
+  "original_svg_assets": [
+    {
+      "path": "apps/web/public/scene/cafe-night.svg",
+      "role": "runtime scene background",
+      "sha256": "3c3dcfb31b9126ab3ee511dd1e241fd2d714babcfd100651346fd162913cbf96",
+      "provenance": "Original hand-authored project SVG; no external artwork/font/model identified.",
+      "license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred."
+    },
+    {
+      "path": "apps/web/public/scene/trip-memory.svg",
+      "role": "runtime illustrated travel artifact",
+      "sha256": "e6571c45bb27bcc010854ffed0077837a225959d8224437b2b6234a5b0d8745e",
+      "provenance": "Original hand-authored project SVG; described as an illustration, not a photo or generated runtime image.",
+      "license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred."
+    },
+    {
+      "path": "apps/web/index.html",
+      "role": "inline original adult MIRA character SVG (.mira-character)",
+      "sha256": "212c72a380dd9e16b44cbdc66feaa9bf4c22f383a3fe486250e528accf899c72",
+      "provenance": "Original hand-authored inline SVG; source file also contains non-art HTML, so hash is for container file.",
+      "license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred."
+    },
+    {
+      "path": "docs/changes/WP04-character-scene/previews/mira-character.svg",
+      "role": "review-only character-art preview; reproduces inline character artwork",
+      "sha256": "0c3a7f85a59cc829f5ee7ad48d52764c0a7731eb4304cf07a434748063aa3bbf",
+      "provenance": "Original project character geometry per WP04 design/provenance notes; not a runtime dependency.",
+      "license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred."
+    },
+    {
+      "path": "docs/changes/WP04-character-scene/previews/expressions-study.svg",
+      "role": "review-only expression contact-sheet SVG",
+      "sha256": "070af7d67f7d9a6df4107668570482be129ee3c5abc96b6708daa7c0dc11464b",
+      "provenance": "Original project expression study per WP04 design notes; embeds character variants as SVG data.",
+      "license_evidence": "Project provenance notes state AI-assisted original code-native artwork; no third-party artwork/license identified. No project-wide license is set or inferred."
+    }
+  ],
+  "generated_speech": {
+    "fixture_manifest": "apps/api/src/mira/adapters/generation/rehearsal/fixtures/audio/manifest.json",
+    "synthetic": true,
+    "language": "en-US",
+    "offline_only": true,
+    "voice": "CMU Flite cmu_us_slt `slt`",
+    "clip_count": 8,
+    "file_count": 16,
+    "total_duration_ms": 52560,
+    "generation": "Original AI-assisted captions, synthesized locally by FFmpeg flite source with installed CMU slt voice; mono 24kHz PCM16; no cloud provider, credential, download, or recording.",
+    "clips": [
+      {
+        "clip": "greeting",
+        "pcm": "greeting.pcm",
+        "pcm_sha256": "67179120b348ae05195453fab63199b3e458474311a57791afae51a833c8c924",
+        "wav": "greeting.wav",
+        "wav_sha256": "fb83f6049dd767cd227670e84683712a770eba9813d4448a6cef471d3a543a3f",
+        "duration_ms": 6135,
+        "caption_sha256": "4b9a3da9eec7332f37306a8983da42b35028918eb60a4d5f4b1d9a344c4efec3"
+      },
+      {
+        "clip": "camera",
+        "pcm": "camera.pcm",
+        "pcm_sha256": "12c1bd0d4f703f451bdb5960839ed6be2e0040a4a3d055c5687189a73a672207",
+        "wav": "camera.wav",
+        "wav_sha256": "097e9fde93feed0532826407c5376b85a9a5f4e353c540c3027bb4cfdfaa0224",
+        "duration_ms": 5185,
+        "caption_sha256": "1c34b347ac95a356c9bc63528a5ec090f9c64dd2c19dfc23dfda82052a900133"
+      },
+      {
+        "clip": "photo",
+        "pcm": "photo.pcm",
+        "pcm_sha256": "2110b6df6af0ce3e66a4385aaae378877628615c36022d4504a3d661c92ee094",
+        "wav": "photo.wav",
+        "wav_sha256": "4001355cca0b829849562cb983797c3bea5a1d095540024ab7b323263badaacc",
+        "duration_ms": 6720,
+        "caption_sha256": "dc9dd03a5a9ba655959b2950c42f433af6a56e678b01863afcde08f55c7c3632"
+      },
+      {
+        "clip": "detail",
+        "pcm": "detail.pcm",
+        "pcm_sha256": "dfb3a0aae2233d3aa576f7acc8dc4b0400a5d4e41be046d26392942a4c28ee97",
+        "wav": "detail.wav",
+        "wav_sha256": "babbe4f8c32f3ad040e248414f836b5c04768c4ec73778e89bec10de347e640e",
+        "duration_ms": 6075,
+        "caption_sha256": "80e6bf16baa4eaa44a98ec7ab36d7a2cf4c412fb27c2fff0c9f250d22c73125d"
+      },
+      {
+        "clip": "absent",
+        "pcm": "absent.pcm",
+        "pcm_sha256": "4ca0eec8af49d8581d30663ef177856a14b5fbae962dbc813163ebf0070533c6",
+        "wav": "absent.wav",
+        "wav_sha256": "4554a740229b3ce8049ab083822b1cd166a0e685adee7f3e2ca26bd16bc7c87d",
+        "duration_ms": 4450,
+        "caption_sha256": "c9a2ee8ce08d18b21b3eeba6a6e27a5548a3ef3550d35a70afef3be170e275fd"
+      },
+      {
+        "clip": "story",
+        "pcm": "story.pcm",
+        "pcm_sha256": "1aecda9aebe8822a3380b0dfededdfc65a7581060f8d16bc8b6c48a49f745abe",
+        "wav": "story.wav",
+        "wav_sha256": "525490c6b72ccdde876635a33999d1f49f802781335932457631c53991f8a7ed",
+        "duration_ms": 14715,
+        "caption_sha256": "08d8a4ac184a9f58de8a6da16ace2ffddd82bfc71acb4118091bc89af379ba92"
+      },
+      {
+        "clip": "rain",
+        "pcm": "rain.pcm",
+        "pcm_sha256": "364c040c10f647249e85874519b4ab5e1dec6236a1f1dfecf1a07ae533acc29d",
+        "wav": "rain.wav",
+        "wav_sha256": "8b6f5514847c03ac86d7e8e86d29bc63e4692647115f0187faa7eda9189521d1",
+        "duration_ms": 4660,
+        "caption_sha256": "d62cbd746580f6774b014786a7099bd27baae58894d8ae97fed8b8bd335a1be9"
+      },
+      {
+        "clip": "warm",
+        "pcm": "warm.pcm",
+        "pcm_sha256": "353003a070953a1391a98b765a92179fd0e6575078c26d506fad0741c2fcc4a1",
+        "wav": "warm.wav",
+        "wav_sha256": "8451770dd44648fe91a0676799ea67ce0c31b9c590052120293296d792b9eee8",
+        "duration_ms": 4620,
+        "caption_sha256": "7cd78d1911c73f756b5ab2666ec29d31b3802b2e9d7101ca09f1609ae4a91daa"
+      }
+    ],
+    "voice_provenance_evidence": {
+      "local_notice": "/usr/share/doc/libflite1/copyright (SHA-256 77d13a5e6cbe7277b4721033f9ad15707241c2832baa8c74ec823c9ee5ebf71c)",
+      "flite_license_source": "https://github.com/festvox/flite/blob/master/COPYING",
+      "slt_voice_source": "https://github.com/festvox/flite/blob/master/lang/cmu_us_slt/cmu_us_slt.c",
+      "flite_library_soname": "libflite.so.2.2",
+      "voice_library_soname": "libflite_cmu_us_slt.so.2.2",
+      "installed_flite_library_sha256": "490ffd91ee67acbe4279a6b736dafdacba7a88211985960282e27c0d2d7c6eaf",
+      "installed_voice_library_sha256": "bc025b00db2d651a244f66e85d80a234284921e8d141d96e3189d75839a7980a",
+      "package_manager_version_metadata": "unavailable in the DEMO-02 evidence; exact package release not established",
+      "assessment": "The reviewed installed notice and upstream files describe permissive CMU software/voice licensing; no separate restriction on newly synthesized output was found in those reviewed sources. Scoped provenance review only, not legal advice or an exclusivity claim."
+    },
+    "redistribution_boundary": "Only generated PCM/WAV output is in the project. Flite software and CMU voice binaries are not copied into the repository; software/voice binary obligations should be revisited if those binaries are ever redistributed.",
+    "ffmpeg_boundary": "FFmpeg 7.1.5-0+deb13u1 was a local generation tool, not included. The pinned FFmpeg binary/package license/build-configuration record is absent; do not claim its binary redistribution has been cleared."
+  },
+  "observed_evidence_gaps": [
+    "requirements/dev.lock and requirements/runtime.lock pin versions but contain no wheel hashes; the installed environment comparison verifies metadata/version closure, not exact wheel bytes across platforms.",
+    "package-lock.json pins TypeScript 5.8.3 and records its registry tarball URL but omits npm integrity; exact tarball bytes are therefore not fixed by the frozen lock.",
+    "Several Python packages use legacy or generic license metadata rather than an SPDX expression. Their exact included license files are listed; annotated-types and click lack a METADATA License/License-Expression field, packaging has only generic Apache/BSD classifiers, and pyasn1-modules declares only generic BSD.",
+    "pluggy has no upstream project/repository URL in its installed METADATA; its source column falls back to the PyPI project/release page.",
+    "pip and setuptools are development/build-only pins whose distributions contain bundled vendored components and per-component notices. These notices are present in the local installed metadata, not expanded as 46 additional top-level locks; preserve and review them if redistributing those tool distributions/environments.",
+    "No consolidated third-party NOTICE/license bundle for the Python dependency set is present in the checked source tree. Applicability depends on what a future distribution actually bundles; this inventory is not itself a redistribution bundle.",
+    "MIRA project-wide license remains unspecified. The project-authorship notes are provenance claims, not an independent originality assessment or a license selection for the project/AI-assisted art/captions.",
+    "DEMO-02 records no Flite package-manager metadata; FFmpeg and Flite/voice binary redistribution evidence is incomplete because those binaries are not included and were not assessed for redistribution.",
+    "No legal clearance or license conclusion for the whole project is made."
+  ],
+  "vendor_license_notice_locations": {
+    "pip": {
+      "path_prefix": "pip-26.2.1.dist-info/licenses/src/pip/_vendor/",
+      "vendor_roots": [
+        "cachecontrol",
+        "certifi",
+        "distlib",
+        "distro",
+        "idna",
+        "msgpack",
+        "packaging",
+        "pkg_resources",
+        "platformdirs",
+        "pygments",
+        "pyproject_hooks",
+        "requests",
+        "resolvelib",
+        "rich",
+        "tomli",
+        "tomli_w",
+        "truststore",
+        "urllib3"
+      ]
+    },
+    "setuptools": {
+      "path_prefix": "setuptools-84.0.0.dist-info/licenses/ plus setuptools/_vendor/*-*.dist-info/licenses/",
+      "vendor_roots": [
+        ".lock",
+        "autocommand",
+        "autocommand-2.2.2.dist-info",
+        "backports",
+        "backports.tarfile-1.2.0.dist-info",
+        "importlib_metadata",
+        "importlib_metadata-8.7.1.dist-info",
+        "jaraco",
+        "jaraco.text-4.0.0.dist-info",
+        "jaraco_context-6.1.0.dist-info",
+        "jaraco_functools-4.4.0.dist-info",
+        "more_itertools",
+        "more_itertools-10.8.0.dist-info",
+        "packaging",
+        "packaging-26.0.dist-info",
+        "platformdirs",
+        "platformdirs-4.4.0.dist-info",
+        "tomli",
+        "tomli-2.4.0.dist-info",
+        "wheel",
+        "wheel-0.46.3.dist-info",
+        "zipp",
+        "zipp-3.23.0.dist-info"
+      ]
+    }
+  }
+}

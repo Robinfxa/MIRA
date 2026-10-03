@@ -22,6 +22,7 @@
     <span>预录英文合成音频 · 双语字幕 · 原创本地插画。没有真实模型、语音识别或麦克风采集。请使用下方固定口令。</span>
   </aside>
   <p class="recording-notice" data-recording-notice role="status" aria-live="polite" data-recording-state="unknown">开发录制状态尚未确认，请勿输入秘密。</p>
+  <p class="reviewed-audio-notice" data-review-audio-notice role="status" aria-live="polite" hidden></p>
 
   <section class="stage" data-stage data-scene="cafe" data-phase="idle" data-expression="calm" data-action="camera_ready" aria-label="MIRA 的雨夜咖啡馆">
     <div class="stage-visual">
@@ -115,6 +116,38 @@
       <p class="subtitle" data-subtitle aria-live="polite" aria-atomic="true">窗外还在下雨。和 MIRA 打个招呼吧。</p>
     </div>
   </section>
+
+  <details class="reviewed-audio-panel" data-review-audio-panel>
+    <summary>开发录制与原始音频审核</summary>
+    <div class="reviewed-audio-content">
+      <p class="reviewed-audio-status" data-review-audio-status role="status" aria-live="polite">正在确认当前会话的开发录制状态…</p>
+      <p class="reviewed-audio-scope" data-review-audio-scope></p>
+      <p class="reviewed-audio-privacy">此开关只在开发配置开放时可用。开启后，已认证的本地 MIRA 应用会话可暂存有界、短时的原始音频。音频不会自动识别或抹除口述秘密；必须由操作员听实际原音并审核精确缓冲。ASR 转写不是隐私审核。保存仅进入本机私有诊断队列，原始导出仍需单独同意。</p>
+      <p class="reviewed-audio-eligibility" data-review-audio-eligibility hidden></p>
+      <label class="reviewed-audio-consent"><input type="checkbox" data-review-audio-consent disabled> 我明确同意在本地 MIRA 应用范围内开启有界、短时开发录制，并理解原始音频不会自动做秘密检测或脱敏。</label>
+      <div class="reviewed-audio-actions">
+        <button type="button" data-review-audio-enable disabled>明确开启开发录制</button>
+        <button type="button" data-review-audio-disable hidden>关闭应用范围内的开发录制</button>
+        <button type="button" data-review-audio-review hidden disabled>审核待处理的原始音频</button>
+      </div>
+      <section class="reviewed-audio-clip" data-review-audio-clip hidden aria-label="精确原始音频审核">
+        <h2>精确音频缓冲</h2>
+        <p data-review-audio-clip-metadata></p>
+        <p>请实际试听上面标识的这一段完整原音。不要只检查 ASR 转写；没有自动语音秘密检测，也不会自动删除或改写音频。</p>
+        <div class="reviewed-audio-actions">
+          <button type="button" data-review-audio-preview>加载精确缓冲以试听</button>
+          <button type="button" data-review-audio-audition hidden disabled>试听这段原音</button>
+        </div>
+        <p data-review-audio-audition-status role="status" aria-live="polite"></p>
+        <label class="reviewed-audio-consent"><input type="checkbox" data-review-audio-attestation disabled> 我已完整听过这段原始音频，亲自确认它适合私有保存，并单独同意把这段精确缓冲保存到本机私有诊断存储。</label>
+        <div class="reviewed-audio-actions">
+          <button type="button" data-review-audio-confirm hidden disabled>确认并排入本机私有队列</button>
+          <button type="button" data-review-audio-cancel hidden disabled>拒绝并清除</button>
+        </div>
+      </section>
+      <p class="reviewed-audio-result" data-review-audio-result role="status" aria-live="polite"></p>
+    </div>
+  </details>
 
   <fieldset class="conversation-controls" disabled>
     <legend class="sr-only">与 MIRA 交谈</legend>

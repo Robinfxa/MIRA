@@ -77,7 +77,7 @@ def classify_failure(error: BaseException | None = None, *,
 _PUBLIC_CODES = frozenset({
     "audio_failed", "audio_interrupted", "after_stop_fence", "audio_history_capacity", "audio_non_monotonic", "audio_receipt_required",
     "audio_terminal", "busy", "duplicate_effect", "effect_capacity", "empty_audio", "empty_generation",
-    "incomplete_stream", "input_limit", "invalid_audio", "invalid_audio_progress", "invalid_cutoff",
+    "history_pending", "incomplete_stream", "input_limit", "invalid_audio", "invalid_audio_progress", "invalid_cutoff",
     "invalid_effect", "invalid_input", "invalid_range", "invalid_response", "media_cancelled",
     "microphone_unavailable", "not_speech", "output_limit", "receipt_conflict", "receipt_mismatch",
     "receipt_sequence", "request_conflict", "review_not_allowed", "session_capacity", "session_closed",

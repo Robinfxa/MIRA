@@ -1,0 +1,249 @@
+{
+  "baseline_commit": "6ab19a8b8d82dce5268c005ab1b99f071464bdf9",
+  "source": "GitHub read-only Git tree API, recursive and not truncated",
+  "deletions": [
+    {
+      "path": "apps/web/dist/app/main.js",
+      "remote_git_blob_sha": "6de2c1b465a119abfcb51126b6e8141e7ec56f11",
+      "remote_mode": "100644",
+      "remote_bytes": 10691
+    },
+    {
+      "path": "apps/web/dist/app/main.js.map",
+      "remote_git_blob_sha": "32b14e606967766c7392919e65e77ebb7ff44411",
+      "remote_mode": "100644",
+      "remote_bytes": 9822
+    },
+    {
+      "path": "apps/web/dist/features/audio/capture.js",
+      "remote_git_blob_sha": "616f14a619883918e246466c317064496fee794a",
+      "remote_mode": "100644",
+      "remote_bytes": 11418
+    },
+    {
+      "path": "apps/web/dist/features/audio/capture.js.map",
+      "remote_git_blob_sha": "bc4ef3616910f08dad8dcbfa2aad2d24048364bc",
+      "remote_mode": "100644",
+      "remote_bytes": 10539
+    },
+    {
+      "path": "apps/web/dist/features/audio/index.js",
+      "remote_git_blob_sha": "0de790716e6d3bf5aaf17e293c81b4a8e3ddd484",
+      "remote_mode": "100644",
+      "remote_bytes": 135
+    },
+    {
+      "path": "apps/web/dist/features/audio/index.js.map",
+      "remote_git_blob_sha": "3524559503e4e6102633ed57fc7be2c1f23c9621",
+      "remote_mode": "100644",
+      "remote_bytes": 207
+    },
+    {
+      "path": "apps/web/dist/features/audio/pcm.js",
+      "remote_git_blob_sha": "a53260a0206ac6cbb7e5e82cfc17dc80f27334fd",
+      "remote_mode": "100644",
+      "remote_bytes": 1736
+    },
+    {
+      "path": "apps/web/dist/features/audio/pcm.js.map",
+      "remote_git_blob_sha": "773dbd07bceef24fde5d304c9d4cf58e83dd2f19",
+      "remote_mode": "100644",
+      "remote_bytes": 1759
+    },
+    {
+      "path": "apps/web/dist/features/audio/playback.js",
+      "remote_git_blob_sha": "f6631b172c885b97195dbf8a22dbeac59888e22f",
+      "remote_mode": "100644",
+      "remote_bytes": 9563
+    },
+    {
+      "path": "apps/web/dist/features/audio/playback.js.map",
+      "remote_git_blob_sha": "2879d756ccdc942be90de3d510b56a088001b290",
+      "remote_mode": "100644",
+      "remote_bytes": 9477
+    },
+    {
+      "path": "apps/web/dist/features/audio/types.js",
+      "remote_git_blob_sha": "718fd38ae40c67ea23b242517cf9919f602c5a3e",
+      "remote_mode": "100644",
+      "remote_bytes": 44
+    },
+    {
+      "path": "apps/web/dist/features/audio/types.js.map",
+      "remote_git_blob_sha": "be4410fdeef8af8ed787d35a42f6e75c0a25f492",
+      "remote_mode": "100644",
+      "remote_bytes": 123
+    },
+    {
+      "path": "apps/web/dist/features/diagnostics/status.js",
+      "remote_git_blob_sha": "06ea6f5328b4c684dd4a29c947161d6f30870392",
+      "remote_mode": "100644",
+      "remote_bytes": 5916
+    },
+    {
+      "path": "apps/web/dist/features/diagnostics/status.js.map",
+      "remote_git_blob_sha": "96f85b6a6698a8712fc17ab5c3dd0f77fd3e9252",
+      "remote_mode": "100644",
+      "remote_bytes": 4538
+    },
+    {
+      "path": "apps/web/dist/features/presentation/dom-executor.js",
+      "remote_git_blob_sha": "e3a38ad1e82848276e163454881bc2bb80f16d77",
+      "remote_mode": "100644",
+      "remote_bytes": 1254
+    },
+    {
+      "path": "apps/web/dist/features/presentation/dom-executor.js.map",
+      "remote_git_blob_sha": "f9a7a0c244af567b4d43762ec8b2d0275265e254",
+      "remote_mode": "100644",
+      "remote_bytes": 1114
+    },
+    {
+      "path": "apps/web/dist/features/presentation/permit-gate.js",
+      "remote_git_blob_sha": "13b3a2cd0adec10541b4d3e887438866ff3f1acc",
+      "remote_mode": "100644",
+      "remote_bytes": 7103
+    },
+    {
+      "path": "apps/web/dist/features/presentation/permit-gate.js.map",
+      "remote_git_blob_sha": "0a523e4551b43c2a8e1fe5f15684aa44c4b91a59",
+      "remote_mode": "100644",
+      "remote_bytes": 7082
+    },
+    {
+      "path": "apps/web/dist/features/presentation/ports.js",
+      "remote_git_blob_sha": "bcc8ce2e7d96dd32e8477dab7315b807a20bde13",
+      "remote_mode": "100644",
+      "remote_bytes": 44
+    },
+    {
+      "path": "apps/web/dist/features/presentation/ports.js.map",
+      "remote_git_blob_sha": "4b1d78a5409b44938efed56240cda97e3fc9de2a",
+      "remote_mode": "100644",
+      "remote_bytes": 130
+    },
+    {
+      "path": "apps/web/dist/features/presentation/scene-executor.js",
+      "remote_git_blob_sha": "3d828f7d5088fe3b29380ced5ca7d5710ffa745f",
+      "remote_mode": "100644",
+      "remote_bytes": 8612
+    },
+    {
+      "path": "apps/web/dist/features/presentation/scene-executor.js.map",
+      "remote_git_blob_sha": "ee7558da7056acb606864e20f350d38ebffa3397",
+      "remote_mode": "100644",
+      "remote_bytes": 7728
+    },
+    {
+      "path": "apps/web/dist/features/presentation/scene-state.js",
+      "remote_git_blob_sha": "79a497829ff4ba36c29e81177888e9acdf4cd8a2",
+      "remote_mode": "100644",
+      "remote_bytes": 2076
+    },
+    {
+      "path": "apps/web/dist/features/presentation/scene-state.js.map",
+      "remote_git_blob_sha": "ec1eb7718da23be536edaed7240e25afe53cd6da",
+      "remote_mode": "100644",
+      "remote_bytes": 1863
+    },
+    {
+      "path": "apps/web/dist/features/session/api-client.js",
+      "remote_git_blob_sha": "e59cd0e53330c7bc258c5cc0776b9aa8ef396be9",
+      "remote_mode": "100644",
+      "remote_bytes": 5616
+    },
+    {
+      "path": "apps/web/dist/features/session/api-client.js.map",
+      "remote_git_blob_sha": "d1bf0515c03cb366c943a3e856e8122008f6d594",
+      "remote_mode": "100644",
+      "remote_bytes": 5846
+    },
+    {
+      "path": "apps/web/dist/features/session/audio-transport.js",
+      "remote_git_blob_sha": "36c3488cac5bd69697993401c40c653c1473507c",
+      "remote_mode": "100644",
+      "remote_bytes": 17865
+    },
+    {
+      "path": "apps/web/dist/features/session/audio-transport.js.map",
+      "remote_git_blob_sha": "d12b70315613e7f121f64248c9fbece64aeb963b",
+      "remote_mode": "100644",
+      "remote_bytes": 16456
+    },
+    {
+      "path": "apps/web/dist/features/session/controller.js",
+      "remote_git_blob_sha": "a3c1fc1fcc91192157bbc4357a096fdf905c58f3",
+      "remote_mode": "100644",
+      "remote_bytes": 24040
+    },
+    {
+      "path": "apps/web/dist/features/session/controller.js.map",
+      "remote_git_blob_sha": "ac535d03fa0ceb5d8ac82562d34b17d78df7e784",
+      "remote_mode": "100644",
+      "remote_bytes": 24416
+    },
+    {
+      "path": "apps/web/dist/features/session/ports.js",
+      "remote_git_blob_sha": "bcc8ce2e7d96dd32e8477dab7315b807a20bde13",
+      "remote_mode": "100644",
+      "remote_bytes": 44
+    },
+    {
+      "path": "apps/web/dist/features/session/ports.js.map",
+      "remote_git_blob_sha": "5283600e125313405171112cd5880cab3d4edf1d",
+      "remote_mode": "100644",
+      "remote_bytes": 125
+    },
+    {
+      "path": "apps/web/dist/shared/config.js",
+      "remote_git_blob_sha": "730addfcbca5e9775feb930ada2bc52880bdc82a",
+      "remote_mode": "100644",
+      "remote_bytes": 144
+    },
+    {
+      "path": "apps/web/dist/shared/config.js.map",
+      "remote_git_blob_sha": "e3a59ac57d2d81e995f96d5715b21709046a3bca",
+      "remote_mode": "100644",
+      "remote_bytes": 232
+    },
+    {
+      "path": "apps/web/dist/shared/cue-contract.js",
+      "remote_git_blob_sha": "52228708c0b970042d4a95de4a7ac94101192a0b",
+      "remote_mode": "100644",
+      "remote_bytes": 2453
+    },
+    {
+      "path": "apps/web/dist/shared/cue-contract.js.map",
+      "remote_git_blob_sha": "d09b6761f5c2b3dac6d1de20e7ec39ac9e75e761",
+      "remote_mode": "100644",
+      "remote_bytes": 2500
+    },
+    {
+      "path": "apps/web/dist/shared/generated/contracts.js",
+      "remote_git_blob_sha": "202a39eb533d56395ec5c1d37b3575673188ece2",
+      "remote_mode": "100644",
+      "remote_bytes": 48
+    },
+    {
+      "path": "apps/web/dist/shared/generated/contracts.js.map",
+      "remote_git_blob_sha": "7f82b2c6c299bc7ca34a321f42559e4785fcf748",
+      "remote_mode": "100644",
+      "remote_bytes": 133
+    },
+    {
+      "path": "apps/web/dist/shared/protocol.js",
+      "remote_git_blob_sha": "58d822a7b0d74ecf4fcc6d8f38d88cf0e6c5765c",
+      "remote_mode": "100644",
+      "remote_bytes": 3735
+    },
+    {
+      "path": "apps/web/dist/shared/protocol.js.map",
+      "remote_git_blob_sha": "c94efc4c0b85311e65e057e915448b4ca703dd18",
+      "remote_mode": "100644",
+      "remote_bytes": 4123
+    }
+  ],
+  "non_generated_paths_deleted": [],
+  "historical_backups_deleted": [],
+  "permission_scope": "Only generated apps/web/dist artifacts; source/public rebuild verification required before deletion"
+}

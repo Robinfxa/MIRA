@@ -5,6 +5,8 @@ export interface PlaybackOptions {
   readonly isAuthorized: (origin: AudioOrigin) => boolean;
   readonly onFact?: (fact: PlaybackFact) => void;
   readonly onError?: (error: AudioRuntimeError) => void;
+  /** Review-only audition lifecycle. Auditions never emit PlaybackFacts. */
+  readonly onAuditionState?: (state: 'starting' | 'playing' | 'stopped' | 'completed' | 'failed') => void;
   readonly createContext?: () => AudioContext;
   readonly setInterval?: (callback: () => void, milliseconds: number) => number;
   readonly clearInterval?: (id: number) => void;
@@ -24,11 +26,17 @@ interface StreamState {
   source: AudioBufferSourceNode | null;
   activeFrames: number;
 }
+interface AuditionState {
+  readonly generation: number;
+  source: AudioBufferSourceNode | null;
+}
 
 /** One character-voice sink; no policy, wire receipts, provider selection or speech synthesis. */
 export class CancelSafePlayback {
   private context: AudioContext | null = null;
   private current: StreamState | null = null;
+  private auditioning: AuditionState | null = null;
+  private auditionGeneration = 0;
   private generation = 0;
   private timer: number | null = null;
   private closed = false;
@@ -45,6 +53,8 @@ export class CancelSafePlayback {
     if (!Number.isSafeInteger(value) || value < minimum || value > maximum) throw new RangeError('Invalid audio buffer bound');
     return value;
   }
+  /** True only when no ordinary speech or review audition owns the shared sink. */
+  get quiescent(): boolean { return !this.closed && this.current === null && this.auditioning === null; }
   private authorized(origin: AudioOrigin): boolean {
     try { return this.options.isAuthorized(origin) === true; } catch { return false; }
   }
@@ -67,6 +77,7 @@ export class CancelSafePlayback {
     if (this.closed || !this.authorized(origin)) return null;
     // Reopening the same active effect must not restart already submitted sound.
     if (this.current && JSON.stringify(this.current.origin) === JSON.stringify(this.copyOrigin(origin))) return null;
+    this.stopAudition();
     this.stop('new-input');
     const state: StreamState = { generation: ++this.generation, origin: this.copyOrigin(origin),
       queue: [], sealed: false, pumping: false, bufferedFrames: 0, submittedFrames: 0,
@@ -111,6 +122,69 @@ export class CancelSafePlayback {
       else throw new Error('Web Audio unavailable');
     }
     return this.context;
+  }
+  /** Explicit user-gesture-only playback of a reviewed raw buffer through this shared sink. */
+  async audition(pcm16: Int16Array, sampleRateHz: number): Promise<boolean> {
+    if (this.closed || this.current || this.auditioning || !(pcm16 instanceof Int16Array)
+      || pcm16.length < 1 || pcm16.length > 262_144
+      || ![16_000, 24_000, 48_000].includes(sampleRateHz)) return false;
+    const state: AuditionState = {generation: ++this.auditionGeneration, source: null};
+    this.auditioning = state;
+    this.notifyAudition('starting');
+    try {
+      const context = this.getContext();
+      await context.resume();
+      if (!this.activeAudition(state)) return false;
+      const buffer = context.createBuffer(1, pcm16.length, sampleRateHz);
+      const channel = buffer.getChannelData(0);
+      for (let i = 0; i < pcm16.length; i++) channel[i] = pcm16[i]! / 32_768;
+      const source = context.createBufferSource();
+      state.source = source;
+      source.buffer = buffer;
+      source.onended = () => this.finishAudition(state);
+      source.connect(context.destination);
+      if (!this.activeAudition(state)) return false;
+      source.start();
+      this.notifyAudition('playing');
+      return true;
+    } catch {
+      if (this.activeAudition(state)) this.terminateAudition(state, 'failed');
+      this.error('playback-failed', 'Reviewed audio could not be auditioned. The clip was not saved.');
+      return false;
+    }
+  }
+  private activeAudition(state: AuditionState): boolean {
+    return !this.closed && this.auditioning === state && state.generation === this.auditionGeneration;
+  }
+  private finishAudition(state: AuditionState): void {
+    if (!this.activeAudition(state)) return;
+    this.detachAudition(state);
+    this.notifyAudition('completed');
+  }
+  /** Synchronously disconnects and drops a review audition without emitting any character fact. */
+  stopAudition(): void {
+    const state = this.auditioning;
+    if (!state) return;
+    this.terminateAudition(state, 'stopped');
+  }
+  private terminateAudition(state: AuditionState, outcome: 'stopped' | 'failed'): void {
+    if (this.auditioning !== state || state.generation !== this.auditionGeneration) return;
+    this.detachAudition(state);
+    this.notifyAudition(outcome);
+  }
+  private detachAudition(state: AuditionState): void {
+    this.auditioning = null;
+    this.auditionGeneration++;
+    const source = state.source;
+    state.source = null;
+    if (!source) return;
+    source.onended = null;
+    try { source.disconnect(); } catch { /* Already disconnected by the browser. */ }
+    try { source.stop(); } catch { /* An already ended source can reject stop. */ }
+    source.buffer = null;
+  }
+  private notifyAudition(state: 'starting' | 'playing' | 'stopped' | 'completed' | 'failed'): void {
+    try { this.options.onAuditionState?.(state); } catch { /* An observer cannot retain or revive audio. */ }
   }
   private async pump(state: StreamState): Promise<void> {
     if (!this.permitted(state) || state.pumping || state.source || state.queue.length === 0) return;
@@ -162,7 +236,10 @@ export class CancelSafePlayback {
   reconcileAuthorization(): void {
     if (this.current && !this.authorized(this.current.origin)) this.stop('revoked');
   }
-  stop(reason: AudioStopReason = 'stop'): void { this.terminate(reason, 'stopped'); }
+  stop(reason: AudioStopReason = 'stop'): void {
+    this.stopAudition();
+    this.terminate(reason, 'stopped');
+  }
   private terminate(reason: AudioStopReason, stage: 'stopped' | 'failed'): void {
     const state = this.current;
     this.current = null;

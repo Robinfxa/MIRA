@@ -119,13 +119,23 @@ class SessionActor:
                 if previous != fingerprint:
                     raise DomainError("request_conflict", "Request ID was reused with different data.")
                 return self._state
+            try:
+                state = transitions.begin_input(self._state, activity_seq=activity_seq,
+                    cutoff=cutoff, request_id=request_id, text=text)
+            except DomainError as error:
+                if error.code == "history_pending":
+                    # A rejected new turn still removes authority from a current old
+                    # branch, but does not consume the caller's request/activity ID.
+                    revoked = transitions.revoke_for_history_pending(self._state, cutoff=cutoff)
+                    if revoked is not self._state:
+                        self._cancel_tasks(CancellationReason.SUPERSEDED)
+                        self._commit(revoked, "history_pending_revoked")
+                raise
             if len(self._request_fingerprints) >= self._limits.max_turns:
                 raise DomainError("session_capacity", "Foundation turn budget reached; create a new session.")
             # Cancellation-resistant providers are not allowed to create an unbounded task set.
             if len(self._tasks) >= 4:
                 raise DomainError("busy", "Previous work is still terminating.")
-            state = transitions.begin_input(self._state, activity_seq=activity_seq,
-                                             cutoff=cutoff, request_id=request_id, text=text)
             self._cancel_tasks(CancellationReason.SUPERSEDED)
             self._request_fingerprints[request_id] = fingerprint
             self._decision_inputs += (ReliableUserInput(request_id, text, source),)

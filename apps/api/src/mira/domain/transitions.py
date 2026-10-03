@@ -17,6 +17,12 @@ def _presentation_sequences(state: SessionState) -> tuple[int, ...]:
     )
 
 
+def _complete_presentation_prefix(state: SessionState, cutoff: int) -> bool:
+    # Presentation sequences are globally unique and the retained history is bounded.
+    # Compare the count instead of iterating over a client-controlled cutoff.
+    return len({sequence for sequence in _presentation_sequences(state) if sequence <= cutoff}) == cutoff
+
+
 def _cutoff(state: SessionState, value: int) -> None:
     known = max(_presentation_sequences(state), default=0)
     previous = state.last_presentation_cutoff
@@ -38,6 +44,8 @@ def begin_input(
     if activity_seq <= state.activity_seq:
         raise DomainError("stale_activity", "A new request needs a newer local activity.")
     _cutoff(state, cutoff)
+    if not _complete_presentation_prefix(state, cutoff):
+        raise DomainError("history_pending", "Presentation history through the cutoff is incomplete.")
     return replace(
         state, revision=state.revision + 1, activity_seq=activity_seq,
         input_epoch=state.input_epoch + 1, output_epoch=state.output_epoch + 1,
@@ -46,6 +54,20 @@ def begin_input(
         last_error_diagnostic_id=None,
         fences=_fences_after_stop(state, cutoff), last_presentation_cutoff=cutoff,
         user_inputs=state.user_inputs + (text,),
+    )
+
+
+def revoke_for_history_pending(state: SessionState, *, cutoff: int) -> SessionState:
+    """Revoke the prior branch without consuming a local Stop/input activity."""
+    if state.request_id is None:
+        return state
+    _cutoff(state, cutoff)
+    return replace(
+        state, revision=state.revision + 1,
+        output_epoch=state.output_epoch + 1, permit_revision=state.permit_revision + 1,
+        phase=Phase.STOPPED, request_id=None, active_grants=(), sealed=False,
+        fences=_fences_after_stop(state, cutoff), last_presentation_cutoff=cutoff,
+        last_error=None, last_error_diagnostic_id=None,
     )
 
 

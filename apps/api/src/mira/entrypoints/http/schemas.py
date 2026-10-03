@@ -26,6 +26,7 @@ class InputRequest(WireModel):
     activity_seq: Annotated[int, Field(strict=True, ge=1)]
     presentation_cutoff: Annotated[int, Field(strict=True, ge=0)]
     text: Annotated[str, Field(min_length=1, max_length=2000, pattern=r"\S")]
+    source_audio_stream_id: UUID | None = None
 
 
 class StopRequest(WireModel):
@@ -124,6 +125,54 @@ class DiagnosticsStatusResponse(WireModel):
     dropped_recordings: int
     io_failures: int
     pending_records: int
+
+
+class ReviewedAudioRecordingRequest(WireModel):
+    enabled: Annotated[bool, Field(strict=True)]
+    consent: Annotated[bool, Field(strict=True)] = False
+
+
+class ReviewedAudioStatusResponse(WireModel):
+    scope: Literal["application"] = "application"
+    recording_active: bool
+    has_pending_audio: bool
+    staged_bytes: Annotated[int, Field(ge=0)]
+    max_audio_bytes: Annotated[int, Field(ge=2, le=512 * 1024)]
+    expires_in_seconds: Annotated[float, Field(ge=0, le=60)]
+    pending_stream_id: UUID | None = None
+    pending_kind: Literal["audio_input", "audio_output"] | None = None
+    input_completion_ready: bool
+    notice: str
+    scope_notice: str
+
+
+class ReviewedAudioReviewResponse(WireModel):
+    scope: Literal["application"] = "application"
+    scope_notice: str
+    review_id: Annotated[str, Field(pattern=r"^[a-f0-9]{32}$")]
+    digest: Annotated[str, Field(pattern=r"^[a-f0-9]{64}$")]
+    kind: Literal["audio_input", "audio_output"]
+    sample_rate_hz: Literal[16000, 24000, 48000]
+    byte_count: Annotated[int, Field(strict=True, ge=2, le=512 * 1024)]
+    expires_in_seconds: Annotated[float, Field(ge=0, le=60)]
+    preview_path: str
+    notice: str
+
+
+class ReviewedAudioConfirmRequest(WireModel):
+    reviewed_digest: Annotated[str, Field(pattern=r"^[a-f0-9]{64}$")]
+    review: Literal["approved", "rejected", "uncertain"]
+    persist_consent: Annotated[bool, Field(strict=True)]
+
+
+class ReviewedAudioActionResponse(WireModel):
+    scope: Literal["application"] = "application"
+    scope_notice: str
+    ok: bool
+    code: str
+    message: str
+    recording_active: bool
+    accepted_for_queue: bool = False
 
 
 class VoiceCapabilities(WireModel):

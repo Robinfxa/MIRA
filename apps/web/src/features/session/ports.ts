@@ -1,4 +1,4 @@
-import type { AudioProgressRequest, CreateSessionResponse, EffectView, InputRequest, MicrophoneComplete, MicrophoneStart, ReceiptRequest, SessionView, StopRequest } from '../../shared/generated/contracts.js';
+import type { AudioProgressRequest, CreateSessionResponse, EffectView, InputRequest, MicrophoneComplete, MicrophoneStart, ReceiptRequest, ReviewedAudioStatusResponse, SessionView, StopRequest } from '../../shared/generated/contracts.js';
 import type { CapturedAudio } from '../audio/types.js';
 
 export type { VoiceCapabilities } from '../../shared/generated/contracts.js';
@@ -21,6 +21,7 @@ export interface SessionTransport {
   stop(request: StopRequest, signal?: AbortSignal): Promise<SessionView>;
   receipt(request: ReceiptRequest): Promise<SessionView>;
   audioProgress(request: AudioProgressRequest): Promise<SessionView>;
+  reviewedAudioStatus?(signal?: AbortSignal): Promise<ReviewedAudioStatusResponse>;
   speech(effect: EffectView, signal: AbortSignal, onPcm: (pcm: Int16Array) => void | Promise<void>): Promise<void>;
   microphone(origin: MicrophoneOrigin, signal: AbortSignal): MicrophoneStream;
   close(): Promise<void>;

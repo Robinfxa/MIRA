@@ -83,6 +83,7 @@ export type InputRequest = {
   readonly activity_seq: number;
   readonly presentation_cutoff: number;
   readonly text: string;
+  readonly source_audio_stream_id?: string | null;
 };
 
 export type MicrophoneAudio = {
@@ -142,6 +143,54 @@ export type ReceiptRequest = {
   readonly output_epoch: number;
   readonly activity_seq: number;
   readonly presentation_seq: number;
+};
+
+export type ReviewedAudioActionResponse = {
+  readonly scope?: "application";
+  readonly scope_notice: string;
+  readonly ok: boolean;
+  readonly code: string;
+  readonly message: string;
+  readonly recording_active: boolean;
+  readonly accepted_for_queue?: boolean;
+};
+
+export type ReviewedAudioConfirmRequest = {
+  readonly reviewed_digest: string;
+  readonly review: "approved" | "rejected" | "uncertain";
+  readonly persist_consent: boolean;
+};
+
+export type ReviewedAudioRecordingRequest = {
+  readonly enabled: boolean;
+  readonly consent?: boolean;
+};
+
+export type ReviewedAudioReviewResponse = {
+  readonly scope?: "application";
+  readonly scope_notice: string;
+  readonly review_id: string;
+  readonly digest: string;
+  readonly kind: "audio_input" | "audio_output";
+  readonly sample_rate_hz: 16000 | 24000 | 48000;
+  readonly byte_count: number;
+  readonly expires_in_seconds: number;
+  readonly preview_path: string;
+  readonly notice: string;
+};
+
+export type ReviewedAudioStatusResponse = {
+  readonly scope?: "application";
+  readonly recording_active: boolean;
+  readonly has_pending_audio: boolean;
+  readonly staged_bytes: number;
+  readonly max_audio_bytes: number;
+  readonly expires_in_seconds: number;
+  readonly pending_stream_id?: string | null;
+  readonly pending_kind?: "audio_input" | "audio_output" | null;
+  readonly input_completion_ready: boolean;
+  readonly notice: string;
+  readonly scope_notice: string;
 };
 
 export type SessionView = {

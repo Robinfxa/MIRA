@@ -287,3 +287,33 @@ button:disabled { opacity: .5; }
 .rehearsal-commands button { padding: .6rem .85rem; border: 1px solid #60736b; border-radius: 1rem; color: #e3dcc5; background: #263c3c; }
 .rehearsal-guide[hidden], .rehearsal-banner[hidden] { display: none; }
 .subtitle { white-space: pre-line; }
+
+/* Reviewed raw-audio tools stay secondary and collapsed beside the primary conversation. */
+.reviewed-audio-notice { margin: 0 0 12px; padding: 12px 16px; border: 1px solid #d49d58; border-radius: 12px; background: #48301f; color: #ffead0; font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }
+.reviewed-audio-notice[hidden] { display: none; }
+.reviewed-audio-panel { margin: 0 0 14px; border: 1px solid #4c5c57; border-radius: 12px; background: rgba(17, 31, 32, .78); color: #d9e2d9; }
+.reviewed-audio-panel > summary { min-height: 44px; display: flex; align-items: center; padding: 0 15px; cursor: pointer; color: #c9b17d; font-size: 13px; }
+.reviewed-audio-content { padding: 0 15px 15px; font-size: 13px; line-height: 1.7; }
+.reviewed-audio-content p { overflow-wrap: anywhere; }
+.reviewed-audio-status { font-weight: 650; }
+.reviewed-audio-scope { color: #f0d7aa; }
+.reviewed-audio-privacy { color: #c4d0c8; }
+.reviewed-audio-consent { display: flex; align-items: flex-start; gap: .65rem; margin: .8rem 0; }
+.reviewed-audio-consent input { flex: 0 0 auto; width: 1rem; height: 1rem; margin-top: .25rem; accent-color: #dfb66e; }
+.reviewed-audio-consent input:disabled { opacity: .55; }
+.reviewed-audio-actions { display: flex; flex-wrap: wrap; gap: .55rem; margin: .75rem 0; }
+.reviewed-audio-actions button { min-height: 40px; padding: .55rem .85rem; border: 1px solid #69796e; border-radius: 8px; background: #253938; color: #f0e7d1; }
+.reviewed-audio-actions button:disabled { opacity: .5; cursor: not-allowed; }
+.reviewed-audio-actions button[data-review-audio-confirm] { border-color: #9f7443; background: #46301f; }
+.reviewed-audio-clip { margin-top: 1rem; padding: 1rem; border: 1px solid #6b593d; border-radius: 10px; background: #1d2928; }
+.reviewed-audio-clip[hidden] { display: none; }
+.reviewed-audio-clip h2 { margin: 0 0 .5rem; font-size: .95rem; }
+.reviewed-audio-clip p { margin: .5rem 0; }
+.reviewed-audio-clip [data-review-audio-clip-metadata] { color: #f0d8ae; font-family: ui-monospace, monospace; font-size: 12px; }
+.reviewed-audio-eligibility[hidden] { display: none; }
+.reviewed-audio-result { min-height: 1.5em; color: #e7d3a9; }
+@media (max-width: 760px) {
+  .reviewed-audio-panel { margin-top: .5rem; }
+  .reviewed-audio-content { padding: 0 12px 12px; }
+  .reviewed-audio-clip { padding: .75rem; }
+}

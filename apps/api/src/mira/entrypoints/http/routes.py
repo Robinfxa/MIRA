@@ -70,19 +70,31 @@ async def get_session(session_id: UUID, token: Token, container: ContainerDepend
 @router.post("/sessions/{session_id}/inputs", response_model=SessionView, status_code=202)
 async def submit_input(session_id: UUID, body: InputRequest, token: Token,
                        container: ContainerDependency) -> SessionView:
-    state = await container.sessions.get(str(session_id), token).submit(
+    session_key = str(session_id)
+    actor = container.sessions.get(session_key, token)
+    same_audio_input = (body.source_audio_stream_id is not None and
+        container.reviewed_audio.consume_input_completion(
+            session_key, str(body.source_audio_stream_id), str(body.request_id), body.text.strip()))
+    state = await actor.submit(
         request_id=str(body.request_id), activity_seq=body.activity_seq,
         cutoff=body.presentation_cutoff, text=body.text.strip(),
+        source="asr_final" if same_audio_input else "text",
     )
+    # A matching ASR commit is the same microphone input. Other new text/input replaces the stage.
+    if not same_audio_input:
+        container.reviewed_audio.cancel_session(session_key)
     return session_view(state)
 
 
 @router.post("/sessions/{session_id}/stop", response_model=SessionView)
 async def stop_session(session_id: UUID, body: StopRequest, token: Token,
                        container: ContainerDependency) -> SessionView:
-    state = await container.sessions.get(str(session_id), token).stop(
+    session_key = str(session_id)
+    actor = container.sessions.get(session_key, token)
+    state = await actor.stop(
         activity_seq=body.activity_seq, cutoff=body.presentation_cutoff,
     )
+    container.reviewed_audio.cancel_session(session_key)
     return session_view(state)
 
 
@@ -112,5 +124,8 @@ async def events(session_id: UUID, token: Token, container: ContainerDependency)
 
 @router.delete("/sessions/{session_id}", status_code=204)
 async def delete_session(session_id: UUID, token: Token, container: ContainerDependency) -> Response:
-    await container.sessions.delete(str(session_id), token)
+    session_key = str(session_id)
+    container.sessions.get(session_key, token)
+    container.reviewed_audio.cancel_session(session_key)
+    await container.sessions.delete(session_key, token)
     return Response(status_code=204)

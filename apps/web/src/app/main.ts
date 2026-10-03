@@ -3,6 +3,7 @@ import { SceneEffectExecutor } from '../features/presentation/scene-executor.js'
 import { MiraApiClient } from '../features/session/api-client.js';
 import { SessionController } from '../features/session/controller.js';
 import { recordingNotice, safeSessionError, watchDiagnosticsStatus } from '../features/diagnostics/status.js';
+import { ReviewedAudioPanel } from '../features/diagnostics/reviewed-audio.js';
 
 function element<T extends HTMLElement>(selector: string): T {
   const value = document.querySelector<T>(selector);
@@ -21,6 +22,8 @@ const rehearsalButton = element<HTMLButtonElement>('[data-rehearsal-input]');
 const rehearsalHint = element('[data-rehearsal-hint]');
 let rehearsalAvailable = false;
 let rehearsalHeld: string | null = null;
+let gestureReviewFence: (() => void) | null = null;
+let rehearsalReviewFence: (() => void) | null = null;
 const diagnosticsWatcher = watchDiagnosticsStatus(config, value => {
   const notice = recordingNotice(value);
   recordingBanner.hidden = !notice.visible;
@@ -33,6 +36,8 @@ let gestureInputRevision = 0;
 let rehearsalInputRevision = 0;
 let messageRevision = 0;
 let closed = false;
+let reviewPanel: ReviewedAudioPanel | null = null;
+const api = new MiraApiClient(config);
 messageInput.addEventListener('input', () => { messageRevision++; });
 function restoreNotSent(outcome: {status?: string; text?: string} | undefined, revision: number,
     expectedText?: string): void {
@@ -45,8 +50,11 @@ function defaultVoiceHint(): string {
   return microphoneAvailable ? '按住说话，松开后等待可靠转写。停止会立即释放麦克风。' : '麦克风识别未配置或浏览器不支持。可以继续用文字。';
 }
 const controller = new SessionController(
-  new MiraApiClient(config), new SceneEffectExecutor(element('[data-stage]')), {
-    connected() { if (!closed) element<HTMLFieldSetElement>('fieldset').disabled = false; },
+  api, new SceneEffectExecutor(element('[data-stage]')), {
+    connected() {
+      if (!closed) element<HTMLFieldSetElement>('fieldset').disabled = false;
+      reviewPanel?.start();
+    },
     update(view) {
       status.textContent = view.phase;
       diagnostic.textContent = JSON.stringify({
@@ -66,6 +74,7 @@ const controller = new SessionController(
       const modes = {mock: 'Mock · 固定场景', replay: 'Fixture · 生成夹具回放', rehearsal: 'OFFLINE · 离线排练', injected: '注入后端 · 尚未验收'};
       element('[data-mode-label]').textContent = modes[value.generation_mode];
       rehearsalAvailable = value.generation_mode === 'rehearsal' && value.qualification === 'offline_fixture';
+      reviewPanel?.setCanEnable(value.generation_mode === 'injected' && (value.microphone_enabled || value.speech_enabled));
       element('[data-rehearsal-banner]').hidden = !rehearsalAvailable;
       element('[data-rehearsal-controls]').hidden = !rehearsalAvailable;
       rehearsalButton.disabled = !rehearsalAvailable;
@@ -88,20 +97,46 @@ const controller = new SessionController(
         : state === 'recording' ? '正在听。松开后结束录音并等待转写。'
         : state === 'finishing' ? '录音已停止，正在等待可靠的最终转写…' : defaultVoiceHint();
     },
+    reviewAudition(state) { reviewPanel?.auditionState(state); },
   }, config,
 );
+reviewPanel = new ReviewedAudioPanel(api, controller, {
+  notice: element('[data-review-audio-notice]'),
+  status: element('[data-review-audio-status]'),
+  scope: element('[data-review-audio-scope]'),
+  eligibilityNotice: element('[data-review-audio-eligibility]'),
+  consent: element<HTMLInputElement>('[data-review-audio-consent]'),
+  enable: element<HTMLButtonElement>('[data-review-audio-enable]'),
+  disable: element<HTMLButtonElement>('[data-review-audio-disable]'),
+  review: element<HTMLButtonElement>('[data-review-audio-review]'),
+  clip: element('[data-review-audio-clip]'),
+  clipMetadata: element('[data-review-audio-clip-metadata]'),
+  preview: element<HTMLButtonElement>('[data-review-audio-preview]'),
+  audition: element<HTMLButtonElement>('[data-review-audio-audition]'),
+  auditionStatus: element('[data-review-audio-audition-status]'),
+  attestation: element<HTMLInputElement>('[data-review-audio-attestation]'),
+  confirm: element<HTMLButtonElement>('[data-review-audio-confirm]'),
+  cancel: element<HTMLButtonElement>('[data-review-audio-cancel]'),
+  result: element('[data-review-audio-result]'),
+});
+reviewPanel.setCanEnable(false);
 function releaseGesture(cancel: boolean): void {
   if (held === null) return;
   held = null;
-  if (cancel) void controller.stop();
+  const settleFence = gestureReviewFence; gestureReviewFence = null;
+  if (cancel) {
+    void controller.stop().finally(() => settleFence?.());
+  }
   else {
     const revision = gestureInputRevision;
-    void controller.finishMicrophone().then(outcome => restoreNotSent(outcome, revision));
+    void controller.finishMicrophone().then(outcome => restoreNotSent(outcome, revision))
+      .finally(() => settleFence?.());
   }
 }
 function startGesture(identity: string): void {
   if (closed || ptt.disabled || held !== null || rehearsalHeld !== null) return;
   gestureInputRevision = ++messageRevision;
+  gestureReviewFence = reviewPanel?.invalidateForNewInput() ?? null;
   held = identity;
   error.textContent = '';
   void controller.startMicrophone();
@@ -138,15 +173,20 @@ ptt.addEventListener('click', event => {
 function releaseRehearsal(cancel: boolean): void {
   if (rehearsalHeld === null) return;
   rehearsalHeld = null;
-  if (cancel) void controller.stop();
+  const settleFence = rehearsalReviewFence; rehearsalReviewFence = null;
+  if (cancel) {
+    void controller.stop().finally(() => settleFence?.());
+  }
   else {
     const revision = rehearsalInputRevision;
-    void controller.finishRehearsalInput().then(outcome => restoreNotSent(outcome, revision));
+    void controller.finishRehearsalInput().then(outcome => restoreNotSent(outcome, revision))
+      .finally(() => settleFence?.());
   }
 }
 function startRehearsal(identity: string): void {
   if (closed || !rehearsalAvailable || rehearsalButton.disabled || held !== null || rehearsalHeld !== null) return;
   rehearsalInputRevision = ++messageRevision;
+  rehearsalReviewFence = reviewPanel?.invalidateForNewInput() ?? null;
   error.textContent = '';
   void controller.startRehearsalInput();
   rehearsalHeld = identity;
@@ -185,25 +225,44 @@ element<HTMLFormElement>('form').addEventListener('submit', event => {
   event.preventDefault();
   const text = messageInput.value;
   if (!text.trim()) return;
+  const gestureFence = gestureReviewFence; gestureReviewFence = null; gestureFence?.();
+  const rehearsalFence = rehearsalReviewFence; rehearsalReviewFence = null; rehearsalFence?.();
+  const reviewFence = reviewPanel?.invalidateForNewInput();
   error.textContent = '';
   held = null; rehearsalHeld = null;
   const revision = ++messageRevision;
   messageInput.value = '';
-  void controller.input(text).then(outcome => restoreNotSent(outcome, revision, text));
+  void controller.input(text).then(outcome => restoreNotSent(outcome, revision, text))
+    .finally(() => reviewFence?.());
 });
-element('[data-stop]').addEventListener('click', () => { held = null; rehearsalHeld = null; void controller.stop(); });
+element('[data-stop]').addEventListener('click', () => {
+  held = null; rehearsalHeld = null;
+  const gestureFence = gestureReviewFence; gestureReviewFence = null; gestureFence?.();
+  const rehearsalFence = rehearsalReviewFence; rehearsalReviewFence = null; rehearsalFence?.();
+  const reviewFence = reviewPanel?.invalidateForStop();
+  void controller.stop().finally(() => reviewFence?.());
+});
 for (const button of document.querySelectorAll<HTMLButtonElement>('[data-command]')) {
   button.addEventListener('click', () => {
     error.textContent = ''; held = null; rehearsalHeld = null; messageRevision++;
-    void controller.input(button.dataset.command ?? '');
+    const gestureFence = gestureReviewFence; gestureReviewFence = null; gestureFence?.();
+    const rehearsalFence = rehearsalReviewFence; rehearsalReviewFence = null; rehearsalFence?.();
+    const reviewFence = reviewPanel?.invalidateForNewInput();
+    void controller.input(button.dataset.command ?? '').finally(() => reviewFence?.());
   });
 }
 element('[data-close]').addEventListener('click', () => {
   messageRevision++;
   closed = true; held = null; rehearsalHeld = null; ptt.disabled = true; rehearsalButton.disabled = true;
+  gestureReviewFence?.(); gestureReviewFence = null; rehearsalReviewFence?.(); rehearsalReviewFence = null;
+  reviewPanel?.close();
   diagnosticsWatcher.close();
   element<HTMLFieldSetElement>('fieldset').disabled = true;
   void controller.close().then(() => { status.textContent = 'closed · 刷新可新建'; });
 });
-window.addEventListener('pagehide', () => { closed = true; held = null; rehearsalHeld = null; messageRevision++; diagnosticsWatcher.close(); void controller.close(); });
+window.addEventListener('pagehide', () => {
+  closed = true; held = null; rehearsalHeld = null; messageRevision++;
+  gestureReviewFence?.(); gestureReviewFence = null; rehearsalReviewFence?.(); rehearsalReviewFence = null;
+  reviewPanel?.close(); diagnosticsWatcher.close(); void controller.close();
+});
 void controller.connect().catch(() => { error.textContent = '连接失败。请刷新后重试；未启动任何语音。'; });

@@ -3,11 +3,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from collections.abc import Awaitable, Callable
 
+from mira.adapters.diagnostics.audio_review import ReviewedAudioCapture
 from mira.adapters.journal.memory import MemoryEventJournal
 from mira.adapters.diagnostics.recorder import DiagnosticOptions, LocalDiagnostics, NullDiagnostics
 from mira.application.ports.diagnostics import Diagnostics
 from mira.application.ports.journal import EventJournal
 from mira.application.ports.media import SpeechRecognitionBackend, SpeechSynthesisBackend
+from mira.application.ports.reviewed_audio import ReviewedAudioCapturePort
 from mira.application.session_actor import RuntimeLimits, SessionActor
 from mira.application.sessions import SessionRegistry
 from mira.bootstrap.providers import Providers, create_providers
@@ -20,6 +22,7 @@ class Container:
     settings: Settings
     sessions: SessionRegistry
     journal: EventJournal
+    reviewed_audio: ReviewedAudioCapturePort
     speech_enabled: bool = False
     microphone_enabled: bool = False
     generation_mode: str = "mock"
@@ -27,6 +30,10 @@ class Container:
     diagnostics: Diagnostics = field(default_factory=NullDiagnostics)
 
     async def close(self) -> None:
+        try:
+            self.reviewed_audio.close()
+        except Exception:
+            pass
         try:
             await self.sessions.close()
         finally:
@@ -80,6 +87,19 @@ def build_container(settings: Settings, *, providers: Providers | None = None,
                                    decision_owner=selected.decision_owner),
         journal, settings.runtime.max_sessions,
     )
-    return Container(settings, sessions, journal, speech_synthesis is not None,
-                     speech_recognition is not None,
-                     "injected" if providers is not None else settings.providers.generation, media_shutdown, diagnostics)
+    reviewed_audio = ReviewedAudioCapture(diagnostics)
+    if settings.diagnostics.development_recording:
+        # Keep the old explicit private config path coherent with the coordinator. Default settings
+        # remain off; an explicit UI/API transition is required before any runtime staging otherwise.
+        reviewed_audio.set_recording(True, consent=settings.diagnostics.recording_consent)
+    return Container(
+        settings=settings,
+        sessions=sessions,
+        journal=journal,
+        reviewed_audio=reviewed_audio,
+        speech_enabled=speech_synthesis is not None,
+        microphone_enabled=speech_recognition is not None,
+        generation_mode="injected" if providers is not None else settings.providers.generation,
+        media_shutdown=media_shutdown,
+        diagnostics=diagnostics,
+    )

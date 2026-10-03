@@ -27,6 +27,7 @@ from mira.config.loader import ConfigurationError, load_settings, project_root
 from mira.config.settings import Settings
 from mira.domain.errors import DomainError
 from mira.entrypoints.http.routes import router
+from mira.entrypoints.http.audio_review_routes import router as audio_review_router
 from mira.entrypoints.http.media_routes import router as media_router
 from mira.entrypoints.http.schemas import MEDIA_WIRE_MODELS
 
@@ -138,6 +139,7 @@ def create_app(settings: Settings | None = None, *, providers: Providers | None 
                              "request_id": request.state.request_id}, status_code=422)
 
     app.include_router(router)
+    app.include_router(audio_review_router)
     app.include_router(media_router)
 
     def public_openapi():

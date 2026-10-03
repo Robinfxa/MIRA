@@ -13,8 +13,10 @@ from starlette.websockets import WebSocketDisconnect
 from mira.application.diagnostic_errors import classify_failure, public_error_code
 from mira.application.diagnostic_events import (
     CancellationReason, DiagnosticCode, DiagnosticEvent, DiagnosticOutcome, DiagnosticStage,
+    RecordingKind,
     diagnostic_context, emit_safely, failure_diagnostic_id, request_correlation,
 )
+from mira.application.ports.reviewed_audio import AudioCaptureHandle, AudioCaptureOwner
 from mira.application.media_runtime import MediaOperation, MicrophoneBuffer
 from mira.application.ports.media import TranscriptRevision
 from mira.domain.errors import DomainError
@@ -55,26 +57,47 @@ async def speech_stream(session_id: UUID, effect_id: UUID, body: SpeechStreamReq
     actor = container.sessions.get(str(session_id), token)
     operation = await actor.open_speech(effect_id=str(effect_id), digest=body.digest,
                                        output_epoch=body.output_epoch, activity_seq=body.activity_seq)
+    owner = AudioCaptureOwner(
+        session_id=str(session_id),
+        turn_id=str(operation.output_epoch),
+        stream_id=str(effect_id),
+        effect_id=str(effect_id),
+        output_epoch=operation.output_epoch,
+    )
+    capture = container.reviewed_audio
+    capture_result = capture.begin_scoped(owner, sample_rate_hz=24000,
+                                          kind=RecordingKind.AUDIO_OUTPUT)
+    capture_handle = capture_result.handle if capture_result.ok else None
     origin = dict(effect_id=str(effect_id), digest=body.digest, output_epoch=body.output_epoch,
                   activity_seq=body.activity_seq, stream_id=str(effect_id))
+    stream_succeeded = False
 
     async def frames():
+        nonlocal stream_succeeded
         cursor, sequence = 0, 0
         try:
             async for packet in operation.values():
                 await actor.validate_media(operation)
+                if capture_handle is not None:
+                    # speech_packets has already checked the PCM16LE format, stream/effect identity,
+                    # sample rate, continuity and chunk bound before the packet reaches this edge.
+                    capture.append_scoped(owner, capture_handle, packet.pcm)
                 cursor = packet.first_sample + len(packet.pcm) // 2
                 sequence += 1
                 yield SpeechAudioFrame(**origin, sequence=sequence, first_sample=packet.first_sample,
                     pcm_base64=base64.b64encode(packet.pcm).decode("ascii")).model_dump_json() + "\n"
             await actor.validate_media(operation)
             yield SpeechCompleteFrame(**origin, total_samples=cursor).model_dump_json() + "\n"
+            # Set only after the complete frame has actually been sent by the streaming consumer.
+            stream_succeeded = True
         except DomainError as error:
             if error.code != "media_cancelled":
                 await actor.media_failed(operation, error.code)
             yield SpeechErrorFrame(**origin, code=public_error_code(error.code),
                                    diagnostic_id=operation.diagnostic_id).model_dump_json() + "\n"
         finally:
+            if capture_handle is not None and not stream_succeeded:
+                capture.cancel_session(str(session_id), stream_id=owner.stream_id)
             await actor.close_media(operation, CancellationReason.DISCONNECT)
 
     class OwnedStreamResponse(StreamingResponse):
@@ -82,6 +105,8 @@ async def speech_stream(session_id: UUID, effect_id: UUID, body: SpeechStreamReq
             try:
                 await super().__call__(scope, receive, send)
             finally:
+                if capture_handle is not None and not stream_succeeded:
+                    capture.cancel_session(str(session_id), stream_id=owner.stream_id)
                 await actor.close_media(operation, CancellationReason.DISCONNECT)
 
     return OwnedStreamResponse(frames(), media_type="application/x-ndjson",
@@ -106,7 +131,8 @@ async def _message(websocket: WebSocket, *, timeout: float = 10) -> dict:
 
 
 async def _read_microphone(websocket: WebSocket, buffer: MicrophoneBuffer, actor,
-                           operation: MediaOperation) -> None:
+                           operation: MediaOperation, capture, capture_owner: AudioCaptureOwner,
+                           capture_handle: AudioCaptureHandle | None) -> None:
     while True:
         raw = await _message(websocket)
         await actor.validate_media(operation)
@@ -117,6 +143,9 @@ async def _read_microphone(websocket: WebSocket, buffer: MicrophoneBuffer, actor
             except (ValueError, binascii.Error):
                 raise DomainError("invalid_audio", "Invalid PCM encoding.") from None
             buffer.push(sequence=value.sequence, first_sample=value.first_sample, pcm=pcm)
+            if capture_handle is not None:
+                # Only append after the live input boundary has validated and accepted this chunk.
+                capture.append_scoped(capture_owner, capture_handle, pcm)
         else:
             control = MicrophoneControl.model_validate(raw)
             if control.type == "cancel":
@@ -129,7 +158,8 @@ async def _read_microphone(websocket: WebSocket, buffer: MicrophoneBuffer, actor
 
 
 async def _send_transcripts(websocket: WebSocket, buffer: MicrophoneBuffer, actor,
-                            operation: MediaOperation) -> None:
+                            operation: MediaOperation, capture, capture_owner: AudioCaptureOwner,
+                            capture_handle: AudioCaptureHandle | None) -> None:
     revision, final_text, had_final = 0, "", False
     async for value in operation.values():
         await actor.validate_media(operation)
@@ -147,6 +177,10 @@ async def _send_transcripts(websocket: WebSocket, buffer: MicrophoneBuffer, acto
     await actor.validate_media(operation)
     if not buffer.finished:
         raise DomainError("incomplete_stream", "Recognition ended before microphone finish.")
+    if had_final and capture_handle is not None:
+        # The server binds this exact final transcript to the authenticated stream before telling
+        # the client completion succeeded. A later input may preserve only this one-use pairing.
+        capture.register_input_completion(capture_owner, capture_handle, final_text)
     await websocket.send_text(MicrophoneComplete(stream_id=buffer.stream_id, revision=revision,
         text=final_text if had_final else "", had_final=had_final).model_dump_json())
 
@@ -163,6 +197,8 @@ async def microphone(websocket: WebSocket, session_id: str) -> None:
     context_token = request_correlation.set(str(uuid4()))
     close_reason = CancellationReason.UNKNOWN
     operation, buffer, actor = None, None, None
+    capture_owner, capture_handle = None, None
+    microphone_succeeded = False
     tasks: list[asyncio.Task] = []
     try:
         UUID(session_id)
@@ -171,10 +207,22 @@ async def microphone(websocket: WebSocket, session_id: str) -> None:
         buffer = MicrophoneBuffer(str(start.stream_id))
         operation = await actor.open_microphone(stream_id=buffer.stream_id,
             activity_seq=start.activity_seq, input_epoch=start.input_epoch, buffer=buffer)
+        capture_owner = AudioCaptureOwner(
+            session_id=session_id,
+            turn_id=None,
+            stream_id=buffer.stream_id,
+            input_epoch=operation.input_epoch,
+        )
+        capture = container.reviewed_audio
+        capture_result = capture.begin_scoped(capture_owner, sample_rate_hz=16000,
+                                              kind=RecordingKind.AUDIO_INPUT)
+        capture_handle = capture_result.handle if capture_result.ok else None
         await websocket.send_text(MicrophoneReady(stream_id=buffer.stream_id,
             activity_seq=start.activity_seq, input_epoch=start.input_epoch).model_dump_json())
-        reader = asyncio.create_task(_read_microphone(websocket, buffer, actor, operation))
-        sender = asyncio.create_task(_send_transcripts(websocket, buffer, actor, operation))
+        reader = asyncio.create_task(_read_microphone(websocket, buffer, actor, operation,
+            capture, capture_owner, capture_handle))
+        sender = asyncio.create_task(_send_transcripts(websocket, buffer, actor, operation,
+            capture, capture_owner, capture_handle))
         tasks = [reader, sender]
         operation.own_consumers(*tasks)
         async with asyncio.timeout(75):
@@ -182,8 +230,16 @@ async def microphone(websocket: WebSocket, session_id: str) -> None:
             # Receiver remains alive through drain so close/cancel always tears down STT.
             # If both finish simultaneously, reject malformed/cancelled input first.
             if reader in done:
-                await reader
+                try:
+                    await reader
+                except WebSocketDisconnect:
+                    # The client normally closes immediately after receiving MicrophoneComplete.
+                    # That completed stream remains reviewable; an earlier disconnect still cancels.
+                    if not (sender.done() and not sender.cancelled()
+                            and sender.exception() is None):
+                        raise
             await sender
+            microphone_succeeded = True
     except asyncio.CancelledError:
         close_reason = CancellationReason.DISCONNECT
         raise
@@ -215,6 +271,8 @@ async def microphone(websocket: WebSocket, session_id: str) -> None:
             # This call revokes and registers all owned cleanup synchronously;
             # repeated outer cancellation cannot skip either step.
             cleanup = actor.close_media(operation, close_reason)
+            if capture_handle is not None and not microphone_succeeded:
+                container.reviewed_audio.cancel_session(session_id, stream_id=buffer.stream_id)
             for task in tasks:
                 if not task.done():
                     task.cancel()
