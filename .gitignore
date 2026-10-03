@@ -1,0 +1,31 @@
+.env
+.env.*
+.env*
+!.env.example
+!.env.development.example
+.venv/
+.venv313/
+node_modules/
+**/dist/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.egg-info/
+var/
+.DS_Store
+playwright-report/
+test-results/
+
+# Generated local history transport; shipped separately in the delivery archive.
+docs/verification/fnd-02/development.bundle
+
+docs/verification/fnd-03/development.bundle
+
+# Local credential material must never enter archives or history.
+.secrets/
+*.credentials.json
