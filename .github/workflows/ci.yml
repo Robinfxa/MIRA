@@ -1,0 +1,89 @@
+name: foundation-quality
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+      has_work: ${{ steps.select.outputs.has_work }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - id: select
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ -z "$BASE_SHA" ] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
+            python tools/check.py --full --matrix > matrix.json
+          else
+            python tools/check.py --affected --base "$BASE_SHA" --matrix > matrix.json
+          fi
+          echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
+          python -c 'import json,os; n=bool(json.load(open("matrix.json"))["include"]); open(os.environ["GITHUB_OUTPUT"],"a").write("has_work="+str(n).lower()+"\n")'
+  quality:
+    needs: plan
+    if: needs.plan.outputs.has_work == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+          cache: npm
+      - run: python -m pip install -r requirements/dev.lock
+      - if: matrix.lane == 'web'
+        run: npm ci --ignore-scripts
+      - run: python tools/check.py --lane "${{ matrix.lane }}" --jobs 1 --output-dir var/quality/ci-${{ matrix.lane }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-${{ matrix.lane }}
+          path: var/quality/
+          if-no-files-found: warn
+  quality-gate:
+    if: always()
+    needs: [plan, quality]
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          PLAN_RESULT: ${{ needs.plan.result }}
+          TEST_RESULT: ${{ needs.quality.result }}
+          HAS_WORK: ${{ needs.plan.outputs.has_work }}
+        run: |
+          test "$PLAN_RESULT" = "success"
+          if [ "$HAS_WORK" = "true" ]; then
+            test "$TEST_RESULT" = "success"
+            echo "Selected lane jobs passed. This is not a full product acceptance."
+          else
+            echo "No selected runtime checks (documentation-only/no-changes); no test pass claimed."
+          fi
+  release-local:
+    if: github.event_name == 'workflow_dispatch'
+    needs: quality-gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r requirements/dev.lock
+      - run: python tools/check.py --lane package smoke --jobs 1 --output-dir var/quality/release
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-local
+          path: var/quality/
