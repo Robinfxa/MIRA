@@ -1,0 +1,29 @@
+MIRA 2026-10-04 12:12 UTC memory + macOS source package
+
+This is one complete split source delivery. Keep all seven files together. The code ZIP is intentionally incomplete without both asset ZIPs. The split manifest covers exactly 876 projected files with paths, byte sizes, SHA-256 hashes and POSIX modes. It is bound to public projection manifest SHA-256 031d82a3029a3fc50007ee5bbc72309d733c475a88fe550ad96e45d57ef9055e, derived from frozen capture manifest SHA-256 858991041e081a7ce05ee8b8065636f944a1130208e79894ef920f6a610b9ef7. The public projection retains all 89 vendor license/notice files.
+
+Release checks
+The frozen source and exact public projection each passed the complete 12-lane release selection, with no not-run lanes or source drift. Each run recorded 1,759 pytest cases plus 11 subtests and 277 Node tests. The packaging and smoke lanes also passed. A pattern-only scan of the 876 staged files found 28 token/marker-shaped matches across 15 test/fixture paths and none outside tests/fixtures; it recorded counts only and printed no raw matches. Source summary SHA-256: 085deb1d1a63ebd31aa7f751ea48700c126e6da9a28c0994261f4b30e739cfd1. Public summary SHA-256: 3f5411723e0f2a2acf3ebe40ccb037bf72869405ca5b2a8c0f4fe109e845899f.
+
+Feature and acceptance boundaries
+The opt-in memory CLI can manually record, inspect, recall, preview context, correct, reversibly forget, and restore entries in an explicitly chosen local SQLite store. See docs/development/LOCAL_MEMORY.md. It is a local operator tool: it is not wired to MIRA's Actor, live conversation, automatic recall, or personality learning, and it does not collect real dialogue. No actual private memory database was included. A reversible forget suppresses records from recall but does not erase source text.
+
+The runtime-preparation change pins official native Codex CLI 0.159.2 artifacts for macOS arm64 and x86_64, alongside Linux x86_64, and offline guard tests passed. No actual Mac process startup, metadata handshake, login, model inference, or user-device acceptance was performed. The earlier 09:52 delivery remains unchanged and Linux-only; use this matched complete package, not an overlay.
+
+Offline portrait feedback at 12:07: the portrait was visible and its detail was praised; stiffness and background mismatch remain open. This is not full 12-frame, voice, device, or video acceptance. Previous provider receipts are unchanged: normal text ALLOW, voice UNKNOWN, and narrow synthetic TTS/STT checks only. No paid provider call was made while preparing this package.
+
+Verify, restore and rehearse
+Run one checksum command from this directory:
+  # Linux
+  sha256sum -c MIRA-20261004-1212-SHA256SUMS.txt
+  # macOS alternative
+  shasum -a 256 -c MIRA-20261004-1212-SHA256SUMS.txt
+
+Restore into a new path that does not already exist (all three ZIPs, this manifest, this guide, the restore helper, and checksum file must stay together):
+  python3 -O MIRA-20261004-1212-restore.py restore --delivery-dir "$PWD" --target "$HOME/mira-20261004-1212-restored"
+  cd "$HOME/mira-20261004-1212-restored"
+  python3 -m ensurepip --version
+  python3 tools/bootstrap.py
+  sh scripts/dev --profile rehearsal
+
+Use Python 3.11–3.13, Node.js 22.12 or newer, and npm. Bootstrap needs the official package registries and installs project-local dependencies. Check ensurepip before bootstrap; some Python distributions omit it. See docs/development/QUICKSTART.md for prerequisites and the bounded offline rehearsal. Stop the local rehearsal with Ctrl+C.
