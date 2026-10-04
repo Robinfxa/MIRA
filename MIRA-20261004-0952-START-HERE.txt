@@ -1,0 +1,32 @@
+MIRA 0952 runtime-transport repair: source delivery and rehearsal guide
+
+What this contains
+This delivery has three complementary archives plus a split-source manifest, the matching restore helper, this guide and a checksum list. The code ZIP is intentionally incomplete without BOTH asset ZIPs. Keep all seven files together and verify SHA256SUMS.txt before restoring. The split-source manifest covers exactly 859 projected source files, including paths, bytes, SHA256 hashes and POSIX modes. It binds the public projection manifest SHA256 b0b664d766450344bb5d6268892b31597a9cd2f3113278a5d3f8df52015eebab and its source capture manifest SHA256 9196ab3aac435a20632c5b6291eb153e1837aa7823018615949927743c993fa3. The projection has 89 vendor-license/notice files in total: the two new vendor-license files and all 87 prior license files are preserved.
+
+Preflight review
+The manifest-built projection stage was compared against all 859 projected paths, file sizes, SHA256 hashes and modes before packaging. It contains no actual `.env` file, dependencies, build `dist` directory, cache, raw log, or provider-output file. A redacted credential-marker scan found five credential-shaped matches only in synthetic test fixtures and 35 synthetic-marker references; there were zero non-test credential-shaped matches. Raw matched values were not printed.
+
+Release evidence
+The exact frozen source and the exact public projection each passed the complete 12-lane release selection; all lanes passed and not_run is empty in both results. Each recorded 1,704 pytest tests plus 11 subtests and 277 Node tests; packaging and smoke lanes passed. The wsproto 1.3.2 repair passed five implementation tests and eight independent actual-TCP checks. PyJWT 2.15.1 passed 21 auth tests, 11 subtests and seven independent negative controls; the auth implementation itself did not change. Current docs describe these boundaries truthfully.
+
+Additional narrow speech-transport evidence (2026-10-04 09:57 UTC)
+One 3.24-second Chinese synthetic WAV was submitted once to chirp_3/cmn-Hans-CN/us. In 14.497196 seconds it returned “你好,这是一次语音连接测试。”; after removing punctuation and whitespace, this matches the fixed text. Report SHA256: 9e304cf7722a26b425a48f063996de42a2b734e319c78940edcda996118c173e. This was synthetic audio only: no human microphone, playback, or other service. It does not calibrate Chinese recognition quality or prove a natural voice conversation. No real microphone, real-browser, continuous-voice, or 3–5 minute video acceptance is claimed.
+
+Restore and rehearse
+Keep the three ZIPs, this manifest, this file, the restore helper and SHA list together in one directory. From that directory run:
+
+  # Linux checksum command:
+  sha256sum -c MIRA-20261004-0952-SHA256SUMS.txt
+  # macOS alternative (use this instead of the Linux command):
+  shasum -a 256 -c MIRA-20261004-0952-SHA256SUMS.txt
+  python3 MIRA-20261004-0952-restore.py restore --delivery-dir "$PWD" --target "$HOME/mira-0952-restored"
+  cd "$HOME/mira-0952-restored"
+  python3 -m ensurepip --version
+  python3 tools/bootstrap.py
+  sh scripts/dev --profile rehearsal
+
+Use Python 3.11–3.13, Node.js 22.12 or newer, and npm. Before bootstrap, verify `python3 -m ensurepip --version`; one tested Python 3.13.5 distribution lacked ensurepip and failed before dependency downloads. Prefer an official Python distribution with venv/ensurepip. If an existing trusted pip must seed the new venv, the current QUICKSTART gives this separate command: `EXISTING_PYTHON -m pip --python NEW_VENV_PYTHON install -r requirements/dev.lock`. That is an extra installation step, not the original one-command bootstrap. Do not change system Python or run a downloaded bootstrap script. Bootstrap needs the official package registries and installs into the project only.
+
+For the bounded offline rehearsal, try: 你好; 不要拍我; 看照片; 照片里有什么; 讲讲旅途 (press Stop during the response); 听雨; 暖灯; /fail then 你好. The eight bundled clips are synthetic English Flite/slt recordings, not human or Google speech or a Chinese voice-quality check. The hold-to-rehearse control is simulated and never opens the microphone; release submits fixed text. The loopback rehearsal is not public. Stop it with Ctrl+C. See docs/development/QUICKSTART.md for full guidance.
+
+No source has been published by preparing this backup. Previously published 0837 material and older archives are untouched. Preserve this frozen delivery as-is; any correction requires a new versioned backup directory. Historical development records remain in the source tree and are not proof of current user-device acceptance.
