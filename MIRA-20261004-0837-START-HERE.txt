@@ -1,0 +1,47 @@
+MIRA 08:37 final-usability public source backup
+Prepared: 2026-10-04 UTC
+
+Status: complete seven-file split backup of the immutable public projection after both the full-source and full-public release checks passed. This is a verified source backup, not a publication or a claim of browser/device/production readiness.
+
+Frozen source identity:
+- Public projection: 20261004T0837Z-final-usability
+- Projection manifest SHA-256: 68af7a7c65a2df86c22c529543144d102360f9161e686dc5575a85732cbf65c6
+- Source capture manifest SHA-256: a1cf88c9fc2fe518f64bc0bf1c0076094f69ae213a12d4a33b348f8ce67cf1fe
+- Manifest-listed files: 853
+
+Release verification:
+- Full source run: passed all 12 selected lanes, with no skipped or not-run lanes, no changed paths, and equal before/after source digests. Source summary SHA-256: cb431039e7913f7cdbd1876e609cae8ef8bffbe3c8b4318ab16b1294ff85c66d
+- Full public-projection run: passed all 12 selected lanes, with no skipped or not-run lanes, no changed paths, and equal before/after source digests. Public summary SHA-256: 8d5bf8d135ba0fc7e7c83aea1f7fbffe9dcc377e0db426f14d7df0b139ad4e67
+- Release-suite counts: 1,696 Python tests plus 8 Python subtests, and 277 Node tests. The 8 subtests are reported separately.
+- Local automated release lanes were architecture, domain, env, config, actor, providers, http, tooling, specs, web, package, and smoke. The release summaries explicitly limit evidence to local automated checks; they do not imply provider, browser/device, or original architecture acceptance.
+- Local bootstrap prerequisite: use Python 3.11–3.13 with working venv and ensurepip/pip, plus Node.js 22.12+ and npm. The slim Python 3.13.5 here lacked ensurepip and failed before downloads. Separately, a fresh 853-file project on the existing Linux host with full Python 3.12.14, Node 24.19.0 and npm 11.9.0 completed the original locked bootstrap in 54.837 seconds with cold project caches. The documented rehearsal command then reached health HTTP 200 in 3.518 seconds; HTML and main.js also returned 200, the server was reaped, and source hashes stayed unchanged. This is one existing-Linux-host fresh-project measurement, not a fresh OS, browser, phone, or timing guarantee. The earlier 3.13 failure and extra pip-target seed are separate evidence.
+- The public projection retains the 07:39 work and CSS Phase 3 motion integration, three focused motion tests, and related specification/documentation updates. It adds safer user-facing handling for local session-capacity errors and startup configuration errors:
+  - The web client recognizes only an exact 429 `session_capacity` code in a bounded JSON response, shows a static local recovery action, and never displays untrusted server error text.
+  - Invalid CLI configuration now emits a safe structured diagnostic on stderr and exits with code 2 before the server starts, for both `python -m mira` and the console entry point. Valid startup behavior is unchanged.
+
+Controlled provider evidence (fixed synthetic development checks only):
+- Native text admission completed in 6.332 seconds with final ALLOW; it sealed with two grants and zero presentations. This shows the controlled generation/review path; no visible browser conversation or quota ownership is claimed.
+- A prerecorded 4.66-second English Flite input was sent once to STT. The final transcript exactly matched the 79-character synthetic fixture. Native generation and four JEV HTTP 200 responses completed; final review returned UNKNOWN, so the app made no TTS request and submitted no presentation/playback receipt. The 4.66 seconds is input duration, not recognition latency; this was not a real microphone test.
+- A separate fixed TTS adapter check used gemini-3.8-flash-tts / Kore / global, returned HTTP 200, and produced 77,760 PCM samples (24 kHz mono, 3.24 seconds; 52 packets). Dispatch-to-first-PCM was 1.273694 seconds and probe-to-save was 2.966465 seconds in this one run. No playback occurred. This is not a natural conversation reply, first-audible-sound measurement, SLA, or guarantee.
+- Actual browser rendering, microphone/speaker behavior, mobile/Safari behavior, a human-observed 3–5-minute recording, and a natural voice exchange reaching approved audible presentation remain unverified. Expected UNKNOWN fallback remains in force.
+
+This bundle contains exactly the 853 files listed in the public projection manifest. Unlisted extras, raw verification logs, private environment files/configuration, dependency trees, and generated build/dist outputs are excluded; only public example environment templates are included. All three ZIPs are required.
+
+Keep all seven files together:
+- MIRA-20261004-0837-code-source-incomplete-without-assets.zip
+- MIRA-20261004-0837-assets-01-of-02.zip
+- MIRA-20261004-0837-assets-02-of-02.zip
+- MIRA-20261004-0837-restore.py
+- MIRA-20261004-0837-split-source-manifest.json
+- MIRA-20261004-0837-START-HERE.txt
+- MIRA-20261004-0837-SHA256SUMS.txt
+
+Verify the six companion files with:
+sha256sum -c MIRA-20261004-0837-SHA256SUMS.txt
+
+Restore to a new destination whose parent exists:
+python3 -O ./MIRA-20261004-0837-restore.py restore --delivery-dir . --target ../mira-final-usability-backup-0837-restored
+
+The standalone helper verifies archive SHA-256 and size; exact membership; safe relative paths; traversal, links, duplicate and case-colliding names; allowed file modes; declared and expanded size limits; every source file's SHA-256 and byte count; and exact recomposition. These checks remain active under python -O.
+
+The earlier MIRA-20261004-0810 final-motion backup remains separate and unchanged.
