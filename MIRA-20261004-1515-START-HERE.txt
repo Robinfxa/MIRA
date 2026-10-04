@@ -1,0 +1,28 @@
+MIRA 2026-10-04 15:15 UTC — actor memory and operator pairing source delivery
+
+This is a source backup for the opt-in local Actor-memory/operator-pairing stage. It is not a software publication or live service acceptance.
+
+What is included
+- Exactly 906 public source files: the frozen 876-file baseline plus 30 reviewed additions. The split manifest records each path, byte count, SHA-256, and POSIX mode, and is bound to capture manifest SHA-256 1346600e187037aa1ba1c99f2b4b3a57b3ff667f9eb6b9e268393b40618f8d05.
+- Twelve public scene PNG assets in two six-file ZIP batches. Each archive is strictly smaller than 20 MiB. The code ZIP is intentionally incomplete without both asset ZIPs.
+- The only environment-named files are the baseline .env.example and .env.development.example templates. No actual .env file, private memory database, credential store, provider report, node_modules, dist output, cache, or runtime log is included.
+
+Verified results
+- The full release selection passed all 12 lanes, with zero not-run lanes and zero source drift. It reported 1,893 pytest cases plus 11 subtests; the JUnit aggregate of 1,904 already includes those subtests. The Node suite passed 292 tests. Release summary SHA-256: 22d88ee62b19665b3b30dee3ac96a6e16d04f239f8b31cadcc7d0ad72b8b8b0e.
+- Independent privacy acceptance passed 78 checks: 11 Python privacy-attack checks, 5 fake-DOM checks, 2 real SQLite/ASGI checks, and 60 frozen contract/launcher/file checks.
+- A pattern-only scan of all 906 projected files recorded 16 credential/marker-shaped matches across 8 test paths and none outside test/fixture paths. Match values were neither printed nor stored.
+- The independent restore-integrity review verified 906 selected files with zero missing, modified, or extra files. 
+Behavior and boundaries
+Memory is opt-in. The text app reads an existing local store only with explicit scope arguments and a separate transmission authorization; it does not create a database or automatically extract/save conversation facts. Local operator pairing authorizes one running local app session; this prototype is not multi-user identity authentication. Voice-plus-memory is not included. Synthetic and local acceptance checks do not prove live model/provider behavior, browser-device acceptance, or an end-user deployment. No real private memory database or user data was used.
+
+Check and restore
+Run one checksum command from this directory:
+  # Linux
+  sha256sum -c MIRA-20261004-1515-SHA256SUMS.txt
+  # macOS
+  shasum -a 256 -c MIRA-20261004-1515-SHA256SUMS.txt
+
+Restore all three ZIPs into a new directory that does not already exist. Keep the seven delivery files together:
+  python3 -O MIRA-20261004-1515-restore.py restore --delivery-dir "$PWD" --target "$HOME/mira-20261004-1515-restored"
+
+The restore helper verifies the complete seven-file set, checksums, split-manifest rows, ZIP membership, file bytes, SHA-256 values, and POSIX modes before reporting success. For project setup and runtime prerequisites, see docs/development/QUICKSTART.md and docs/development/ACTOR_MEMORY.md in the restored source.
