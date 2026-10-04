@@ -1,0 +1,44 @@
+MIRA 08:10 final-motion public source backup
+Prepared: 2026-10-04 UTC
+
+Status: complete seven-file split backup of the immutable public projection after both the full-source and full-public release checks passed. This is a verified source backup, not a publication or a claim of browser/device/production readiness.
+
+Frozen source identity:
+- Public projection: 20261004T0810Z-final-motion
+- Projection manifest SHA-256: 960c9db3431c3c66d5e0e2a981c08d8488b9643e96f6040a6995b1b52e8cf872
+- Source capture manifest SHA-256: e9ba2072f0e747702c245ff31d5fe1044071c363cf2cc8f8b83f3e73c99d2a9a
+- Manifest-listed files: 852
+
+Release verification:
+- Full source run: passed all 12 selected lanes, with no skipped lanes, no changed paths, and equal before/after source digests. Source summary SHA-256: 953b4043a854803c8e41864017a3c13ae1c5f6ba0b5ea99136b0bf584f5858fa
+- Full public-projection run: passed all 12 selected lanes, with no skipped lanes, no changed paths, and equal before/after source digests. Public summary SHA-256: cffdbda753c12af65759ffd0b48156b2b3ee96b7d580c66752a9676dc7e0fe93
+- Release-suite counts: 1,690 Python tests plus 8 Python subtests, and 274 Node tests. The 8 subtests are reported separately.
+- The public projection retains the 07:39 work and adds the CSS Phase 3 motion integration, three focused motion tests, and related specification/documentation updates.
+- Projection preparation made three documentation-only transformations to remove private machine paths; no executable code or test files were changed by these transformations. Historical checkpoints remain in git history and are not embedded in this backup.
+
+Controlled provider evidence (fixed synthetic development checks only):
+- Native text admission completed in 6.332 seconds with final ALLOW; it sealed with two grants and zero presentations. This shows the controlled generation/review path; no visible browser conversation or quota ownership is claimed.
+- A prerecorded 4.66-second English Flite input was sent once to STT. The final transcript exactly matched the 79-character synthetic fixture. Native generation and four JEV HTTP 200 responses completed; final review returned UNKNOWN, so the app made no TTS request and submitted no presentation/playback receipt. The 4.66 seconds is input duration, not recognition latency; this was not a real microphone test.
+- A separate fixed TTS adapter check used gemini-3.8-flash-tts / Kore / global, returned HTTP 200, and produced 77,760 PCM samples (24 kHz mono, 3.24 seconds; 52 packets). Dispatch-to-first-PCM was 1.273694 seconds and probe-to-save was 2.966465 seconds in this one run. No playback occurred. This is not a natural conversation reply, first-audible-sound measurement, SLA, or guarantee.
+- Actual browser rendering, microphone/speaker behavior, mobile/Safari behavior, a human-observed 3–5-minute recording, and a natural voice exchange reaching approved audible presentation remain unverified. Expected UNKNOWN fallback remains in force.
+
+This bundle contains exactly the 852 files listed in the public projection manifest. Unlisted extras, raw verification logs, private environment files/configuration, dependency trees, and generated build/dist outputs are excluded; only public example environment templates are included. All three ZIPs are required.
+
+Keep all seven files together:
+- MIRA-20261004-0810-code-source-incomplete-without-assets.zip
+- MIRA-20261004-0810-assets-01-of-02.zip
+- MIRA-20261004-0810-assets-02-of-02.zip
+- MIRA-20261004-0810-restore.py
+- MIRA-20261004-0810-split-source-manifest.json
+- MIRA-20261004-0810-START-HERE.txt
+- MIRA-20261004-0810-SHA256SUMS.txt
+
+Verify the six companion files with:
+sha256sum -c MIRA-20261004-0810-SHA256SUMS.txt
+
+Restore to a new destination whose parent exists:
+python3 -O ./MIRA-20261004-0810-restore.py restore --delivery-dir . --target ../mira-final-motion-backup-0810-restored
+
+The standalone helper verifies the archive SHA-256 and size; exact membership; safe relative paths; traversal, links, duplicate and case-colliding names; allowed file modes; declared and expanded size limits; every source file's SHA-256 and byte count; and exact recomposition. These checks remain active under python -O.
+
+The earlier MIRA-20261004-0739 backup remains separate and unchanged.
