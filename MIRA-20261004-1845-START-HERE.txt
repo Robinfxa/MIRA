@@ -1,0 +1,44 @@
+MIRA 2026-10-04 18:45 UTC — opt-in local paired memory-management source delivery
+STAGED SOURCE BACKUP — the immutable source capture, source-specific full release and local recovery rehearsal are bound by checksums below. This local package has not been uploaded or published.
+
+This delivery is bound to the immutable source capture manifest SHA-256 f1d03b16c8f3cdfebf129dcef9afe335c0c1fac9f20676e6439d5b344fc80ff2. It contains exactly 962 public source files. All 962 captured paths were checked for size, SHA-256 and POSIX mode; the only extra file in the capture root was its capture-manifest.json. The source, release-run and current trees were independently compared with zero drift; director zero-drift receipt SHA-256: c85724b4fe8cd4cf7843743ac6aec890480e643e00b4bad824a8096b885af662.
+
+The source-specific full release selection passed all 12 lanes: 2,010 pytest cases plus 13 subtests and 329 Node tests, with package and smoke checks passing. The installed-package/resource and web-resource checks passed (106 installed resources and 100 web resources). Full release summary SHA-256: f782fb8946e951e3525bf6bbc403fb12d48ef118d3a36853dfb3b8b36cac954d. These results are scoped to this frozen source; they do not establish macOS/browser/composite or user-device acceptance.
+
+This is a recoverable source backup, not a software publication, deployment, live-service acceptance, or claim of complete product/device acceptance. No provider calls were made, and no upload or publication was performed by this staging process.
+
+Seven files in this delivery
+- MIRA-20261004-1845-code-source-incomplete-without-assets.zip
+- MIRA-20261004-1845-assets-01-of-02.zip
+- MIRA-20261004-1845-assets-02-of-02.zip
+- MIRA-20261004-1845-split-source-manifest.json
+- MIRA-20261004-1845-START-HERE.txt
+- MIRA-20261004-1845-restore.py
+- MIRA-20261004-1845-SHA256SUMS.txt
+
+The source projection binds every selected path, byte count, SHA-256 and POSIX mode to the capture manifest. Two asset ZIPs contain all 13 scene PNGs (seven and six); the code ZIP is incomplete without both. Each ZIP is strictly smaller than 20 MiB. Third-party license notices are preserved. Only the key-free .env.example and .env.development.example templates are included. No real environment file, private memory database/store, credentials, provider output, dependencies, build output, caches or runtime logs are included.
+
+Secret-pattern review
+A raw-byte scan covered all 962 source files. It found 21 credential- or marker-shaped matches across 10 paths; every match was in a test or fixture path. The manually inspected, redacted context was synthetic test input or expected header/diagnostic data. No values or surrounding secret-like bytes are stored in the scan receipt or printed. Tests were retained unchanged. This pattern scan cannot guarantee detection of every credential.
+
+Memory and consent boundaries
+- Default mock/replay/rehearsal startup is offline and does not read a private memory store, automatically record conversations, or call live providers.
+- Paired local memory management remains a local-only, explicitly launched capability with separate per-operation confirmation. It does not grant provider or transcript-sharing permission.
+- Actor recall is a separate opt-in. Memory is untrusted evidence and does not authorize actions or disclosure. No automatic transcript extraction or saving is enabled.
+- Official npm-native discovery and bounded supported startup notices are included, but the actual macOS App Server RPC root cause/fix remains unconfirmed by a real Mac/browser run.
+- Push-to-talk transcript preview and separate clock timings are provisional. The optional table-free V3 background does not establish actual composite acceptance.
+- Continuous click-listening, application usage profile, and new character motion/rig are outside this stage.
+
+Restore
+Keep all seven files together. Verify the published checksum list, then restore to a new directory that does not already exist:
+  python3 -O MIRA-20261004-1845-restore.py restore --delivery-dir . --target ./MIRA-1845-restored
+
+The helper verifies all required files and checksums, split-manifest rows, ZIP membership, restored bytes, SHA-256 values and POSIX modes. Use only files from this same stage. A successful isolated restore rehearsal and full source comparison were recorded during stage preparation.
+
+After restoring, see docs/development/QUICKSTART.md for the offline local rehearsal. Use the documented prerequisites and `sh scripts/dev --profile rehearsal`. For local memory behavior and consent boundaries, read docs/development/LOCAL_MEMORY.md, docs/development/ACTOR_MEMORY.md and docs/development/MEMORY_MANAGEMENT.md in the restored source.
+
+Remaining limitations
+- Setup-doctor diagnostics report selected-path and binary-identity facts; they do not prove an actual macOS App Server RPC fix.
+- Automatic npm-native discovery in this stage covers only the two reviewed macOS layouts. Linux direct verified native-path resolution remains supported; Linux npm automatic discovery is not implemented. A source comment says Linux has no optional package, but the independent official codex-cli 0.159.2 source check found both @openai/codex-linux-x64 and @openai/codex-linux-arm64. This is an evidence correction only; neither binary is admitted by this stage.
+- Actual Mac/browser/composite/device acceptance, memory quality, live model behavior, real voice experience and full M06 completion remain unverified unless later evidence explicitly proves otherwise.
+- Acceptance evidence is bound to this frozen source stage. Any publication should use only the exact seven files whose checksums appear alongside this note.
