@@ -1,0 +1,31 @@
+MIRA public source delivery — frozen projection 2026-10-04 05:43 UTC
+
+This is a source-code delivery, not an installed application or broad product-acceptance claim. The reviewed public projection contains 838 files: 826 code/source files plus 12 Pixi PNG frames, split across the two asset ZIPs. Use all three ZIPs together; the code ZIP alone is incomplete without both asset ZIPs.
+
+Evidence for this snapshot:
+- The explicit 12-lane public release run passed, with 1,650 Python tests, 262 Node tests, package verification and HTTP smoke passing; not_run and changed_during_run were empty.
+- The Pixi 12-frame source set and the SVG-failure fallback are included.
+- The latest real native text-v6 generation succeeded. A valid JEV input was exercised; a weak o3 refusal was mapped to UNKNOWN and handled by the system fallback. That run produced 0 grants and 0 presentations.
+
+Not established by this snapshot: a normal ALLOW outcome, a complete voice session, real-device behavior, or recording acceptance. Output-question-v3 is still under development and is not included here.
+
+The README inside the frozen source has a 05:15 UTC state timestamp. It remains byte-for-byte unchanged to preserve the projection manifest. This notice describes the 05:43 packaged snapshot without changing that reviewed source.
+
+KEEP TOGETHER FOR A COMPLETE DELIVERY
+- MIRA-20261004-0543-code-source-incomplete-without-assets.zip
+- MIRA-20261004-0543-assets-01-of-02.zip
+- MIRA-20261004-0543-assets-02-of-02.zip
+- MIRA-20261004-0543-split-source-manifest.json
+- MIRA-20261004-0543-restore.py
+- MIRA-20261004-0543-SHA256SUMS.txt
+- MIRA-20261004-0543-START-HERE.txt
+
+RESTORE AND RUN
+From a folder containing all listed delivery files, choose a new destination whose parent directory already exists:
+
+python3 -O ./MIRA-20261004-0543-restore.py restore --delivery-dir . --target ../MIRA-20261004-0543-restored
+cd ../MIRA-20261004-0543-restored
+python3 tools/bootstrap.py
+sh scripts/dev --profile rehearsal
+
+Then open http://127.0.0.1:8000 in a browser. The restore helper uses only Python's standard library and works offline. `tools/bootstrap.py` installs the locked dependencies from the package registry, so first-time bootstrap needs network access. Requirements: Python 3.11–3.13 and Node.js 22.12+. The rehearsal profile uses fixed mock interactions; it does not enable paid/live providers, recording, or real microphone input.

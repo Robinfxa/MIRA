@@ -1,0 +1,6 @@
+ef39f4517e9fa7525804ce7662ac0ec718a7ed536fbd479f11c7fd618bedea88  MIRA-20261004-0543-START-HERE.txt
+39517ba009f007fd9df8cb66473fea83a682ed27ed8a313cfeea5ebabaffca8d  MIRA-20261004-0543-assets-01-of-02.zip
+a8a20ef8aed037b9517c45ada33dfd6f4e6e05e55a27a56a75027df07104a7fe  MIRA-20261004-0543-assets-02-of-02.zip
+1cf0368529a11dd85ee4f5b7a445d8b95b4865c6a85d88b3a396fbf1cfb22e49  MIRA-20261004-0543-code-source-incomplete-without-assets.zip
+ad0a5738a116c40f2340ee7afc24ca4777c98bc02f2edeeed079758e64ffed01  MIRA-20261004-0543-restore.py
+3a67fadba687913cb8e66f4d8df8c41c0c9fbf70ebdac00798864ac38a8dce55  MIRA-20261004-0543-split-source-manifest.json
