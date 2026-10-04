@@ -1,0 +1,41 @@
+MIRA direct-provider source backup — MIRA-20261004-2219
+
+Frozen capture: 2026-10-04T22:19:27.960733+00:00; capture-manifest SHA-256: 35bea534ee2377ed2a9902a5ad7caa77ac17bbe7a6bde119b08f6789ecb9b11c; captured source files: 1004. Bound full-release evidence: 13 selected lanes passed (summary SHA-256: 5fd022b4f6156c4a2bcba8cd487de725b81b6c2c7a90a66f69dcd48135f8609f); test counts: 2,194 pytest cases + 13 subtests; 355 Node tests; 107 installed wheel resources; 101 HTTP assets. Independent checks: Final hash-bound 26 Responses contracts, 15 OAuth contracts, 5 route/check cases, and4 adversarial HTTPX probes; synthetic only. Two pre-fix parser failures retained and resolved. Logout does not revoke in-flight provider use.. These source/release results do not establish real subscription login, direct model access, account eligibility, API charges, or device acceptance. Local packaging did not upload or publish anything.
+
+Keep all seven same-stage files together:
+- MIRA-20261004-2219-code-source-incomplete-without-assets.zip
+- MIRA-20261004-2219-assets-01-of-02.zip
+- MIRA-20261004-2219-assets-02-of-02.zip
+- MIRA-20261004-2219-split-source-manifest.json
+- MIRA-20261004-2219-START-HERE.txt
+- MIRA-20261004-2219-restore.py
+- MIRA-20261004-2219-SHA256SUMS.txt
+
+Each ZIP is strictly under 20 MiB. Check the listed hashes with `shasum -a 256 -c MIRA-20261004-2219-SHA256SUMS.txt` on macOS (or `sha256sum -c MIRA-20261004-2219-SHA256SUMS.txt` on Linux). Then restore into a new directory:
+
+  python3 -O MIRA-20261004-2219-restore.py restore --delivery-dir . --target ./MIRA-20261004-2219-restored
+
+Work from that restored copy; do not overwrite or upgrade an existing frozen project. From the project directory, run `python3 tools/bootstrap.py` to install declared development dependencies. This needs Python and, unless using `--python-only`, Node.js 22/npm and package-registry access. The direct-provider routes do not require the Codex executable, app-server, binary pin, or native-environment admission file.
+
+See `docs/development/DIRECT_PROVIDER_QUICKSTART.md` for configuration, data-consent details, finite limits, voice and recovery behavior. No login occurs automatically on startup or `check`. For JEV, configure `MIRA_SERVICES__JEV__API_KEY` locally and set `MIRA_SERVICES__JEV__MODEL=jev-1.13.0` exactly. Choose an account-available model only for the selected OpenAI route; no catalog or entitlement check is performed. A privately owned `.env` may live inside the project only if it is owner-readable/writable and excluded from Git, as described below. Never commit or publish credentials, include them in a source archive, or send them in chat.
+
+Subscription OAuth route:
+
+  .venv/bin/python tools/provider_login.py login
+
+Read the warning and type `LOGIN` only if you want a separate MIRA-owned device-code sign-in. Open the displayed official link and enter the one-time code there. MIRA stores its session in its private app-data directory, unencrypted and outside the project. This uses a private ChatGPT/Codex subscription Responses backend; terms, quota, account eligibility, and support are not established by the public OpenAI API contract. Login completion does not prove model access. No other app's auth file is copied and no API-key fallback occurs.
+
+  PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py check --provider chatgpt_subscription --model YOUR_MODEL --env-file .env
+  PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve --provider chatgpt_subscription --model YOUR_MODEL --env-file .env --authorize-provider-data
+
+Official OpenAI API route:
+
+  MIRA_SERVICES__OPENAI__API_KEY=<enter locally>
+  PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py check --provider openai_api --model YOUR_API_MODEL --env-file .env
+  PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve --provider openai_api --model YOUR_API_MODEL --env-file .env --authorize-provider-data --authorize-api-billing
+
+This route targets only `https://api.openai.com/v1/responses`; it can incur API charges. The separate billing flag acknowledges that billing route. Both live modes send dialogue and candidate responses to the selected OpenAI service and JEV for independent review when provider-data authorization is enabled. Request limits are technical limits, not dollar caps. No key or credentials are included in this source backup.
+
+Real OAuth, direct-model access, and actual device acceptance for this stage: not_run for real subscription OAuth, real direct-model access, and user-device acceptance; no provider calls were made by release validation.. Synthetic auth/HTTP/ASGI tests do not prove real-account or device behavior. Record anything not run or unavailable as `not_run` or `blocked`, never as passed by inference. For Google voice, memory transmission, or login-store maintenance, use the full quickstart; each has separate limits and authorization steps.
+
+Never copy, export, paste, or recreate authentication files. Do not share tokens, session files, raw provider logs/responses, private databases, or diagnostic dumps. Report only a public error code or diagnostic ID, the step, and expected versus actual behavior.
