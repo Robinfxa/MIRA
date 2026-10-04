@@ -1,0 +1,39 @@
+MIRA 2026-10-04 16:59 UTC — opt-in local memory-management source delivery
+STAGED SOURCE BACKUP — source-specific release and independent acceptance checks passed; this local package has not been uploaded or published.
+
+This delivery is bound to the immutable source capture manifest SHA-256 9f6e139d7895972aac4826fbd76cec2f56010c949f5146c8af7332d7293b98c2. It contains exactly 929 public source files. The capture and release-run tree have been independently compared with zero mismatches; director-zero-drift receipt SHA-256: de43a853fcb6f5a42f556e1724e25a1f777feecdd9ff185f76f38c863923adeb.
+
+The source-specific full release selection passed all 12 lanes with no not-run lanes or source drift: 1,946 pytest cases plus 13 subtests and 312 Node tests. Installed-package and smoke lanes passed. Release summary SHA-256: 0938680ebb5a3d2537ce7189a73d4ae5e458190e9765f6ea01309ef22b9a9b68. Independent focused acceptance also passed: 10 HTTP/Actor checks, 8 async-worker checks, and 20 UI checks. The independent page-2 pagination regression was reproduced RED on 1649 and confirmed GREEN on 1659. A separate SQLite/page-budget gate passed all 39 checks. These results are scoped to the frozen 1659 source; they do not establish live-device or memory-quality acceptance.
+
+This is a recoverable source backup, not a software publication, deployment, live-service acceptance, or claim that memory quality or device behavior is verified. No upload or publication was performed.
+
+Seven files in this delivery
+- MIRA-20261004-1659-code-source-incomplete-without-assets.zip
+- MIRA-20261004-1659-assets-01-of-02.zip
+- MIRA-20261004-1659-assets-02-of-02.zip
+- MIRA-20261004-1659-split-source-manifest.json
+- MIRA-20261004-1659-START-HERE.txt
+- MIRA-20261004-1659-restore.py
+- MIRA-20261004-1659-SHA256SUMS.txt
+
+The public projection binds every selected path, byte count, SHA-256 and POSIX mode to the capture manifest. The two asset ZIPs contain six scene PNGs each; the code ZIP is incomplete without both. Each ZIP is strictly smaller than 20 MiB. Only the tracked .env.example and .env.development.example templates are included. No real environment file, private memory database, credentials, provider artifacts, dependencies, build output, caches or runtime logs are included.
+
+Memory and consent boundaries
+- Default mock/replay/rehearsal startup is offline and does not read a private memory store, automatically record conversations, or call live providers. See docs/development/QUICKSTART.md for the offline rehearsal instructions.
+- Saving a memory is explicit and manual. Correct creates a new version. Soft-forget reversibly hides an entry from recall; it does not physically erase the old text or undo a previous transmission. Restore explicitly reverses an active soft-forget.
+- Local storage consent, the paired local-management launch authorization (--authorize-local-memory-management) plus per-operation confirmation, and provider-transmission authorization (--authorize-memory-to-codex-and-jev) are separate permissions. One does not imply another. No automatic transcript extraction or saving is enabled.
+- Any enabled recall-to-provider flow treats stored memory as untrusted evidence, not authority. Do not save credentials. The credential heuristic cannot guarantee detection of every secret.
+- Localhost pairing is for one local operator and one active app session. It is not multi-user identity authentication and must not be exposed to a shared network.
+
+Restore
+Keep all seven files together. Verify the published checksum list, then restore to a new directory that does not already exist:
+  python3 -O MIRA-20261004-1659-restore.py restore --delivery-dir . --target ./MIRA-1659-restored
+
+The helper verifies all required files and checksums, split-manifest rows, ZIP membership, restored file bytes, SHA-256 values and POSIX modes. Use only all seven files from this same stage. The successful independent restore rehearsal and source comparison are recorded separately from this user-facing starter note.
+
+After restoring, see docs/development/QUICKSTART.md for the default offline rehearsal: install the documented Python and Node prerequisites, bootstrap project-local dependencies as documented, then run `sh scripts/dev --profile rehearsal`. This is a local rehearsal, not live provider use. For memory behavior and consent boundaries, read docs/development/LOCAL_MEMORY.md, docs/development/ACTOR_MEMORY.md and docs/development/MEMORY_MANAGEMENT.md in the restored source.
+
+Remaining limitations
+- Setup-doctor diagnostics report selected-path and binary-identity facts; they do not establish or prove a macOS App Server RPC fix.
+- Memory quality, user-device acceptance, live model behavior, real voice experience and full M06 completion remain unverified unless later source-specific evidence explicitly proves otherwise.
+- The acceptance evidence is bound to this frozen source stage. This copy has not been uploaded or published; any publication should use the exact seven files whose checksums appear in this directory.
