@@ -1,0 +1,38 @@
+MIRA 07:39 usable-admission public source backup
+Prepared: 2026-10-04 UTC
+
+Status: complete staged backup for the immutable public-v2 projection; the full source and full public-projection release checks both passed. This is a verified backup, not a publication or a claim of browser/device/production readiness.
+
+Frozen source identity:
+- Public projection: 20261004T0739Z-usable-admission-public-v2
+- Projection manifest SHA-256: 36c2b20ca8318aa72c4201ee8cd8d60b5c92c5c8c320f7d0a7bdf5f31ceb2e1e
+- Source capture manifest SHA-256: d58f32ec042f869f1762987bb733f5aa2483539e1ed1bb69b44c2a913e54bcdc
+- Manifest-listed files: 849
+
+Release verification:
+- Full source run: passed all 12 selected lanes, no lanes skipped and no source drift.
+- Full public-v2 run: passed all 12 selected lanes, no lanes skipped and no source drift. Terminal report SHA-256: 59db2a6d46d59b14e08b6c50bdf2b9937ec7524e360dae3dac8fa608ef9cd556
+- The release checked 1,698 Python tests and 271 Node tests; package verification and smoke checks passed.
+- The public preflight records five documentation-only transformations, removing private machine paths and correcting stale stage references. No executable code or test files changed in the public projection.
+- Runtime acceptance: the reviewed v8 normal case returned ALLOW with two grants and zero presentations. In the voice case STT succeeded, but semantic review returned UNKNOWN, so TTS stayed blocked; no audio was played or presented.
+
+Privacy scan covered exactly the 849 manifest-listed paths, all of which matched the projection manifest. No real credentials, real project ID, non-template .env file, raw log, dependency/build tree, or private output path was found. Only .env example templates are included. Five high-confidence credential-pattern matches are deliberately synthetic test sentinels in four test files (three bearer-like values, one private-key test marker, and one OpenAI-key-like test value); no match was unclassified. Project-ID-like strings are placeholders or synthetic test labels. The code includes fixed public auth.openai.com authorize/token/JWKS endpoints and its strict 127.0.0.1 callback for the intended sign-in integration; no private deployment-specific auth route or callback is included.
+
+This bundle contains exactly the manifest-listed 849 source files. Unlisted test outputs, dependencies, dist/build folders, .env files, var data, logs, and private outputs are excluded. Follow-on role/motion work after this frozen tag remains WIP and is not included.
+
+Keep all seven files together:
+- MIRA-20261004-0739-code-source-incomplete-without-assets.zip
+- MIRA-20261004-0739-assets-01-of-02.zip
+- MIRA-20261004-0739-assets-02-of-02.zip
+- MIRA-20261004-0739-restore.py
+- MIRA-20261004-0739-split-source-manifest.json
+- MIRA-20261004-0739-START-HERE.txt
+- MIRA-20261004-0739-SHA256SUMS.txt
+
+Verify the six payload files with: sha256sum -c MIRA-20261004-0739-SHA256SUMS.txt
+Restore to a new destination whose parent exists:
+python3 -O ./MIRA-20261004-0739-restore.py restore --delivery-dir . --target ../MIRA-20261004-0739-restored
+
+All three ZIPs are required. The standalone helper explicitly checks archive SHA-256 and size; exact membership; safe relative paths; traversal, links, duplicate and case-colliding names; allowed file modes; declared and expanded size limits; each source file's SHA-256 and byte count; and exact recomposition. These checks remain active under python -O.
+
+The prior 05:43 delivery remains separate. Do not mix files or restore helpers between stages.
