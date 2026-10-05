@@ -1,0 +1,7 @@
+MIRA2353 verified source delta backup
+
+Requires the published2219 complete restored source as base. This JSON contains13 exact UTF-8 file additions/replacements and the full1010-file target SHA/mode manifest. It is not a standalone installer or a new rendered character preview.
+
+Included: explicit paired memory for both direct OpenAI routes; separately authorized memory-derived Google speech; pre-pair lazy resources; correction/forget/Stop voice boundaries. Full13-lane software release and independent synthetic checks passed. No actual provider/user-memory/device acceptance is implied.
+
+Not included: later story/affect/rig/barge-in work. Follow restore_contract in the JSON, always into a new clean target. No private credentials, real memory data or runtime logs are included.
