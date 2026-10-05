@@ -1,0 +1,20 @@
+MIRA 0247 verified source delta backup
+
+This is a three-file source delta, not a standalone installer. It requires the complete published 2219 source (Git archive commit 307658340c857576d6fbd5e8555a802b370ec1d7). Restore that seven-file 2219 delivery into a NEW directory, then follow restore_contract in this JSON. Never apply this delta to a modified live checkout.
+
+The JSON contains 83 exact UTF-8 file actions: 40 additions and 43 replacements, with the complete 1044-file target SHA-256/byte-length/mode table. No removals or binary changes. Fresh 2219 archive restoration plus this exact delta reconstructed all 1044 files without mismatches.
+
+Included: paired authored four-node story/affect and optional private story checkpoints; continuous reply-only interruption; direct installed-Node builds using the existing local bundle script; safe OAuth failure diagnostics and exactly-once decoded responses; story-worker capacity released before completion is observable. No new character artwork or later turn-cap patch is included.
+
+0247's own full release passed all 13 lanes: 2359 pytest cases plus 13 subtests, 361 Node tests, package and loopback smoke, 107 installed resources and 101 HTTP assets. No source drift. Release summary SHA-256: ca5b5d82178e3cf9585dc3cf71fe9bbb31b3b105171d9a54682d178ac4b90da5
+Capture manifest SHA-256: 7b7b9471cfc7ec42778bbb46ca25b6693d92d3e0469565e86ca5c266eaaca171
+
+Independent acceptance is qualified: the prior 0156 receipt passed 24 synthetic checks (14 directed and 10 independent). It remains tied to that older source. 0247 changes the async-worker completion order, test setup/negative coverage, build launchers and OAuth code/tests; it has its own complete release, but no new independent audit of the whole 0247 source is claimed. Prior failed/incomplete 0156/0224 evidence is preserved separately.
+
+The user reported that the repaired OAuth flow saved a separate MIRA session on their Mac. This proves neither model access nor inference, microphone, playback, natural conversation or complete device acceptance. This package contains no real credentials, private user-memory databases, raw runtime logs or provider outputs. The current code-vector/low-resolution art direction is pending; existing art is inherited from the base.
+
+Verify both companion hashes before use:
+  shasum -a 256 -c MIRA-20261005-0247-SHA256SUMS.txt
+Linux alternative: sha256sum -c MIRA-20261005-0247-SHA256SUMS.txt
+
+The frozen source README/status files retain capture-time and historical statements. This START-HERE and the JSON bind the completed 0247 local release/restore result. Local verification does not publish or deploy the project, update expanded main-source code, or establish real-provider/device acceptance.
