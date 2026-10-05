@@ -1,0 +1,55 @@
+MIRA 完整源码备份 / Complete source backup — 20261005-0317
+
+本包固定为0317阶段，共1,061个源码/资源文件，48,607,313原始字节。它独立包含全部源码与既有资源，无需旧版、delta或上一份备份。
+Capture SHA-256: 4abfe2fd3d2214885c205bb854520fcb69131bc1986a08057f5343f7cfcbf291
+Release summary SHA-256: b9dfc2472ae213a75331587917fa8def3fba1e54a9a213395e2a842c46f19dd0
+Independent final evidence SHA-256: a8e607142a5f0811f31f9975f45a3e7331bbcbb8c78b197bbe4956221feccadd
+
+已验证的软件范围
+- 13/13离线发布lane通过，0跳过、0源码漂移；2,445 pytest cases + 13 subtests（2,458 JUnit results）、382 Node tests；113已安装config/web资源，107 web资源。
+- 独立离线审阅：70 Node + 52 Python通过；1,001个审阅文件逐一对应0317 capture。真实编译main.js、惰性renderer、3套衣服的绘制调用/回执、Stop/Close、20条能力目录、CLI/ASGI与wheel内容通过。DOM/Canvas/HTTP为合成环境，未测真实像素或设备。
+- 全部1,061源码文件完成路径/字节/模式/摘要检查；24个密钥形状匹配逐项审核为合成测试或测试模板。没有真实密钥发现；启发式扫描不保证发现一切秘密。
+
+本次包含
+- 单一应用入口可显式选择 code-native-review；代码绘制脸v3/身体v1及黑夹克、奶油色内搭、琥珀雨衣三套服装。
+- 有界角色控制、可选--story剧情、连接前可编辑草稿、失败保留/手动重试、native fetch receiver修复。
+- 0247已修复的OAuth响应恰好解码一次与安全失败诊断保留。
+
+仍未完成/未验收
+- v3外形和比例未经用户认可。普通表情/相机头饰已实现；戒备/开心/娇羞、星星头饰、放低相机/转头及替代脸型仍不可用，不能当作成功呈现。
+- 说话仅有状态节奏，不是音素/真实音量同步。
+- 真实浏览器像素、用户设备、手机、麦克风/播放、自然连续直连回复、provider最终可用性、用户视觉认可及3–5分钟实录均未完成本阶段验收。
+- 这是源码包，不是预装应用；不包含依赖、编译输出、登录会话、真实环境文件/数据库/运行日志。历史文档保留原时间语境；本说明和本阶段manifest说明0317实际交付边界。
+
+下载与校验
+可以下载全部七个同阶段文件，或者只下载 MIRA-20261005-0317-complete-download.zip。完整ZIP包含同一份七文件文件夹；先解压该外层ZIP，进入文件夹，再按下列步骤还原。两个路径是同一源码，不能混用其他阶段的文件。
+
+七个文件：
+MIRA-20261005-0317-code-source-incomplete-without-assets.zip
+MIRA-20261005-0317-assets-01-of-02.zip
+MIRA-20261005-0317-assets-02-of-02.zip
+MIRA-20261005-0317-split-source-manifest.json
+MIRA-20261005-0317-START-HERE.txt
+MIRA-20261005-0317-restore.py
+MIRA-20261005-0317-SHA256SUMS.txt
+
+三个分卷ZIP均严格小于20MiB；代码ZIP必须与两个资源ZIP同时保留。split-source-manifest为每个源码文件和每个archive记录SHA-256、git blob SHA-1、bytes及模式；SHA256SUMS覆盖六个非自身文件。完整外层ZIP的摘要由交付消息/发布清单另给，避免自引用。
+
+macOS: shasum -a 256 -c MIRA-20261005-0317-SHA256SUMS.txt
+Linux: sha256sum -c MIRA-20261005-0317-SHA256SUMS.txt
+
+在装有Python3的macOS/Linux上，从七文件所在目录执行：
+  python3 -O MIRA-20261005-0317-restore.py restore --delivery-dir . --target ./MIRA-0317-restored
+
+目标目录必须不存在，父目录必须已存在，任何目标祖先均不能是符号链接。工具先完整检查七文件/三archive/全部payload，再通过不跟随链接的目录描述符与独占新文件创建还原，拒绝覆盖、路径穿越、重复/大小写/Unicode冲突和非普通ZIP成员。-O不会关闭验证。失败时保留现场；另选新目标，不能用同一路径强制覆盖。此工具只读包和写新目录，不安装、联网、执行源码或配置认证。
+
+启动
+进入还原后的 MIRA-0317-restored。按README和docs/development/DIRECT_PROVIDER_QUICKSTART.md安装所声明依赖；常规安装入口为 python3 tools/bootstrap.py，需要已支持的Python和Node22/npm以及依赖仓库访问。本次打包检查没有安装任何依赖或联网。
+
+依赖就绪后的零模型离线入口：
+  sh scripts/dev --character-renderer code-native-review
+
+这显示代码角色和固定mock流程，不是自由对话；未实现动作会如实拒绝。使用者若已独立完成直连配置/登录，在quickstart原check/serve命令追加：
+  --story --character-renderer code-native-review
+
+check不发推理、不创建本机配对、不打开记忆库；serve保留原来内容/计费同意、模型与有限次数约束。无需Codex CLI，没有自动付费fallback。不要把密钥或会话文件加入源码、备份或聊天。OAuth登录成功不等于模型权限或设备验收。
