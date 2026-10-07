@@ -1,0 +1,41 @@
+{
+  "feature": "WP03-COMPOSITION",
+  "spec": "specs/features/WP03-google-voice-composition/spec.md",
+  "requirements": [
+    {
+      "id": "WP03COMPOSITION-001",
+      "tests": [
+        "tests/contracts/test_development_voice_composition.py::test_factory_is_opt_in_delayed_exact_and_single_use",
+        "tests/contracts/test_development_voice_composition.py::test_missing_or_denied_inputs_fail_before_provider_construction",
+        "tests/contracts/test_development_voice_composition.py::test_nonselected_model_voice_or_region_is_rejected",
+        "tests/contracts/test_google_speech_stt.py::test_voice_factory_rejects_invalid_typed_adapter_options_before_sdk_clients",
+        "tests/contracts/test_development_app_entry.py::test_unarmed_or_voice_required_factory_is_rejected"
+      ]
+    },
+    {
+      "id": "WP03COMPOSITION-002",
+      "tests": [
+        "tests/contracts/test_development_voice_composition.py::test_stt_empty_input_does_not_reserve_and_cancelled_attempt_is_not_refunded",
+        "tests/contracts/test_development_voice_composition.py::test_concurrent_tts_attempts_cannot_oversubscribe_one_instance"
+      ]
+    },
+    {
+      "id": "WP03COMPOSITION-003",
+      "tests": [
+        "tests/contracts/test_development_voice_composition.py::test_first_valid_pcm_is_forwarded_without_lookahead",
+        "tests/contracts/test_development_voice_composition.py::test_tts_duration_limit_blocks_over_budget_packet",
+        "tests/contracts/test_development_voice_composition.py::test_invalid_tts_pcm_never_reaches_consumer",
+        "tests/contracts/test_development_voice_composition.py::test_stt_duration_ceiling_rejects_extra_pcm_before_forwarding",
+        "tests/contracts/test_google_speech_stt.py::test_voice_factory_rejects_invalid_duration_bounds_before_sdk_clients",
+        "tests/contracts/test_google_speech_stt.py::test_voice_factory_passes_explicit_tls_roots_and_duration_limits"
+      ]
+    },
+    {
+      "id": "WP03COMPOSITION-004",
+      "tests": [
+        "tests/contracts/test_development_voice_composition.py::test_factory_is_opt_in_delayed_exact_and_single_use",
+        "tests/contracts/test_development_voice_composition.py::test_stt_empty_input_does_not_reserve_and_cancelled_attempt_is_not_refunded"
+      ]
+    }
+  ]
+}

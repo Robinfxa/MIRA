@@ -1,0 +1,33 @@
+{
+  "feature": "DELIVERY-01",
+  "spec": "specs/features/DELIVERY-01-private-devices/spec.md",
+  "requirements": [
+    {
+      "id": "DELIVERY01-001",
+      "tests": [
+        "tests/contracts/test_private_device_access.py::test_loopback_default_and_explicit_private_only",
+        "tests/contracts/test_private_device_access.py::test_private_pairing_rejects_csrf_wrong_authority_and_duplicate_headers",
+        "tests/contracts/test_private_device_access.py::test_private_tls_policy_rejects_plaintext_and_forwarded_spoofing"
+      ]
+    },
+    {
+      "id": "DELIVERY01-002",
+      "tests": [
+        "tests/contracts/test_private_device_access.py::test_two_codes_are_independent_one_use_and_revoke_is_scoped",
+        "tests/contracts/test_private_device_access.py::test_private_app_requires_temporary_device_pairing_before_runtime",
+        "tests/contracts/test_private_device_access.py::test_private_websocket_requires_matching_origin_host_and_cookie_before_runtime",
+        "tests/contracts/test_private_device_sessions.py::test_separate_browser_ownership_rejects_foreign_bearer_and_bounds_one_session_each",
+        "tests/contracts/test_private_device_sessions.py::test_revoking_phone_closes_only_phone_and_its_open_socket",
+        "tests/contracts/test_private_device_sessions.py::test_expiry_closes_owned_session_and_socket_without_new_http_request"
+      ]
+    },
+    {
+      "id": "DELIVERY01-003",
+      "tests": [
+        "tests/contracts/test_private_device_launcher.py::test_http_requires_explicit_text_ack_and_cannot_enable_voice",
+        "tests/contracts/test_private_device_launcher.py::test_https_requires_complete_existing_private_key_metadata_without_reading",
+        "tests/contracts/test_private_device_launcher.py::test_private_check_reports_declaration_without_creating_pairing_or_listening"
+      ]
+    }
+  ]
+}

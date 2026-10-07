@@ -1,5 +1,7 @@
 """Offline, synthetic auth tests; no account, secrets, or network required."""
 
+import base64
+import json
 import os
 import tempfile
 import threading
@@ -164,7 +166,12 @@ class IdentityTests(unittest.TestCase):
             from cryptography.hazmat.primitives.asymmetric import rsa
         except ImportError as exc:
             raise unittest.SkipTest("PyJWT/cryptography not installed in this interpreter") from exc
+        from cryptography.hazmat.primitives import hashes
+        from cryptography.hazmat.primitives.asymmetric import padding
+
         cls.jwt = jwt
+        cls.hashes = hashes
+        cls.rsa_padding = padding
         cls.key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
         jwk = jwt.algorithms.RSAAlgorithm.to_jwk(cls.key.public_key(), as_dict=True)
         jwk["kid"] = "synthetic-test-key"
@@ -178,6 +185,23 @@ class IdentityTests(unittest.TestCase):
         return self.jwt.encode(claims, self.key, algorithm="RS256",
                                headers={"kid": "synthetic-test-key"})
 
+    @staticmethod
+    def _b64url(data):
+        return base64.urlsafe_b64encode(data).rstrip(b"=").decode("ascii")
+
+    @staticmethod
+    def _decode_segment(segment):
+        return base64.urlsafe_b64decode(segment + "=" * (-len(segment) % 4))
+
+    def _sign_segments(self, header_segment, payload_segment, pad_signature=False):
+        signing_input = f"{header_segment}.{payload_segment}".encode("ascii")
+        signature = self.key.sign(signing_input, self.rsa_padding.PKCS1v15(),
+                                  self.hashes.SHA256())
+        encoded_signature = self._b64url(signature)
+        if pad_signature:
+            encoded_signature += "=" * (-len(encoded_signature) % 4)
+        return f"{header_segment}.{payload_segment}.{encoded_signature}"
+
     def test_valid_signature_identity_and_nonce(self):
         claims = validate_identity(self.token(), "oaiapp_test", "synthetic-nonce", self.jwks)
         self.assertEqual(claims["sub"], "synthetic-user")
@@ -187,6 +211,53 @@ class IdentityTests(unittest.TestCase):
                        {"nonce": "wrong"}, {"exp": int(time.time()) - 10}):
             with self.subTest(claims=claims), self.assertRaises(AuthError):
                 validate_identity(self.token(**claims), "oaiapp_test", "synthetic-nonce", self.jwks)
+
+    def test_malformed_header_payload_and_non_alphabet_junk_fail_closed(self):
+        valid_header, valid_payload, _ = self.token().split(".")
+        malformed_header = f"!!!!.{valid_payload}.synthetic-signature"
+        malformed_payload = self._sign_segments(valid_header, self._b64url(b"{"))
+        invalid_alphabet_payload = self._sign_segments(valid_header, "!!!!")
+
+        for token in (malformed_header, malformed_payload, invalid_alphabet_payload):
+            with self.subTest(token=token[:24]), self.assertRaises(AuthError):
+                validate_identity(token, "oaiapp_test", "synthetic-nonce", self.jwks)
+
+    def test_deeply_nested_payload_is_wrapped_as_decode_error(self):
+        header_segment, _, _ = self.token().split(".")
+        claims = {"iss": ISSUER, "aud": "oaiapp_test", "sub": "synthetic-user",
+                  "nonce": "synthetic-nonce", "iat": int(time.time()),
+                  "exp": int(time.time()) + 60}
+        payload = (json.dumps(claims, separators=(",", ":"))[:-1]
+                   + ',"nested":' + '{"x":' * 12000 + "0" + "}" * 12000 + "}")
+        token = self._sign_segments(header_segment, self._b64url(payload.encode()))
+
+        with self.assertRaises(self.jwt.DecodeError):
+            self.jwt.decode(token, self.key.public_key(), algorithms=["RS256"],
+                            audience="oaiapp_test", issuer=ISSUER)
+
+        with self.assertRaises(AuthError):
+            validate_identity(token, "oaiapp_test", "synthetic-nonce", self.jwks)
+
+    def test_trailing_base64url_padding_is_accepted_for_all_compact_segments(self):
+        header_segment, payload_segment, _ = self.token().split(".")
+        header = self._decode_segment(header_segment)
+        payload = self._decode_segment(payload_segment)
+
+        while len(self._b64url(header)) % 4 == 0:
+            header += b" "
+        while len(self._b64url(payload)) % 4 == 0:
+            payload += b" "
+        padded_header = self._b64url(header)
+        padded_header += "=" * (-len(padded_header) % 4)
+        padded_payload = self._b64url(payload)
+        padded_payload += "=" * (-len(padded_payload) % 4)
+        token = self._sign_segments(padded_header, padded_payload, pad_signature=True)
+
+        self.assertTrue(padded_header.endswith("="))
+        self.assertTrue(padded_payload.endswith("="))
+        self.assertTrue(token.rsplit(".", 1)[1].endswith("="))
+        claims = validate_identity(token, "oaiapp_test", "synthetic-nonce", self.jwks)
+        self.assertEqual(claims["sub"], "synthetic-user")
 
 
 class PreparedListenerTests(unittest.TestCase):

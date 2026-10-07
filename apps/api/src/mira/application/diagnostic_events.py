@@ -6,6 +6,14 @@ import hashlib
 import re
 from time import monotonic
 
+from mira.application.contracts import ReportedConfidenceWarning, SafeResponseValidation
+from mira.application.generation_diagnostics import SafeGenerationDiagnostic
+from mira.application.fixed_photo_diagnostics import SafeFixedPhotoDiagnostic
+from mira.application.wardrobe_diagnostics import SafeWardrobeDiagnostic
+from mira.application.optional_candidate_diagnostics import SafeOptionalCandidateDiagnostic
+from mira.application.image_readiness import SafeImageReadinessDiagnostic
+from mira.application.native_tool_diagnostics import SafeNativeToolDiagnostic
+
 
 class DiagnosticStage(StrEnum):
     HTTP = "http"
@@ -14,10 +22,17 @@ class DiagnosticStage(StrEnum):
     INPUT_REVIEW = "input_review"
     OUTPUT_REVIEW = "output_review"
     STT = "stt"
+    STT_FIRST_REVISION = "stt_first_revision"
+    STT_FIRST_FINAL_REVISION = "stt_first_final_revision"
+    STT_STREAM_END = "stt_stream_end"
     TTS = "tts"
     MICROPHONE = "microphone"
     PLAYBACK = "playback"
     DIAGNOSTICS = "diagnostics"
+    FIXED_PHOTO = "fixed_photo"
+    WARDROBE = "wardrobe"
+    IMAGE_READINESS = "image_readiness"
+    NATIVE_TOOL = "native_tool"
 
 
 class DiagnosticKind(StrEnum):
@@ -51,6 +66,13 @@ class DiagnosticCode(StrEnum):
     QUOTA_EXHAUSTED = "quota_exhausted"
     TIMEOUT = "timeout"
     UNAVAILABLE = "unavailable"
+    STORY_CHECKPOINT_PENDING = "story_checkpoint_pending"
+    TRANSPORT_CONNECT = "transport_connect"
+    TRANSPORT_PROXY = "transport_proxy"
+    TRANSPORT_PROTOCOL = "transport_protocol"
+    TRANSPORT_READ = "transport_read"
+    TRANSPORT_WRITE = "transport_write"
+    CODEX_STARTUP_READONLY_FILESYSTEM = "codex_startup_readonly_filesystem"
     INVALID_INPUT = "invalid_input"
     INVALID_RESPONSE = "invalid_response"
     INVALID_AUDIO = "invalid_audio"
@@ -59,6 +81,10 @@ class DiagnosticCode(StrEnum):
     BLOCKED = "blocked"
     CANCELLED = "cancelled"
     DISCONNECTED = "disconnected"
+    MEMORY_CONTEXT_STALE = "memory_context_stale"
+    MEMORY_CONTEXT_OVERFLOW = "memory_context_overflow"
+    MEMORY_TIMEOUT = "memory_timeout"
+    MEMORY_UNAVAILABLE = "memory_unavailable"
     UNKNOWN = "unknown"
 
 
@@ -80,6 +106,14 @@ class DiagnosticEvent:
     cancellation_reason: CancellationReason | None = None
     duration_ms: float | None = None
     http_status: int | None = None
+    response_validation: SafeResponseValidation | None = None
+    generation_diagnostic: SafeGenerationDiagnostic | None = None
+    reported_confidence_warning: ReportedConfidenceWarning | None = None
+    fixed_photo: SafeFixedPhotoDiagnostic | None = None
+    wardrobe: SafeWardrobeDiagnostic | None = None
+    optional_candidate_hold: SafeOptionalCandidateDiagnostic | None = None
+    image_readiness: SafeImageReadinessDiagnostic | None = None
+    native_tool: SafeNativeToolDiagnostic | None = None
     # No arbitrary provider name, message, URL, headers, metadata or body field.
 
 
@@ -177,18 +211,40 @@ class DiagnosticSpan:
         self.sink, self.stage, self.context = sink, stage, context
         self._started = monotonic()
         self._finished = False
+        self._observed_milestones: set[DiagnosticStage] = set()
         self.cancellation_reason: CancellationReason | None = None
         emit_safely(sink, DiagnosticEvent(stage, DiagnosticOutcome.STARTED, context,
                                          kind=DiagnosticKind.STARTED))
 
+    def observe(self, stage: DiagnosticStage, outcome: DiagnosticOutcome = DiagnosticOutcome.SUCCEEDED) -> None:
+        """Emit a fixed numeric milestone on the existing safe diagnostics sink."""
+        if (self.stage != DiagnosticStage.STT
+                or stage not in (DiagnosticStage.STT_FIRST_REVISION,
+                                 DiagnosticStage.STT_FIRST_FINAL_REVISION,
+                                 DiagnosticStage.STT_STREAM_END)
+                or stage in self._observed_milestones
+                or (self._finished and stage != DiagnosticStage.STT_STREAM_END)):
+            return
+        self._observed_milestones.add(stage)
+        emit_safely(self.sink, DiagnosticEvent(stage, outcome, self.context,
+            kind=DiagnosticKind.STATE_CHANGED,
+            duration_ms=max(0.0, (monotonic() - self._started) * 1000)))
+
     def finish(self, outcome: DiagnosticOutcome, *, code: DiagnosticCode | None = None,
-               reason: CancellationReason | None = None) -> None:
+               reason: CancellationReason | None = None,
+               response_validation: SafeResponseValidation | None = None,
+               generation_diagnostic: SafeGenerationDiagnostic | None = None,
+               reported_confidence_warning: ReportedConfidenceWarning | None = None) -> None:
         if self._finished:
             return
         self._finished = True
         self.cancellation_reason = reason
         emit_safely(self.sink, DiagnosticEvent(self.stage, outcome, self.context,
-            code=code, cancellation_reason=reason, duration_ms=(monotonic() - self._started) * 1000))
+            code=code, cancellation_reason=reason, duration_ms=(monotonic() - self._started) * 1000,
+            response_validation=response_validation,
+            generation_diagnostic=generation_diagnostic,
+            http_status=generation_diagnostic.http_status if generation_diagnostic else None,
+            reported_confidence_warning=reported_confidence_warning))
 
 
 def capture_text_safely(sink, kind: RecordingKind, text: str, context: DiagnosticContext) -> None:

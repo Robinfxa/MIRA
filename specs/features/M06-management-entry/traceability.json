@@ -1,0 +1,27 @@
+{
+  "feature": "M06-MANAGEMENT-ENTRY",
+  "spec": "specs/features/M06-management-entry/spec.md",
+  "requirements": [
+    {
+      "id": "M06MANAGEMENTENTRY-001",
+      "tests": [
+        "tests/contracts/test_memory_management_launcher.py::test_local_management_flag_defaults_off_and_requires_explicit_selection",
+        "tests/contracts/test_memory_management_launcher.py::test_local_management_alone_does_not_enable_memory_or_read_admission",
+        "tests/contracts/test_memory_management_launcher.py::test_existing_transmission_consent_does_not_authorize_local_edits"
+      ]
+    },
+    {
+      "id": "M06MANAGEMENTENTRY-002",
+      "tests": [
+        "tests/contracts/test_memory_management_launcher.py::test_management_factory_is_inert_until_paired_app_invokes_it"
+      ]
+    },
+    {
+      "id": "M06MANAGEMENTENTRY-003",
+      "tests": [
+        "tests/integration/test_memory_management_actor.py::test_paired_edit_during_generation_blocks_old_grants_and_next_turn_uses_new_scope",
+        "tests/integration/test_memory_management_actor.py::test_recall_consent_without_edit_consent_keeps_management_disabled"
+      ]
+    }
+  ]
+}

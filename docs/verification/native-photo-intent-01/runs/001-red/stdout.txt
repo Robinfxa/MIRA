@@ -1,0 +1,277 @@
+FFFFFFFFFF                                                               [100%]
+=================================== FAILURES ===================================
+_ test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates[\u8fd8\u6709\u522b\u7684\u7167\u7247\u5417-chatgpt_subscription] _
+
+route = <ResponsesRoute.CHATGPT_SUBSCRIPTION: 'chatgpt_subscription'>
+utterance = '还有别的照片吗'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route',list(ResponsesRoute))
+    @pytest.mark.parametrize('utterance',['还有别的照片吗','别的给我看看'])
+    async def test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates(route,utterance):
+        s=WireSession(route=route);images=image_runtime(s)
+        try:
+            await s.turn('这张照片我看过了','这张灯塔照片可以慢慢看。')
+            call=GenerationToolCall('image','generate_story_image',json.dumps({
+                'brief':'An imaginary empty rainlit cafe window.','framing':'wide','lighting':'warm'}))
+            r,state=await s.turn(utterance,call)
+            assert r['status']=='failed' and r['reason']=='generation'
+            assert len(images.requests)==1 and len(s.requests)==3
+>           body=json.loads(s.requests[-2].content);assert_intent_contract(body)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/contracts/test_native_photo_request_intent.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_ test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates[\u8fd8\u6709\u522b\u7684\u7167\u7247\u5417-openai_api] _
+
+route = <ResponsesRoute.OPENAI_API: 'openai_api'>, utterance = '还有别的照片吗'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route',list(ResponsesRoute))
+    @pytest.mark.parametrize('utterance',['还有别的照片吗','别的给我看看'])
+    async def test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates(route,utterance):
+        s=WireSession(route=route);images=image_runtime(s)
+        try:
+            await s.turn('这张照片我看过了','这张灯塔照片可以慢慢看。')
+            call=GenerationToolCall('image','generate_story_image',json.dumps({
+                'brief':'An imaginary empty rainlit cafe window.','framing':'wide','lighting':'warm'}))
+            r,state=await s.turn(utterance,call)
+            assert r['status']=='failed' and r['reason']=='generation'
+            assert len(images.requests)==1 and len(s.requests)==3
+>           body=json.loads(s.requests[-2].content);assert_intent_contract(body)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/contracts/test_native_photo_request_intent.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_ test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates[\u522b\u7684\u7ed9\u6211\u770b\u770b-chatgpt_subscription] _
+
+route = <ResponsesRoute.CHATGPT_SUBSCRIPTION: 'chatgpt_subscription'>
+utterance = '别的给我看看'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route',list(ResponsesRoute))
+    @pytest.mark.parametrize('utterance',['还有别的照片吗','别的给我看看'])
+    async def test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates(route,utterance):
+        s=WireSession(route=route);images=image_runtime(s)
+        try:
+            await s.turn('这张照片我看过了','这张灯塔照片可以慢慢看。')
+            call=GenerationToolCall('image','generate_story_image',json.dumps({
+                'brief':'An imaginary empty rainlit cafe window.','framing':'wide','lighting':'warm'}))
+            r,state=await s.turn(utterance,call)
+            assert r['status']=='failed' and r['reason']=='generation'
+            assert len(images.requests)==1 and len(s.requests)==3
+>           body=json.loads(s.requests[-2].content);assert_intent_contract(body)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/contracts/test_native_photo_request_intent.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_ test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates[\u522b\u7684\u7ed9\u6211\u770b\u770b-openai_api] _
+
+route = <ResponsesRoute.OPENAI_API: 'openai_api'>, utterance = '别的给我看看'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route',list(ResponsesRoute))
+    @pytest.mark.parametrize('utterance',['还有别的照片吗','别的给我看看'])
+    async def test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates(route,utterance):
+        s=WireSession(route=route);images=image_runtime(s)
+        try:
+            await s.turn('这张照片我看过了','这张灯塔照片可以慢慢看。')
+            call=GenerationToolCall('image','generate_story_image',json.dumps({
+                'brief':'An imaginary empty rainlit cafe window.','framing':'wide','lighting':'warm'}))
+            r,state=await s.turn(utterance,call)
+            assert r['status']=='failed' and r['reason']=='generation'
+            assert len(images.requests)==1 and len(s.requests)==3
+>           body=json.loads(s.requests[-2].content);assert_intent_contract(body)
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/contracts/test_native_photo_request_intent.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_ test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u4f60\u4ee5\u524d\u8fd8\u62cd\u8fc7\u4ec0\u4e48\u7167\u7247] _
+
+utterance = '你以前还拍过什么照片'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('utterance',['你以前还拍过什么照片','他说“别的给我看看”','不想看别的照片','如果想看别的呢','还有别的照片吗'])
+    async def test_photo_words_without_native_call_do_not_start_or_invent_an_image(utterance):
+        s=WireSession();images=image_runtime(s)
+        try:
+            r,state=await s.turn(utterance,'我们接着聊。')
+            assert r is None and not images.requests
+>           assert_intent_contract(json.loads(s.requests[0].content))
+
+tests/contracts/test_native_photo_request_intent.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_ test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u4ed6\u8bf4\u201c\u522b\u7684\u7ed9\u6211\u770b\u770b\u201d] _
+
+utterance = '他说“别的给我看看”'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('utterance',['你以前还拍过什么照片','他说“别的给我看看”','不想看别的照片','如果想看别的呢','还有别的照片吗'])
+    async def test_photo_words_without_native_call_do_not_start_or_invent_an_image(utterance):
+        s=WireSession();images=image_runtime(s)
+        try:
+            r,state=await s.turn(utterance,'我们接着聊。')
+            assert r is None and not images.requests
+>           assert_intent_contract(json.loads(s.requests[0].content))
+
+tests/contracts/test_native_photo_request_intent.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_ test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u4e0d\u60f3\u770b\u522b\u7684\u7167\u7247] _
+
+utterance = '不想看别的照片'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('utterance',['你以前还拍过什么照片','他说“别的给我看看”','不想看别的照片','如果想看别的呢','还有别的照片吗'])
+    async def test_photo_words_without_native_call_do_not_start_or_invent_an_image(utterance):
+        s=WireSession();images=image_runtime(s)
+        try:
+            r,state=await s.turn(utterance,'我们接着聊。')
+            assert r is None and not images.requests
+>           assert_intent_contract(json.loads(s.requests[0].content))
+
+tests/contracts/test_native_photo_request_intent.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_ test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u5982\u679c\u60f3\u770b\u522b\u7684\u5462] _
+
+utterance = '如果想看别的呢'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('utterance',['你以前还拍过什么照片','他说“别的给我看看”','不想看别的照片','如果想看别的呢','还有别的照片吗'])
+    async def test_photo_words_without_native_call_do_not_start_or_invent_an_image(utterance):
+        s=WireSession();images=image_runtime(s)
+        try:
+            r,state=await s.turn(utterance,'我们接着聊。')
+            assert r is None and not images.requests
+>           assert_intent_contract(json.loads(s.requests[0].content))
+
+tests/contracts/test_native_photo_request_intent.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_ test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u8fd8\u6709\u522b\u7684\u7167\u7247\u5417] _
+
+utterance = '还有别的照片吗'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('utterance',['你以前还拍过什么照片','他说“别的给我看看”','不想看别的照片','如果想看别的呢','还有别的照片吗'])
+    async def test_photo_words_without_native_call_do_not_start_or_invent_an_image(utterance):
+        s=WireSession();images=image_runtime(s)
+        try:
+            r,state=await s.turn(utterance,'我们接着聊。')
+            assert r is None and not images.requests
+>           assert_intent_contract(json.loads(s.requests[0].content))
+
+tests/contracts/test_native_photo_request_intent.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+_________ test_natural_request_with_disabled_images_keeps_tool_absent __________
+
+    @pytest.mark.asyncio
+    async def test_natural_request_with_disabled_images_keeps_tool_absent():
+        s=WireSession()
+        try:
+            r,state=await s.turn('还有别的照片吗','这次暂时不能找新图，我们可以聊聊想看的风景。')
+>           body=json.loads(s.requests[0].content);assert_intent_contract(body)
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/contracts/test_native_photo_request_intent.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+body = {'include': ['reasoning.encrypted_content'], 'input': [{'content': [{'text': '{"author_policy":{"allowed_controls":[{"...story. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.', 'model': 'gpt-6-luna', ...}
+
+    def assert_intent_contract(body):
+        text=body['instructions']
+>       assert '还有别的照片吗' in text and '别的给我看看' in text
+E       AssertionError: assert ('还有别的照片吗' in 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.')
+
+tests/contracts/test_native_photo_request_intent.py:23: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_photo_request_intent.py::test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates[\u8fd8\u6709\u522b\u7684\u7167\u7247\u5417-chatgpt_subscription]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates[\u8fd8\u6709\u522b\u7684\u7167\u7247\u5417-openai_api]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates[\u522b\u7684\u7ed9\u6211\u770b\u770b-chatgpt_subscription]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates[\u522b\u7684\u7ed9\u6211\u770b\u770b-openai_api]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u4f60\u4ee5\u524d\u8fd8\u62cd\u8fc7\u4ec0\u4e48\u7167\u7247]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u4ed6\u8bf4\u201c\u522b\u7684\u7ed9\u6211\u770b\u770b\u201d]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u4e0d\u60f3\u770b\u522b\u7684\u7167\u7247]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u5982\u679c\u60f3\u770b\u522b\u7684\u5462]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_photo_words_without_native_call_do_not_start_or_invent_an_image[\u8fd8\u6709\u522b\u7684\u7167\u7247\u5417]
+FAILED tests/contracts/test_native_photo_request_intent.py::test_natural_request_with_disabled_images_keeps_tool_absent
+10 failed in 0.89s

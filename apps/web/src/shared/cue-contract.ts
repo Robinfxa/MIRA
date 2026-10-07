@@ -8,6 +8,22 @@ export function validateCueFields(effect: EffectView): void {
     }
   }
   if (effect.cue_speech_id != null && effect.cue_id == null) throw new Error('Missing presentation cue identity');
+  const chunk = effect.caption_chunk;
+  if (chunk != null) {
+    if (typeof chunk !== 'object' || Array.isArray(chunk)
+      || Object.keys(chunk).sort().join(',') !== 'end,group_id,index,source_sha256,start,total'
+      || effect.kind !== 'subtitle' || effect.cue_speech_id != null
+      || typeof chunk.group_id !== 'string' || !/^[0-9a-f-]{36}$/.test(chunk.group_id)
+      || typeof chunk.source_sha256 !== 'string' || !/^[0-9a-f]{64}$/.test(chunk.source_sha256)
+      || ![chunk.index, chunk.start, chunk.end, chunk.total].every(Number.isSafeInteger)
+      || chunk.index < 0 || chunk.index > 3 || chunk.start < 0 || chunk.start >= chunk.end
+      || chunk.end > chunk.total || chunk.total > 4096
+      || (chunk.index === 0) !== (chunk.start === 0)
+      || Array.from(effect.value).length !== chunk.end - chunk.start) {
+      throw new Error('Invalid original caption chunk');
+    }
+  }
+
 }
 
 /** Active grants are complete sets; presented history can intentionally omit a speech peer. */
@@ -22,6 +38,20 @@ export function validateCueGrants(effects: readonly EffectView[]): void {
       const group = cues.get(effect.cue_id) ?? [];
       group.push(effect); cues.set(effect.cue_id, group);
     }
+  }
+  const captionGroups = new Map<string, EffectView[]>();
+  for (const effect of effects) {
+    const chunk = effect.caption_chunk;
+    if (!chunk) continue;
+    const group = captionGroups.get(chunk.group_id) ?? [];
+    const previous = group.at(-1);
+    if ((!previous && chunk.index !== 0) || (previous && (
+      previous.caption_chunk!.index + 1 !== chunk.index || previous.caption_chunk!.end !== chunk.start
+      || previous.caption_chunk!.total !== chunk.total || previous.caption_chunk!.source_sha256 !== chunk.source_sha256
+      || previous.activity_seq !== effect.activity_seq || previous.output_epoch !== effect.output_epoch))) {
+      throw new Error('Noncontiguous original caption chunks');
+    }
+    group.push(effect); captionGroups.set(chunk.group_id, group);
   }
   // Only an isolated legacy speech has an unambiguous meaning. Never guess which text belongs to it.
   const speech = effects.filter(effect => effect.kind === 'speech');

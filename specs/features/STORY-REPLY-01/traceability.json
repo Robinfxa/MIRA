@@ -1,0 +1,23 @@
+{
+  "feature": "STORY-REPLY-01",
+  "spec": "specs/features/STORY-REPLY-01/spec.md",
+  "requirements": [
+    {
+      "id": "STORYREPLY01-001",
+      "tests": [
+        "tests/contracts/test_story_reply_fence.py::test_presented_gift_survives_reply_fence_and_one_current_acceptance",
+        "tests/contracts/test_story_reply_fence.py::test_reply_fence_clears_pending_immediately_without_advancing_late_history"
+      ]
+    },
+    {
+      "id": "STORYREPLY01-002",
+      "tests": [
+        "tests/contracts/test_story_reply_fence.py::test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer",
+        "tests/contracts/test_story_reply_fence.py::test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question",
+        "tests/contracts/test_story_reply_fence.py::test_reply_fence_is_idempotent_but_rejects_unrecorded_epoch_gap",
+        "tests/contracts/test_story_reply_fence.py::test_role_question_is_bound_to_one_actual_input_id_not_just_epoch",
+        "tests/contracts/test_story_reply_fence.py::test_invalid_input_does_not_consume_question_and_same_input_retry_is_idempotent"
+      ]
+    }
+  ]
+}

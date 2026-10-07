@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "curation_date_utc": "2026-10-07",
+  "current_code_version": "MIRA-20261006-2012 + released image-review and dialogue-followthrough patches",
+  "images": [
+    {
+      "path": "docs/images/01-current-stage.png",
+      "title": "当前代码角色与咖啡馆场景",
+      "caption": "2012 加已发布图片审核与对话续接修复；同版角色几何与已有 SVG 场景的离线文档组合。不是产品 UI 截图。",
+      "kind": "code_rendered_offline_illustration",
+      "sha256": "c6220eb603d572de7fb0bf1ca11e850816f1cad67ddadfa6eddaa52638073681",
+      "dimensions": [
+        1200,
+        930
+      ],
+      "metadata_keys": [],
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/images/02-current-wardrobes.png",
+      "title": "三套服装",
+      "caption": "同版代码离线渲染：黑夹克、奶油色内搭、琥珀雨衣。固定初始姿态；不代表换装交互或美术验收。",
+      "kind": "code_rendered_offline_illustration",
+      "sha256": "0cfc409c8372ba72fd6c086f23b882685a785294b0ec4bfb2f8b53271215a195",
+      "dimensions": [
+        1800,
+        1080
+      ],
+      "metadata_keys": [],
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/images/03-current-emotions.png",
+      "title": "四种独立情绪",
+      "caption": "同版代码离线渲染取样：平常、戒备、开心、娇羞。仅裁切头肩作对照，未重绘。",
+      "kind": "code_rendered_offline_illustration",
+      "sha256": "3417831d4837f6d4f155cb12fc94ad3a720fc0847bb143aa91d83d696fb1a614",
+      "dimensions": [
+        1520,
+        760
+      ],
+      "metadata_keys": [],
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/images/04-current-phases.png",
+      "title": "四种表现阶段",
+      "caption": "同版代码 t=1.0 秒离线取样：待机、倾听、思考、说话。不证明真实语音、口型同步或动画性能。",
+      "kind": "code_rendered_offline_illustration",
+      "sha256": "1156877aa6efc4efdbe28b0ccd025c1fd0a0b9aac2636f50ccd19def1c3f6cb0",
+      "dimensions": [
+        1600,
+        820
+      ],
+      "metadata_keys": [],
+      "visually_reviewed": true
+    },
+    {
+      "path": "docs/images/05-historical-browser.png",
+      "title": "历史开发浏览器截图",
+      "caption": "原截图文件名日期为2026-10-04 22:54:22，时区未注明；2026-10-05上传。static-pixi旧插画界面，具体构建号未确认。保留“正在连接”和固定Stop字幕，仅展示历史开发界面，不代表当前2012或live验收。",
+      "kind": "historical_browser_screenshot",
+      "sha256": "e4bee81aaf949ed64f0cd846c9ff562ae8b3dd876695d0a6838a92a6211f801b",
+      "dimensions": [
+        1385,
+        1157
+      ],
+      "metadata_keys": [],
+      "visually_reviewed": true,
+      "source": {
+        "filename": "截屏2026-10-04 22.54.22.png",
+        "library_file_id": "libfile_5fd31c5633c08191ba62f17eb76d3129",
+        "original_dimensions": [
+          2048,
+          1280
+        ],
+        "original_sha256": "a3bb0fd356710da9cf4e1a63ac832c6f9865ccaa9f10a46e2ab5002eba4920ef",
+        "crop_xyxy": [
+          5,
+          118,
+          1390,
+          1275
+        ],
+        "resize": false,
+        "pixel_retouch": false,
+        "pixel_equality_to_source_crop_verified": true,
+        "uploaded_at_utc": "2026-10-05T03:00:45.974558Z",
+        "capture_timezone": "unknown",
+        "build_id": "unconfirmed"
+      }
+    }
+  ],
+  "render_sources": {
+    "apps/web/src/features/presentation/code-native-character-renderer.ts": "b4fe1e1bd88a548785be987710616971a4968f4d987eb10cdaa6c9fa6970a0b8",
+    "apps/web/src/features/presentation/scene-state.ts": "a7a77c9a46e62aec6e0ecbe3bb6eb3a237f2be61b9a99594ed5596abdb4c7c63",
+    "apps/web/src/features/presentation/code-native-vendor/character.js": "46f5588578dae646d2df9c1db8f80c2afe64279410a23cf3b9320b235a3b2028",
+    "apps/web/src/features/presentation/code-native-vendor/body.js": "b284f65e9b21e5e4905c10b1d72fe8592e2c373843603ac3645538ace9263da1",
+    "apps/web/src/features/presentation/code-native-vendor/hair.js": "daf9524bd986206c604d3aa301f6c4ff4c03d07c204d540bc676c51933e74ea8",
+    "apps/web/src/features/presentation/code-native-vendor/expression.js": "6cb7f4816b0eed35107887ea454c1e26e40352b338c91e4e985402518b27d33c",
+    "apps/web/src/features/presentation/code-native-vendor/camera-motion.js": "4147f738e574d1ed00a59b7c7b71b7b8ca9f2b5ba0f4e68bdebe5f2fee8b3c3d",
+    "apps/web/public/scene/code-native/readiness-catalog.json": "31a16f2c027e686a13db62013b7bd910880a572d78756a92fe51da92a965ace7",
+    "apps/web/public/scene/cafe-night.svg": "3c3dcfb31b9126ab3ee511dd1e241fd2d714babcfd100651346fd162913cbf96"
+  },
+  "render_method": "Node built-in TypeScript transform on a separate copy; composeCodeNativeScene; serialize the original layered paths, transforms, clipping, fill and effective alpha to SVG; Inkscape PNG rasterization at 288x408; documentation layout with nearest-neighbor scaling. No runtime source edits, provider calls or image generation. SVG rasterization is illustrative and is not a pixel-identical Canvas/browser capture.",
+  "privacy_review": "Each final image was visually inspected. No credentials, environment values, personal chat, browser tabs or developer tools appear in delivered images. Historical source image and unrelated discovery inputs are excluded from packaging."
+}

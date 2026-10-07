@@ -1,0 +1,34 @@
+{
+  "feature": "M06-FP",
+  "spec": "specs/features/M06-first-person-story/spec.md",
+  "requirements": [
+    {
+      "id": "M06FP-001",
+      "tests": [
+        "tests/contracts/test_first_person_story_memory.py::test_internal_authored_past_is_first_person_without_disclosure_or_user_history",
+        "tests/contracts/test_first_person_story_memory.py::test_unselected_drafts_are_not_private_first_person_knowledge"
+      ]
+    },
+    {
+      "id": "M06FP-002",
+      "tests": [
+        "tests/contracts/test_first_person_story_memory.py::test_arrival_is_fresh_only_once_and_reentry_preserves_progress",
+        "tests/contracts/test_first_person_story_memory.py::test_plans_and_concerns_never_become_completed_episodes",
+        "tests/contracts/test_first_person_story_memory.py::test_pending_stopped_and_receipted_steps_remain_distinct_in_first_person_view"
+      ]
+    },
+    {
+      "id": "M06FP-003",
+      "tests": [
+        "tests/contracts/test_first_person_story_memory.py::test_dialogue_quotes_actual_input_and_receipted_output_only"
+      ]
+    },
+    {
+      "id": "M06FP-004",
+      "tests": [
+        "tests/contracts/test_first_person_story_memory.py::test_generation_and_review_receive_identical_first_person_memory",
+        "tests/contracts/test_first_person_story_memory.py::test_perspective_tampering_is_rejected_even_with_rehashed_json"
+      ]
+    }
+  ]
+}

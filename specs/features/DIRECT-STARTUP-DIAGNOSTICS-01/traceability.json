@@ -1,0 +1,20 @@
+{
+  "feature": "DIRECTSTARTUPDIAGNOSTICS",
+  "spec": "specs/features/DIRECT-STARTUP-DIAGNOSTICS-01/spec.md",
+  "requirements": [
+    {
+      "id": "DIRECTSTARTUPDIAGNOSTICS-001",
+      "tests": [
+        "tests/contracts/test_live_provider_launcher.py::test_invalid_tts_location_reports_only_safe_field_before_adc_or_resources",
+        "tests/contracts/test_live_provider_launcher.py::test_config_diagnostics_allowlist_fields_without_echoing_values",
+        "tests/contracts/test_live_provider_launcher.py::test_config_diagnostics_reject_unknown_exception_fields_and_bound_output"
+      ]
+    },
+    {
+      "id": "DIRECTSTARTUPDIAGNOSTICS-002",
+      "tests": [
+        "tests/contracts/test_live_provider_launcher.py::test_private_file_failure_identifies_metadata_stage_without_path_or_read"
+      ]
+    }
+  ]
+}

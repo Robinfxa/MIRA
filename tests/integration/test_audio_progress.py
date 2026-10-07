@@ -3,6 +3,7 @@ import time
 from uuid import uuid4
 
 import pytest
+from tests.integration.test_voice_http import Tts
 from fastapi.testclient import TestClient
 
 from mira.application.contracts import (
@@ -28,7 +29,7 @@ class TestOnlyReview:
 @pytest.fixture
 def spoken():
     with TestClient(create_app(Settings(), providers=Providers(
-            SpeechGeneration(), TestOnlyReview()))) as client:
+            SpeechGeneration(), TestOnlyReview()), speech_synthesis=Tts())) as client:
         created = client.post("/api/v1/sessions", json={"client_instance_id": str(uuid4())}).json()
         path = "/api/v1/sessions/" + created["session"]["session_id"]
         headers = {"X-Mira-Session-Token": created["session_token"]}

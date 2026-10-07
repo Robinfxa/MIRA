@@ -1,207 +1,243 @@
-# MIRA · 原创角色互动开发版
+# MIRA · 雨夜咖啡馆里的实时角色互动
 
-**可运行的零密钥演示；真实服务、设备与完整互动验收仍有独立准入条件。**
-MIRA 是一位26岁的原创虚构摄影师，场景是雨夜咖啡馆。当前实现包含原创 SVG 角色/场景、四态表现、表情与受控动作、文字输入、可取消音频传输/播放、独立语义审核，以及有界脱敏诊断和显式开发录制。离线排练中的按住手势只提交固定合成文本，不采集麦克风；真实语音入口仍待授权后的设备验收。
+MIRA 是一位 26 岁的原创虚构摄影师。你可以在雨夜咖啡馆里和她打字、说话、打断回应，聊摄影、改变穿着与场景，再以老朋友「夏禾」的身份完成一次相认与赠照。角色和环境是体验主体，聊天框负责输入与辅助阅读。
 
-## 当前实现与验收边界
+本项目选择**代码驱动的角色动画**作为核心多模态能力，同时提供固定灯塔照片和可选的后台图片生成。日常对话保持角色口吻；明确问到 AI 身份、现实存在或图片来源时，她应如实说明自己是扮演 MIRA 的 AI，以及素材的真实来源。
 
-以下状态核对至 **2026-10-03 19:27 UTC**；各次测试和真实调用绑定各自源码快照。
+**当前交付：2026-10-07 项目提交源码 ZIP，已整合 2012 基线、图片审核、自然对话衔接和默认同 Wi-Fi 免配对三项修补，无需再运行补丁安装器。** 包内前端由同一冻结源码编译；依赖环境另行准备。用户已确认基本聊天、固定照片，以及一次生成图的显示与主动完成通知，但反馈没有绑定精确源码摘要。完整语音、真实打断、手机和同版本完整流程尚待实机验收，演示视频随邮件另附（用户已录制，本包未包含且未代验）。历史发布、后续影响面检查和本次打包核验的范围见[验证说明](docs/submission/VERIFICATION.md)；本次未重新执行完整发布套件，未发布新的在线演示或远端仓库。
 
-- 默认 `mock` / `replay` 可离线启动，不读取私密 `.env`，不调用模型或真实语音服务。另有显式 `rehearsal`：固定口令、多轮呈现历史、预录英文合成音频及双语字幕，真实麦克风始终关闭。
-- 受批准的既有原生 Codex 开发环境已通过实际 MIRA 适配器产出一份 `gpt-6-luna` 结构化候选；Google Speech-to-Text V2 已识别一段6.135秒的合成英文。精确 `gemini-3.8-flash-tts` 已返回完整3.4秒合成中文 PCM，耗时16.056秒（含私有落盘），首PCM/可听延迟未测。JEV 有连接/解析证据，用户指定的≥0.6开发判定策略已落代码、仍在独立集成验收；这些组件尚未组成通过审核的实时会话，默认 live 工厂仍关闭。
-- 字幕/动作通过应用生成的 cue 身份与对应语音关联。Stop、新输入和权限撤销先在本地阻断；软件渲染样本不证明用户听见，也不是逐字对齐。
-- 普通日志无原文。开发原文录制需要单独开关与确认，保持可见标记；凭据结构与不确定内容拒绝记录。原始音频录制仍默认关闭，只在显式注入的开发语音模式中提供应用范围的开关；最多512 KiB、短时暂存，提供精确缓冲试听，由用户确认已审核、再单独确认排入本机私有诊断队列；软件不能证明人实际听过。ASR转写不能代替原音审核，也没有自动口述秘密检测；队列接收不代表已写入磁盘。默认 mock/replay/rehearsal 麦克风与录制保持关闭。
-- 独立审查已发现并修复字幕提前呈现、嵌套凭据过滤、累计音频上下文、错误文案和异常 token 等问题。每个后续阶段须重新冻结源码验证，旧阶段的绿色测试不能替代新版本验收。
-- 真实浏览器/手机/扬声器/麦克风、完整3–5分钟交互录屏、真实模型表现与中文审核校准尚未完成。没有云部署或正式产品就绪声明。
+[先从这里开始](START-HERE.md) · [首次使用／升级](FIRST-RUN.md) · [提交前清单](docs/SUBMISSION-CHECKLIST.md) · [录制步骤](docs/development/DEMO-RECORDING.md) · [AI 使用说明](AI_USAGE.md) · [验证范围](docs/submission/VERIFICATION.md)
 
-[项目北极星](docs/NORTH_STAR.md) · [最终需求与验收](docs/mission/requirements-and-acceptance.md) · [当前版本与缺口](docs/mission/acceptance-status-1927.md) · [固定归档快速指引](docs/development/QUICKSTART.md) · [测试政策](docs/development/TESTING.md)
+## 可以体验什么
 
-## 服务配置准备
+- **实时交流**：文字与显式开启的真实麦克风输入；声音、字幕和待机／倾听／思考／说话四态。
+- **可见表演**：平常、戒备、开心、娇羞四种神情；举起与放回相机；黑夹克、奶油色内搭、琥珀雨衣；相机头饰与星星发卡。
+- **场景变化**：咖啡馆与雨窗。相机动作只改变角色姿态，不会拍摄用户。
+- **夏禾章节**：陌生人交流 → 明确自认夏禾 → 共同挑试印的往事 → 赠照邀请 → 一次接受 → 屏内实际递照。预览照片与完成赠照分别记录。
+- **后台新图**：请求一张无人物、无动物的虚构环境／静物图后继续聊天；实际显示后才自然通知一次。可分别收起固定照片、取消生成任务或停止全部。
+- **无密钥体验**：本地 Mock 和带预录声音的固定排练，保留明确的离线标识。
 
-在既有loader中加入具名服务配置和私密模板；提供默认无网络检查、显式有界模型目录检查。
-**适配器代码与接入参数不代表账户开通或 live 准入。** 默认应用仍是 mock/replay；真实服务只能在显式装配、授权、预算和对应验收通过后使用。
-[API环境与一次性准备](docs/development/API_ENV.md) · [Provider Matrix](docs/development/PROVIDER_MATRIX.md) · [当前交接](docs/handoff/ENV-01.md) · [规格](specs/features/ENV-01-development-services/spec.md)
+## 当前角色与开发画面
 
-```bash
-python tools/api_env.py init     # 创建空.env；已有文件拒绝覆盖
-python tools/api_env.py check    # 默认不联网；字段缺失退出2，不表示MVP失败
-python tools/check.py --lane env --jobs 2
-```
+下面前三张是**当前代码离线渲染示意**：使用同版角色组合函数和已有场景，经 SVG 光栅化制作。它们展示实际代码里的造型、服装和表情，没有模拟产品 UI，也不是浏览器／设备截图。
 
-密钥仅在本机私密文件／进程提供，不发送聊天，不写进spec、日志、前端或截图。
+![当前代码离线渲染示意：MIRA 与雨夜咖啡馆](docs/images/01-current-stage.png)
 
-## 历史基础阶段：增量分块测试
+三套服装：黑夹克、奶油色内搭与琥珀雨衣。此图用于对照造型，不代替实际换装交互验收。
 
-以下数字保留原阶段的历史含义，不是当前完整实现的测试总数。
+![当前代码离线渲染的三套服装](docs/images/02-current-wardrobes.png)
 
-默认开发检查改为affected；定向RED/GREEN不必先跑全量。9个默认离线块可并行，package/smoke留发布。
-[测试工作流](docs/development/TESTING.md) · [FND03规格](specs/features/FND-03-scoped-quality/spec.md) · [验证](docs/changes/FND-03/verification.md)
+四种表情：平常、戒备、开心、娇羞。[四态固定帧](docs/images/04-current-phases.png)另供参考；静帧不能证明真实语音、口型同步或动画性能。
 
-最终本地181 Python＋20 Node、18条规格映射通过；4组真实RED/GREEN。定向示例与分块收据均在验证目录，未选检查明确not_run。
+![当前代码离线渲染的四种表情](docs/images/03-current-emotions.png)
 
-## 继承的开发示范
+下面是**历史真实浏览器截图**：原文件名日期为 2026-10-04 22:54:22，时区与具体构建号未确认，使用旧 `static-pixi` 插画界面。仅裁去标签栏和开发者工具，保留“正在连接”与停止字幕；不代表本包当前运行界面或真实模型验收。
 
-[SDD/TDD示范手册](docs/development/TDD-SDD.md) · [功能规格](specs/features/FND-02-fixture-replay/spec.md) ·
-[开发日志](docs/development/LOG.md) · [本轮验证](docs/changes/FND-02/verification.md) · [最新交接](docs/handoff/FND-03.md)
+![历史 static-pixi 浏览器界面，保留正在连接与停止状态](docs/images/05-historical-browser.png)
 
-FND-02是一个新adapter的完整例子，不是空目录：先写规格，真实RED/GREEN，再重构和集成。最终132 Python＋20前端通过；此前73 Python为基线，未伪造其TDD顺序。无新增依赖版本升级。
+每张图的模式、尺寸、来源与摘要见[图片来源说明](docs/images/PROVENANCE.md)。
 
 ## 快速启动
 
-需要 Python 3.11–3.13、Node.js 22.12+ 和锁文件声明的依赖。在工程根目录运行：
+在完整源码根目录操作。需要 **Python 3.11–3.13（含 venv／ensurepip）、Node.js 22.12+ 和 npm**。macOS／Linux 使用下面的命令；Windows 尚未验证。
 
-```bash
-sh scripts/dev
+ZIP 包含完整源码、现有素材和同版预编译 `apps/web/dist`，不包含 `.venv` 或 `node_modules`。首次准备依赖时，下面的工具使用现有 `requirements/dev.lock` 和 `package-lock.json`，需要访问 Python／npm 包注册表：
+
+```sh
+sh scripts/start --setup
 ```
 
-此命令**不会安装依赖**。先验证 `.venv` 和当前解释器的实际应用导入能力；不完整的 `.venv` 不会遮住可用的当前解释器。
-缺依赖会退出 2 并提示显式安装。首次准备需要包注册表：`python3 tools/bootstrap.py`，只写项目 `.venv` 和 `node_modules`。
-如果已在其他隔离环境安装依赖，用显式解释器路径，不自动扫描或猜测虚拟环境名称：
+安装完成后，使用常用入口：
 
-```bash
-sh scripts/dev --python /absolute/path/to/ready/python
-# Windows：python tools/dev.py --python C:\\path\\to\\python.exe（本轮未实测）
+```sh
+sh scripts/start
 ```
 
-启动前检查合同、编译 TypeScript，再以单进程提供 API 和静态工作台。浏览器手动打开 `http://127.0.0.1:8000`；可用 `--port 8123` 改端口。
-**默认演示固定为 mock，忽略根 `.env` 和进程中的 MIRA 服务配置／常用凭据变量**；不启用 live provider、付费调用或原文记录。`--no-bootstrap` 保留兼容，但现在所有启动都不自动安装。
-归档可没有脚本执行位，所以推荐 `sh scripts/dev`，不要求 `chmod`。
+首次选择 `1` 真实默认预设、`2` 无密钥离线排练或 `0` 取消，以后复用本目录的选择。之前选过离线时，用 `sh scripts/start --preset live` 切换真实预设。真实预设保留原 `gpt-6.1-sol`＋Fast、Google 语音、剧情、可选图片与 `gpt-6-luna` 图片审核；首次选择需确认其数据和用量范围。新用户缺少 `.env` 时只创建不含秘密的模板，已有文件不覆盖；登录、ADC 与缺项处理见[首次使用／升级](FIRST-RUN.md)。
 
-### 有声离线排练（推荐演示入口）
+在运行服务的电脑打开 **http://127.0.0.1:8000**。端口占用时追加 `--port 8123`；按 Ctrl+C 结束服务。普通启动检查合同、构建前端，不自动安装依赖；只有 `--setup` 显式安装，完成后须另行启动。当前默认角色为 `code-native-review`；旧全帧插画可用 `sh scripts/start -- --character-renderer static-pixi` 显式选择。
 
-```bash
-sh scripts/dev --profile rehearsal
-# 已验证可用的其他解释器可追加 --python /absolute/path/to/ready/python
+已有兼容 Python 环境可以复用，不要搬迁旧 `.venv`；新源码目录也需要自己的前端依赖入口：
+
+```sh
+sh scripts/start --python /absolute/path/to/ready/python
 ```
 
-页面常显 `OFFLINE · 固定互动排练`。这条路线只有 7 个固定口令和一个失败注入，不支持自由对话；目录外文字只得到明确口令提示，不被假装识别或转述。真实麦克风按钮保持关闭，独立「按住演练输入 · 不录音」只展示 listening 状态，松开后提交固定的「照片里有什么」，不会调用录音或 STT。
+需要无密钥声音与故障排练时：
 
-原始音频/文字录制默认关闭。8 段预先生成的英文合成声音共约 52.56 秒，来自本地 Flite `slt`，不是 Google 语音、真人声音或中文发音验收；中文翻译与完整英文句子按现有语音 cue 显示，非逐字对齐。音频只经既有 Actor、有效许可、认证音频流和唯一取消安全播放队列进入页面。
-
-12:56 历史归档存在图片未就绪就记录呈现回执的问题。当前源码已加入可取消的图片就绪等待、最新许可复核与失败重试修复，并通过独立软件层复验；旧归档保持原样并附已知问题说明。前端还会等待已有呈现回执同步后再提交下一轮，Stop 不等待网络。服务端也已加入缺失回执前缀的拒绝与同请求重试控制，独立11个场景和1843组合软件发布检查已通过。当前未验证浏览器实际绘制或用户看见。见[当前状态](docs/mission/acceptance-status-1927.md)。
-
-按自己的节奏走一遍约 3–5 分钟的指引（包含观察、重复与停止，不是已录制的验收时长）：
-
-1. 「你好」→「不要拍我」：观察好奇、微笑与相机放低。
-2. 「看照片」：等语音与原创海岸/灯塔插画出现。
-3. 「讲讲旅途」：讲话中点「停止回应」。声音、字幕不继续，已经看到的插画保留。
-4. 按住「演练输入」，确认画面显示 listening 且没有麦克风请求；松开只发送「照片里有什么」。回应用实际呈现过的插画；新会话未看图就问，会先提示看图。
-5. 「听雨」→「暖灯」：看环境和表情变化。用 `/fail` 测失败，再点「你好」恢复；输入目录外文字检查口令提示。
-
-完整口令：`你好`、`不要拍我`、`看照片`、`照片里有什么`、`讲讲旅途`、`听雨`、`暖灯`、`/fail`。前后空格和改写也不会被当作识别成功。Stop、失焦、取消、关闭或更新的文字输入都会使待发送的合成输入失效。
-
-这条路径用于验证受控体验，不证明真实模型、真实语音识别、物理扬声器听感、手机或真人 3–5 分钟互动录屏已经完成。[规格与实测边界](specs/features/DEMO-01-offline-rehearsal/spec.md) · [素材来源](docs/changes/DEMO-02-offline-speech-assets/README.md)
-
-回放固定照片场景（不调用模型）：
-
-```bash
-sh scripts/dev --profile replay
-# 其他现成 Python 环境同样追加 --python /absolute/path/to/ready/python
+```sh
+sh scripts/start --preset offline
 ```
 
-可以加 `--replay-scenario delayed-photo` 测停止，或 `--replay-scenario failed-tail` 测失败。
-这只是固定生成夹具回放，不是自然语言理解或完整会话恢复。语音、账户、真实设备能力不能从本启动检查推出。
+页面显示 `OFFLINE · 离线排练`。可使用「你好」「不要拍我」「看照片」「照片里有什么」「讲讲旅途」「听雨」「暖灯」和 `/fail`。这条路线使用固定文本与预录 Flite/slt 英文合成声音；「按住演练输入」不录音，也不进行自由模型对话。原 Mock 入口 `sh scripts/dev` 与 `sh scripts/dev --profile rehearsal` 保留；Mock 同样不读取私密配置、不调用服务、不采集真实麦克风。
 
-配置感知入口仍是 `PYTHONPATH=apps/api/src /path/to/ready/python -m mira`，它会按原 loader 读取根 `.env` 和进程配置；仅在已明确配置、授权和审核的开发流程中手动使用，不属于上述离线演示。live 工厂守卫不因启动工具改变而放宽。
+准备好依赖后可一条命令启动；全新电脑的安装耗时受工具和网络影响，**目前没有完整 ≤15 分钟安装计时证据**。
 
-离线 wheel 验证：`/path/to/ready/python tools/verify_package.py`。构建 Python 需要现成的 pip 与 `pyproject.toml` 固定版本的 setuptools、wheel（已列入开发锁文件）；必要时加 `--build-python /path/to/build/python`，运行烟测仍使用调用脚本的解释器。工具在临时副本编译前端、无网络构建／安装 wheel，并从安装目录验证配置、fixture、HTTP 与全部静态资源；不靠 checkout 的 PYTHONPATH 补资源。直接手动构建 wheel 前须先 `npm run build`，漏编译会明确失败。
-实测和限制见 [STARTUP-01 验证](docs/verification/startup-01/verification.md)。
+## 连接真实模型、语音和图片
 
-## 质量命令
+常用入口 `sh scripts/start` 将选定的订阅预设交给现有 `tools/live_provider.py`，不依赖 Codex CLI。`--dry-run` 只查看最终参数，`--check` 只做本地预检；两者不启动真实服务。默认 `luna_tools` 是原生函数工具协议名称，实际对话模型由 `--model` 选择。正常路径不构造 JEV，也不需要 JEV 凭据。只有原 CLI 显式选择 `legacy_jev` 才使用旧兼容路线。
 
-```bash
-python tools/check.py --list
-python tools/check.py --files apps/api/src/mira/adapters/generation/replay/backend.py --plan
-python tools/check.py --lane providers actor --jobs 2  # 精确相关块
-python tools/check.py --affected --base <共同Git基点> --jobs 3  # 合并前
-python tools/check.py --full --jobs 3      # 集成收口，不是每次修改
-python tools/check.py --release --jobs 3   # 再加离线wheel与loopback
-python tools/verify_tdd_evidence.py         # 原FND02历史完整性；公开归档不含其所需原日志
-python tools/export_contracts.py --check
+### 1. 复用配置和已有登录
+
+保留原有私密 `.env`、Google ADC 和 **MIRA 自己的登录**。下方沿用用户原命令：项目根 `.env`、现有 Google ADC 路径，以及默认 MIRA 登录存储，不新增 `--auth-store`。只有原命令已使用自定义 MIRA 登录存储时，才继续追加原有 `--auth-store` 路径。已有有效登录无需重新 OAuth，不要复制其他应用的认证或把整份 `.env` 用 `source` 导入开发环境。首次登录与新装／升级区别见[首次使用说明](FIRST-RUN.md)。
+
+新环境运行 `sh scripts/start --preset live` 并选择真实预设后，仅在 `.env` 不存在时复制公开 `.env.example`，以仅本人可读写权限保存；已有配置保持原样。模板带现有非秘密语音预设，Google 项目等缺项由本人填写。具体步骤见[首次使用说明](FIRST-RUN.md)和 [Google 语音配置](docs/development/GOOGLE_VOICE_CONFIGURATION.md)。配置与 ADC 须为本人拥有、仅本人可读写的普通文件。不要将密钥、认证文件、配对码或私人对话放进仓库、截图和录屏。
+
+常用模型、Fast 等级、语音／剧情／图片开关和 ADC 路径可在 `.env` 的 `MIRAAPP_*` 字段中保存；模板已填原预设，自定义 `MIRAAPP_AUTH_STORE` 留空以保留默认登录存储。已有配置缺少这些字段时仍用原默认；明确 CLI 参数优先。预设不替代数据／用量授权，`--dry-run` 会读取这些预设来展示最终参数。字段和开关对照见[首次使用说明](FIRST-RUN.md)。
+
+以下命令只检查 MIRA 的本机登录记录，不联网、不刷新，也不验证模型资格：
+
+```sh
+.venv/bin/python tools/provider_login.py status
 ```
 
-无Git的ZIP用`--files`或`--lane`；默认命令只检查Git工作区，已提交变更请带base。报告在`var/quality/<run>/summary.json`，未选块为not_run，没有测试结果缓存。
+仅当确实没有 MIRA 登录，并决定授予它独立访问时，运行下面的命令并按本机提示在官方页面完成授权：
 
-环境里同时存在多个 Python 时，用已验证且依赖完整的解释器绝对路径执行质量命令；不要仅凭 `.venv` 目录存在就认为可用。
-14:48 已验证源码已完整展开至提交 `45b716d7ae80ce9d55934b81372dd1a7b411caf3`，543个源码文件的 Git blob 与模式逐项匹配，46个历史备份文件保留。其[首个真实远端 CI](https://github.com/Robinfxa/MIRA/actions/runs/37140155063)通过10个离线质量块；该次未跑 package/smoke。其后修复了发布任务缺少 Node/npm 的准备步骤；33410f5手动发布检查通过。1756阶段6ab19a8的推送与手动CI也已通过，手动检查包括package/smoke；结果仍绑定各自提交。更新中的源码必须重新冻结和验证。
-
-## 工作台能验证什么
-
-输入“不要拍我”“看照片”“听雨”进入固定Mock场景；`/fail`注入生成失败。
-可查看activity/output/permit版本、有效集合和回执数。停止先在浏览器生效，旧结果不能恢复。
-支持新请求、重复请求、会话能力token、范围累加、停止截止范围和迟到回执。
-
-默认模式不会产生真实 ASR/TTS/LLM 请求。原创角色和旅行插画已实现，属于本地矢量素材，不能说成实时生图。真实语音代码、软件级取消测试和控制台能力标记，也不能代替账户、声卡、麦克风与完整需求验收。
-
-## 目录入口
-
-```text
-apps/api/src/mira/
-  domain/             纯模型、错误、状态转换
-  application/        用例与会话生命周期；ports声明外部能力
-  adapters/           Mock/回放、默认关闭的真实服务、私有诊断适配器
-  config/             类型与唯一env读取入口
-  bootstrap/          工厂、组合根、生命周期装配
-  entrypoints/http/   DTO、映射、依赖、路由、app factory
-apps/web/src/
-  app/                浏览器组合根
-  features/session/   transport与交互协调
-  features/presentation/  本地许可门、cue身份与原创场景执行器
-  features/audio/     唯一播放队列、可取消麦克风采集
-  features/diagnostics/  实际录制状态与安全错误文案
-  shared/             公开配置、协议验证、generated类型
-config/               非秘密默认值与profile
-packages/contracts/   自动导出的OpenAPI
-requirements/         精确安装版本闭包
-scripts/ tools/       启动、安装、合同导出、验证
-tests/                unit、integration、architecture、web、browser
-docs/                 50h计划、实施ADR、来源快照、交接与验证
+```sh
+.venv/bin/python tools/provider_login.py login
 ```
 
-完整文件树见 `docs/implementation/FILE_TREE.md`。
+自选存储路径应放在子命令前，例如 `tools/provider_login.py --auth-store /absolute/private/mira-session.json status`。订阅路线使用非公开兼容后端，资格、配额与长期兼容性仍取决于服务方。
 
-## 配置与抽象的约束
+### 2. 文字＋剧情
 
-- `Settings`不可变；默认值→profile→显式dotenv→进程env→测试overrides；未知配置启动失败。
-- 业务层不读env、不知道provider名称；仅 `bootstrap/providers.py` 选实现。
-- `create_app(settings)`可注入依赖；没有全局容器、import-time连接或反射插件扫描。
-- domain标准库限定，application不反向依赖adapters；有自动边界测试。
-- 公共DTO单点定义，OpenAPI／TS只导出；新增schema先改owner，再跑drift check。
-- live provider 不会因环境字段齐全而自行启用；显式装配仍须通过身份、质量、数据和预算准入，不会偷偷 Mock 或改走付费路线。
+下面沿用当前选定的 `gpt-6.1-sol` 和显式 Fast 等级。将示例路径替换为自己的现有私密配置；`--authorize-provider-data` 表示同意将对话和受控工具上下文发给所选 OpenAI 服务。
 
-## 必读文档
+```sh
+PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
+  --provider chatgpt_subscription --model gpt-6.1-sol --service-tier fast \
+  --env-file /absolute/path/to/existing/.env \
+  --authorize-provider-data --story
+```
 
-[50小时计划](docs/plans/50-hour-delivery.md) · [实施ADR](docs/implementation/ADR-F001-foundation.md) ·
-[配置约定](config/README.md) · [开发范例](docs/implementation/config-and-extension-guide.md) ·
-[最新交接](docs/handoff/FND-03.md) · [原架构/复用 v0.6](docs/reference/architecture-v0.6/MIRA_架构全书_v0.6.md)
+去掉 `--story` 可关闭作者剧情。将同一命令的 `serve` 改为 `check`，只检查所选配置及声明，不发模型请求、不读取登录存储、不打开麦克风，也不证明账户可用。`live_provider.py` 没有 `--python` 参数；复用环境时直接替换命令开头的 `.venv/bin/python`。Fast 是请求等级，不是速度或供应商实际计量保证；可用 `--service-tier standard` 明确选择 Standard。
 
-## 运行与安全界限
+### 3. 语音＋剧情＋可选新图
 
-仅loopback＋单worker，内存会话，有限容量；停止与实例隔离是基础子集，不是生产认证系统。
-浏览器token只在内存，诊断不输出用户原文/凭据；只服务明确public/dist文件，不服务仓库根。
-刷新不恢复旧会话，关闭按钮释放本地session；完整持久化/隐私清除在WP05后续实现。
+`sh scripts/start` 的真实预设来自下面这条用户已经使用的完整命令，图片审核明确选择 `gpt-6-luna`。它使用项目根 `.env` 和已有 ADC；若原文件放在别处，用入口的 `--env-file`／`--adc-file` 指定，或修改下方对应路径。运行前，须已同意对话外传、Google 的音频／文字处理和服务用量，以及图片数据、订阅用量与本轮可变虚构描述的外传范围。**已有更小限额应继续保留。** 本次打包不读取或迁移这些文件，不重新授权，也不修改系统或证书设置。
 
-依赖来源与素材见THIRD_PARTY.md；AI使用与未进行的人工验证见AI_USAGE.md。
-已在同一 Linux 环境的新隔离目录验证46个固定 Python 依赖、TypeScript5.8.3和启动；远端固定提交的10块CI也已通过。它们不代表全新操作系统、Windows/macOS、手机或物理音频验收。详见[安装证据与限制](docs/verification/fresh-install/verification.md)。
+```sh
+PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
+  --provider chatgpt_subscription --model gpt-6.1-sol --service-tier fast \
+  --env-file .env --authorize-provider-data \
+  --voice --adc-file "$HOME/.config/gcloud/application_default_credentials.json" \
+  --authorize-google-voice-data-and-spend \
+  --story --story-images \
+  --authorize-story-image-data-to-openai \
+  --authorize-story-image-subscription-usage \
+  --authorize-story-image-custom-brief \
+  --story-image-review-model gpt-6-luna
+```
 
-## 为什么选择按住输入
+这条命令沿用原默认：`luna_tools`、TTS 20 次／每次最多 30 秒、单 STT RPC 120 秒、图片 1 个任务，不扩大额度。图片的四个启用／授权开关是 `--story-images` 和三个 `--authorize-story-image-…` 参数。只要语音＋剧情时，去掉这四个开关及 `--story-image-review-model gpt-6-luna`。`--story` 本身不会开启生图。固定灯塔照片无需图片服务调用。
 
-本 MVP 选择明确的按住/松开与停止控制，而不是自动 VAD：移动端更容易看清何时开始采集，能够利用用户手势解锁音频，并避免把背景声误作打断。真实路径仍需验证麦克风许可、识别结果、释放和新一轮衔接。离线 rehearsal 用单独标记的合成输入演练这些状态，不把它称为真实语音识别。
+在 Mac／服务电脑上仍打开 **http://127.0.0.1:8000** 使用原语音入口；手机打开终端打印的 `http://PRIVATE_IP:8000`，无需配对。普通 `serve` 默认只选唯一可确认的活动物理 Wi-Fi／以太网私网 IPv4；无法确定时打印 `WARNING` 并继续本机服务。需要指定地址时只追加 `--private-bind 192.168.2.13`（换成电脑当前地址）；只供本机则追加 `--loopback-only`，两者不要混用。
 
-## 当前投入与后续两周计划
+使用常用入口时，网络及有限预算参数放在分隔符后，例如 `sh scripts/start -- --private-bind 192.168.2.13`、`sh scripts/start -- --loopback-only` 或 `sh scripts/start -- --tts-requests 10`。入口只透传支持的网络、有限预算与 renderer 参数；其他路线和额外授权继续使用原 CLI。
 
-本轮从 2026-10-03 08:53:50 UTC 开始；截至本条记录 18:27 UTC，已用约9小时33分钟自然时间。多个 AI 执行项并行，累计计算时间和等价人工工时未统计，也没有把自动检查记作人工产品验收。24小时交付截止仍为2026-10-04 08:53:50 UTC。
+手机 HTTP 严格只支持文字及已启用的图片功能：后端没有该会话的 STT／TTS 端口，不能通过声音偏好或 WebSocket 开启语音。手机语音须使用已经配置并由两端信任的 HTTPS；原有 TLS 参数和语音授权见[设备指南](docs/development/PRIVATE-DEVICE-TESTING.md)。手动配对是可选路线，须配置 `--require-device-pairing`、`--device-pairing-dir` 和精确 `--device-origin`；HTTP 配对同样不支持语音。
 
-以下是后续计划，不是已经完成或自动获准付费/部署的工作：
+图片路线接收已释放的虚构场景说明；独立读图路线接收规范化 PNG、绑定信息与审核标准。可变描述限 600 字符，只支持无人、无动物的环境或静物，不附加完整对话、私有记忆、参考图、URL 或文件路径。不要在描述里提供私人资料。订阅图片请求为 `gpt-image-2`／`auto`；默认独立读图模型跟随所选对话模型，也可显式用 `--story-image-review-model` 指定已获准的模型。
 
-- 第1周：在已完成的软件图片就绪修复、原生结构化生成和英文 STT 连通基础上，完成精确 TTS 的实际音频与有界实时会话；用独立中文开发/保留样本验证 JEV 的误放行、拒绝和可用回应覆盖，不为通过而降低阈值。调用额度与数据范围继续按实际授权执行。
-- 第 2 周：在主要桌面浏览器和至少一台真实手机上验证权限拒绝、后台切换、声音中断与下一轮输入；记录实际首包/取消时间和连续会话表现，完成同版本 3–5 分钟录屏、恢复演练和最终来源/秘密检查。扩展浏览器、中文声音体验和素材表现；部署或外部分享仍按实际授权执行。
+官方 API 是另行选择的路线，需要自己的 API 配置及计费同意；不会由订阅失败自动切入：
 
-### 当前缺口与下一步
+```sh
+PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
+  --provider openai_api --model YOUR_API_MODEL \
+  --env-file /absolute/path/to/existing/.env \
+  --authorize-provider-data --authorize-api-billing --story
+```
 
-- Codex：16:43已通过实际适配器完成一份 `gpt-6-luna` 结构化候选；独立 fixture 拒绝它，未签发呈现许可。随后补上必需的显式字幕合同，147项相关离线检查通过，18:17在1756固定源码上又完成了含 speech/subtitle/pose 的原生候选，耗时6.32秒；未签发呈现许可或调用JEV/语音。既有开发环境的额度归属与可移植性未知；独立私有环境的401记录保留，未复制凭据或静默切换付费API。
-- Google：ADC、项目、五项权限与所需两个 API 启用状态已验证；英文合成 STT 一次成功，中文与麦克风仍未验收。TTS 首个已观察文本 part 曾触发客户端提前关闭，后续未知；最新一次 HTTP200 后超时。离线解析修正已通过，仍无真实可用 TTS 音频。七次保守预税保留共USD0.978560，税费未知，后续付费调用已停止；计费状态不能由API启用推断。
-- JEV：连接与严格返回解析有成功证据，首个预注册中文诊断样例超时。后续6个合成样例已有实际响应：5个解析有效，第6个响应校验失败后停止，失效字段当时未保留；生产校准和呈现准入仍关闭，不降低阈值凑通过。
-- 图片与历史：图片就绪/失败重试已通过软件层独立复验。前端延迟呈现回执屏障也通过实际前端到 HTTP 检查；服务端同样的前缀约束已通过7个定向用例，前后端组合与独立验收正在进行，不能仅据这些测试声称用户感知正确。
-- 体验：离线场景、固定声音及软件取消链已验证；当前浏览器像素、物理音频/麦克风、手机和连续 3–5 分钟录屏未验收。受支持的渲染/设备路径准备好后逐项观察，不能用模拟样本计数替代。
-- 交付：14:48源码已完整展开并通过真实远端10块CI；下一阶段会排除未稳定改动，重新冻结、测试和发布。已有可恢复历史归档。原始音频的后端接线已有离线证据，审听/保存 UI 已通过214项前端检查，尚待组合验收且不在1756已发布切片中。长期人格/记忆、完整 storylet、G06 生图与 D-M 等原架构范围仍不完整；原164条验收目录仍按未执行记录，不能用单元测试数代替。最终录屏与源码版本关系尚未建立。
+### 当前默认预算
+
+| 项目 | 默认与边界 |
+|---|---|
+| 订阅文字 | 本机模型请求次数、文字轮数不设上限；`--generation-requests N`、`--turns N` 可选有限值 |
+| 连续聆听／Google STT | 本机时长、发送、启动、续接和共享 STT 请求次数默认不设上限；单识别 RPC 最多 120 秒，可续接 |
+| Google TTS | 每进程 20 次，每次最多 30 秒 |
+| 新图 | 每进程 1 个任务；一次生成＋至多一次独立读图，不自动重试 |
+| 官方 API 文字 | 默认 20 次生成、20 轮 |
+
+无需追加 `--local-unlimited`。本机不限不代表免费，也不取消供应商配额、超时、并发或队列限制。Google 持续识别会继续产生用量，直到用户停止或服务限制／故障终止。有限参数仍可通过 `--stt-requests`、`--listen-max-seconds`、`--listen-max-utterances` 等设置，完整选项见 `serve --help`。
+
+普通聊天通常一次模型请求；工具轮至多一个工具和两次模型请求。图片实际显示后的完成通知还可能使用一次无工具模型续答及原有 TTS 额度。失败／取消不退有限计数；重启只重置本机计数，这些值不是账户账本或金额硬上限。
+
+同一可信私人网络内能访问地址的人可能消耗已启用的额度。所有入口共享同一个 provider runtime 和原有预算，**16 个独立临时浏览器会话是资源上限，不是 provider 请求额度，也不会按设备增加 TTS 20 次或图片 1 次的额度**。`--memory-db`、`--story-db`、`--conversation-db` 持久模式保留原本机单操作者及配对边界，不会默认开放 LAN；普通 `--story` 是临时剧情。
+
+## 语音和打断怎样工作
+
+1. 用户在浏览器点击「开始自然对话」并允许麦克风，音频送到 Google STT；临时转写只作预览。
+2. 本地检测到有效说话后约 700 毫秒安静，进入有界收尾；合格最终转写才提交一轮。文字也可随时输入。
+3. 服务端生成完整候选与受控工具请求；确认可执行的内容交给前端。Google TTS 提供声音，字幕与角色四态配合呈现。
+4. 默认开启语音插话：新声音活动可先在本地停旧声音和待播内容，再提交新输入。旧结果不得在后续回合复活。按钮「打断回应，继续听我说」保留麦克风；全局 Stop／关闭会释放麦克风并停止相关未完成任务。
+
+选择“本地先停＋服务端取消／版本校验”，是为了让用户夺回话轮时不必等待网络。显式打断按钮提供可理解的兜底；另外保留保守的重叠语音手动确认模式。当前音量／时间启发式没有可靠说话人识别或声学回声消除，建议使用耳机；实际声尾、误触发和新输入处理仍需真机验证。字幕采用本地确定性边界，不额外调用 JEV；口部运动是状态动画，尚未实现音素同步。
+
+「静音回应」会关闭回应声音并继续显示文字，麦克风可继续聆听；「开启回应声音」从后续回合恢复。它提供主动文字降级入口，不等于已经验证音频服务故障恢复。
+
+普通输入或回复级打断保留已经接受的后台图片任务；精确取消只处理指定图片／任务。全局 Stop 的范围更大。已真实呈现的状态与可靠用户输入会保留，未呈现的旧输出不能被当作已发生。
+
+## 角色指令与系统结构
+
+模型提出动作，应用核对参数、当前素材、状态前提与数据／用量许可，浏览器实际绘制后返回呈现回执。对白里的“已经给你了”不能代替动作完成。
+
+| 互动目的 | 结构化工具／参数 |
+|---|---|
+| 看灯塔照片 | `show_photo(photo_id=trip_photo)` |
+| 换衣／头饰 | `set_outfit`：`black_jacket`、`cream_inner_only`、`amber_raincoat`；`set_accessory`：`camera_clip`、`star_clip` |
+| 表情／动作 | `set_emotion`：`normal`、`guarded`、`happy`、`shy`；`perform_action`：`raise_camera`、`return_camera` |
+| 场景 | `set_scene`：`cafe`、`rain_window` |
+| 有限剧情 | `advance_story`：相认、往事、邀请、接受／拒绝等，受当前章节状态约束 |
+| 可选新图 | `generate_story_image`；有当前任务时才提供对应 `cancel_story_image` |
+
+工具能力会随模式、预算和当前状态变化。夏禾是用户选择的虚构角色，不是现实身份认证。共同往事由作者预设；灯塔是 MIRA 独自拍摄的角色故事，二人的共同经历是回到咖啡馆挑试印。
+
+| 模块 | 作用 |
+|---|---|
+| `apps/web/src` | TypeScript 前端：场景与代码角色、音频／字幕、输入、停止与呈现回执 |
+| `apps/api/src/mira/entrypoints/http` | FastAPI／WebSocket 入口、会话与设备配对 |
+| `apps/api/src/mira/application` | 会话 Actor、工具执行、后台图片、语音及取消调度 |
+| `apps/api/src/mira/domain` | 状态、剧情、邀请与实际呈现事实，独立于 HTTP／服务 SDK |
+| `apps/api/src/mira/adapters`、`bootstrap` | OpenAI／Google／存储适配器与显式组装 |
+| `tools`、`tests`、`specs` | 启动与恢复工具、分块离线检查、行为规格 |
+
+完整链路为：浏览器文字／语音 → 会话 Actor → 所选模型与有限工具 → 状态和许可检查 → 音频／字幕／角色／图片 → 呈现回执 → 下一轮上下文。原始对话和音频录制默认关闭；本地记忆、会话档案与角色存档分别显式启用，不自动保存或学习人格。
+
+## 技术选择、模型与素材
+
+| 选择 | 用途与取舍 |
+|---|---|
+| TypeScript＋代码原生角色；保留 PixiJS 回退 | 同一组可编辑部件表达衣装、情绪和动作，便于取消；造型、动作幅度和口型仍有限 |
+| Python＋FastAPI／WebSocket＋单会话 Actor | 把状态、取消和真实呈现放在同一控制流程；当前面向本地体验，尚未作为多用户线上服务验收 |
+| OpenAI 订阅直连；官方 API 显式备用 | 本次示例为 `gpt-6.1-sol`＋Fast；无自动换模型、重试或付费回退 |
+| Google STT V2 `chirp_3`＋`gemini-3.8-flash-tts` | 真实识别与合成分开，便于控制输入和播放；需要 Google 配置、ADC 与用量授权 |
+| 固定素材＋可选 `gpt-image-2` | 固定照片使主要章节无需等生图；新图异步生成，失败时保留其他聊天能力 |
+
+默认角色由代码绘制。咖啡馆、固定灯塔插画和历史角色 PNG 的 AI 辅助原创来源见[素材说明](apps/web/public/scene/ORIGINAL-ASSETS.md)及 [AI_USAGE](AI_USAGE.md)。离线声音为本地 Flite/slt 合成输出。主要依赖、许可证和第三方通知见[来源清单](docs/development/ATTRIBUTION-INVENTORY.md)与[第三方通知](docs/development/third-party-notices/README.md)；本说明不替项目选择整体开源许可证。
+
+## 已验证与待完成
+
+本次保留了 2012 的历史 13-lane 完整离线发布收据，以及三项后续修补各自的影响面证据。默认 LAN 的最终汇总曾在 providers 约 98% 时中断：保留十个已成功检查块，并只补跑 providers（4523 项通过）；这不是本次完整 release 重跑。另有两名 AI 代理参与的 5 次独立运行、共 63 条自然输入：使用真实生产提示，程序工具与编译前端回执实际执行，外部 provider、图片和 TTS 使用模拟。它们不等于真实 `gpt-6.1-sol` 订阅／付费服务、声音或设备验收。本次核对恢复来源、编译产物、启动参数、文档与归档完整性；详细来源、独立复核和范围见[验证说明](docs/submission/VERIFICATION.md)。
+
+| 当前状态／问题 | 下一步 |
+|---|---|
+| 基本聊天、固定照片、一次生成图与主动通知有用户确认；未绑定精确源码摘要 | 录制时记录实际版本、命令和设备，复核完整主线 |
+| 语音链路、自动／手动打断有实现和离线证据；完整可听回复、声尾与回声未完成同版本实测 | 戴耳机实录：说话中插话、继续听、新一轮回复、迟到不复活 |
+| 三衣装、情绪和场景具备软件路径；整体美术、自然度及移动端仍待验收 | 实际录到至少三种可辨表情、两种非说话状态和一次环境变化 |
+| 手机语音需要已受信任的 HTTPS；私网默认免配对，也可显式要求人工配对。窄视口截图不能证明手机麦克风可用 | 按[双设备指南](docs/development/PRIVATE-DEVICE-TESTING.md)做真实手机检查 |
+| 生图资格、时延和审核仍受外部服务影响；审核合格不代表角色已理解全部像素细节 | 保留实际失败反馈，核对显示后的单次通知，不从描述臆测画面 |
+| 用户已录制视频并将随邮件另附；本包未收录、未代验。全新安装计时和最新远端仓库仍待确认 | 对照[录制指南](docs/development/DEMO-RECORDING.md)检查视频内容，在提交清单登记实际文件／地址 |
+| 音素口型、可靠声学回声消除、完整长期人格学习未完成 | 后续按体验价值逐项推进，不列为当前完成能力 |
+
+## 投入时间与再开发两周
+
+作者按**包含 AI 运行时间**的口径粗估总投入约 **100 小时**：设计 5、后端 30、人物 30、整合 10、返工与路线变动 20、测试 5 小时。这是各部分的粗略投入统计，不是个人工作 100 小时，也不代表连续 100 小时的开发周期。可核对的迭代记录覆盖 2026-10-03 至 2026-10-07；完整第一人称复盘见 [AI_USAGE](AI_USAGE.md)。
+
+如继续开发两周，建议先完成当前体验验收，再扩大能力：
+
+- **第 1–3 天**：冻结版本，补齐桌面／手机语音、打断与故障恢复实测；记录首轮延迟、声尾和实际服务用量。
+- **第 4–7 天**：依据录屏修正表情可辨性、动作衔接、字幕节奏与语音误触发，优先解决主线阻塞。
+- **第 8–10 天**：完善图片排队／取消反馈和模型理解图片的明确边界；改善剧情岔开话题与拒绝后的自然衔接。
+- **第 11–14 天**：做干净安装计时、设备回归与长会话检查，补齐素材来源、可重复录制和最终发布收据。
+
+这是演进建议，不是已完成工作或交付日期承诺。

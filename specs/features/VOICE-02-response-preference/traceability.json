@@ -1,0 +1,38 @@
+{
+  "feature": "VOICE-02",
+  "spec": "specs/features/VOICE-02-response-preference/spec.md",
+  "requirements": [
+    {
+      "id": "VOICE02-001",
+      "tests": [
+        "tests/contracts/test_response_preference.py::test_optional_jev_outcome_cannot_block_ordinary_speech",
+        "tests/contracts/test_response_preference.py::test_input_jev_wait_does_not_delay_speech_and_mute_revokes_only_output"
+      ]
+    },
+    {
+      "id": "VOICE02-002",
+      "tests": [
+        "tests/contracts/test_response_preference.py::test_persistent_mute_survives_unrelated_turn_until_explicit_unmute",
+        "tests/contracts/test_response_preference.py::test_current_turn_mute_expires_but_model_never_unmutes_session",
+        "tests/contracts/test_response_preference.py::test_narrow_commands_do_not_treat_quotes_or_negation_as_permission",
+        "tests/contracts/test_response_preference.py::test_repeated_natural_mute_fences_an_older_pending_unmute"
+      ]
+    },
+    {
+      "id": "VOICE02-003",
+      "tests": [
+        "tests/contracts/test_response_preference.py::test_stale_unmute_cannot_override_newer_mute_and_stop_preserves_preference",
+        "tests/contracts/test_response_preference.py::test_mute_keeps_actual_microphone_websocket_open_and_rejects_old_speech_stream",
+        "tests/contracts/test_response_preference.py::test_terminal_audio_after_mute_is_a_fact_and_does_not_cancel_pending_text"
+      ]
+    },
+    {
+      "id": "VOICE02-004",
+      "tests": [
+        "tests/contracts/test_response_preference.py::test_both_direct_routes_receive_effective_text_only_and_keep_strict_parser",
+        "tests/contracts/test_response_preference.py::test_preference_http_rejects_invalid_or_extra_authority",
+        "tests/contracts/test_response_preference.py::test_prompt_builder_cannot_widen_explicit_modality"
+      ]
+    }
+  ]
+}

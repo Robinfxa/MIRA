@@ -1,0 +1,17 @@
+{
+  "feature": "BUDGET-RECOVERY-01",
+  "spec": "specs/features/BUDGET-RECOVERY-01/spec.md",
+  "requirements": [
+    {
+      "id": "BUDGETRECOVERY01-001",
+      "tests": [
+        "tests/unit/test_jev_evaluator.py::test_invalid_historical_aggregate_fails_closed",
+        "tests/unit/test_jev_evaluator.py::test_duplicate_historical_aggregate_field_fails_closed",
+        "tests/unit/test_jev_evaluator.py::test_recovered_historical_aggregate_limits_a_15_case_continuation_and_stays_immutable",
+        "tests/unit/test_jev_evaluator.py::test_historical_attempt_cap_respects_34_and_35_boundaries",
+        "tests/unit/test_jev_evaluator.py::test_historical_charge_over_full_reserve_blocks_before_dispatch",
+        "tests/unit/test_jev_evaluator.py::test_legacy_ledger_without_historical_aggregate_is_unchanged"
+      ]
+    }
+  ]
+}

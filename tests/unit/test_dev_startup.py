@@ -7,6 +7,19 @@ import pytest
 
 from tools import dev
 
+_REAL_WHICH = dev.shutil.which
+
+
+def put_tools_on_path(monkeypatch, tmp_path, *names):
+    bin_dir = tmp_path / "synthetic-path"
+    bin_dir.mkdir()
+    for name in names:
+        executable = bin_dir / name
+        executable.write_text("#!/bin/sh\nexit 0\n")
+        executable.chmod(0o755)
+    monkeypatch.setenv("PATH", str(bin_dir))
+    monkeypatch.setattr(dev.shutil, "which", lambda name: _REAL_WHICH(name, path=str(bin_dir)))
+
 
 def fake_launch(monkeypatch, tmp_path, *, ready=(), project_python=True):
     python = tmp_path / ".venv/bin/python"
@@ -16,6 +29,9 @@ def fake_launch(monkeypatch, tmp_path, *, ready=(), project_python=True):
     compiler = tmp_path / "node_modules/typescript/bin/tsc"
     compiler.parent.mkdir(parents=True)
     compiler.touch()
+    esbuild = tmp_path / "node_modules/esbuild/lib/main.js"
+    esbuild.parent.mkdir(parents=True)
+    esbuild.touch()
     monkeypatch.setattr(dev, "ROOT", tmp_path)
     monkeypatch.setattr(dev.shutil, "which", lambda name: "/synthetic/bin/" + name)
     # The old launcher only inspects its own interpreter; retain that stimulus.
@@ -116,6 +132,91 @@ def test_missing_compiler_fails_without_installing_or_starting(monkeypatch, tmp_
     assert "TypeScript" in capsys.readouterr().err
     assert not any("export_contracts.py" in str(command) or "--serve" in command
                    for command, _ in calls)
+
+
+def test_missing_node_explains_node_and_npm_must_be_installed_first(monkeypatch, tmp_path, capsys):
+    _, calls = fake_launch(monkeypatch, tmp_path, ready=(sys.executable,))
+    put_tools_on_path(monkeypatch, tmp_path, "npm")
+    assert invoke(monkeypatch) == 2
+    error = capsys.readouterr().err
+    assert "Node.js 22.12+" in error
+    assert "npm" in error
+    assert "bootstrap.py" in error
+    assert not any("export_contracts.py" in str(command) or "--serve" in command
+                   for command, _ in calls)
+
+
+def test_existing_locked_dependencies_build_without_starting_npm(monkeypatch, tmp_path, capsys):
+    _, calls = fake_launch(monkeypatch, tmp_path, ready=(sys.executable,))
+    put_tools_on_path(monkeypatch, tmp_path, "node")
+    assert invoke(monkeypatch) == 0
+    assert not any(Path(command[0]).name in {"npm", "npx"} for command, _ in calls)
+    assert not any("install" in command or "ci" in command for command, _ in calls)
+    assert any(command[-1] == str(tmp_path / "tools/build_web.mjs") for command, _ in calls)
+
+
+def test_unsupported_node_version_fails_before_contract_export(monkeypatch, tmp_path, capsys):
+    _, calls = fake_launch(monkeypatch, tmp_path, ready=(sys.executable,))
+    put_tools_on_path(monkeypatch, tmp_path, "node", "npm")
+    original_run = dev.subprocess.run
+
+    def old_node(command, **kwargs):
+        if command == [str(tmp_path / "synthetic-path/node"), "--version"]:
+            calls.append((command, kwargs))
+            return subprocess.CompletedProcess(command, 0, "v20.18.0\n", "")
+        return original_run(command, **kwargs)
+
+    monkeypatch.setattr(dev.subprocess, "run", old_node)
+    assert invoke(monkeypatch) == 2
+    assert "Node.js 22.12+" in capsys.readouterr().err
+    assert not any("export_contracts.py" in str(command) or "--serve" in command
+                   for command, _ in calls)
+
+
+def test_launcher_checks_contracts_then_runs_local_node_build_before_server(monkeypatch, tmp_path):
+    _, calls = fake_launch(monkeypatch, tmp_path, ready=(sys.executable,))
+    assert invoke(monkeypatch) == 0
+    commands = [command for command, _ in calls]
+    contract = next(i for i, command in enumerate(commands) if any("export_contracts.py" in part for part in command))
+    build = commands.index(["/synthetic/bin/node", str(tmp_path / "tools/build_web.mjs")])
+    serve = next(i for i, command in enumerate(commands) if "--serve" in command)
+    assert contract < build < serve
+
+
+@pytest.mark.parametrize('fallback',[False,True])
+def test_offline_launcher_forwards_adopted_renderer_or_explicit_fallback(monkeypatch,tmp_path,fallback):
+    _,calls=fake_launch(monkeypatch,tmp_path,ready=(sys.executable,))
+    args=['--character-renderer','static-pixi'] if fallback else []
+    assert invoke(monkeypatch,*args)==0
+    command=next(command for command,_ in calls if '--serve' in command)
+    assert '--character-renderer' in command
+    assert command[command.index('--character-renderer')+1]==('static-pixi' if fallback else 'code-native-review')
+
+
+@pytest.mark.parametrize('fallback',[False,True])
+def test_offline_child_uses_same_renderer_without_loading_live_resources(monkeypatch,fallback):
+    seen=[]
+    def serve(*,profile,port,scenario,character_renderer='static-pixi'):
+        seen.append(character_renderer)
+    monkeypatch.setattr(dev,'serve',serve)
+    assert invoke(monkeypatch,'--serve',*(['--character-renderer','static-pixi'] if fallback else []))==0
+    assert seen==['static-pixi' if fallback else 'code-native-review']
+
+
+def test_failed_local_node_build_does_not_start_server(monkeypatch, tmp_path, capsys):
+    _, calls = fake_launch(monkeypatch, tmp_path, ready=(sys.executable,))
+    original_run = dev.subprocess.run
+
+    def fail_build(command, **kwargs):
+        calls.append((command, kwargs))
+        if command == ["/synthetic/bin/node", str(tmp_path / "tools/build_web.mjs")]:
+            raise subprocess.CalledProcessError(1, command, output="", stderr="synthetic-build-detail")
+        return original_run(command, **kwargs)
+
+    monkeypatch.setattr(dev.subprocess, "run", fail_build)
+    assert invoke(monkeypatch) == 2
+    assert "Startup command failed" in capsys.readouterr().err
+    assert not any("--serve" in command for command, _ in calls)
 
 
 def test_child_environment_strips_service_configuration_and_credential_aliases(monkeypatch):

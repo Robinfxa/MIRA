@@ -31,6 +31,277 @@ export type AuditEventView = {
   readonly occurred_at: string;
 };
 
+export type CaptionChunkView = {
+  readonly group_id: string;
+  readonly index: number;
+  readonly start: number;
+  readonly end: number;
+  readonly total: number;
+  readonly source_sha256: string;
+};
+
+export type ChapterChoiceRequest = {
+  readonly choice: "accept" | "decline";
+  readonly offer_id: string;
+  readonly offer_effect_id: string;
+  readonly offer_effect_digest: string;
+};
+
+export type ChapterProjectionView = {
+  readonly schema: "mira.xiahe-chapter.v1";
+  readonly source_hash: string;
+  readonly stage: "stranger_cafe" | "recognized" | "old_friend_story" | "photo_promise" | "photo_previewed" | "gift_offered" | "gift_declined" | "completed";
+  readonly role_active: boolean;
+  readonly role_name: "\u590f\u79be" | null;
+  readonly active_gift_offer_id: string | null;
+  readonly gift_offer_effect_id: string | null;
+  readonly gift_offer_effect_digest: string | null;
+  readonly pending_transition: "x.recognize" | "x.story" | "x.promise" | "x.preview" | "x.gift_offer" | "x.gift_accept" | "x.gift_decline" | "x.exit" | null;
+  readonly completed: boolean;
+  readonly revision: number;
+  readonly suspended: boolean;
+};
+
+export type ContinuousListeningAudio = {
+  readonly type: "audio";
+  readonly lease_id: string;
+  readonly sequence: number;
+  readonly first_sample: number;
+  readonly pcm_base64: string;
+};
+
+export type ContinuousListeningCancelEndpoint = {
+  readonly type: "cancel_endpoint";
+  readonly lease_id: string;
+  readonly endpoint_id: string;
+};
+
+export type ContinuousListeningClientEndpoint = {
+  readonly type: "client_endpoint";
+  readonly lease_id: string;
+  readonly endpoint_id: string;
+  readonly source_end_sample: number;
+};
+
+export type ContinuousListeningCommit = {
+  readonly type: "commit";
+  readonly lease_id: string;
+  readonly commit_id: string;
+  readonly revision: number;
+  readonly utterance_id?: string | null;
+};
+
+export type ContinuousListeningCommitReady = {
+  readonly type?: "commit_ready";
+  readonly lease_id: string;
+  readonly commit_id: string;
+  readonly segment_seq: number;
+  readonly revision: number;
+  readonly text: string;
+  readonly utterance_id?: string | null;
+};
+
+export type ContinuousListeningCommitRejected = {
+  readonly type?: "commit_rejected";
+  readonly lease_id: string;
+  readonly commit_id: string;
+  readonly reason: "stale_revision" | "no_final_text" | "request_limit" | "lease_revoked" | "identity_conflict" | "pending_capacity";
+  readonly current_revision: number;
+};
+
+export type ContinuousListeningEndpointPending = {
+  readonly type?: "endpoint_pending";
+  readonly lease_id: string;
+  readonly revision: number;
+  readonly text: string;
+  readonly reason: "missing_result_offset" | "unmatched_activity_end";
+  readonly can_submit_manually?: boolean;
+};
+
+export type ContinuousListeningEndpointStatus = {
+  readonly type?: "endpoint_status";
+  readonly lease_id: string;
+  readonly endpoint_id: string;
+  readonly source_end_sample: number;
+  readonly state: "queued" | "draining" | "cancelled" | "completed";
+};
+
+export type ContinuousListeningHeld = {
+  readonly type?: "utterance_held";
+  readonly lease_id: string;
+  readonly utterance_id: string;
+  readonly revision: number;
+  readonly text: string;
+};
+
+export type ContinuousListeningHold = {
+  readonly type: "hold";
+  readonly lease_id: string;
+  readonly utterance_id: string;
+  readonly revision: number;
+};
+
+export type ContinuousListeningHoldRejected = {
+  readonly type?: "hold_rejected";
+  readonly lease_id: string;
+  readonly utterance_id: string;
+  readonly revision: number;
+  readonly reason: "stale_revision" | "lease_revoked" | "identity_conflict" | "request_limit";
+  readonly current_revision: number;
+};
+
+export type ContinuousListeningReady = {
+  readonly type?: "ready";
+  readonly lease_id: string;
+  readonly sample_rate_hz?: 16000;
+  readonly max_seconds: number | null;
+  readonly max_samples: number | null;
+  readonly max_utterances: number | null;
+  readonly max_streams_per_session: number | null;
+  readonly max_total_streams: number | null;
+  readonly session_lease_starts_used: number;
+  readonly total_lease_starts_used: number;
+  readonly stt_requests_used?: number | null;
+  readonly stt_requests_remaining?: number | null;
+  readonly endpoint_mode: "google_vad_offsets_manual_commit" | "google_vad_offsets_natural" | "unavailable_manual";
+  readonly manual_commit_required?: boolean;
+  readonly client_endpoint_supported?: boolean;
+  readonly client_silence_ms?: number;
+  readonly natural_grace_ms?: number;
+  readonly drain_timeout_ms?: number;
+  readonly max_recognition_streams?: number | null;
+};
+
+export type ContinuousListeningRecognitionStatus = {
+  readonly type?: "recognition_status";
+  readonly lease_id: string;
+  readonly stream_index: number;
+  readonly state: "opening" | "listening" | "draining" | "awaiting_commit" | "completed" | "limit";
+  readonly stt_requests_used?: number | null;
+  readonly stt_requests_remaining?: number | null;
+};
+
+export type ContinuousListeningStart = {
+  readonly type: "start";
+  readonly session_token: string;
+  readonly lease_id: string;
+  readonly mode?: "manual" | "natural";
+  readonly client_endpointing?: boolean;
+};
+
+export type ContinuousListeningStop = {
+  readonly type: "stop";
+  readonly lease_id: string;
+  readonly reason?: "user_stop" | "permission_lost";
+};
+
+export type ContinuousListeningStopped = {
+  readonly type?: "stopped";
+  readonly lease_id: string;
+  readonly reason: "user_stop" | "permission_lost" | "replaced" | "max_duration" | "max_samples" | "queue_limit" | "revision_limit" | "utterance_limit" | "provider_stream_ended" | "unavailable" | "invalid_input" | "invalid_response" | "session_closed" | "disconnect" | "output_limit" | "session_capacity" | "microphone_unavailable" | "input_limit" | "invalid_audio" | "timeout" | "unauthenticated" | "permission_denied" | "quota_exhausted" | "media_cancelled" | "incomplete_stream" | "blocked" | "response_limit" | "service_budget_exhausted";
+  readonly diagnostic_id?: string | null;
+};
+
+export type ContinuousListeningTranscript = {
+  readonly type?: "transcript";
+  readonly lease_id: string;
+  readonly revision: number;
+  readonly text: string;
+  readonly is_final: boolean;
+  readonly committed_commit_id?: string | null;
+  readonly committed_utterance_id?: string | null;
+};
+
+export type ContinuousListeningUtteranceReady = {
+  readonly type?: "utterance_ready";
+  readonly lease_id: string;
+  readonly utterance_id: string;
+  readonly revision: number;
+  readonly text: string;
+  readonly begin_offset_samples: number;
+  readonly end_offset_samples: number;
+  readonly final_offset_samples: number | null;
+  readonly endpoint_basis?: "offset_coverage" | "vad_final_grace" | "stream_finalized" | "client_silence_finalized";
+  readonly client_endpoint_id?: string | null;
+  readonly source_end_sample: number;
+};
+
+export type ContinuousListeningUtteranceRevision = {
+  readonly type?: "utterance_revision";
+  readonly lease_id: string;
+  readonly utterance_id: string;
+  readonly commit_id: string;
+  readonly revision: number;
+  readonly text: string;
+  readonly reason?: "late_result_after_submission";
+  readonly requires_review?: true;
+  readonly submission_state: "pending" | "reserved" | "accepted" | "revoked" | "unknown";
+};
+
+export type ConversationEntryView = {
+  readonly entry_id: string;
+  readonly source_version: number;
+  readonly stage: "accepted_input" | "corrected_input" | "presented_effect" | "audio_progress";
+  readonly active: boolean;
+  readonly text: string;
+  readonly output_epoch: number;
+  readonly request_id: string | null;
+  readonly input_source: "text" | "asr_final" | null;
+  readonly effect_kind: EffectKind | null;
+  readonly rendered_samples: number | null;
+  readonly sample_rate_hz: number | null;
+  readonly audio_status: AudioStatus | null;
+  readonly forget_event_id: string | null;
+};
+
+export type ConversationOperationRequest = {
+  readonly operation_id: string;
+  readonly expected_revision: number;
+  readonly operation: "correct" | "forget" | "restore";
+  readonly confirmed: true;
+  readonly text?: string | null;
+  readonly kind?: "episodic" | "boundary" | null;
+  readonly entry_id?: string | null;
+  readonly forget_event_id?: string | null;
+  readonly session_id: string;
+};
+
+export type ConversationPageView = {
+  readonly session_id: string;
+  readonly revision: number;
+  readonly entries: ReadonlyArray<ConversationEntryView>;
+  readonly next_cursor: string | null;
+};
+
+export type ConversationRevokeRequest = {
+  readonly confirmed: boolean;
+};
+
+export type ConversationSelectionRequest = {
+  readonly session_id: string | null;
+  readonly authorize_selected_provider_and_jev: boolean;
+  readonly authorize_google_derived_speech?: boolean;
+};
+
+export type ConversationSessionsView = {
+  readonly revision: number;
+  readonly sessions: ReadonlyArray<string>;
+  readonly next_cursor: string | null;
+};
+
+export type ConversationStatusView = {
+  readonly enabled: boolean;
+  readonly persistence_status: "disabled" | "enabled_no_committed_records" | "pending" | "saved" | "unavailable" | "write_outcome_unknown" | "unavailable_or_write_outcome_unknown" | "rejected" | "revoked_existing_records_retained";
+  readonly management_enabled?: boolean;
+  readonly recall_session_id?: string | null;
+  readonly current_session_id?: string | null;
+  readonly selection_locked?: boolean;
+  readonly recipients?: string;
+  readonly speech_enabled?: boolean;
+  readonly recall_authorized?: boolean;
+  readonly google_authorized?: boolean;
+};
+
 export type CreateSessionRequest = {
   readonly client_instance_id: string;
 };
@@ -61,12 +332,30 @@ export type EffectView = {
   readonly activity_seq: number;
   readonly cue_id?: string | null;
   readonly cue_speech_id?: string | null;
+  readonly caption_chunk?: CaptionChunkView | null;
 };
 
 export type ErrorResponse = {
   readonly code: string;
   readonly message: string;
   readonly request_id: string;
+};
+
+export type FixedPhotoProgressRequest = {
+  readonly effect_id: string;
+  readonly digest: string;
+  readonly output_epoch: number;
+  readonly activity_seq: number;
+  readonly outcome: "preparing" | "preparation_failed" | "presentation_failed" | "receipt_pending";
+};
+
+export type FixedPhotoView = {
+  readonly state?: "idle" | "pending" | "held" | "granted" | "preparing" | "receipt_pending" | "presented" | "failed" | "cancelled" | "dismissed";
+  readonly reason?: "unavailable" | "already_visible" | "dismissed" | "review_unknown" | "review_rejected" | "review_failed" | "optional_ineligible" | "preparation_failed" | "presentation_failed" | "receipt_unconfirmed" | "cancelled" | null;
+  readonly attempt_seq?: number;
+  readonly output_epoch?: number;
+  readonly activity_seq?: number;
+  readonly effect_id?: string | null;
 };
 
 export type HealthResponse = {
@@ -84,6 +373,54 @@ export type InputRequest = {
   readonly presentation_cutoff: number;
   readonly text: string;
   readonly source_audio_stream_id?: string | null;
+  readonly listening_utterance_id?: string | null;
+  readonly relation?: "independent" | "continuation" | "new_topic";
+  readonly continuation_of_request_id?: string | null;
+  readonly continuation_of_output_epoch?: number | null;
+  readonly chapter_choice?: ChapterChoiceRequest | null;
+};
+
+export type MemoryManagementEntryView = {
+  readonly entry_id: string;
+  readonly text: string;
+  readonly kind: "episodic" | "boundary";
+  readonly source?: "user_statement";
+  readonly source_version: number;
+  readonly recorded_at: string;
+  readonly active: boolean;
+  readonly forget_event_id: string | null;
+  readonly forgotten_at: string | null;
+};
+
+export type MemoryManagementOperationRequest = {
+  readonly operation_id: string;
+  readonly expected_revision: number;
+  readonly operation: "record" | "correct" | "forget" | "restore";
+  readonly confirmed: true;
+  readonly text?: string | null;
+  readonly kind?: "episodic" | "boundary" | null;
+  readonly entry_id?: string | null;
+  readonly forget_event_id?: string | null;
+};
+
+export type MemoryManagementOperationView = {
+  readonly status?: "committed";
+  readonly operation_id: string;
+  readonly revision: number;
+  readonly entry_id?: string | null;
+  readonly event_id?: string | null;
+  readonly replayed?: boolean;
+};
+
+export type MemoryManagementPageView = {
+  readonly revision: number;
+  readonly entries: ReadonlyArray<MemoryManagementEntryView>;
+  readonly next_cursor: string | null;
+};
+
+export type MemoryManagementStatusView = {
+  readonly enabled: boolean;
+  readonly revision: number | null;
 };
 
 export type MicrophoneAudio = {
@@ -137,12 +474,26 @@ export type MicrophoneTranscript = {
 
 export type Phase = "idle" | "thinking" | "ready" | "stopped" | "error";
 
+export type PhotoDismissRequest = {
+  readonly target?: "display" | "fixed_photo" | "image_job" | "all_photos";
+  readonly expected_photo_effect_id?: string | null;
+  readonly expected_image_request_id?: string | null;
+  readonly request_id: string;
+  readonly expected_revision: number;
+  readonly presentation_cutoff: number;
+};
+
 export type ReceiptRequest = {
   readonly effect_id: string;
   readonly digest: string;
   readonly output_epoch: number;
   readonly activity_seq: number;
   readonly presentation_seq: number;
+};
+
+export type ResponsePreferenceRequest = {
+  readonly muted: boolean;
+  readonly expected_revision: number;
 };
 
 export type ReviewedAudioActionResponse = {
@@ -194,6 +545,11 @@ export type ReviewedAudioStatusResponse = {
 };
 
 export type SessionView = {
+  readonly presentation_floor?: number;
+  readonly retired_user_inputs?: number;
+  readonly chapter_projection?: ChapterProjectionView | null;
+  readonly fixed_photo?: FixedPhotoView;
+  readonly story_image?: StoryImageView;
   readonly schema_version?: "0.1.0-foundation";
   readonly session_id: string;
   readonly client_instance_id: string;
@@ -208,8 +564,13 @@ export type SessionView = {
   readonly active_grants: ReadonlyArray<EffectView>;
   readonly presented_effects: ReadonlyArray<EffectView>;
   readonly audio_progress: ReadonlyArray<AudioProgressView>;
+  readonly photo_visible?: boolean;
+  readonly photo_visibility_revision?: number;
   readonly last_error: string | null;
   readonly last_error_diagnostic_id?: string | null;
+  readonly response_muted?: boolean;
+  readonly response_mode?: "voice" | "text_only";
+  readonly response_preference_revision?: number;
 };
 
 export type SpeechAudioFrame = {
@@ -253,14 +614,46 @@ export type SpeechStreamRequest = {
 };
 
 export type StopRequest = {
+  readonly scope?: "all" | "reply";
   readonly activity_seq: number;
   readonly presentation_cutoff: number;
+};
+
+export type StoryImageCompletionRequest = {
+  readonly request_id: string;
+  readonly parent_request_id: string;
+  readonly output_epoch: number;
+  readonly activity_seq: number;
+  readonly presented_effect_id?: string | null;
+};
+
+export type StoryImageResourceRequest = {
+  readonly effect_id: string;
+  readonly digest: string;
+  readonly output_epoch: number;
+  readonly activity_seq: number;
+  readonly content_digest: string;
+};
+
+export type StoryImageView = {
+  readonly capability?: "unavailable" | "bounded_fiction";
+  readonly state?: "unavailable" | "idle" | "held" | "pending" | "generating" | "reviewing" | "qualified" | "presented" | "failed" | "cancelled";
+  readonly request_id?: string | null;
+  readonly scene_id?: string | null;
+  readonly resource_id?: string | null;
+  readonly content_digest?: string | null;
+  readonly failure_code?: "unavailable" | "ineligible" | "budget" | "generation" | "review" | "timeout" | "cancelled" | null;
+  readonly completion_state?: "unavailable" | "pending" | "context_consumed" | "requested" | "granted" | "presented" | "failed" | "cancelled";
+  readonly completion_effect_id?: string | null;
+  readonly completion_speech_effect_id?: string | null;
+  readonly completion_available?: boolean;
 };
 
 export type VoiceCapabilities = {
   readonly generation_mode: "mock" | "replay" | "rehearsal" | "injected";
   readonly speech_enabled: boolean;
   readonly microphone_enabled: boolean;
+  readonly continuous_listening_enabled?: boolean;
   readonly speech_sample_rate_hz?: 24000;
   readonly microphone_sample_rate_hz?: 16000;
   readonly qualification: "injected_unverified" | "unavailable" | "offline_fixture";

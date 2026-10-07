@@ -1,0 +1,12 @@
+{
+  "feature": "WP03-capture-delivery",
+  "spec": "specs/features/WP03-capture-delivery/spec.md",
+  "owner": "web",
+  "checker_note": "Web sidecar; unique ownership is supplied by the existing tests/quality.toml wildcard. These are Node cases, not pytest node IDs.",
+  "requirements": [
+    {"id": "CAPTUREDELIVERY-001", "tests": [{"file": "tests/web/capture-delivery-handoff.test.mjs", "case": "real 48000 Hz worklet/40 ms startup audio drains without a WebSocket burst"}, {"file": "tests/web/capture-delivery-handoff.test.mjs", "case": "ready cannot resurrect listening after draining startup audio has already failed"}]},
+    {"id": "CAPTUREDELIVERY-002", "tests": [{"file": "tests/web/capture-delivery-handoff.test.mjs", "case": "resumed speech cancels an endpoint still behind startup PCM without releasing capture"}, {"file": "tests/web/capture-delivery-handoff.test.mjs", "case": "resumed speech during endpoint drain is held and recognition restarts on the same microphone"}]},
+    {"id": "CAPTUREDELIVERY-003", "tests": [{"file": "tests/web/capture-delivery-handoff.test.mjs", "case": "playback quiet room PCM does not contaminate later speech"}, {"file": "tests/web/capture-delivery-handoff.test.mjs", "case": "playback audible capture requires review"}, {"file": "tests/web/continuous-natural.test.mjs", "case": "malformed or unknown playback PCM stays conservatively held in an injected capture port"}]},
+    {"id": "CAPTUREDELIVERY-004", "tests": [{"file": "tests/web/audio-capture.test.mjs", "case": "consumer failures identify only a closed capture stage and safe counters"}, {"file": "tests/web/capture-delivery-handoff.test.mjs", "case": "bounded backlog and finite duration end visibly without a generic consumer failure"}]}
+  ]
+}

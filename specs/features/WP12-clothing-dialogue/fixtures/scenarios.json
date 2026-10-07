@@ -1,0 +1,11 @@
+{
+  "source": "Self-authored offline analogues, not a user transcript or live outputs.",
+  "scenarios": [
+    {"id": "wet_indoors", "user": "刚到屋里，外套被雨淋湿了，坐着不太舒服。", "reply": "那我先脱掉外套，里面这件留着。", "control": "outfit_cream_inner_only", "acknowledge": true, "next_user": "这样舒服些了吧？", "next_reply": "嗯，少了湿外套贴着，好些了。"},
+    {"id": "explicit_raincoat", "user": "待会儿要去外面，你先穿雨衣吧。", "reply": "行，我先把雨衣穿上。", "control": "outfit_amber_raincoat", "acknowledge": true, "next_user": "现在是什么样？", "next_reply": "雨衣已经穿上了。"},
+    {"id": "remove_outer", "user": "我的意思是只脱掉外套，别再套别的。", "reply": "明白，只脱外套就行。", "control": "outfit_cream_inner_only", "acknowledge": true, "next_user": "对，就这样。", "next_reply": "好，这样轻松些。"},
+    {"id": "asked_clothing", "user": "你现在穿的什么？", "reply": "一件外套，里面是上衣。", "control": null, "acknowledge": false, "next_user": "颜色呢？", "next_reply": "外套是黑色的，里面是浅色。"},
+    {"id": "pending_receipt", "user": "先换上雨衣。", "reply": "我打算先换上雨衣。", "control": "outfit_amber_raincoat", "acknowledge": false, "next_user": "换好了吗？", "next_reply": "还没确认换好，刚才只是打算换。"},
+    {"id": "digression", "user": "衣服的事先放一边。拍街景时怎么选主体？", "reply": "先找最吸引你视线的东西，再把旁边抢眼的杂物避开。", "control": null, "acknowledge": false, "next_user": "路灯也能当主体吧？", "next_reply": "当然，看看光线和周围的暗处怎么衬它。"}
+  ]
+}

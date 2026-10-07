@@ -1,0 +1,1 @@
+"""Authored character data adapters."""

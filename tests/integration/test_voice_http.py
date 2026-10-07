@@ -116,8 +116,10 @@ def test_speech_stream_is_origin_bound_bounded_and_approved():
 
 
 def test_speech_missing_provider_fails_clearly_without_mock_audio():
-    with TestClient(app_with()) as client:
+    with TestClient(app_with(tts=Tts())) as client:
         path, headers, state = create(client, speak=True)
+        # Simulate the injected provider becoming unavailable after this grant.
+        client.app.state.container.sessions.get(state["session_id"], headers["X-Mira-Session-Token"])._speech_synthesis = None
         response = speech_request(client, path, headers, state["active_grants"][0])
         assert response.status_code == 503 and response.json()["code"] == "speech_unavailable"
 
@@ -529,14 +531,15 @@ async def test_microphone_buffer_duration_pacing_and_capacity_are_bounded():
     from mira.application.media_runtime import MicrophoneBuffer
     from mira.domain.errors import DomainError
     buffer = MicrophoneBuffer("s")
-    for i in range(8):
+    buffer._started -= 3
+    for i in range(100):
         buffer.push(sequence=i + 1, first_sample=i * 320, pcm=b"\0\0" * 320)
     with pytest.raises(DomainError, match="full"):
-        buffer.push(sequence=9, first_sample=2560, pcm=b"\0\0" * 320)
-    # Finish must not block receive/disconnect even with all eight credits held.
+        buffer.push(sequence=101, first_sample=32000, pcm=b"\0\0" * 320)
+    # Finish must not block receive/disconnect with two seconds of audio queued.
     async with asyncio.timeout(.1):
         await buffer.finish()
-    assert len([packet async for packet in buffer.packets()]) == 8
+    assert len([packet async for packet in buffer.packets()]) == 100
     fast = MicrophoneBuffer("fast")
     fast.push(sequence=1, first_sample=0, pcm=b"\0\0" * 6000)
     fast.push(sequence=2, first_sample=6000, pcm=b"\0\0" * 6000)

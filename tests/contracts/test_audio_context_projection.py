@@ -2,6 +2,7 @@
 import asyncio
 
 import pytest
+from tests.integration.test_voice_http import Tts
 
 from mira.adapters.generation.codex_support.payload import build_prompt
 from mira.adapters.generation.codex_support.types import CodexLimits
@@ -33,7 +34,7 @@ class SyntheticReview:
 async def with_long_audio():
     generation = PromptCheckedGeneration()
     actor = SessionActor(SessionState("synthetic-session", "synthetic-client"), generation,
-        SyntheticReview(), MemoryEventJournal(512), RuntimeLimits(2, 64, 128))
+        SyntheticReview(), MemoryEventJournal(512), RuntimeLimits(2, 64, 128), speech_synthesis=Tts())
     await actor.submit(request_id="input-1", activity_seq=1, cutoff=0, text="第一句。")
     await asyncio.gather(*tuple(actor._tasks))
     effect = (await actor.snapshot()).active_grants[0]

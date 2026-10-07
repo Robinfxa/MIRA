@@ -1,0 +1,25 @@
+{
+  "feature": "DEV-NATIVE-LAUNCH-01",
+  "spec": "specs/features/DEV-NATIVE-LAUNCH-01-approved-context/spec.md",
+  "requirements": [
+    {
+      "id": "DEVNATIVELAUNCH01-001",
+      "tests": [
+        "tests/contracts/test_codex_development_context.py::test_development_argv_preserves_managed_proxy_and_disables_cloud_capabilities",
+        "tests/contracts/test_codex_generation_process.py::test_fixed_process_profile_has_all_disabled_categories_and_no_shell_command"
+      ]
+    },
+    {
+      "id": "DEVNATIVELAUNCH01-002",
+      "tests": [
+        "tests/contracts/test_codex_development_context.py::test_managed_home_defaults_to_official_home_codex_without_inserting_override",
+        "tests/contracts/test_codex_development_context.py::test_managed_home_fallback_rejects_unsafe_or_noncanonical_home",
+        "tests/contracts/test_codex_development_context.py::test_managed_home_fallback_rejects_missing_home_and_mismatched_runtime_home",
+        "tests/contracts/test_codex_development_context.py::test_managed_home_rejects_invalid_explicit_codex_home",
+        "tests/contracts/test_codex_development_context.py::test_managed_home_rejects_bad_home_even_with_explicit_override",
+        "tests/contracts/test_codex_development_context.py::test_managed_home_fallback_rejects_symlinked_home",
+        "tests/contracts/test_codex_development_context.py::test_development_home_binding_cannot_be_substituted"
+      ]
+    }
+  ]
+}

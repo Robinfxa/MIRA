@@ -1,0 +1,9 @@
+{
+  "feature": "WP12CLOTH",
+  "spec": "specs/features/WP12-clothing-dialogue/spec.md",
+  "requirements": [
+    {"id": "WP12CLOTH-001", "tests": ["tests/contracts/test_character_clothing_dialogue.py::test_clothing_policy_is_shared_without_expanding_instruction_budget", "tests/contracts/test_character_clothing_dialogue.py::test_six_authored_exchanges_preserve_request_readiness_and_receipt_evidence"]},
+    {"id": "WP12CLOTH-002", "tests": ["tests/contracts/test_character_clothing_dialogue.py::test_clothing_policy_is_shared_without_expanding_instruction_budget", "tests/contracts/test_character_clothing_dialogue.py::test_six_authored_exchanges_preserve_request_readiness_and_receipt_evidence", "tests/contracts/test_character_clothing_dialogue.py::test_pending_scenario_never_invents_control_or_acknowledgement"]},
+    {"id": "WP12CLOTH-003", "tests": ["tests/contracts/test_character_clothing_dialogue.py::test_six_authored_exchanges_preserve_request_readiness_and_receipt_evidence", "tests/contracts/test_character_clothing_dialogue.py::test_pending_scenario_never_invents_control_or_acknowledgement"]}
+  ]
+}

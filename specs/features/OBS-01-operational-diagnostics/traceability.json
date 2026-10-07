@@ -60,7 +60,10 @@
         "tests/unit/test_diagnostic_export.py::test_raw_export_requires_separate_explicit_confirmation",
         "tests/unit/test_diagnostic_export.py::test_export_drops_injected_fields_malformed_records_and_symlinks",
         "tests/unit/test_diagnostic_export.py::test_export_never_overwrites_existing_destination",
-        "tests/unit/test_diagnostic_export.py::test_export_skips_overdeep_json_without_crashing"
+        "tests/unit/test_diagnostic_export.py::test_export_skips_overdeep_json_without_crashing",
+        "tests/unit/test_diagnostic_export.py::test_reported_choice_warning_survives_current_export_schema",
+        "tests/unit/test_diagnostic_export.py::test_reported_choice_export_rejects_extra_or_wrong_kind_fields",
+        "tests/unit/test_diagnostic_export.py::test_existing_reported_choice_log_reexports_without_new_provider_call"
       ]
     }
   ]

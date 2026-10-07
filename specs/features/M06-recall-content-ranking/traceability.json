@@ -1,0 +1,34 @@
+{
+  "feature": "M06RCR",
+  "spec": "specs/features/M06-recall-content-ranking/spec.md",
+  "requirements": [
+    {
+      "id": "M06RCR-001",
+      "tests": [
+        "tests/contracts/test_conversation_recall_content_ranking.py::test_chinese_question_retrieves_older_preference_and_episode_before_newer_noise",
+        "tests/contracts/test_conversation_recall_content_ranking.py::test_metadata_and_latin_substrings_do_not_outrank_dialogue",
+        "tests/contracts/test_conversation_recall_content_ranking.py::test_uncompleted_speech_text_cannot_win_recall_rank",
+        "tests/contracts/test_conversation_recall_content_ranking.py::test_receipted_first_person_character_dialogue_remains_recallable"
+      ]
+    },
+    {
+      "id": "M06RCR-002",
+      "tests": [
+        "tests/contracts/test_conversation_recall_content_ranking.py::test_corrected_forgotten_and_recent_denial_keep_source_precedence",
+        "tests/contracts/test_conversation_recall_content_ranking.py::test_durable_reopen_to_native_wire_keeps_old_role_and_plan_historical"
+      ]
+    },
+    {
+      "id": "M06RCR-003",
+      "tests": [
+        "tests/contracts/test_conversation_recall_content_ranking.py::test_durable_reopen_to_native_wire_keeps_old_role_and_plan_historical"
+      ]
+    },
+    {
+      "id": "M06RCR-004",
+      "tests": [
+        "tests/contracts/test_conversation_recall_content_ranking.py::test_whole_rows_and_byte_bound_remain_explicit"
+      ]
+    }
+  ]
+}

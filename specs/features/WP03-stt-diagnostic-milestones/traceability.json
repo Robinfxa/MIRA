@@ -1,0 +1,12 @@
+{
+  "feature": "WP03-STTDIAG",
+  "spec": "specs/features/WP03-stt-diagnostic-milestones/spec.md",
+  "requirements": [
+    {
+      "id": "WP03STTDIAG-001",
+      "tests": [
+        "tests/contracts/test_diagnostics_runtime.py::test_microphone_diagnostics_emit_numeric_revision_and_stream_end_milestones_only"
+      ]
+    }
+  ]
+}

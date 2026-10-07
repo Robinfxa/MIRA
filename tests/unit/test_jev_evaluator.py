@@ -90,6 +90,9 @@ def cases_by_id(frozen):
 class SyntheticTransport:
     def __init__(self, frozen, mode="gold", callback=None):
         self.frozen, self.mode, self.callback = frozen, mode, callback
+        initial = runner.load_ledger(frozen[0])
+        historical = initial.get("historical_aggregate", {})
+        self.initial_attempt_count = historical.get("attempt_count", 0) + len(initial["attempts"])
         self.requests = []
         self.kwargs_seen = []
         self.response = None
@@ -103,7 +106,8 @@ class SyntheticTransport:
         ledger = runner.load_ledger(root,
             continuation=manifest.get("budget_policy_id") == runner.APPROVED_CONTINUATION_POLICY_ID)
         assert ledger["attempts"][-1]["budget_charge_usd"] == "0.0029568000"
-        assert len(ledger["attempts"]) == 5 + len(self.requests)
+        history_count = ledger.get("historical_aggregate", {}).get("attempt_count", 0)
+        assert history_count + len(ledger["attempts"]) == self.initial_attempt_count + 1 + len(self.requests)
         with (root / runner.LOCK_RELATIVE).open("a") as lock:
             with pytest.raises(BlockingIOError):
                 fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -201,6 +205,22 @@ def test_frozen_sources_dtos_adjudication_and_question_sets_match(frozen):
     assert all(case["partition"] == "development" for _, case in selected)
     assert len(plan["first_four_compatible"]) == 4
     assert support.REQUIRED_SOURCES <= manifest["file_sha256"].keys()
+
+
+@pytest.mark.parametrize(("field", "value"), [
+    ("memory_packet", None),
+    ("memory_packet", {"facts": [{"text": "forged memory"}]}),
+    ("memory_evidence", {"facts": [{"text": "forged memory"}]}),
+    ("forged_memory_packet", {"facts": [{"text": "forged memory"}]}),
+    ("untrusted_extra", "forged"),
+])
+def test_legacy_evaluation_codec_rejects_memory_and_unknown_context_fields(frozen, field, value):
+    case = cases_by_id(frozen)["in_simultaneous"]
+    row = copy.deepcopy(case["snapshot"])
+    row["context"][field] = value
+
+    with pytest.raises(support.EvaluationStop, match="snapshot_context_schema_invalid"):
+        support.snapshot(row)
 
 
 def test_continuation_manifest_excludes_timed_out_case_and_keeps_original_order(frozen):
@@ -758,6 +778,113 @@ async def test_malformed_budget_cannot_create_spend_authority(frozen, bad_charge
     smoke.save(root / runner.LEDGER_RELATIVE, ledger)
     with pytest.raises(support.EvaluationStop, match="ledger_invalid"):
         await execute(frozen)
+
+
+def _carry_forward_ledger(frozen, *, attempt_count=15, reserve="0.0159615960"):
+    root, _, _ = frozen
+    ledger = runner.load_ledger(root)
+    ledger["historical_aggregate"] = {
+        "schema_version": 1,
+        "attempt_count": attempt_count,
+        "reserved_or_charged_usd": reserve,
+    }
+    # Historic per-request detail was lost; only newly dispatched requests get rows.
+    ledger["attempts"] = []
+    smoke.save(root / runner.LEDGER_RELATIVE, ledger)
+    return copy.deepcopy(ledger["historical_aggregate"])
+
+
+@pytest.mark.parametrize("bad_history", [
+    {"schema_version": 2, "attempt_count": 15, "reserved_or_charged_usd": "0.0159615960"},
+    {"schema_version": True, "attempt_count": 15, "reserved_or_charged_usd": "0.0159615960"},
+    {"schema_version": 1, "attempt_count": True, "reserved_or_charged_usd": "0.0159615960"},
+    {"schema_version": 1, "attempt_count": -1, "reserved_or_charged_usd": "0.0159615960"},
+    {"schema_version": 1, "attempt_count": 36, "reserved_or_charged_usd": "0.0159615960"},
+    {"schema_version": 1, "attempt_count": 15, "reserved_or_charged_usd": "NaN"},
+    {"schema_version": 1, "attempt_count": 15, "reserved_or_charged_usd": "Infinity"},
+    {"schema_version": 1, "attempt_count": 15, "reserved_or_charged_usd": "-0.01"},
+    {"schema_version": 1, "attempt_count": 15, "reserved_or_charged_usd": "0.050000001"},
+    {"schema_version": 1, "attempt_count": 15, "reserved_or_charged_usd": 0.015},
+    {"schema_version": 1, "attempt_count": 15, "reserved_or_charged_usd": "0.015", "guessed_rows": []},
+])
+def test_invalid_historical_aggregate_fails_closed(frozen, bad_history):
+    root, _, _ = frozen
+    ledger = runner.load_ledger(root)
+    ledger["historical_aggregate"] = bad_history
+    smoke.save(root / runner.LEDGER_RELATIVE, ledger)
+    with pytest.raises(support.EvaluationStop, match="ledger_invalid"):
+        runner.load_ledger(root, continuation=True)
+
+
+def test_duplicate_historical_aggregate_field_fails_closed(frozen):
+    root, _, _ = frozen
+    path = root / runner.LEDGER_RELATIVE
+    path.write_text(
+        '{"maximum_attempts":20,"maximum_usd":"0.01","attempts":[],'
+        '"historical_aggregate":{"schema_version":1,"attempt_count":15,'
+        '"attempt_count":14,"reserved_or_charged_usd":"0.0159615960"}}\n'
+    )
+    with pytest.raises(support.EvaluationStop, match="duplicate_json_key"):
+        runner.load_ledger(root, continuation=True)
+
+
+@pytest.mark.asyncio
+async def test_recovered_historical_aggregate_limits_a_15_case_continuation_and_stays_immutable(frozen):
+    frozen = continuation_manifest(frozen)
+    root, path, _ = frozen
+    historical = _carry_forward_ledger(frozen)
+    transport = SyntheticTransport(frozen)
+    result = await runner.run_batch(root=root, manifest_path=path,
+        manifest_sha256=support.sha(path.read_bytes()), transport_factory=lambda: transport,
+        max_cases=15, approved_continuation=True)
+    ledger = runner.load_ledger(root, continuation=True)
+    assert result["status"] == "completed"
+    assert result["attempted_requests"] == len(transport.requests) == 15
+    assert result["global_attempts"] == 30
+    assert result["global_reserved_or_charged_usd"] == "0.0161115960"
+    assert ledger["historical_aggregate"] == historical
+    assert len(ledger["attempts"]) == 15
+    assert [row["attempt"] for row in result["results"]] == list(range(16, 31))
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(("history_count", "should_dispatch"), [(34, True), (35, False)])
+async def test_historical_attempt_cap_respects_34_and_35_boundaries(frozen, history_count, should_dispatch):
+    frozen = continuation_manifest(frozen)
+    root, path, _ = frozen
+    _carry_forward_ledger(frozen, attempt_count=history_count, reserve="0")
+    transport = SyntheticTransport(frozen)
+    result = await runner.run_batch(root=root, manifest_path=path,
+        manifest_sha256=support.sha(path.read_bytes()), transport_factory=lambda: transport,
+        max_cases=1, approved_continuation=True)
+    assert bool(transport.requests) is should_dispatch
+    assert result["attempted_requests"] == (1 if should_dispatch else 0)
+    assert result["global_attempts"] == 35
+    assert result["status"] == ("attempt_limit_reached" if should_dispatch else "local_budget_exhausted")
+
+
+@pytest.mark.asyncio
+async def test_historical_charge_over_full_reserve_blocks_before_dispatch(frozen):
+    frozen = continuation_manifest(frozen)
+    root, path, _ = frozen
+    _carry_forward_ledger(frozen, attempt_count=15, reserve="0.047043201")
+    transport = SyntheticTransport(frozen)
+    result = await runner.run_batch(root=root, manifest_path=path,
+        manifest_sha256=support.sha(path.read_bytes()), transport_factory=lambda: transport,
+        max_cases=1, approved_continuation=True)
+    assert result["attempted_requests"] == 0
+    assert not transport.requests
+    assert result["global_attempts"] == 15
+    assert Decimal(result["global_reserved_or_charged_usd"]) == Decimal("0.047043201")
+    assert result["status"] == "local_budget_exhausted"
+
+
+def test_legacy_ledger_without_historical_aggregate_is_unchanged(frozen):
+    root, _, _ = frozen
+    ledger = runner.load_ledger(root)
+    assert "historical_aggregate" not in ledger
+    assert len(ledger["attempts"]) == 4
+    assert runner.charged(ledger) == Decimal("0.006055476")
 
 
 def test_unarmed_main_ignores_configuration_and_manifest_reads(frozen, monkeypatch, capsys):

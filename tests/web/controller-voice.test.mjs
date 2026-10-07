@@ -9,16 +9,17 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 const voice={speech_enabled:true,microphone_enabled:true,speech_sample_rate_hz:24000,microphone_sample_rate_hz:16000,qualification:'injected_unverified',generation_mode:'mock'};
 function harness(options={}){
- const calls=[],received=[],progress=[],errors=[],phases=[],microphones=[];let client,rev=0,activity=0,inputEpoch=0;
+ const calls=[],received=[],progress=[],errors=[],phases=[],microphones=[],previews=[],timings=[];let client,rev=0,activity=0,inputEpoch=0;
  const session=(overrides={})=>({schema_version:'0.1.0-foundation',session_id:'s',client_instance_id:client,revision:++rev,activity_seq:activity,input_epoch:inputEpoch,output_epoch:activity,permit_revision:rev,phase:'stopped',request_id:null,sealed:true,active_grants:[],presented_effects:[],audio_progress:[],last_error:null,...overrides});
- const api={create:async c=>{client=c;return {session:session(),session_token:'secret'};},capabilities:async()=>options.capabilities??voice,snapshot:()=>new Promise(()=>{}),input:async r=>{calls.push(['input',r]);activity=r.activity_seq;inputEpoch++;const effect={id:`speech-${activity}`,kind:'speech',value:'hello',digest:'a'.repeat(64),output_epoch:activity,activity_seq:activity};return session({phase:'ready',request_id:r.request_id,active_grants:[effect]});},stop:async r=>{calls.push(['network-stop',r]);activity=r.activity_seq;return session();},receipt:async r=>{received.push(r);return session();},audioProgress:async r=>{progress.push(r);return session();},speech:async (e,s,push)=>{calls.push(['speech',e]);await push(new Int16Array([1,2]));},microphone:(origin,signal)=>{calls.push(['microphone',origin]);const d=deferred();const stream={ready:Promise.resolve(),completion:d.promise,send:c=>calls.push(['pcm',c]),finish:()=>{calls.push(['finish']);return d.promise;},cancel:()=>calls.push(['mic-cancel']),resolve:d.resolve,signal};microphones.push(stream);return stream;},close:async()=>calls.push(['api-close'])};
+ const api={create:async c=>{client=c;return {session:session(),session_token:'secret'};},capabilities:async()=>options.capabilities??voice,snapshot:()=>new Promise(()=>{}),input:async r=>{calls.push(['input',r]);activity=r.activity_seq;inputEpoch++;const effect={id:`speech-${activity}`,kind:'speech',value:'hello',digest:'a'.repeat(64),output_epoch:activity,activity_seq:activity};return session({phase:'ready',request_id:r.request_id,active_grants:[effect]});},stop:async r=>{calls.push(['network-stop',r]);activity=r.activity_seq;return session();},receipt:async r=>{received.push(r);return session();},audioProgress:async r=>{progress.push(r);return session();},speech:async (e,s,push)=>{calls.push(['speech',e]);await push(new Int16Array([1,2]));},microphone:(origin,signal,observers)=>{calls.push(['microphone',origin]);const d=deferred();const stream={ready:Promise.resolve(),completion:d.promise,send:c=>calls.push(['pcm',c]),finish:()=>{calls.push(['finish']);return d.promise;},cancel:()=>calls.push(['mic-cancel']),resolve:d.resolve,signal,observers};microphones.push(stream);return stream;},close:async()=>calls.push(['api-close'])};
  let playbackOptions,captureOptions;
  const sink={active:null,unlock:async()=>{calls.push(['unlock']);return true;},open:e=>{calls.push(['open',e]);sink.active=e;return {push:pcm=>{calls.push(['push',pcm]);playbackOptions.onFact({origin:e,stage:'submitted',submittedFrames:pcm.length,renderedFrames:0,sampleRate:24000,inFlightFramesUncertain:pcm.length});return true;},finish:()=>{calls.push(['sealed']);return true;}};},stop:reason=>{calls.push(['local-audio-stop',reason]);if(sink.active){const e=sink.active;sink.active=null;playbackOptions.onFact({origin:e,stage:'stopped',submittedFrames:2,renderedFrames:0,sampleRate:24000,inFlightFramesUncertain:2,reason});}},reconcileAuthorization:()=>{if(sink.active&&!playbackOptions.isAuthorized(sink.active))sink.stop('revoked');},close:async()=>{sink.stop('close');calls.push(['sink-close']);}};
  const capture={start:async()=>{calls.push(['capture-start']);captureOptions.onState('recording');return true;},stop:()=>{calls.push(['capture-stop']);captureOptions.onState('stopped');},close:async()=>calls.push(['capture-close'])};
  const effects={apply:e=>calls.push(['visual',e]),prepareInput:()=>calls.push(['prepare']),stop:()=>calls.push(['scene-stop']),setPhase:p=>phases.push(p)};
- const view={connected:()=>calls.push(['connected']),update:s=>calls.push(['view',s]),error:e=>errors.push(e),localStop:()=>calls.push(['view-stop']),capabilities:v=>calls.push(['capabilities',v]),microphone:s=>calls.push(['mic-state',s])};
- const controller=new SessionController(api,effects,view,{apiBase:'/api/v1',pollIntervalMs:200},{createPlayback:o=>{playbackOptions=o;return options.createPlayback?options.createPlayback(o):sink;},createCapture:o=>{captureOptions=o;return capture;}});
- return {controller,api,sink,capture,calls,received,progress,errors,phases,microphones,session,get playback(){return playbackOptions;},get captureEvents(){return captureOptions;}};
+ const view={connected:()=>calls.push(['connected']),update:s=>calls.push(['view',s]),error:e=>errors.push(e),localStop:()=>calls.push(['view-stop']),capabilities:v=>calls.push(['capabilities',v]),microphone:s=>calls.push(['mic-state',s]),microphonePreview:value=>previews.push(value),microphoneTiming:value=>timings.push(value)};
+ const controller=new SessionController(api,effects,view,{apiBase:'/api/v1',pollIntervalMs:200},{createPlayback:o=>{playbackOptions=o;return options.createPlayback?options.createPlayback(o):sink;},createCapture:o=>{captureOptions=o;return capture;},
+  externalMicrophoneActive:options.externalMicrophoneActive,onGlobalStop:options.onGlobalStop});
+ return {controller,api,sink,capture,calls,received,progress,errors,phases,microphones,previews,timings,session,get playback(){return playbackOptions;},get captureEvents(){return captureOptions;}};
 }
 test('new text stops locally before request and explicit speech never reaches DOM receipt',async()=>{const h=harness();await h.controller.connect();await h.controller.input('hello');await tick();assert.ok(h.calls.findIndex(x=>x[0]==='local-audio-stop')<h.calls.findIndex(x=>x[0]==='input'));assert.equal(h.calls.filter(x=>x[0]==='visual'&&x[1].kind==='speech').length,0);assert.equal(h.received.length,0);assert.equal(h.calls.filter(x=>x[0]==='speech').length,1);assert.equal(h.playback.isAuthorized(h.sink.active),true);await h.controller.close();});
 test('stop terminal fact is sequenced within stop cutoff before network',async()=>{const h=harness();await h.controller.connect();await h.controller.input('hello');await tick();await h.controller.stop();await tick();const stop=h.calls.find(x=>x[0]==='network-stop')[1];assert.equal(h.progress.length,1);assert.equal(h.progress[0].status,'interrupted');assert.equal(stop.presentation_cutoff,h.progress[0].presentation_seq);assert.equal(h.sink.active,null);await h.controller.close();});
@@ -45,3 +46,56 @@ test('offline synthetic listening never opens microphone and releases one fixed 
 test('synthetic input release before stop acknowledgement waits and Stop prevents late submission',async()=>{const h=harness({capabilities:rehearsalVoice}),ack=deferred();h.api.stop=r=>ack.promise;await h.controller.connect();await tick();const start=h.controller.startRehearsalInput();const finish=h.controller.finishRehearsalInput();assert.equal(h.calls.some(x=>x[0]==='input'),false);const stopped=h.controller.stop();ack.resolve(h.session({activity_seq:2,output_epoch:2}));await Promise.all([start,finish,stopped]);assert.equal(h.calls.some(x=>x[0]==='input'),false);await h.controller.close();});
 test('new text and close each invalidate held synthetic input',async()=>{for(const action of ['text','close']){const h=harness({capabilities:rehearsalVoice});await h.controller.connect();await tick();await h.controller.startRehearsalInput();if(action==='text')await h.controller.input('你好');else await h.controller.close();await h.controller.finishRehearsalInput();assert.deepEqual(h.calls.filter(x=>x[0]==='input').map(x=>x[1].text),action==='text'?['你好']:[]);await h.controller.close();}});
 test('synthetic listening is unavailable outside explicit rehearsal capability',async()=>{const h=harness();await h.controller.connect();await tick();await h.controller.startRehearsalInput();await h.controller.finishRehearsalInput();assert.equal(h.calls.some(x=>x[0]==='network-stop'||x[0]==='input'||x[0]==='capture-start'),false);await h.controller.close();});
+
+
+test('microphone revisions remain provisional and finish, newer input, permission denial, Stop and Close clear stale callbacks',async()=>{
+ const h=harness();
+ try {
+  await h.controller.connect();await h.controller.startMicrophone();await tick();
+  const stream=h.microphones[0],id=h.calls.find(x=>x[0]==='microphone')[1].stream_id;
+  stream.observers.onRevision({stream_id:id,revision:1,text:'provisional only',is_final:false});
+  assert.equal(h.previews.at(-1).text,'provisional only');
+  const finish=h.controller.finishMicrophone();await tick();assert.equal(h.previews.at(-1),null);
+  stream.resolve({text:'reliable final only',had_final:true});await finish;await tick();
+  assert.equal(h.calls.filter(x=>x[0]==='input').at(-1)[1].text,'reliable final only');assert.equal(h.previews.at(-1),null);
+
+  await h.controller.startMicrophone();await tick();const newer=h.microphones.at(-1),newId=h.calls.findLast(x=>x[0]==='microphone')[1].stream_id;
+  newer.observers.onRevision({stream_id:newId,revision:1,text:'clear on newer text',is_final:false});
+  await h.controller.input('newer user text');assert.equal(h.previews.at(-1),null);
+  newer.observers.onRevision({stream_id:newId,revision:2,text:'old generation',is_final:false});assert.equal(h.previews.at(-1),null);
+
+  await h.controller.startMicrophone();await tick();const denied=h.microphones.at(-1),deniedId=h.calls.findLast(x=>x[0]==='microphone')[1].stream_id;
+  denied.observers.onRevision({stream_id:deniedId,revision:1,text:'clear on permission denial',is_final:false});
+  h.captureEvents.onError(new Error('synthetic permission denial'));assert.equal(h.previews.at(-1),null);
+  denied.observers.onRevision({stream_id:deniedId,revision:2,text:'stale after denial',is_final:false});assert.equal(h.previews.at(-1),null);
+
+  await h.controller.startMicrophone();await tick();const stopped=h.microphones.at(-1),stopId=h.calls.findLast(x=>x[0]==='microphone')[1].stream_id;
+  stopped.observers.onRevision({stream_id:stopId,revision:1,text:'clear on stop',is_final:false});
+  await h.controller.stop();assert.equal(h.previews.at(-1),null);
+  stopped.observers.onRevision({stream_id:stopId,revision:2,text:'old after stop',is_final:false});assert.equal(h.previews.at(-1),null);
+
+  await h.controller.startMicrophone();await tick();const closed=h.microphones.at(-1),closeId=h.calls.findLast(x=>x[0]==='microphone')[1].stream_id;
+  closed.observers.onRevision({stream_id:closeId,revision:1,text:'clear on close',is_final:false});
+  await h.controller.close();assert.equal(h.previews.at(-1),null);
+  closed.observers.onRevision({stream_id:closeId,revision:2,text:'old after close',is_final:false});assert.equal(h.previews.at(-1),null);
+ } finally {await h.controller.close();}
+});
+
+test('manual continuous transcript uses the ordinary receipt-prefix input request and survives reply-turn generation changes',async()=>{
+ const stopReasons=[];let continuousActive=true;
+ const h=harness({externalMicrophoneActive:()=>continuousActive,onGlobalStop:reason=>{stopReasons.push(reason);}});
+ try {
+  await h.controller.connect();
+  assert.equal(h.controller.canAuditionReviewedAudio(),false,'raw-audio audition is blocked during continuous capture');
+  const outcome=await h.controller.input('server-confirmed phrase',undefined,'22345678-1234-4234-8234-123456789012');
+  assert.equal(outcome.status,'submitted');
+  const request=h.calls.filter(call=>call[0]==='input').at(-1)[1];
+  assert.equal(request.text,'server-confirmed phrase');
+  assert.equal(request.listening_utterance_id,'22345678-1234-4234-8234-123456789012');
+  assert.equal(Number.isInteger(request.activity_seq),true);assert.equal(Number.isInteger(request.presentation_cutoff),true);
+  assert.equal(continuousActive,true,'ordinary reply/input epoch changes do not own the separate mic lease');
+  assert.deepEqual(stopReasons,[],'normal new-input interruption must not invoke the global mic release');
+  continuousActive=false;await h.controller.stop();assert.deepEqual(stopReasons,['stop']);
+  await h.controller.close();assert.deepEqual(stopReasons,['stop','close']);
+ } finally {await h.controller.close();}
+});

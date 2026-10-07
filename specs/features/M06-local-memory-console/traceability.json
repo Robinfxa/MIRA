@@ -1,0 +1,49 @@
+{
+  "feature": "M06-LMC",
+  "spec": "specs/features/M06-local-memory-console/spec.md",
+  "requirements": [
+    {
+      "id": "M06LMC-001",
+      "tests": [
+        "tests/contracts/test_local_memory_console_launcher.py::test_no_command_and_help_are_inert",
+        "tests/contracts/test_local_memory_console_launcher.py::test_check_requires_consent_before_loading_configuration",
+        "tests/contracts/test_local_memory_console_launcher.py::test_frontend_child_environment_reads_only_explicit_nonsecret_allowlist",
+        "tests/unit/test_local_memory_scope_configuration.py::test_management_options_have_no_transmission_authorization",
+        "tests/contracts/test_local_memory_console_launcher.py::test_direct_checkout_check_works_without_pythonpath_or_installed_mira",
+        "tests/contracts/test_local_memory_console_launcher.py::test_direct_checkout_pairing_helper_import_has_no_pythonpath_dependency",
+        "tests/contracts/test_local_memory_console_launcher.py::test_fixed_consent_error_is_actionable_but_unknown_errors_are_not_echoed"
+      ]
+    },
+    {
+      "id": "M06LMC-002",
+      "tests": [
+        "tests/contracts/test_local_memory_console_launcher.py::test_check_never_creates_pairing_or_opens_store",
+        "tests/contracts/test_local_memory_console_launcher.py::test_serve_requires_distinct_write_and_pairing_consents",
+        "tests/contracts/test_local_memory_console_launcher.py::test_serve_creates_only_synthetic_pairing_after_explicit_consent"
+      ]
+    },
+    {
+      "id": "M06LMC-003",
+      "tests": [
+        "tests/integration/test_local_memory_console_http.py::test_console_exposes_only_allowlisted_local_routes",
+        "tests/integration/test_local_memory_console_http.py::test_console_rejects_unapproved_host_and_origin"
+      ]
+    },
+    {
+      "id": "M06LMC-004",
+      "tests": [
+        "tests/integration/test_local_memory_console_http.py::test_pairing_is_the_first_operation_that_opens_management_store",
+        "tests/integration/test_local_memory_console_http.py::test_revoke_and_shutdown_close_manager_and_revoke_pairing",
+        "tests/integration/test_local_memory_console_http.py::test_shutdown_without_revoke_closes_manager_and_revokes_pairing",
+        "tests/integration/test_local_memory_console_http.py::test_timed_out_pairing_startup_cancels_lazy_factory_and_revokes"
+      ]
+    },
+    {
+      "id": "M06LMC-005",
+      "tests": [
+        "tests/integration/test_local_memory_console_http.py::test_console_exposes_only_allowlisted_local_routes",
+        "tests/unit/test_package_distribution.py::test_local_memory_console_assets_are_declared"
+      ]
+    }
+  ]
+}

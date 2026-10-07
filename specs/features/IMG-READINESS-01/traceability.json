@@ -1,0 +1,45 @@
+{
+  "feature": "IMG-READINESS-01",
+  "spec": "specs/features/IMG-READINESS-01/spec.md",
+  "requirements": [
+    {
+      "id": "IMGREADINESS01-001",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_operator_check_reports_custom_tool_readiness_without_probe"
+      ]
+    },
+    {
+      "id": "IMGREADINESS01-002",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_process_budget_exhaustion_after_new_session_removes_only_generated_tool",
+        "tests/contracts/test_image_readiness_diagnostics.py::test_busy_process_removes_generation_without_reserving_or_spending",
+        "tests/contracts/test_image_readiness_diagnostics.py::test_local_readiness_is_current_and_content_free"
+      ]
+    },
+    {
+      "id": "IMGREADINESS01-003",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_actor_export_observes_final_serialized_tools_after_dialogue_budget",
+        "tests/contracts/test_image_readiness_diagnostics.py::test_continuation_reports_no_tools_with_current_phase_and_keeps_fixed_photo_success"
+      ]
+    },
+    {
+      "id": "IMGREADINESS01-004",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_provider_failure_is_observed_separately_and_never_guessed_from_local_failure"
+      ]
+    },
+    {
+      "id": "IMGREADINESS01-005",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_stale_readiness_callback_cannot_reappear_after_stop_or_close"
+      ]
+    },
+    {
+      "id": "IMGREADINESS01-006",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_export_roundtrip_rejects_private_metadata_and_retains_old_events"
+      ]
+    }
+  ]
+}

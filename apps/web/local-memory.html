@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="只在本机上管理已存在的私有记忆记录。">
+  <title>MIRA · 本机记忆管理</title>
+  <link rel="stylesheet" href="/local-memory.css">
+</head>
+<body>
+<main class="console-shell">
+  <header class="console-header">
+    <span class="brand">mira<span aria-hidden="true">✳</span></span>
+    <span class="console-tag">本机记忆控制台</span>
+  </header>
+
+  <aside class="local-only-notice" data-local-only-notice role="note" aria-label="本机隐私说明">
+    <strong>仅在本机运行</strong>
+    <p>此控制台只提供本机健康检查、静态页面、一次性配对和记忆管理接口。它没有模型或提供方路由，也不会向外部服务传送记忆内容。配对和下方的逐项确认只授权此工具中的本机管理操作，不会授权任何外部内容传输。</p>
+    <p>软忘记会在本机追加历史中保留原文，并可通过明确操作恢复；这不是安全删除，也不能撤回其他独立工具可能已获准传送的内容。</p>
+  </aside>
+
+  <section class="operator-pairing" data-operator-pairing-panel hidden aria-labelledby="operator-pairing-title">
+    <h1 id="operator-pairing-title">配对本机管理</h1>
+    <p>打开本机私有配对文件，把一次性代码手动输入密码框。不要将代码放入网址、聊天或其他应用。</p>
+    <p class="operator-pairing-safety">配对只保护本机控制台，不防止同一操作系统账户下的恶意软件读取文件或控制浏览器。</p>
+    <form data-operator-pairing-form>
+      <label for="operator-pairing-code">一次性配对代码</label>
+      <input id="operator-pairing-code" data-operator-pairing-code type="password" maxlength="512"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <button type="submit" data-operator-pairing-submit disabled>确认并配对</button>
+    </form>
+    <p data-operator-pairing-status role="status" aria-live="polite" aria-atomic="true">正在确认本机配对状态…</p>
+    <button type="button" data-operator-pairing-cancel hidden>撤销本机管理授权</button>
+  </section>
+
+  <section class="console-intro">
+    <h2>手动管理已保存的陈述</h2>
+    <p>内容必须由你亲自输入。这里不会读取聊天记录、自动提取内容、生成摘要或启动对话。</p>
+  </section>
+
+  <details class="memory-management-panel" data-memory-management-panel hidden aria-labelledby="memory-management-title">
+    <summary id="memory-management-title">打开本机记忆列表</summary>
+    <div class="memory-management-content">
+      <p class="memory-management-disclosure">读取和写入只发生在此机器的固定私有范围。此工具不会把记忆内容发送给模型或其他外部服务。</p>
+      <p class="memory-management-retention">软忘记是可恢复的隐藏记录：原文仍留在本机追加历史中，并可明确恢复；这不是安全删除。</p>
+      <label class="memory-management-consent"><input type="checkbox" data-memory-management-local-consent> 我明确同意在此固定本机范围中读取当前页，或创建、更正、软忘记、恢复我亲自输入的陈述。</label>
+
+      <div class="memory-management-actions">
+        <button type="button" data-memory-management-refresh>读取或刷新当前页</button>
+        <button type="button" data-memory-management-previous disabled>上一页</button>
+        <button type="button" data-memory-management-next disabled>下一页</button>
+      </div>
+      <p class="memory-management-status" data-memory-management-status role="status" aria-live="polite" aria-atomic="true">展开后才会读取有界的本机记忆页。</p>
+      <ol class="memory-management-entries" data-memory-management-entries aria-label="当前页的本机记忆"></ol>
+
+      <form class="memory-management-form" data-memory-management-record-form>
+        <h3 data-memory-management-editor-title>添加一条陈述</h3>
+        <label for="memory-management-kind">记录类别</label>
+        <select id="memory-management-kind" data-memory-management-kind>
+          <option value="episodic">普通记忆（按需）</option>
+          <option value="boundary">明确界限（每轮保留）</option>
+        </select>
+        <label for="memory-management-text">由你亲自输入的内容</label>
+        <textarea id="memory-management-text" data-memory-management-text rows="3" maxlength="8192"
+          autocomplete="off" spellcheck="true" aria-describedby="memory-management-text-limit"></textarea>
+        <small id="memory-management-text-limit">本页上限为 4,096 个 Unicode 字符和 16 KiB UTF-8；存储本身也会校验限额。</small>
+        <div class="memory-management-actions">
+          <button type="submit" data-memory-management-propose>准备保存</button>
+          <button type="button" data-memory-management-cancel-edit hidden>取消更正</button>
+        </div>
+      </form>
+
+      <section class="memory-management-confirmation" data-memory-management-confirmation hidden aria-labelledby="memory-management-confirmation-title">
+        <h3 id="memory-management-confirmation-title">逐项核对本机操作</h3>
+        <p data-memory-management-preview></p>
+        <label class="memory-management-consent"><input type="checkbox" data-memory-management-confirmed> 我已核对上方准确文字与操作，并确认只在此固定本机范围执行这一次。</label>
+        <div class="memory-management-actions">
+          <button type="button" data-memory-management-commit disabled>确认这一次操作</button>
+          <button type="button" data-memory-management-cancel>取消本次确认</button>
+        </div>
+      </section>
+      <button type="button" class="memory-management-reconcile" data-memory-management-reconcile hidden>用相同编号核对（若尚未提交，会执行原操作）</button>
+    </div>
+  </details>
+
+  <footer>独立本机工具 · 不含对话页面、模型、语音或媒体功能</footer>
+</main>
+<script type="module" src="/local-memory.js"></script>
+</body>
+</html>

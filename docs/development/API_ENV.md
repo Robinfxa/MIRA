@@ -24,13 +24,13 @@
 | D-M读图 | 图像输入的独立审查请求 | vision_model及当前允许图像 | 实际像素输入、unknown、内容绑定；不可自我批准 |
 | Input/Output Decision | JEV/TypeSafe | TYPESAFE_API_KEY、固定model | 中文、原语映射、超时与拒绝；不能由文本模型代替读图 |
 | ASR | **已批准 MVP 路线** Google Speech-to-Text V2 | 项目、quota项目、ADC、区域、model、locale | 启用与IAM、gRPC、实际语言／区域、流式转写 |
-| TTS | **已批准 MVP 路线** Google Cloud Text-to-Speech | 同项目/ADC，独立locale与voice | list_voices、真实合成、播放、打断、同步字幕 |
+| TTS | **已批准 MVP 路线** Gemini 3.8 Flash TTS on Gemini Enterprise Agent Platform (Preview) | 同项目/ADC，独立locale与voice；`aiplatform.googleapis.com` | 实际项目可用性、真实合成、播放、打断、同步字幕 |
 | 可替换标准API | OpenAI Responses/Image API | 安全设置流程提供的OPENAI_API_KEY | 明确付费预算、每项能力独立验收；不自动回退 |
 
 Google STT V2是为减少首轮身份系统而提出的开发默认，不宣称此前ADR已经锁定ASR供应商，也不改工厂。已有可用ASR不必为了此模板迁移。
 Hindsight不是当前P0前置；不为了开发env另外购买记忆、向量库或视频服务。
 
-**外部文档核查：**Codex区分订阅登录与API-key计费[S1]，内置图片使用Codex用量[S2]；JEV使用Bearer与`/v1/systemone`，有模型目录[S3]；Google流式TTS与STT V2有独立输入合同，语言和地区须按实际组合验证[S4–S6]。这些事实不是本账户验证。
+**外部文档核查：**Codex区分订阅登录与API-key计费[S1]，内置图片使用Codex用量[S2]；JEV使用Bearer与`/v1/systemone`，有模型目录[S3]；Google STT V2与Gemini Enterprise TTS有各自API合同，语言、地区、账单及IAM须按实际项目验证[S5–S8]。这些事实不是本账户验证。
 
 
 ## 2.1 已批准的 MVP Provider Matrix
@@ -43,7 +43,7 @@ Hindsight不是当前P0前置；不为了开发env另外购买记忆、向量库
 | 图片生成 | OpenAI | Codex / OpenAI image capability | 最终图片仍需隔离、D-M与当前许可 |
 | D-M 实际读图 | OpenAI | 视觉能力的独立请求 | 不接受生成器自评替代实际像素检查 |
 | ASR | Google Cloud | Speech-to-Text V2 | 真实项目／区域／语言和流式行为需实测 |
-| TTS | Google Cloud | Text-to-Speech streaming | 真实 voice、区域、取消与设备尾部需实测 |
+| TTS | Gemini Enterprise Agent Platform (Preview) | `gemini-3.8-flash-tts` over `aiplatform.googleapis.com` | 真实 voice、区域、取消与设备尾部需实测 |
 
 `Input/Output Decision` 仍按已批准 G05 保留 JEV/TypeSafe 为当前独立判断路线；本次 provider 收敛没有把它悄悄并入主 LLM。若后续要将 DecisionBackend 也改为 OpenAI，需要单独记录该后端变更及中文判断对照。
 
@@ -96,17 +96,20 @@ python tools/api_env.py check
 ### 4.3 Google语音
 
 本地开发优先由用户设置ADC，不下载并塞进仓库一份service-account私钥。[S6]
-在有权限的项目内，按官方流程确认Speech-to-Text与Text-to-Speech已经启用、账单和最小IAM可用；命令示例：
+当前精确TTS模型是Gemini Enterprise Agent Platform预览模型，通过Vertex AI Generative AI的`aiplatform.googleapis.com`在`global`位置调用；它不是Cloud Text-to-Speech模型。[S8]
+在有权限的项目内，按官方流程确认Speech-to-Text与Vertex AI API已经启用、账单和最小IAM可用；命令示例：
 
 ```bash
 # 用户本人操作；不是本工具自动执行的setup
 # 项目和计费未确认前，不执行启用或真实推理
  gcloud auth application-default login
- gcloud services enable speech.googleapis.com texttospeech.googleapis.com --project=YOUR_PROJECT_ID
+ gcloud services enable speech.googleapis.com aiplatform.googleapis.com --project=YOUR_PROJECT_ID
 ```
 
+`texttospeech.googleapis.com`只用于另行选择的Cloud Text-to-Speech模型；不要用它来准备此处的`gemini-3.8-flash-tts`路线。
+
 项目与quota项目填写到私密env。ADC登录与gcloud当前账户可能不同；不能仅凭gcloud登录成功判断SDK已可调用。[S6]
-建议初始ASR配置`chirp_3 / cmn-Hans-CN / us`，TTS独立用`cmn-CN`，声线留空直到实际可用列表确认。[S4–S5]
+建议初始ASR配置`chirp_3 / cmn-Hans-CN / us`，TTS独立用`cmn-CN`，声线留空直到实际可用列表确认。[S4–S5, S8]
 模板中的项目/地区/声线是配置，**ADC、IAM和语音调用均未探测**。本工具不读取Google认证文件，也不通过metadata命令假装验证音频。
 如果由部署环境使用`GOOGLE_APPLICATION_CREDENTIALS`，它属于Google SDK的进程配置；本loader不会把dotenv里的任意变量写入进程环境，不能只填在.env里就声称ADC生效。
 
@@ -121,7 +124,9 @@ OpenAI key使用本轮ChatGPT安全设置入口或组织已有安全发放流程
 `check`只检查当前实际配置。字段缺失退出2；字段齐全退出0，但输出始终包含`live_ready=false`与`inference_verified=not_run`。
 原生Codex/Google认证标为managed-not-checked；输入了一个token只能标为supplied，不是verified。
 `core_fields_complete`仅覆盖text/review/asr/tts字段，image/vision分别列明；不允许拿它替代图片D-M。
-缺什么就补什么；可选图片缺项不能阻止离线语音播放器任务。完整live交付仍需要账号、adapter与真实测试。
+`adapter`只表示所选能力路线上是否存在明确的开发入口，与字段完整、登录／账户权限、真实推理和默认应用工厂装配分开：Codex原生text与JEV review指向`tools/live_dev.py`；Google STT V2与Gemini TTS指向`tools/live_voice.py`，均标为`implemented_in_explicit_development_entry`，同时`default_provider_factory_composed=false`。这只是代码存在及有界开发入口的状态；报告仍将`account_access`标成`not_run`，始终不声称已登录或验证服务。gateway／OpenAI通用text、image、vision仍标为`not_implemented`，不能因为某个Codex路线有实现就整体翻转。
+显式传入`--env-file`但文件不存在时，check返回固定原因码`explicit_env_file_missing`和选择正确文件／初始化项目模板的下一步；不会退回读取项目根`.env`，也不回显路径、文件内容或原始校验错误。
+缺什么就补什么；可选图片缺项不能阻止离线语音播放器任务。字段齐全与存在显式开发入口都不表示服务已就绪；完整live交付仍要有对应账号权限、明确准入和真实产品验收。
 
 ## 6. 有边界的元数据检查
 
@@ -141,10 +146,10 @@ python tools/api_env.py metadata --service jev
 
 ## 7. Codex接手规则
 
-1. 先读当前.env模板与本页，不读取或打印私密文件；检查只输出经过筛选的状态。
+1. 先读当前.env模板与本页，不读取或打印私密文件；检查只输出经过筛选的状态。显式`--env-file`必须指向现存文件；如果报`explicit_env_file_missing`，校正所选文件，或省略该选项使用项目根`.env`，需要新模板时先运行`init`。
 2. 默认离线开发，按env/对应模块运行定向测试；metadata须有本次授权。
 3. 别名、凭据与参数只通过loader；adapter接收不可变具名设置，不自行读环境变量。
-4. live工厂现在未实现，不能删除保护或让FixtureReview批准live输出来冒充接通。
+4. 默认`create_providers`对live启动保持fail-closed；Codex/JEV/Google的显式开发入口不代表已接入默认运行时。不能删除准入保护或让FixtureReview批准live输出来冒充接通。
 5. API真实小探针需后续明确调用范围和费用预算，并使用专门最小化日志；不要套会保存完整输出的record_check记录私人请求。
 6. 下一步只实现既定产品适配器和音频/角色任务，不继续扩建env管理平台。
 
@@ -157,5 +162,6 @@ python tools/api_env.py metadata --service jev
 - [S5 Google Chirp 3 STT](https://docs.cloud.google.com/speech-to-text/docs/models/chirp-3)：V2流式、地区与语言列表，组合仍需实测。
 - [S6 Google本地ADC](https://docs.cloud.google.com/docs/authentication/set-up-adc-local-dev-environment)：用户凭据、权限及本地文件风险。
 - [S7 OpenAI模型目录](https://developers.openai.com/api/reference/resources/models/methods/list)：GET模型目录，不替代推理调用。
+- [S8 Gemini 3.8 Flash TTS](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-flash-tts)：模型页列明Gemini Enterprise Agent Platform预览模型、`global` REST路径与`aiplatform.googleapis.com`。
 
 原项目基础：v0.6 M09/M10；自主交接阻断评审H04/H05/H10；ENV-01 spec与本次verification。借鉴来源保留不重写。

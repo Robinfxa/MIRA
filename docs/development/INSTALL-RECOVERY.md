@@ -4,7 +4,10 @@ This guide is for the immutable source-archive checkpoint published at commit [`
 
 ## Download and restore
 
-From the exact commit above, download all seven files listed by its checkpoint: the ZIP, `MIRA-CHECKPOINT-MANIFEST-20261003T1158Z.json`, `restore-checkpoint-20261003T1158Z.py`, `SHA256SUMS-20261003T1158Z.txt`, `BACKUP-README-20261003T1158Z.md`, `KNOWN-GAPS-20261003T1158Z.md`, and `RELEASE-EVIDENCE-20261003T1158Z.json`. Keep them together. Verify them before extraction:
+> [!NOTE]
+> Historical checkpoint ZIP packages and their corresponding `SHA256SUMS-*.txt` verification sidecars are preserved in the Git history / `archive/pre-final-20261007` branch, and are no longer kept loose in the `main` branch root. To recover historical snapshots, checkout the corresponding historical commit or archive branch.
+
+From the exact commit above (or the `archive/pre-final-20261007` branch), download all seven files listed by its checkpoint: the ZIP, `MIRA-CHECKPOINT-MANIFEST-20261003T1158Z.json`, `restore-checkpoint-20261003T1158Z.py`, `SHA256SUMS-20261003T1158Z.txt`, `BACKUP-README-20261003T1158Z.md`, `KNOWN-GAPS-20261003T1158Z.md`, and `RELEASE-EVIDENCE-20261003T1158Z.json`. Keep them together. Verify them before extraction:
 
 ```sh
 sha256sum -c SHA256SUMS-20261003T1158Z.txt

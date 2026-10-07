@@ -1,3 +1,5 @@
+> **历史归档说明 / Archive Notice**: 本文件所描述的历史发布包 ZIP 及对应的 `SHA256SUMS-*.txt` 校验文件已完整保留在 Git 历史与 `archive/pre-final-20261007` 归档分支中；当前 `main` 分支为主干展开源码，不在此保留指向旧 ZIP 的冗余清单。如需按历史包还原，请检出归档分支。
+
 # MIRA stage checkpoint: 2026-10-03 12:56 UTC
 
 A sanitized, recoverable **source archive** from one immutable candidate. Earlier backups remain unchanged. This does not by itself establish an expanded Git source tree or remote CI.

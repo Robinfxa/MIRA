@@ -1,0 +1,41 @@
+{
+  "feature": "IMG-SUBSCRIPTION-01",
+  "spec": "specs/features/IMG-SUBSCRIPTION-01/spec.md",
+  "requirements": [
+    {
+      "id": "IMGSUBSCRIPTION01-001",
+      "tests": [
+        "tests/contracts/test_subscription_images.py::test_exact_subscription_request_and_single_inline_png",
+        "tests/contracts/test_subscription_images.py::test_optional_auth_headers_and_independent_turn_identity",
+        "tests/contracts/test_subscription_images.py::test_invalid_request_never_resolves_credentials_or_dispatches",
+        "tests/contracts/test_subscription_images.py::test_no_endpoint_model_or_api_key_override_exists"
+      ]
+    },
+    {
+      "id": "IMGSUBSCRIPTION01-002",
+      "tests": [
+        "tests/contracts/test_subscription_images.py::test_invalid_subscription_credentials_are_safe_and_never_dispatch",
+        "tests/contracts/test_subscription_images.py::test_auth_refresh_failure_is_safe_single_attempt_and_never_falls_back",
+        "tests/contracts/test_subscription_images.py::test_construction_requires_bounded_injected_dependencies"
+      ]
+    },
+    {
+      "id": "IMGSUBSCRIPTION01-003",
+      "tests": [
+        "tests/contracts/test_subscription_images.py::test_response_must_be_one_complete_source_dto_image",
+        "tests/contracts/test_subscription_images.py::test_optional_response_metadata_is_accepted_without_entitlement_or_usage_claims",
+        "tests/contracts/test_subscription_images.py::test_source_serde_ignores_benign_metadata_and_does_not_require_mime",
+        "tests/contracts/test_subscription_images.py::test_benign_metadata_does_not_hide_explicit_failure_or_external_resource",
+        "tests/contracts/test_subscription_images.py::test_image_byte_and_base64_bounds",
+        "tests/contracts/test_subscription_images.py::test_downstream_pillow_still_rejects_invalid_raster",
+        "tests/contracts/test_subscription_images.py::test_http_is_bounded_redacted_and_never_retried_or_redirected"
+      ]
+    },
+    {
+      "id": "IMGSUBSCRIPTION01-004",
+      "tests": [
+        "tests/contracts/test_subscription_images.py::test_swallowed_cancellation_and_deadline_cannot_return_late_image"
+      ]
+    }
+  ]
+}

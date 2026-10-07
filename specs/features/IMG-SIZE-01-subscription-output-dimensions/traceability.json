@@ -1,0 +1,30 @@
+{
+  "feature": "IMG-SIZE-01",
+  "spec": "specs/features/IMG-SIZE-01-subscription-output-dimensions/spec.md",
+  "requirements": [
+    {
+      "id": "IMGSIZE01-001",
+      "tests": [
+        "tests/contracts/test_image_output_dimensions.py::test_subscription_actual_dimensions_reach_bound_resource_and_shown_tool_result"
+      ]
+    },
+    {
+      "id": "IMGSIZE01-002",
+      "tests": [
+        "tests/contracts/test_image_output_dimensions.py::test_api_returned_non_square_fails_before_review_without_refund",
+        "tests/contracts/test_image_output_dimensions.py::test_dimension_policy_rejects_unsupported_and_oversized_before_decompression",
+        "tests/contracts/test_image_output_dimensions.py::test_landscape_retains_container_pixel_opacity_and_byte_guards",
+        "tests/contracts/test_image_output_dimensions.py::test_shared_decoder_uses_each_validated_raster_dimensions_without_cross_job_state",
+        "tests/contracts/test_image_output_dimensions.py::test_review_rejects_unbound_dimensions_pixels_or_route_policy_before_http",
+        "tests/contracts/test_image_output_dimensions.py::test_landscape_transport_retains_job_on_input_and_cancels_explicit_fences"
+      ]
+    },
+    {
+      "id": "IMGSIZE01-003",
+      "tests": [
+        "tests/contracts/test_image_output_dimensions.py::test_failed_image_fact_survives_new_input_cleanup_without_refund",
+        "tests/contracts/test_image_output_dimensions.py::test_terminal_release_is_idempotent_but_pending_release_cancels"
+      ]
+    }
+  ]
+}

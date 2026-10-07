@@ -1,0 +1,24 @@
+F.....                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_awaiting_dialogue_reason_survives_actual_actor_privacy_export_and_read __
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-126/test_awaiting_dialogue_reason_0')
+
+    @pytest.mark.asyncio
+    async def test_awaiting_dialogue_reason_survives_actual_actor_privacy_export_and_read(tmp_path):
+        s=WireSession();sink=Sink();s.a._diagnostics=sink
+        try:
+            await s.turn('我是夏he',story_call('x.recognize',act='claim_role',text='我是夏he'))
+            result,state=await s.turn('继续说吧',story_call('x.story',cue='PRIVATE_CONTROL_SENTINEL'))
+            assert result['status']=='pending' and result['phase']=='awaiting_dialogue'
+            event=rows(sink)[-1]
+            assert event.native_tool.status=='pending'
+>           assert event.native_tool.reason=='awaiting_dialogue'
+E           AssertionError: assert None == 'awaiting_dialogue'
+E            +  where None = SafeNativeToolDiagnostic(tool='advance_story', status='pending', output_epoch=2, activity_seq=2, transition='x.story',...on=None, chapter_before='recognized', chapter_after='recognized', role_before=True, role_after=True, receipt_kind=None).reason
+E            +    where SafeNativeToolDiagnostic(tool='advance_story', status='pending', output_epoch=2, activity_seq=2, transition='x.story',...on=None, chapter_before='recognized', chapter_after='recognized', role_before=True, role_after=True, receipt_kind=None) = DiagnosticEvent(stage=<DiagnosticStage.NATIVE_TOOL: 'native_tool'>, outcome=<DiagnosticOutcome.SUCCEEDED: 'succeeded'>...n=None, chapter_before='recognized', chapter_after='recognized', role_before=True, role_after=True, receipt_kind=None)).native_tool
+
+tests/contracts/test_native_tool_diagnostics.py:172: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_tool_diagnostics.py::test_awaiting_dialogue_reason_survives_actual_actor_privacy_export_and_read
+1 failed, 5 passed in 0.39s

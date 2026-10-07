@@ -19,9 +19,30 @@ MAX_RESPONSE_BYTES = 256 * 1024
 MODEL_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}")
 CORE_CAPABILITIES = ("text", "review", "asr", "tts")
 
+# These routes have concrete, deliberately opt-in development entries. This is
+# implementation inventory only: it says nothing about login, entitlement,
+# inference, or composition into the normal application provider factory.
+DEVELOPMENT_ENTRYPOINTS = {
+    ("text", "codex_native"): "tools/live_dev.py",
+    ("review", "jev"): "tools/live_dev.py",
+    ("asr", "google_cloud_stt_v2"): "tools/live_voice.py",
+    ("tts", "google_gemini_enterprise_tts"): "tools/live_voice.py",
+}
+
 
 class ServicePreparationError(ValueError):
     """Messages contain fixed reason codes, never credential or response values."""
+
+
+def _adapter_status(capability: str, route: str) -> dict[str, Any]:
+    entrypoint = DEVELOPMENT_ENTRYPOINTS.get((capability, route))
+    return {
+        "adapter": ("implemented_in_explicit_development_entry" if entrypoint else "not_implemented"),
+        "adapter_entrypoint": entrypoint,
+        # All supported live entries are explicit tools, not the default app
+        # factory. Keep that readiness boundary visible in the offline report.
+        "default_provider_factory_composed": False,
+    }
 
 
 def credential_present(key: SecretStr | None) -> bool:
@@ -57,14 +78,15 @@ def inspect_services(settings: Settings, *, executable_available: bool = False) 
             if route == "gateway" and not services.gateway.access_confirmed:
                 missing.append("gateway_access_confirmation")
         rows[capability] = {"route": route, "fields_complete": not missing, "missing": missing,
-                            "authentication": auth, "account_access": "not_run", "adapter": "not_implemented"}
+                            "authentication": auth, "account_access": "not_run",
+                            **_adapter_status(capability, route)}
     missing = []
     if not credential_present(services.jev.api_key):
         missing.append("typesafe_credential")
     if services.jev.model is None:
         missing.append("model_selection")
     rows["review"] = {"route": "jev", "fields_complete": not missing, "missing": missing,
-                      "account_access": "not_run", "adapter": "not_implemented"}
+                      "account_access": "not_run", **_adapter_status("review", "jev")}
     for capability in ("asr", "tts"):
         missing = []
         if not services.speech.project_id:
@@ -76,7 +98,7 @@ def inspect_services(settings: Settings, *, executable_available: bool = False) 
         rows[capability] = {"route": route,
                             "fields_complete": not missing, "missing": missing,
                             "authentication": "google_adc_not_checked", "account_access": "not_run",
-                            "adapter": "not_implemented"}
+                            **_adapter_status(capability, route)}
         if capability == "tts":
             rows[capability].update(model=services.speech.tts_model,
                                     location=services.speech.tts_location,

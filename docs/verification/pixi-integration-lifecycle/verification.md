@@ -1,0 +1,9 @@
+# Close and full-frame layout integration evidence
+
+The first Close-test invocation used a wrong compiled output path and failed during import; this is setup evidence, not the behavioral RED. Correcting that test path against the exact0328 compiled controller produced two behavioral failures and one legacy-control pass: optional renderer destruction was never called, and a throwing renderer Stop prevented later cleanup. The narrow controller change then passed the focused tests plus UNKNOWN, main/IME and speech-phase regressions:26 cases total. The new fourth control confirms ordinary Stop does not destroy the renderer, and Close does. Tests use real compiled SessionController with synthetic resource ports, not WebGL or physical audio.
+
+The layout test was also run against0328 CSS: the new Pixi-ready selector was absent, producing one failure while the independent geometry control passed. Current CSS passes both controls. It fits only committed Pixi frames, preserves old SVG fallback rules, uses object-fit:contain and full stage-height bounds, and reduces decorative copy on narrow screens. These are static contract/math checks, not browser screenshots or human acceptance.
+
+This slice predates the separate all-visual serialized preparation change. That change needs its own regression and frozen integration run; these receipts must not be applied to later source without rerunning.
+
+2026-10-04 05:15 update: a new static control first failed because ready Pixi left the hidden SVG animation subtree in layout, then passed after a marker-scoped display:none rule. Three layout controls pass. Removing the marker restores the unchanged SVG rule. Current geometry is estimated at about103px face height on390px viewports and136px desktop; actual pixel/CPU/device measurements remain unverified.

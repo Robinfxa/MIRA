@@ -1,0 +1,21 @@
+{
+  "feature": "LUNA-02",
+  "spec": "specs/features/LUNA-02-media-composition/spec.md",
+  "requirements": [
+    {"id": "LUNA02-001", "tests": [
+      "tests/contracts/test_media_tool_composition.py::test_tool_provider_injection_is_explicit_and_legacy_default_stays_absent",
+      "tests/contracts/test_media_tool_composition.py::test_two_request_tool_turn_preserves_declared_total_and_caption_planner"
+    ]},
+    {"id": "LUNA02-002", "tests": [
+      "tests/contracts/test_media_tool_composition.py::test_custom_fiction_consent_is_visible_and_does_not_enable_images",
+      "tests/contracts/test_media_tool_composition.py::test_cli_exposes_custom_brief_consent_and_explicit_legacy_mode"
+    ]},
+    {"id": "LUNA02-003", "tests": [
+      "tests/contracts/test_media_tool_composition.py::test_existing_caption_planner_can_expand_one_complete_tool_result"
+    ]},
+    {"id": "LUNA02-004", "tests": [
+      "tests/contracts/test_media_tool_composition.py::test_tool_wire_keeps_roleplay_names_separate_from_true_asset_source",
+      "tests/contracts/test_media_tool_composition.py::test_fixed_photo_deduplication_compares_actual_target"
+    ]}
+  ]
+}

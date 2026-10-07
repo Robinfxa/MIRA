@@ -1,0 +1,61 @@
+{
+  "started_utc": "2026-10-07T00:15:39.006857+00:00",
+  "probe": "in-process ASGI rehearsal /fail then 你好; no browser/audio/device verification",
+  "network_calls_permitted": false,
+  "previous_probe_corrections": [
+    "Run 1 tried a nonexistent Settings.profile attribute before sending input.",
+    "Run 2 incorrectly expected an error state to be sealed. Error is terminal with request_id null and sealed false."
+  ],
+  "configuration": {
+    "requested_profile": "rehearsal",
+    "external_calls": false,
+    "paid_api": false
+  },
+  "capabilities": {
+    "generation_mode": "rehearsal",
+    "qualification": "offline_fixture",
+    "speech_enabled": true,
+    "microphone_enabled": false
+  },
+  "health": {
+    "mode": "rehearsal",
+    "live_audio": false,
+    "live_llm": false
+  },
+  "steps": [
+    {
+      "input": "/fail",
+      "status_code": 202,
+      "phase": "error",
+      "sealed": false,
+      "last_error": "generation_failed",
+      "request_active": false,
+      "grants": []
+    },
+    {
+      "input": "你好",
+      "status_code": 202,
+      "phase": "ready",
+      "sealed": true,
+      "last_error": null,
+      "request_active": true,
+      "grants": [
+        {
+          "kind": "speech",
+          "value": "Hello, I am Mira. This is an offline rehearsal. Shall we look at a travel illustration together?"
+        },
+        {
+          "kind": "subtitle",
+          "value": "你好，我是 MIRA。这是离线排练。要一起看看旅行插画吗？\nHello, I am Mira. This is an offline rehearsal. Shall we look at a travel illustration together?"
+        },
+        {
+          "kind": "pose",
+          "value": "face_curious"
+        }
+      ]
+    }
+  ],
+  "status": "passed",
+  "blocked_network_attempts": 0,
+  "finished_utc": "2026-10-07T00:15:39.683759+00:00"
+}

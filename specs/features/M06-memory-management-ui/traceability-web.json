@@ -1,0 +1,144 @@
+{
+  "feature": "M06-memory-management-ui",
+  "spec": "specs/features/M06-memory-management-ui/spec.md",
+  "checker_note": "Web-specific sidecar; tests/web/*.test.mjs are uniquely owned by the web lane.",
+  "owner": "tests/quality.toml web lane: tests/web/*.test.mjs",
+  "requirements": [
+    {
+      "id": "M06MMUI-001",
+      "tests": [
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "paired management markup is a collapsed, explicit, locally scoped surface"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "management, pairing, and chat forms retain exact selector semantics"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "main mounts only after pairing and only for the exact server management marker"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "page without both exact opt-in markers never mounts the management module"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "disabled server declaration shows the default-off explanation and never reads entries"
+        },
+        {
+          "file": "tests/web/controller-main.test.mjs",
+          "case": "actual three-form markup binds chat only to the composer"
+        }
+      ]
+    },
+    {
+      "id": "M06MMUI-002",
+      "tests": [
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "the panel does not read before the collapsed disclosure is opened and uses bounded fixed GETs"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "legacy CLI text uses stored-entry limits distinct from the stricter editor limit"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "memory page text budget rejects a page whose rows exceed 128 KiB total"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "bounded pages use only the opaque cursor, support previous, and disclose the twenty-page cap"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "opaque cursors must canonically encode only the displayed revision and sequence"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "a committed edit from a later page refreshes from the new revision first page"
+        }
+      ]
+    },
+    {
+      "id": "M06MMUI-003",
+      "tests": [
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "record requires separate local consent, readable confirmation, and a single confirmed operation"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "write editor keeps its distinct 4096-codepoint and 16KiB UTF-8 bound"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "correct, soft-forget, and restore send only their contracted target fields"
+        }
+      ]
+    },
+    {
+      "id": "M06MMUI-004",
+      "tests": [
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "Stop clears an unsubmitted confirmation and does not claim a sent operation was undone"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "uncertain write is never automatic and reconciliation repeats the byte-identical operation"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "conflict and raw error text are reduced to fixed safe UI messages"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "authentication loss after a loaded page clears private entries and drafts"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "response bodies remain bounded after headers and invalid X-Request-ID values never surface"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "late reads and writes are aborted and fenced on close, with private text cleared"
+        }
+      ]
+    },
+    {
+      "id": "M06MMUI-005",
+      "tests": [
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "paired management markup is a collapsed, explicit, locally scoped surface"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "conflict and raw error text are reduced to fixed safe UI messages"
+        },
+        {
+          "file": "tests/web/memory-management.test.mjs",
+          "case": "late reads and writes are aborted and fenced on close, with private text cleared"
+        }
+      ]
+    }
+  ],
+  "executions": [
+    {
+      "run_id": "m06-memory-management-ui-20261004T1633Z-web",
+      "command": "MIRA_TEST_WEB_DIST=/workspace/shared/mira-memory-management-evidence/20261004T1535Z/web-dist-8 node --test tests/web/*.test.mjs",
+      "environment": "Node v24.19.0; TypeScript strict typecheck; external MIRA_TEST_WEB_DIST build",
+      "result": "Bundle build and typecheck passed; web lane 311 passed, 0 failed. Includes 19 local-memory management UI tests and the actual three-form composer-selector regression.",
+      "artifacts": [
+        "/workspace/shared/mira-memory-management-evidence/20261004T1535Z/027-typecheck.log",
+        "/workspace/shared/mira-memory-management-evidence/20261004T1535Z/028-build.log",
+        "/workspace/shared/mira-memory-management-evidence/20261004T1535Z/029-web-lane.log"
+      ],
+      "scope": "Synthetic fake DOM/fetch only; no real browser, local database, user data, pairing code, model, or provider."
+    }
+  ],
+  "verification_boundary": "Synthetic fake DOM/fetch only; no real browser, local database, user data, pairing code, model, or provider. Rendered pixels remain for user acceptance."
+}

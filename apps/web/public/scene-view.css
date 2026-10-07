@@ -1,0 +1,55 @@
+/* One authored camera/view cut. It reuses the accepted local plates and whole
+   character render; there is no walking, rig change or timer completion. */
+.stage[data-scene="rain_window"] .scene-environment {
+  background-image: url("/assets/scene/cafe-night.svg");
+  background-size: auto 180%;
+  background-position: 78% 25%;
+  background-repeat: no-repeat;
+  transform: none !important;
+  filter: none;
+  transition: none !important;
+}
+.stage[data-background-version="painterly-v3"][data-scene="rain_window"] .scene-environment {
+  background-image: url("/assets/scene/cafe-painterly-lighting-v3-table-free.png"), url("/assets/scene/cafe-night.svg");
+  background-size: auto 210%, auto 180%;
+  background-position: 100% 46%, 78% 25%;
+  transform: none !important;
+  transition: none !important;
+}
+.stage[data-scene="rain_window"]:not([data-character-renderer-mode="code-native-review"]) .character-anchor:not([data-renderer="pixi"]),
+.stage[data-scene="rain_window"] .character-anchor,
+.stage[data-character-renderer-mode="code-native-review"][data-scene="rain_window"] .character-anchor,
+.stage[data-scene="rain_window"] .character-anchor[data-renderer="pixi"] {
+  top: 0; right: 48%; bottom: 0; left: auto;
+  width: 46%; max-width: 520px; height: auto;
+  transform: none !important;
+  transition: none !important;
+}
+.stage[data-scene="rain_window"] .scene-copy { visibility: hidden; }
+.stage[data-scene="rain_window"] .steam { display: none; }
+.stage[data-scene="rain_window"] .rain-layer { opacity: 0; animation: none; }
+.stage[data-scene="rain_window"] .scene-warmth { opacity: .02; transition: none !important; }
+.stage[data-scene="rain_window"] .window-reflection { opacity: .08; }
+@media (max-width: 720px) {
+  .stage[data-scene="rain_window"] .scene-environment { background-position: 76% 30%; }
+  .stage[data-background-version="painterly-v3"][data-scene="rain_window"] .scene-environment {
+    background-size: auto 180%, auto 180%; background-position: 92% 46%, 76% 30%;
+  }
+  .stage[data-scene="rain_window"]:not([data-character-renderer-mode="code-native-review"]) .character-anchor:not([data-renderer="pixi"]),
+.stage[data-scene="rain_window"] .character-anchor,
+  .stage[data-character-renderer-mode="code-native-review"][data-scene="rain_window"] .character-anchor,
+  .stage[data-scene="rain_window"] .character-anchor[data-renderer="pixi"] {
+    right: 25%; left: auto; width: 75%; max-width: none;
+  }
+}
+/* Keep an already-presented photo away from the relocated torso and camera. */
+.stage[data-scene="rain_window"] .stage-visual .photo {
+  left: auto; right: 7%; top: 49%; bottom: auto;
+  width: 200px;
+}
+@media (max-width: 720px) {
+  .stage[data-scene="rain_window"] .stage-visual .photo {
+    left: auto; right: 24px; top: 56px; bottom: auto;
+    width: 118px; transform: rotate(3deg); padding: 6px 6px 9px;
+  }
+}

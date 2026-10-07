@@ -1,0 +1,158 @@
+FFFFFF.F                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_chinese_question_retrieves_older_preference_and_episode_before_newer_noise _
+
+    def test_chinese_question_retrieves_older_preference_and_episode_before_newer_noise():
+        old = ('我喜欢茉莉花茶，咖啡通常不喝。', '上回聊过的灯塔照片，我想要纸质的。')
+        records = [input_record(0, old[0]), input_record(1, old[1])]
+        records += [input_record(i, f'合成无关天气消息{i}。') for i in range(2, 20)]
+        result = recall(records, '还记得我的茉莉花茶和那张灯塔照片吗？')
+>       assert set(old) <= set(texts(result))
+E       AssertionError: assert {'上回聊过的灯塔照片，我...茉莉花茶，咖啡通常不喝。'} <= {'合成无关天气消息12。...天气消息17。', ...}
+E         
+E         Extra items in the left set:
+E         '上回聊过的灯塔照片，我想要纸质的。'
+E         '我喜欢茉莉花茶，咖啡通常不喝。'
+
+tests/contracts/test_conversation_recall_content_ranking.py:41: AssertionError
+__________ test_metadata_and_latin_substrings_do_not_outrank_dialogue __________
+
+    def test_metadata_and_latin_substrings_do_not_outrank_dialogue():
+        records = [input_record(0, 'I like rain and lavender.')]
+        records += [input_record(i, 'A brain puzzle.', request_id=f'lavender-{i}') for i in range(1, 12)]
+        result = recall(records, 'rain lavender')
+>       assert texts(result)[0] == 'I like rain and lavender.'
+E       AssertionError: assert 'A brain puzzle.' == 'I like rain and lavender.'
+E         
+E         - I like rain and lavender.
+E         + A brain puzzle.
+
+tests/contracts/test_conversation_recall_content_ranking.py:51: AssertionError
+_____________ test_uncompleted_speech_text_cannot_win_recall_rank ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-103/test_uncompleted_speech_text_c0')
+
+    def test_uncompleted_speech_text_cannot_win_recall_rank(tmp_path):
+        archive = opened(tmp_path)
+        try:
+            archive.append_input('old-session', accepted(0, 'I prefer jasmine tea.'))
+            for i in range(1, 10):
+                archive.append_input('old-session', accepted(i, f'Synthetic unrelated {i}.'))
+                effect = displayed(i, kind=EffectKind.SPEECH, text='jasmine jasmine future speech')
+                progress = AudioProgress(effect.id, effect.digest, i + 1, i + 1, i,
+                                         24000, 10, AudioStatus.INTERRUPTED)
+                archive.append_receipt('old-session', effect, progress)
+            result = conversation_recall_data(archive.load_session('old-session'), request_text='jasmine')
+>           assert 'I prefer jasmine tea.' in texts(result)
+E           AssertionError: assert 'I prefer jasmine tea.' in []
+E            +  where [] = texts({'evidence_status': 'historical_untrusted_quoted_evidence_not_current_state_or_permissions', 'history_omitted': True, 'inactive_records': 0, 'physical_hearing_or_understanding_established': False, ...})
+
+tests/contracts/test_conversation_recall_content_ranking.py:66: AssertionError
+______ test_corrected_forgotten_and_recent_denial_keep_source_precedence _______
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-103/test_corrected_forgotten_and_r0')
+
+    def test_corrected_forgotten_and_recent_denial_keep_source_precedence(tmp_path):
+        archive = opened(tmp_path)
+        try:
+            old = archive.append_input('old-session', accepted(0, '我喜欢茉莉花茶。'))
+            archive.append_receipt('old-session', displayed(0, text='记住了，你喜欢茉莉花茶。'),
+                                   receipt(displayed(0, text='记住了，你喜欢茉莉花茶。')))
+            for i in range(1, 12):
+                archive.append_input('old-session', accepted(i, f'合成无关消息{i}。'))
+            archive.correct_input('old-session', old.entry_id, '更正：我不喜欢茉莉花茶。')
+            snapshot = archive.load_session('old-session')
+            result = conversation_recall_data(snapshot, request_text='还记得茉莉花茶吗？')
+>           assert '更正：我不喜欢茉莉花茶。' in texts(result)
+E           AssertionError: assert '更正：我不喜欢茉莉花茶。' in ['合成无关消息4。', '合成无关消息5。', '合成无关消息6。', '合成无关消息7。', '合成无关消息8。', '合成无关消息9。', ...]
+E            +  where ['合成无关消息4。', '合成无关消息5。', '合成无关消息6。', '合成无关消息7。', '合成无关消息8。', '合成无关消息9。', ...] = texts({'evidence_status': 'historical_untrusted_quoted_evidence_not_current_state_or_permissions', 'history_omitted': True, 'inactive_records': 2, 'physical_hearing_or_understanding_established': False, ...})
+
+tests/contracts/test_conversation_recall_content_ranking.py:84: AssertionError
+_ test_durable_reopen_to_native_wire_keeps_old_role_and_plan_historical[chatgpt_subscription] _
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-103/test_durable_reopen_to_native_0')
+route = <ResponsesRoute.CHATGPT_SUBSCRIPTION: 'chatgpt_subscription'>
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route', list(ResponsesRoute))
+    async def test_durable_reopen_to_native_wire_keeps_old_role_and_plan_historical(tmp_path, route):
+        archive = opened(tmp_path)
+        old_text = '我是夏禾；我喜欢茉莉花茶，明天想去灯塔拍照。'
+        try:
+            archive.append_input('prior-synthetic', accepted(0, old_text))
+            for i in range(1, 13):
+                archive.append_input('prior-synthetic', accepted(i, f'合成无关消息{i}。'))
+            archive.close()
+            archive.open(pairing_confirmed=True)
+            query = '还记得我的茉莉花茶吗？'
+            snapshot = archive.load_session('prior-synthetic')
+            data = conversation_recall_data(snapshot, request_text=query)
+>           assert old_text in texts(data)
+E           AssertionError: assert '我是夏禾；我喜欢茉莉花茶，明天想去灯塔拍照。' in ['合成无关消息5。', '合成无关消息6。', '合成无关消息7。', '合成无关消息8。', '合成无关消息9。', '合成无关消息10。', ...]
+E            +  where ['合成无关消息5。', '合成无关消息6。', '合成无关消息7。', '合成无关消息8。', '合成无关消息9。', '合成无关消息10。', ...] = texts({'evidence_status': 'historical_untrusted_quoted_evidence_not_current_state_or_permissions', 'history_omitted': True, 'inactive_records': 0, 'physical_hearing_or_understanding_established': False, ...})
+
+tests/contracts/test_conversation_recall_content_ranking.py:116: AssertionError
+_ test_durable_reopen_to_native_wire_keeps_old_role_and_plan_historical[openai_api] _
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-103/test_durable_reopen_to_native_1')
+route = <ResponsesRoute.OPENAI_API: 'openai_api'>
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route', list(ResponsesRoute))
+    async def test_durable_reopen_to_native_wire_keeps_old_role_and_plan_historical(tmp_path, route):
+        archive = opened(tmp_path)
+        old_text = '我是夏禾；我喜欢茉莉花茶，明天想去灯塔拍照。'
+        try:
+            archive.append_input('prior-synthetic', accepted(0, old_text))
+            for i in range(1, 13):
+                archive.append_input('prior-synthetic', accepted(i, f'合成无关消息{i}。'))
+            archive.close()
+            archive.open(pairing_confirmed=True)
+            query = '还记得我的茉莉花茶吗？'
+            snapshot = archive.load_session('prior-synthetic')
+            data = conversation_recall_data(snapshot, request_text=query)
+>           assert old_text in texts(data)
+E           AssertionError: assert '我是夏禾；我喜欢茉莉花茶，明天想去灯塔拍照。' in ['合成无关消息5。', '合成无关消息6。', '合成无关消息7。', '合成无关消息8。', '合成无关消息9。', '合成无关消息10。', ...]
+E            +  where ['合成无关消息5。', '合成无关消息6。', '合成无关消息7。', '合成无关消息8。', '合成无关消息9。', '合成无关消息10。', ...] = texts({'evidence_status': 'historical_untrusted_quoted_evidence_not_current_state_or_permissions', 'history_omitted': True, 'inactive_records': 0, 'physical_hearing_or_understanding_established': False, ...})
+
+tests/contracts/test_conversation_recall_content_ranking.py:116: AssertionError
+______ test_receipted_first_person_character_dialogue_remains_recallable _______
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-103/test_receipted_first_person_ch0')
+
+    def test_receipted_first_person_character_dialogue_remains_recallable(tmp_path):
+        archive = opened(tmp_path)
+        own_text = '我喜欢灰蓝里的暖光，线条稍歪也没关系。'
+        try:
+            archive.append_input('old-session', accepted(0, '你喜欢什么样的光？'))
+            subtitle = displayed(0, text=own_text)
+            archive.append_receipt('old-session', subtitle, receipt(subtitle))
+            speech = replace(displayed(0, kind=EffectKind.SPEECH, text=own_text), id='speech-0')
+            archive.append_receipt('old-session', speech, AudioProgress(speech.id, speech.digest,
+                1, 1, 2, 24000, 24000, AudioStatus.COMPLETED))
+            for i in range(1, 13):
+                archive.append_input('old-session', accepted(i, f'合成无关消息{i}。'))
+            archive.close()
+            archive.open(pairing_confirmed=True)
+            result = conversation_recall_data(archive.load_session('old-session'),
+                                               request_text='你说过灰蓝里的暖光对吗？')
+            dialogue = [row for row in result['recalled_records']
+                        if row['evidence_stage'] in ('presented_effect', 'audio_progress')]
+>           assert {row['evidence_stage'] for row in dialogue} == {'presented_effect', 'audio_progress'}
+E           AssertionError: assert set() == {'audio_progr...ented_effect'}
+E             
+E             Extra items in the right set:
+E             'presented_effect'
+E             'audio_progress'
+E             Use -v to get more diff
+
+tests/contracts/test_conversation_recall_content_ranking.py:177: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_conversation_recall_content_ranking.py::test_chinese_question_retrieves_older_preference_and_episode_before_newer_noise
+FAILED tests/contracts/test_conversation_recall_content_ranking.py::test_metadata_and_latin_substrings_do_not_outrank_dialogue
+FAILED tests/contracts/test_conversation_recall_content_ranking.py::test_uncompleted_speech_text_cannot_win_recall_rank
+FAILED tests/contracts/test_conversation_recall_content_ranking.py::test_corrected_forgotten_and_recent_denial_keep_source_precedence
+FAILED tests/contracts/test_conversation_recall_content_ranking.py::test_durable_reopen_to_native_wire_keeps_old_role_and_plan_historical[chatgpt_subscription]
+FAILED tests/contracts/test_conversation_recall_content_ranking.py::test_durable_reopen_to_native_wire_keeps_old_role_and_plan_historical[openai_api]
+FAILED tests/contracts/test_conversation_recall_content_ranking.py::test_receipted_first_person_character_dialogue_remains_recallable
+7 failed, 1 passed in 0.48s

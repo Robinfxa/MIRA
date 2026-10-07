@@ -1,0 +1,41 @@
+{
+  "feature": "FAST",
+  "spec": "specs/features/FAST-01-requested-tier/spec.md",
+  "requirements": [
+    {
+      "id": "FAST-001",
+      "tests": [
+        "tests/contracts/test_direct_service_tier.py::test_request_tier_selection",
+        "tests/contracts/test_direct_service_tier.py::test_invalid_tier_rejected_before_io"
+      ]
+    },
+    {
+      "id": "FAST-002",
+      "tests": [
+        "tests/contracts/test_direct_service_tier.py::test_terminal_tier_observation_is_closed_and_optional",
+        "tests/contracts/test_direct_service_tier.py::test_created_tier_is_not_final_confirmation",
+        "tests/contracts/test_direct_service_tier.py::test_observer_failure_does_not_fail_content",
+        "tests/contracts/test_direct_service_tier.py::test_tier_observation_resets_for_each_request",
+        "tests/contracts/test_direct_service_tier.py::test_tier_error_diagnostic_roundtrips_and_legacy_fields_remain_optional"
+      ]
+    },
+    {
+      "id": "FAST-003",
+      "tests": [
+        "tests/contracts/test_direct_service_tier.py::test_rejected_tier_is_recoverable_without_retry",
+        "tests/contracts/test_direct_service_tier.py::test_other_errors_keep_original_classification",
+        "tests/contracts/test_direct_service_tier.py::test_cancel_keeps_no_extra_calls",
+        "tests/contracts/test_direct_service_tier.py::test_sse_tier_rejection_is_visible_without_retry",
+        "tests/contracts/test_direct_service_tier.py::test_top_level_sse_tier_rejection_is_actionable",
+        "tests/contracts/test_direct_service_tier.py::test_transport_timeout_has_no_retry_or_false_confirmation"
+      ]
+    },
+    {
+      "id": "FAST-004",
+      "tests": [
+        "tests/contracts/test_direct_service_tier.py::test_check_declares_requested_tier_without_auth",
+        "tests/contracts/test_direct_service_tier.py::test_cli_passes_selection_and_safe_observer"
+      ]
+    }
+  ]
+}

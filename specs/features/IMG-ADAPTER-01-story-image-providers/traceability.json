@@ -1,0 +1,55 @@
+{
+  "feature": "IMG-ADAPTER-01",
+  "spec": "specs/features/IMG-ADAPTER-01-story-image-providers/spec.md",
+  "requirements": [
+    {
+      "id": "IMGADAPTER01-001",
+      "tests": [
+        "tests/contracts/test_story_image_adapters.py::test_image_request_is_one_explicit_official_png_without_private_context",
+        "tests/contracts/test_story_image_adapters.py::test_image_rejects_non_final_single_png_without_trusting_provider_description",
+        "tests/contracts/test_story_image_adapters.py::test_invalid_image_request_never_dispatches",
+        "tests/contracts/test_story_image_adapters.py::test_image_base64_bound_is_checked_before_decode",
+        "tests/contracts/test_story_image_adapters.py::test_options_require_explicit_bounded_model_and_quality",
+        "tests/contracts/test_story_image_adapters.py::test_transports_do_not_accept_raw_or_subscription_credentials"
+      ]
+    },
+    {
+      "id": "IMGADAPTER01-002",
+      "tests": [
+        "tests/contracts/test_story_image_adapters.py::test_http_rejects_bad_transport_once_and_redacts_provider_body",
+        "tests/contracts/test_story_image_adapters.py::test_cancellation_propagates_and_closes_stream_without_retry",
+        "tests/contracts/test_story_image_adapters.py::test_total_deadline_includes_waiting_for_body_without_retry",
+        "tests/contracts/test_story_image_adapter_regressions.py::test_suppressed_cancellation_cannot_survive_await_or_cleanup"
+      ]
+    },
+    {
+      "id": "IMGADAPTER01-003",
+      "tests": [
+        "tests/contracts/test_story_image_adapters.py::test_review_transmits_exact_png_and_only_bounded_spec_and_checks",
+        "tests/contracts/test_story_image_adapters.py::test_review_rejects_unbound_or_malformed_observations",
+        "tests/contracts/test_story_image_adapters.py::test_review_preserves_failed_or_unassessable_checks",
+        "tests/contracts/test_story_image_adapters.py::test_review_requires_exactly_one_completed_structured_message",
+        "tests/contracts/test_story_image_adapters.py::test_review_refuses_wrong_pixel_binding_before_dispatch",
+        "tests/contracts/test_story_image_adapters.py::test_review_refuses_noncanonical_or_mislabeled_pixels_before_dispatch"
+      ]
+    },
+    {
+      "id": "IMGADAPTER01-004",
+      "tests": [
+        "tests/contracts/test_story_image_adapters.py::test_decoder_strips_metadata_preserves_exact_pixels_and_is_idempotent",
+        "tests/contracts/test_story_image_adapters.py::test_decoder_rejects_non_png_truncation_and_wrong_dimensions",
+        "tests/contracts/test_story_image_adapters.py::test_decoder_rejects_animation_and_dimension_bomb",
+        "tests/contracts/test_story_image_adapters.py::test_decoder_rejects_bad_crc_trailing_data_and_input_byte_overflow",
+        "tests/contracts/test_story_image_adapters.py::test_decoder_accepts_only_fully_opaque_alpha_without_changing_pixels",
+        "tests/contracts/test_story_image_adapters.py::test_decoder_rejects_truncation_tolerance_without_mutating_global_settings",
+        "tests/contracts/test_story_image_adapters.py::test_decoder_rejects_truncated_deflate_with_valid_container_crc",
+        "tests/contracts/test_story_image_adapter_regressions.py::test_png_requires_exact_bounded_complete_deflate_stream",
+        "tests/contracts/test_story_image_adapter_regressions.py::test_png_split_idat_is_one_valid_compressed_stream",
+        "tests/contracts/test_story_image_adapter_regressions.py::test_fully_opaque_palette_array_keeps_every_pixel",
+        "tests/contracts/test_story_image_adapter_regressions.py::test_complete_zlib_stream_cannot_hide_extra_uncompressed_raster",
+        "tests/contracts/test_story_image_adapter_regressions.py::test_valid_adam7_pixels_still_use_maintained_decoder",
+        "tests/contracts/test_story_image_adapter_regressions.py::test_valid_packed_palette_rows_still_decode"
+      ]
+    }
+  ]
+}

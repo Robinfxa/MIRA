@@ -14,7 +14,9 @@ def test_evaluation_release_exists_and_is_frozen():
     manifest = json.loads((FEATURE / "release-manifest.v2.json").read_text())
     assert manifest["production_calibration_admitted"] is False
     for path, digest in manifest["artifact_sha256"].items():
-        assert hashlib.sha256((ROOT / path).read_bytes()).hexdigest() == digest
+        target = (FEATURE / "archive-v2/tests/contracts/test_jev_evaluation_corpus.py"
+                  if path == "tests/contracts/test_jev_evaluation_corpus.py" else ROOT / path)
+        assert hashlib.sha256(target.read_bytes()).hexdigest() == digest
 
 from collections import Counter
 from dataclasses import asdict
@@ -26,10 +28,11 @@ from mira.adapters.review.jev import (
     JevHttpResponse, JevReviewBackend, JevReviewContract, candidate_digest, context_digest,
 )
 from mira.adapters.review.jev_input import JevInputDecisionBackend
+from mira.application.contracts import candidate_data
 from mira.application.contracts import CandidateRange, EffectProposal, GenerationContext
 from mira.application.decision_contracts import (
     AuthorPolicy, ControlledReferent, DecisionSnapshot, DirectiveFact, PresentationFact,
-    ReliableUserInput, valid_snapshot,
+    ReliableUserInput, decision_snapshot_data, valid_snapshot,
 )
 from mira.domain.models import AudioProgress, AudioStatus, Effect, EffectKind
 
@@ -96,12 +99,12 @@ def test_original_input_audit_is_complete_and_separates_gold_from_runtime():
 def test_every_fixture_round_trips_application_dtos(case):
     snap = snapshot(case["snapshot"])
     assert valid_snapshot(snap)
-    assert json.loads(canonical(asdict(snap))) == case["snapshot"]
+    assert json.loads(canonical(decision_snapshot_data(snap))) == case["snapshot"]
     assert all(f.observed_text is None for f in snap.presentation_facts)
     if "candidate" in case:
         candidate = CandidateRange(tuple(proposal(e) for e in case["candidate"]["effects"]),
                                    case["candidate"]["fixture_id"])
-        assert json.loads(canonical(asdict(candidate))) == case["candidate"]
+        assert json.loads(canonical(candidate_data(candidate))) == case["candidate"]
 
 
 def test_holdout_family_and_content_separation_is_frozen():

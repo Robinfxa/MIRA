@@ -4,7 +4,14 @@ import json
 import math
 import re
 import unicodedata
-from dataclasses import dataclass, fields
+from dataclasses import asdict, dataclass, fields
+
+from mira.application.generation_diagnostics import SafeGenerationDiagnostic
+from mira.application.fixed_photo_diagnostics import SafeFixedPhotoDiagnostic
+from mira.application.wardrobe_diagnostics import SafeWardrobeDiagnostic
+from mira.application.optional_candidate_diagnostics import SafeOptionalCandidateDiagnostic
+from mira.application.image_readiness import SafeImageReadinessDiagnostic
+from mira.application.native_tool_diagnostics import SafeNativeToolDiagnostic
 
 from mira.application.diagnostic_events import (
     CancellationReason,
@@ -18,6 +25,13 @@ from mira.application.diagnostic_events import (
     RecordingKind,
     ReviewedRecording,
     correlation_hash,
+)
+from mira.application.contracts import (
+    ReportedConfidenceWarning, ResponseChoice, ResponseValidationReason, ResponseWireType,
+    SafeResponseAnswerFacts, SafeResponseValidation,
+)
+from mira.application.choice_wire_policy import (
+    CHOICE_WIRE_POLICY_REPORTED_V2, SUPPORTED_CHOICE_WIRE_POLICIES,
 )
 
 _CONTEXT_KEYS = tuple(field.name for field in fields(DiagnosticContext))
@@ -53,6 +67,11 @@ _CREDENTIAL_KEYS = frozenset((
 _QUOTED_ASSIGNMENT = re.compile(r"[\"']([^\"'\\\r\n]{1,256})[\"']\s*[:=]")
 _JSON_START = re.compile(r"[\[{]")
 _NON_JSON_ESCAPE = re.compile(r'\\(?:["\\]|u[0-9a-fA-F]{4})')
+_RESPONSE_VALIDATION_KEYS = tuple(field.name for field in fields(SafeResponseValidation))
+_RESPONSE_ANSWER_KEYS = tuple(field.name for field in fields(SafeResponseAnswerFacts))
+_RESPONSE_QUESTION_SUFFIX = re.compile(r"(?:o[1-6]|effect_[0-7]|event_[0-7]|event_scope|completed_claim_present|story_relevance|story_willingness|story_refusal|specific_notice|affect_supported)\Z")
+_RESPONSE_NOUL_SUFFIXES = frozenset({"completed_claim_present", "story_relevance",
+    "story_willingness", "story_refusal", "specific_notice"})
 
 
 def _credential_key(value: str) -> bool:
@@ -140,6 +159,228 @@ def _number(value, *, minimum=0, maximum=86400000):
     return round(value, 3)
 
 
+def _bounded_count(value, *, maximum: int, optional: bool = True):
+    if value is None and optional:
+        return None
+    if type(value) is not int or not 0 <= value <= maximum:
+        raise ValueError("invalid response diagnostic count")
+    return value
+
+
+def _bounded_range(value, *, maximum: float):
+    if value is None:
+        return None
+    if type(value) is not tuple or len(value) != 2:
+        raise ValueError("invalid response diagnostic range")
+    lower = _optional_probability(value[0], maximum=maximum)
+    upper = _optional_probability(value[1], maximum=maximum)
+    if lower is None or upper is None or lower > upper:
+        raise ValueError("invalid response diagnostic range")
+    return [lower, upper]
+
+
+def _optional_probability(value, *, maximum: float = 1.0):
+    if value is None:
+        return None
+    if type(value) is int:
+        if not 0 <= value <= maximum:
+            raise ValueError("invalid response diagnostic probability")
+        return float(value)
+    if (type(value) is not float or not math.isfinite(value)
+            or not 0 <= value <= maximum):
+        raise ValueError("invalid response diagnostic probability")
+    return value
+
+
+def _encode_response_answer_facts(value: SafeResponseAnswerFacts) -> dict:
+    if type(value) is not SafeResponseAnswerFacts:
+        raise ValueError("invalid response answer diagnostics")
+    suffix = value.question_suffix
+    if type(suffix) is not str or not _RESPONSE_QUESTION_SUFFIX.fullmatch(suffix):
+        raise ValueError("invalid response question suffix")
+    try:
+        wire_type = ResponseWireType(value.answer_wire_type).value
+        reason = (ResponseValidationReason(value.answer_reason).value
+                  if value.answer_reason is not None else None)
+        choice = ResponseChoice(value.choice).value if value.choice is not None else None
+    except (TypeError, ValueError):
+        raise ValueError("invalid response answer diagnostics") from None
+    is_noul = suffix in _RESPONSE_NOUL_SUFFIXES
+    if (type(value.expected_probability_count) is not int
+            or value.expected_probability_count != (0 if is_noul else 3)):
+        raise ValueError("invalid response answer diagnostics")
+    if (value.selected_is_maximum is not None and type(value.selected_is_maximum) is not bool
+            or value.confidence_consistent is not None and type(value.confidence_consistent) is not bool
+            or value.confidence_mismatch_warning is not None
+            and type(value.confidence_mismatch_warning) is not bool):
+        raise ValueError("invalid response answer diagnostics")
+    if (is_noul and (value.choice is not None
+                     or value.probability_field_count is not None
+                     or value.confidence is not None or value.selected_probability is not None
+                     or value.maximum_probability is not None or value.probability_sum is not None
+                     or value.selected_is_maximum is not None
+                     or value.confidence_consistent is not None
+                     or value.confidence_mismatch_warning is not None)):
+        raise ValueError("invalid response answer diagnostics")
+    if not is_noul and value.noul_probability is not None:
+        raise ValueError("invalid response answer diagnostics")
+    result = {
+        "question_suffix": suffix,
+        "answer_wire_type": wire_type,
+        "answer_reason": reason,
+        "choice": choice,
+        "answer_field_count": _bounded_count(value.answer_field_count, maximum=64),
+        "unexpected_answer_field_count": _bounded_count(
+            value.unexpected_answer_field_count, maximum=64),
+        "expected_probability_count": value.expected_probability_count,
+        "probability_field_count": _bounded_count(value.probability_field_count, maximum=64),
+        "unexpected_probability_field_count": _bounded_count(
+            value.unexpected_probability_field_count, maximum=64),
+        "valid_probability_count": _bounded_count(value.valid_probability_count, maximum=3,
+                                                    optional=False),
+        "confidence": _optional_probability(value.confidence),
+        "selected_probability": _optional_probability(value.selected_probability),
+        "maximum_probability": _optional_probability(value.maximum_probability),
+        "probability_sum": _optional_probability(value.probability_sum, maximum=3),
+        "selected_is_maximum": value.selected_is_maximum,
+        "confidence_consistent": value.confidence_consistent,
+    }
+    if is_noul:
+        result["noul_probability"] = _optional_probability(value.noul_probability)
+    if value.confidence_mismatch_warning is not None:
+        result["confidence_mismatch_warning"] = value.confidence_mismatch_warning
+    return result
+
+
+def _encode_response_validation(value: SafeResponseValidation) -> dict:
+    if type(value) is not SafeResponseValidation:
+        raise ValueError("invalid response diagnostics")
+    try:
+        reason = ResponseValidationReason(value.parser_reason).value
+        wire_type = ResponseWireType(value.response_wire_type).value
+    except (TypeError, ValueError):
+        raise ValueError("invalid response diagnostics") from None
+    response_bytes = _bounded_count(value.response_bytes, maximum=64 * 1024 + 1)
+    expected = _bounded_count(value.expected_answer_count, maximum=20)
+    answer_count = _bounded_count(value.answer_count, maximum=64)
+    missing = _bounded_count(value.missing_answer_count, maximum=20)
+    unexpected = _bounded_count(value.unexpected_answer_count, maximum=64)
+    invalid = _bounded_count(value.invalid_answer_count, maximum=20)
+    invalid_probabilities = _bounded_count(value.invalid_probability_count, maximum=20)
+    nonfinite = _bounded_count(value.nonfinite_numeric_count, maximum=64)
+    oversized = _bounded_count(value.oversized_integer_count, maximum=64)
+    digest = value.response_sha256
+    if digest is not None and (type(digest) is not str or not re.fullmatch(r"[0-9a-f]{64}", digest)):
+        raise ValueError("invalid response diagnostics")
+    if type(value.answer_facts) is not tuple or len(value.answer_facts) > 20:
+        raise ValueError("invalid response answer diagnostics")
+    answer_facts = [_encode_response_answer_facts(item) for item in value.answer_facts]
+    suffixes = [item["question_suffix"] for item in answer_facts]
+    if len(suffixes) != len(set(suffixes)):
+        raise ValueError("duplicate response question suffix")
+    if expected is not None and len(answer_facts) != expected:
+        raise ValueError("response answer diagnostic count mismatch")
+    result = {
+        "parser_reason": reason, "response_wire_type": wire_type,
+        "response_bytes": response_bytes, "response_sha256": digest,
+        "expected_answer_count": expected, "answer_count": answer_count,
+        "missing_answer_count": missing, "unexpected_answer_count": unexpected,
+        "invalid_answer_count": invalid, "invalid_probability_count": invalid_probabilities,
+        "nonfinite_numeric_count": nonfinite, "oversized_integer_count": oversized,
+        "selected_probability_range": _bounded_range(value.selected_probability_range, maximum=1),
+        "confidence_range": _bounded_range(value.confidence_range, maximum=1),
+        "probability_sum_range": _bounded_range(value.probability_sum_range, maximum=3),
+        "answer_facts": answer_facts,
+    }
+    if value.choice_wire_policy_version is not None:
+        if value.choice_wire_policy_version not in SUPPORTED_CHOICE_WIRE_POLICIES:
+            raise ValueError("invalid response choice wire policy")
+        if (value.choice_wire_policy_version == CHOICE_WIRE_POLICY_REPORTED_V2
+                and any(("confidence_mismatch_warning" in item)
+                         if item["question_suffix"] in _RESPONSE_NOUL_SUFFIXES else
+                         item.get("confidence_mismatch_warning") not in (True, False)
+                        for item in answer_facts)):
+            raise ValueError("invalid reported-confidence warning facts")
+        result["choice_wire_policy_version"] = value.choice_wire_policy_version
+    return result
+
+
+def _encode_reported_confidence_warning(value: ReportedConfidenceWarning) -> dict:
+    if (type(value) is not ReportedConfidenceWarning
+            or value.choice_wire_policy_version != CHOICE_WIRE_POLICY_REPORTED_V2):
+        raise ValueError("invalid reported-confidence warning")
+    maximum = _optional_probability(value.maximum_probability)
+    confidence = _optional_probability(value.confidence)
+    probability_sum = _optional_probability(value.probability_sum, maximum=3)
+    if maximum is None or confidence is None or probability_sum is None:
+        raise ValueError("invalid reported-confidence warning")
+    return {"choice_wire_policy_version": CHOICE_WIRE_POLICY_REPORTED_V2,
+            "maximum_probability": maximum, "confidence": confidence,
+            "probability_sum": probability_sum}
+
+
+def _reported_confidence_warning_from_record(value) -> ReportedConfidenceWarning:
+    if type(value) is not dict or set(value) != {
+            "choice_wire_policy_version", "maximum_probability", "confidence", "probability_sum"}:
+        raise ValueError("invalid reported-confidence warning")
+    try:
+        warning = ReportedConfidenceWarning(**value)
+    except (TypeError, ValueError):
+        raise ValueError("invalid reported-confidence warning") from None
+    _encode_reported_confidence_warning(warning)
+    return warning
+
+
+def _response_answer_facts_from_record(value) -> tuple[SafeResponseAnswerFacts, ...]:
+    if type(value) is not list or len(value) > 20:
+        raise ValueError("invalid response answer diagnostics")
+    result = []
+    for item in value:
+        legacy_keys = set(_RESPONSE_ANSWER_KEYS) - {"noul_probability", "confidence_mismatch_warning"}
+        no_warning_keys = set(_RESPONSE_ANSWER_KEYS) - {"confidence_mismatch_warning"}
+        choice_warning_keys = set(_RESPONSE_ANSWER_KEYS) - {"noul_probability"}
+        if type(item) is not dict or set(item) not in (
+                set(_RESPONSE_ANSWER_KEYS), legacy_keys, no_warning_keys, choice_warning_keys):
+            raise ValueError("invalid response answer diagnostics")
+        converted = dict(item)
+        try:
+            converted["answer_wire_type"] = ResponseWireType(converted["answer_wire_type"])
+            if converted["answer_reason"] is not None:
+                converted["answer_reason"] = ResponseValidationReason(converted["answer_reason"])
+            if converted["choice"] is not None:
+                converted["choice"] = ResponseChoice(converted["choice"])
+            answer = SafeResponseAnswerFacts(**converted)
+        except (TypeError, ValueError):
+            raise ValueError("invalid response answer diagnostics") from None
+        _encode_response_answer_facts(answer)
+        result.append(answer)
+    suffixes = [item.question_suffix for item in result]
+    if len(suffixes) != len(set(suffixes)):
+        raise ValueError("duplicate response question suffix")
+    return tuple(result)
+
+
+def _response_validation_from_record(value) -> SafeResponseValidation:
+    legacy_keys = set(_RESPONSE_VALIDATION_KEYS) - {"choice_wire_policy_version"}
+    if type(value) is not dict or set(value) not in (set(_RESPONSE_VALIDATION_KEYS), legacy_keys):
+        raise ValueError("invalid response diagnostics")
+    converted = dict(value)
+    for key in ("selected_probability_range", "confidence_range", "probability_sum_range"):
+        item = converted[key]
+        if item is not None:
+            if type(item) is not list or len(item) != 2:
+                raise ValueError("invalid response diagnostic range")
+            # Serializer checks bounds, exact numeric types and finiteness.
+            converted[key] = tuple(item)
+    converted["answer_facts"] = _response_answer_facts_from_record(converted["answer_facts"])
+    try:
+        checked = SafeResponseValidation(**converted)
+    except (TypeError, ValueError):
+        raise ValueError("invalid response diagnostics") from None
+    _encode_response_validation(checked)
+    return checked
+
+
 def encode_event(event: DiagnosticEvent, now: float) -> dict:
     if type(event) is not DiagnosticEvent:
         raise ValueError("invalid event")
@@ -160,12 +401,61 @@ def encode_event(event: DiagnosticEvent, now: float) -> dict:
         if type(event.http_status) is not int or not 100 <= event.http_status <= 599:
             raise ValueError("invalid status")
         result["http_status"] = event.http_status
+    if event.native_tool is not None:
+        if type(event.native_tool) is not SafeNativeToolDiagnostic or event.stage != DiagnosticStage.NATIVE_TOOL:
+            raise ValueError('invalid native tool diagnostic')
+        event.native_tool.__post_init__()
+        result['native_tool'] = asdict(event.native_tool)
+    if event.image_readiness is not None:
+        if (type(event.image_readiness) is not SafeImageReadinessDiagnostic
+                or event.stage != DiagnosticStage.IMAGE_READINESS):
+            raise ValueError('invalid image readiness diagnostic')
+        event.image_readiness.__post_init__()
+        result['image_readiness'] = asdict(event.image_readiness)
+    if event.wardrobe is not None:
+        if type(event.wardrobe) is not SafeWardrobeDiagnostic or event.stage != DiagnosticStage.WARDROBE:
+            raise ValueError('invalid wardrobe diagnostic')
+        event.wardrobe.__post_init__()
+        result['wardrobe'] = asdict(event.wardrobe)
+    if event.optional_candidate_hold is not None:
+        value = event.optional_candidate_hold
+        if (type(value) is not SafeOptionalCandidateDiagnostic
+                or event.stage != DiagnosticStage.GENERATION
+                or event.kind != DiagnosticKind.STATE_CHANGED or event.outcome != DiagnosticOutcome.DROPPED):
+            raise ValueError('invalid optional candidate diagnostic')
+        value.__post_init__()
+        result['optional_candidate_hold'] = {**asdict(value), 'reasons': list(value.reasons)}
+    if event.fixed_photo is not None:
+        if type(event.fixed_photo) is not SafeFixedPhotoDiagnostic or event.stage != DiagnosticStage.FIXED_PHOTO:
+            raise ValueError('invalid fixed photo diagnostic')
+        event.fixed_photo.__post_init__()
+        result['fixed_photo'] = asdict(event.fixed_photo)
+    if event.generation_diagnostic is not None:
+        value = event.generation_diagnostic
+        if (type(value) is not SafeGenerationDiagnostic or event.stage != DiagnosticStage.GENERATION
+                or event.outcome != DiagnosticOutcome.FAILED):
+            raise ValueError('invalid generation diagnostics')
+        value.__post_init__()
+        result['generation_diagnostic'] = asdict(value)
+        for key in ('event_types','snapshot_item_types','snapshot_item_statuses','snapshot_message_phases'):
+            result['generation_diagnostic'][key] = list(getattr(value,key))
+    if event.response_validation is not None:
+        result["response_validation"] = _encode_response_validation(event.response_validation)
+    if event.reported_confidence_warning is not None:
+        if (DiagnosticStage(event.stage) != DiagnosticStage.INPUT_REVIEW
+                or DiagnosticOutcome(event.outcome) not in
+                (DiagnosticOutcome.SUCCEEDED, DiagnosticOutcome.FAILED)):
+            raise ValueError("reported-confidence warning requires input review event")
+        result["reported_confidence_warning"] = _encode_reported_confidence_warning(
+            event.reported_confidence_warning)
     return result
 
 
 def validate_event_record(record: dict) -> dict:
     required = {"schema", "record_type", "timestamp", "stage", "kind", "outcome", "context"}
-    optional = {"code", "cancellation_reason", "duration_ms", "http_status"}
+    optional = {"code", "cancellation_reason", "duration_ms", "http_status",
+                "response_validation", "reported_confidence_warning", "generation_diagnostic", "fixed_photo", "wardrobe",
+                "optional_candidate_hold", "image_readiness", "native_tool"}
     if (type(record) is not dict or not required <= record.keys()
             or record.keys() - required - optional or type(record["schema"]) is not int
             or record["schema"] != 1 or record["record_type"] != "event"):
@@ -174,9 +464,77 @@ def validate_event_record(record: dict) -> dict:
     if (type(context) is not dict or context.keys() - set(_CONTEXT_KEYS)
             or any(type(value) is not str or not _HASH.fullmatch(value) for value in context.values())):
         raise ValueError("invalid correlation")
+    native_tool = None
+    if 'native_tool' in record:
+        value = record['native_tool']
+        if type(value) is not dict or set(value) != {f.name for f in fields(SafeNativeToolDiagnostic)}:
+            raise ValueError('invalid native tool diagnostic')
+        native_tool = SafeNativeToolDiagnostic(**value)
+    image_readiness = None
+    if 'image_readiness' in record:
+        value = record['image_readiness']
+        current_fields = {f.name for f in fields(SafeImageReadinessDiagnostic)}
+        operation_fields = {'operation_stage', 'failure_reason', 'failure_exception',
+            'png_width', 'png_height', 'png_dimensions', 'png_mode', 'png_bit_depth', 'png_alpha'}
+        job_fields={'job_state','job_event_reason','job_origin_epoch','job_origin_activity','completion_state'}
+        if type(value) is not dict or set(value) not in (current_fields,current_fields-operation_fields,
+                current_fields-job_fields,current_fields-operation_fields-job_fields):
+            raise ValueError('invalid image readiness diagnostic')
+        image_readiness = SafeImageReadinessDiagnostic(**value)
+    wardrobe = None
+    optional_candidate_hold = None
+    if 'optional_candidate_hold' in record:
+        value = record['optional_candidate_hold']
+        if (type(value) is not dict or set(value) != {f.name for f in fields(SafeOptionalCandidateDiagnostic)}
+                or type(value.get('reasons')) is not list):
+            raise ValueError('invalid optional candidate diagnostic')
+        optional_candidate_hold = SafeOptionalCandidateDiagnostic(**{**value, 'reasons': tuple(value['reasons'])})
+    if 'wardrobe' in record:
+        value = record['wardrobe']
+        if type(value) is not dict or set(value) != {f.name for f in fields(SafeWardrobeDiagnostic)}:
+            raise ValueError('invalid wardrobe diagnostic')
+        wardrobe = SafeWardrobeDiagnostic(**value)
+    fixed_photo = None
+    if 'fixed_photo' in record:
+        value = record['fixed_photo']
+        if type(value) is not dict or set(value) != {f.name for f in fields(SafeFixedPhotoDiagnostic)}:
+            raise ValueError('invalid fixed photo diagnostic')
+        fixed_photo = SafeFixedPhotoDiagnostic(**value)
+    generation_diagnostic = None
+    if 'generation_diagnostic' in record:
+        value = record['generation_diagnostic']
+        allowed = {f.name for f in fields(SafeGenerationDiagnostic)}
+        required = allowed - {'content_type', 'content_length_kind', 'header_failure', 'body_kind',
+                              'header_compatibility', 'snapshot_output_kind', 'snapshot_item_count',
+                              'snapshot_message_count', 'snapshot_reasoning_count', 'snapshot_item_types',
+                              'snapshot_item_statuses', 'snapshot_message_phases', 'completed_message_count',
+                              'completed_reasoning_count', 'delta_message_count', 'unmatched_delta_count',
+                              'completed_text_bytes', 'snapshot_text_bytes', 'snapshot_matches_stream',
+                              'terminal_compatibility', 'json_failure_kind', 'wrapper_shape',
+                              'requested_service_tier', 'request_service_tier', 'provider_service_tier'}
+        if (type(value) is not dict or not required <= value.keys() or value.keys() - allowed
+                or type(value.get('event_types')) is not list):
+            raise ValueError('invalid generation diagnostics')
+        converted = dict(value)
+        for key in ('event_types','snapshot_item_types','snapshot_item_statuses','snapshot_message_phases'):
+            if key in converted:
+                if type(converted[key]) is not list:
+                    raise ValueError('invalid generation terminal shape')
+                converted[key] = tuple(converted[key])
+        generation_diagnostic = SafeGenerationDiagnostic(**converted)
+    response_validation = (_response_validation_from_record(record["response_validation"])
+                           if "response_validation" in record else None)
+    reported_confidence_warning = (
+        _reported_confidence_warning_from_record(record["reported_confidence_warning"])
+        if "reported_confidence_warning" in record else None)
     event = DiagnosticEvent(stage=record["stage"], kind=record["kind"], outcome=record["outcome"],
         code=record.get("code"), cancellation_reason=record.get("cancellation_reason"),
-        duration_ms=record.get("duration_ms"), http_status=record.get("http_status"))
+        duration_ms=record.get("duration_ms"), http_status=record.get("http_status"),
+        response_validation=response_validation,
+        generation_diagnostic=generation_diagnostic, fixed_photo=fixed_photo, wardrobe=wardrobe,
+        image_readiness=image_readiness, native_tool=native_tool,
+        optional_candidate_hold=optional_candidate_hold,
+        reported_confidence_warning=reported_confidence_warning)
     checked = encode_event(event, record["timestamp"])
     checked["context"] = dict(context)
     return checked

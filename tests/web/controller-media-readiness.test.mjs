@@ -321,7 +321,7 @@ test('a transient decode rejection can recover on a later input without stale re
   } finally { await h.close(); }
 });
 
-test('unique unresolved visual preparations stay capped and cancel together', async () => {
+test('media preparation stays strictly serial and Stop cancels the current grant', async () => {
   const pending = [];
   const started = [];
   const image = makeImage();
@@ -335,14 +335,14 @@ test('unique unresolved visual preparations stay capped and cancel together', as
   });
   try {
     await h.startPhoto();
-    assert.equal(started.length, 4, 'at most four unique resource preparations may be pending');
+    assert.equal(started.length, 1, 'the earliest media grant owns the preparation lane');
     assert.equal(h.slots.get('photo').hidden, true);
     assert.deepEqual(h.receipts, []);
     await h.controller.install({ ...h.current, revision: h.current.revision + 1 });
     await settle();
-    assert.equal(started.length, 4, 'repeated snapshots cannot duplicate pending work');
+    assert.equal(started.length, 1, 'repeated snapshots cannot duplicate or pass pending work');
     await h.stop();
-    assert.ok(started.every(run => run.signal.aborted));
+    assert.ok(started[0].signal.aborted);
     pending.forEach(task => task.resolve());
     await settle();
     assert.equal(h.slots.get('photo').hidden, true);

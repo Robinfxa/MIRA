@@ -19,7 +19,7 @@ def selected():
 
 
 def context(text, presented=(), accepted=()):
-    return GenerationContext(text, (text,), presented, 1, accepted_prefix=accepted)
+    return GenerationContext(text, (text,), presented, 1, accepted_prefix=accepted, photo_visible=bool(presented))
 
 
 def photo():

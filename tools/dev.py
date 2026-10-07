@@ -64,11 +64,15 @@ def select_python(explicit: str | None) -> str:
     raise StartupError("Missing compatible Python/runtime dependencies. " + INSTALL_HELP)
 
 
-def compiler_command() -> list[str]:
-    compiler = ROOT / "node_modules/typescript/bin/tsc"
+def web_build_command() -> list[str]:
     node = shutil.which("node")
-    if node is None or not compiler.is_file():
-        raise StartupError("Missing Node.js or declared TypeScript compiler. " + INSTALL_HELP)
+    if node is None:
+        raise StartupError(
+            "Node.js 22.12+ and npm must be installed before project setup; bootstrap does not install Node. "
+            "Install Node.js with npm, then run python tools/bootstrap.py for project dependencies."
+        )
+    compiler = ROOT / "node_modules/typescript/bin/tsc"
+    esbuild = ROOT / "node_modules/esbuild/lib/main.js"
     try:
         result = subprocess.run([node, "--version"], capture_output=True, text=True,
                                 timeout=10, env=child_environment())
@@ -77,7 +81,14 @@ def compiler_command() -> list[str]:
     version = re.fullmatch(r"v(\d+)\.(\d+)\.(\d+)\s*", result.stdout)
     if result.returncode or version is None or tuple(map(int, version.groups())) < (22, 12, 0):
         raise StartupError("Node.js 22.12+ is required; no tools were installed.")
-    return [node, str(compiler)]
+    if not compiler.is_file() or not esbuild.is_file():
+        raise StartupError(
+            "Missing declared TypeScript/esbuild build dependencies. "
+            "Install project dependencies explicitly with python tools/bootstrap.py."
+        )
+    # Building uses only the locked local compiler/bundler. Starting npm for
+    # this script may also start npm's update-notifier, which is unnecessary IO.
+    return [node, str(ROOT / "tools/build_web.mjs")]
 
 
 def demo_settings(*, root: Path, profile: str, port: int, scenario: str):
@@ -92,7 +103,7 @@ def demo_settings(*, root: Path, profile: str, port: int, scenario: str):
     })
 
 
-def serve(*, profile: str, port: int, scenario: str) -> None:
+def serve(*, profile: str, port: int, scenario: str, character_renderer: str='static-pixi') -> None:
     # Explicit settings preserve the application's single loader/composition root.
     # Do not invoke python -m mira here: that is the configuration-aware entrypoint.
     sys.path.insert(0, str(ROOT / "apps/api/src"))
@@ -101,7 +112,8 @@ def serve(*, profile: str, port: int, scenario: str) -> None:
     from mira.entrypoints.http.app import create_app
 
     settings = demo_settings(root=ROOT, profile=profile, port=port, scenario=scenario)
-    uvicorn.run(create_app(settings, web_root=ROOT / "apps/web"),
+    uvicorn.run(create_app(settings, web_root=ROOT / "apps/web",
+                          **({'character_renderer':character_renderer} if character_renderer!='static-pixi' else {})),
                 host=settings.http.host, port=settings.http.port, workers=1,
                 access_log=False, ws_max_size=32768, ws_max_queue=8)
 
@@ -123,25 +135,27 @@ def main() -> int:
     parser.add_argument("--replay-scenario", choices=("photo-tour", "delayed-photo", "failed-tail"),
                         default="photo-tour")
     parser.add_argument("--port", type=demo_port, default=8000)
+    parser.add_argument('--character-renderer',choices=('static-pixi','code-native-review'),default='code-native-review')
     parser.add_argument("--no-bootstrap", action="store_true",
                         help="compatibility option; startup never installs dependencies")
     parser.add_argument("--serve", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     try:
         if args.serve:
-            serve(profile=args.profile, port=args.port, scenario=args.replay_scenario)
+            serve(profile=args.profile, port=args.port, scenario=args.replay_scenario,
+                  **({'character_renderer':args.character_renderer} if args.character_renderer!='static-pixi' else {}))
             return 0
         python = select_python(args.python)
-        compiler = compiler_command()
+        build = web_build_command()
         env = child_environment()
         subprocess.run([python, str(ROOT / "tools/export_contracts.py"), "--check"],
                        cwd=ROOT, env=env, check=True, timeout=45)
-        subprocess.run([*compiler, "-p", "apps/web/tsconfig.json"],
-                       cwd=ROOT, env=env, check=True, timeout=90)
+        subprocess.run(build, cwd=ROOT, env=env, check=True, timeout=90)
         print(f"MIRA offline {args.profile} demo: starting http://127.0.0.1:{args.port}; "
               "no dotenv, service credentials, or live providers loaded.", flush=True)
         subprocess.run([python, str(ROOT / "tools/dev.py"), "--serve", "--profile", args.profile,
-                        "--port", str(args.port), "--replay-scenario", args.replay_scenario],
+                        "--port", str(args.port), "--replay-scenario", args.replay_scenario,
+                        '--character-renderer',args.character_renderer],
                        cwd=ROOT, env=env, check=True)
         return 0
     except KeyboardInterrupt:

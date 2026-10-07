@@ -1,6 +1,7 @@
 """Private approved-context admission; all transports here are synthetic."""
 import hashlib
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
 
@@ -51,6 +52,7 @@ def test_development_context_drift_fails_closed(drift):
 def test_development_argv_preserves_managed_proxy_and_disables_cloud_capabilities():
     runtime, _, _ = development()
     args = process._argv(runtime)
+    assert args.index('--no-daemon') < args.index('app-server')
     assert 'orchestrator.mcp.enabled=false' in args
     assert 'cloud.skills.enabled=false' in args
     assert 'features.respect_system_proxy=true' not in args
@@ -102,6 +104,76 @@ def with_approved_environment(runtime, environment):
     approval = replace(runtime.development_context,
                        managed_environment_sha256=hashlib.sha256(canonical(environment)).hexdigest())
     return replace(runtime, development_context=approval, environment=environment)
+
+
+def test_managed_home_defaults_to_official_home_codex_without_inserting_override():
+    runtime, _, _ = development()
+    environment = dict(runtime.environment)
+    environment.pop('CODEX_HOME')
+    environment['HOME'] = '/synthetic'
+    runtime = replace(runtime, codex_home=Path('/synthetic/.codex'))
+    runtime = with_approved_environment(runtime, environment)
+
+    child_environment = process._process_environment(runtime)
+
+    assert child_environment['HOME'] == '/synthetic'
+    assert 'CODEX_HOME' not in child_environment
+
+
+@pytest.mark.parametrize('home', ['', 'relative/home', '/synthetic/../synthetic'])
+def test_managed_home_fallback_rejects_unsafe_or_noncanonical_home(home):
+    runtime, _, _ = development()
+    environment = dict(runtime.environment)
+    environment.pop('CODEX_HOME')
+    environment['HOME'] = home
+    runtime = with_approved_environment(runtime, environment)
+    with pytest.raises(types.CodexGenerationError, match='home_drift'):
+        process._process_environment(runtime)
+
+
+def test_managed_home_fallback_rejects_missing_home_and_mismatched_runtime_home():
+    runtime, _, _ = development()
+    environment = dict(runtime.environment)
+    environment.pop('CODEX_HOME')
+    runtime = with_approved_environment(runtime, environment)
+    with pytest.raises(types.CodexGenerationError, match='home_drift'):
+        process._process_environment(runtime)
+
+    environment['HOME'] = '/synthetic'
+    runtime = with_approved_environment(runtime, environment)
+    with pytest.raises(types.CodexGenerationError, match='home_drift'):
+        process._process_environment(runtime)
+
+
+@pytest.mark.parametrize('codex_home', ['', 'relative/home'])
+def test_managed_home_rejects_invalid_explicit_codex_home(codex_home):
+    runtime, _, _ = development()
+    runtime = with_approved_environment(runtime, dict(runtime.environment, CODEX_HOME=codex_home))
+    with pytest.raises(types.CodexGenerationError, match='home_drift'):
+        process._process_environment(runtime)
+
+
+def test_managed_home_rejects_bad_home_even_with_explicit_override():
+    runtime, _, _ = development()
+    runtime = with_approved_environment(runtime, dict(runtime.environment, HOME='relative'))
+    with pytest.raises(types.CodexGenerationError, match='home_drift'):
+        process._process_environment(runtime)
+
+
+def test_managed_home_fallback_rejects_symlinked_home(tmp_path):
+    target = tmp_path / 'actual-home'
+    target.mkdir()
+    alias = tmp_path / 'home-link'
+    alias.symlink_to(target, target_is_directory=True)
+    runtime, _, _ = development()
+    environment = dict(runtime.environment)
+    environment.pop('CODEX_HOME')
+    environment['HOME'] = str(alias)
+    runtime = replace(runtime, codex_home=target / '.codex')
+    runtime = with_approved_environment(runtime, environment)
+
+    with pytest.raises(types.CodexGenerationError, match='home_drift'):
+        process._process_environment(runtime)
 
 @pytest.mark.parametrize('key', ['CODEX_API_KEY','OPENAI_API_KEY','OPENAI_BASE_URL',
                                  'CODEX_ACCESS_TOKEN','CODEX_REFRESH_TOKEN_URL_OVERRIDE','TYPESAFE_API_KEY'])

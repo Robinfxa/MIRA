@@ -1,42 +1,31 @@
 # MIRA offline rehearsal quickstart
 
-This guide restores and runs the **14:48 offline rehearsal** from its pinned archive. The public [14:48 commit](https://github.com/Robinfxa/MIRA/commit/e123a169cacf6e1432e2b85952508070e725c9c0) contains backup files, not an expanded app tree. Use this exact commit rather than a moving branch.
+Use one verified published source stage. For the current split delivery, keep its code ZIP, both asset ZIPs, split-source manifest, matching restore helper, SHA list and START-HERE together. Follow that START-HERE restore command into a fresh directory; the helper verifies all declared source bytes and modes. These sidecars ship beside the ZIPs, not inside the restored source. Older single-ZIP checkpoints retain their own documented restore formats; never mix parts/helpers from different stages or overwrite newer source with a historical checkpoint.
 
-The frozen release and restored projection each passed 1,155 Python tests and 185 Node tests across 12 local release lanes. A later local HTTP rehearsal reproduced a remaining ordering issue: a delayed receipt for an already-presented photo can arrive after the next prompt's context is captured and lead to an incorrect “not opened” follow-up. This evidence is not live-provider, browser/device, or product acceptance. See the [14:48 known-issue notice](../mission/acceptance-status-1448.md) and the archive's `KNOWN-ISSUE-ADDENDUM-20261003T1448Z.md`.
+The current snapshot and acceptance boundary are in the bundled [README](../../README.md). This guide does not promise a completed live model/voice interaction or all-platform installation. No key is needed for the steps below.
 
-## 1. Fetch and safely restore
+## 1. Check prerequisites
 
-The pinned commit includes the archive, manifest, checksum list, safety notice, and replacement restore helper. It supersedes the historical assertion-based helpers in the earlier backups.
+Install Python 3.11–3.13 plus Node.js 22.12 or newer and npm from their official distributions. `python3 --version`, `node --version`, and `npm --version` must work in your terminal. Bootstrap installs locked project dependencies; it does not install Node/npm or change global packages.
 
-```sh
-git init mira-checkpoint
-cd mira-checkpoint
-git remote add origin https://github.com/Robinfxa/MIRA.git
-git fetch --depth 1 origin e123a169cacf6e1432e2b85952508070e725c9c0
-git checkout --detach FETCH_HEAD
-git rev-parse HEAD
-sha256sum -c SHA256SUMS-20261003T1448Z.txt
-python3 restore-checkpoint-explicit-20261003T1448Z.py \
-  mira-integration-20261003T1448Z.zip \
-  MIRA-CHECKPOINT-MANIFEST-20261003T1448Z.json \
-  ../mira-restored-1448
-cd ../mira-restored-1448
-```
+A fresh project directory on the existing Linux host was actually tested with Python3.12.14 (ensurepip25.0.1), Node24.19.0 and npm11.9.0, with cold project-local caches. Original bootstrap finished in54.837 seconds; rehearsal became HTTP healthy3.518 seconds after launch. The whole recorded attempt through server cleanup took5m55s. This is not a fresh-OS or user-device guarantee. The0837 dependency set subsequently proved to lack Uvicorn WebSocket support; its HTTP rehearsal timing does not establish real microphone transport.
 
-`git rev-parse HEAD` should print the pinned commit above. On macOS, use `shasum -a 256 -c SHA256SUMS-20261003T1448Z.txt`. The restore destination must not already exist; use a private existing parent directory without competing writers. The helper uses Python's standard library, validates hashes and safe paths explicitly, stages the output, and runs no archive code. Do not use the older `restore-checkpoint-20261003T1158Z.py`, `...1236Z.py`, or `...1256Z.py` helpers: their security checks use `assert`, which Python optimization can disable. SHA-256 checks establish consistency with the published list, not who authored the files or their authenticity.
+Check `python3 -m ensurepip --version` before bootstrap. One Python3.13.5 distribution here lacked ensurepip and failed before downloading anything; Python version alone is insufficient. Prefer an official Python distribution with venv/ensurepip. An existing trusted pip can explicitly target the new virtual environment with `EXISTING_PYTHON -m pip --python NEW_VENV_PYTHON install -r requirements/dev.lock`; this is an additional installation step, not evidence that the original one-command bootstrap succeeded. Do not change system Python or run a downloaded bootstrap script.
 
-## 2. Install declared dependencies and launch
+Linux is the tested runtime. macOS and physical phones await user acceptance. Windows is not currently an accepted target: the locked Starlette static-file implementation has a Windows-specific UNC-path advisory, so do not run this development server on Windows until that platform is separately remediated and tested.
 
-The README documents Python 3.11–3.13 and Node.js 22.12 or newer; this checkpoint pins Python 3.13 and Node 22.16.0. With a compatible Python and Node/npm on `PATH`, install the locked development dependencies into the project `.venv` and `node_modules`:
+## 2. Install locked dependencies and launch
+
+From the extracted project root:
 
 ```sh
 python3 tools/bootstrap.py
 sh scripts/dev --profile rehearsal
 ```
 
-Bootstrap needs package-registry access and does not install global packages. The launcher itself never installs packages, loads `.env`, forwards common provider credentials, or calls live providers; it builds the contracts and frontend, then serves on loopback at `http://127.0.0.1:8000`. If port 8000 is busy, use `sh scripts/dev --profile rehearsal --port 8123`. For an already-ready interpreter, add `--python /absolute/path/to/python`.
+Bootstrap needs the official package registries. The server launcher never installs dependencies, loads private `.env`, forwards provider credentials or calls live providers. It checks contracts, compiles the frontend and serves only loopback at `http://127.0.0.1:8000` on the computer where it runs. Open that address in your own browser on that computer; it is not a public link or a supported remote-preview promise. Stop with Ctrl+C.
 
-A clean dependency install and rehearsal startup were verified for the earlier 12:56 source snapshot in one prepared Linux container (Python 3.13.5 and Node 24.19.0); its dependency manifests match this archive. The 14:48 snapshot has its own release-suite results. This is not fresh-operating-system setup evidence, a setup-time promise, or all-platform acceptance. If dependencies are missing, run bootstrap explicitly; it is not part of server startup. Stop the local server with Ctrl+C.
+If that local port is occupied, select a free port through the documented launcher option, such as `sh scripts/dev --profile rehearsal --port 8123`. This local setup option is not permission to bypass a browser or managed-network access restriction. For an already-ready interpreter, add `--python /absolute/path/to/python`. If `node` or `npm` is missing, install that prerequisite before bootstrap; selecting a different Python alone cannot resolve it.
 
 ## 3. Try the finite rehearsal
 
@@ -57,9 +46,9 @@ The eight original prerecorded clips are synthetic English Flite/slt audio total
 
 ## 4. Keep configuration and diagnostics separate
 
-No key or `.env` file is needed for rehearsal. The tracked `.env.example` and `.env.development.example` are templates, not real credentials or project IDs. For later, separately authorized service setup, `python tools/api_env.py init` creates the repo-root `.env` without overwriting an existing file (mode 0600 on POSIX); edit it locally and protect Windows file permissions separately. The service template names fields such as `OPENAI_API_KEY`, `TYPESAFE_API_KEY`, and `GOOGLE_CLOUD_PROJECT`, but contains no real key or project. Never commit, print, share, or copy authentication state into MIRA. A structured candidate has now been produced through an approved private Codex development context; public live-factory admission, JEV quality, Google voice, and real browser/device acceptance remain separate. That development route is not promised to be portable.
+No key or `.env` file is needed for rehearsal. The tracked `.env.example` and `.env.development.example` are templates, not real credentials or project IDs. For later, separately authorized service setup, `python tools/api_env.py init` creates the repo-root `.env` without overwriting an existing file (mode 0600 on POSIX); edit it locally and protect Windows file permissions separately. The service template names fields such as `OPENAI_API_KEY`, `TYPESAFE_API_KEY`, and `GOOGLE_CLOUD_PROJECT`, but contains no real key or project. Never commit, print, share, or copy authentication state into MIRA. Historical controlled native generation and isolated provider checks are documented in README. Runtime admission, complete live conversation, JEV quality and real device acceptance remain separate. A managed development context is not promised to be portable.
 
-Ordinary diagnostics are bounded and sanitized; raw development recording is off by default. The optional development-recording settings require both `MIRA_DIAGNOSTICS__DEVELOPMENT_RECORDING=true` and `MIRA_DIAGNOSTICS__RECORDING_CONSENT=true`, plus a visible recording indicator. This covers only privacy-approved dialogue/logical-model content. Runtime/UI raw-audio capture is unfinished and unavailable in this checkpoint; the rehearsal never opens the mic.
+Ordinary diagnostics are bounded and sanitized; raw development recording is off by default. The optional development-recording settings require both `MIRA_DIAGNOSTICS__DEVELOPMENT_RECORDING=true` and `MIRA_DIAGNOSTICS__RECORDING_CONSENT=true`, plus a visible recording indicator. This covers only privacy-approved dialogue/logical-model content. Reviewed raw-audio staging is available only through the separately enabled development voice entry, with exact-buffer review and explicit persistence confirmation. The rehearsal never opens the mic.
 
 Export ordinary diagnostics to a new local file with:
 
@@ -73,3 +62,9 @@ Including reviewed raw data is a separate, sensitive local export requiring both
 python tools/export_diagnostics.py --output var/diagnostics-sensitive.zip \
   --include-reviewed-raw --confirm-sensitive-export
 ```
+
+## Configuration failure and capacity recovery
+
+The installed `mira` entry reports recognized configuration failures before opening the server: exit2, fixed `configuration_error`, a unique startup identifier, and safe declared field names when available. No values or traceback are reflected. This identifier belongs to the stderr event; a service log may not exist because startup stopped. Check the selected profile and declared fields, then retry. Unexpected programming failures are not silently disguised as configuration problems.
+
+For an exact `429 session_capacity`, end the current or unused sessions before refreshing to create a new one. Repeating the same input cannot reset the local session/turn/microphone budget. Other429 responses remain generic; the UI does not invent a provider quota diagnosis.

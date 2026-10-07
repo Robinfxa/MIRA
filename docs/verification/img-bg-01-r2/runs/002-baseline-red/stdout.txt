@@ -1,0 +1,319 @@
+FFFF.FFFFFFFFFFFF                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_review_survives_three_turns_and_uses_current_exact_receipt ________
+
+    def test_review_survives_three_turns_and_uses_current_exact_receipt():
+        vision=Vision(blocked=True,ignore=False)
+        app,images,_,generation,_=app_for(vision=vision,timeout=4)
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);settled(client,path,headers)
+            try:
+                assert vision.arrived.wait(1);origin=images.calls[0]
+                generation.rows=[candidate(image=False)]
+                for n in (2,3,4):
+                    submit(client,path,headers,activity=n);state=settled(client,path,headers)
+>                   assert state['story_image']['state']=='reviewing'
+E                   AssertionError: assert 'cancelled' == 'reviewing'
+E                     
+E                     - reviewing
+E                     + cancelled
+
+tests/contracts/test_background_story_images.py:30: AssertionError
+____ test_qualified_rollover_revokes_old_grant_without_more_image_or_review ____
+
+    def test_qualified_rollover_revokes_old_grant_without_more_image_or_review():
+        app,images,vision,generation,_=app_for()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            old=next(e for e in state['active_grants'] if e['kind']=='media');resource,body=body_for(old)
+            generation.rows=[candidate(image=False)];submit(client,path,headers,activity=2);state=settled(client,path,headers)
+>           new=next(e for e in state['active_grants'] if e['kind']=='media')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           StopIteration
+
+tests/contracts/test_background_story_images.py:51: StopIteration
+_____ test_reply_stop_preserves_job_global_stop_cancels_and_never_refunds ______
+
+    def test_reply_stop_preserves_job_global_stop_cancels_and_never_refunds():
+        vision=Vision(blocked=True,ignore=False);app,images,_,generation,_=app_for(vision=vision,timeout=4)
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);settled(client,path,headers)
+            try:
+                assert vision.arrived.wait(1)
+                response=client.post(path+'/stop',headers=headers,json={'activity_seq':2,'presentation_cutoff':0,'scope':'reply'})
+>               assert response.status_code==200 and response.json()['story_image']['state']=='reviewing'
+E               assert (422 == 200)
+E                +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/contracts/test_background_story_images.py:70: AssertionError
+_________ test_ready_job_survives_unrelated_failed_chat_then_presents __________
+
+    def test_ready_job_survives_unrelated_failed_chat_then_presents():
+        class Replies(Generation):
+            async def generate(self,context):
+                if context.output_epoch==2:raise OSError('synthetic unrelated failure')
+                async for row in super().generate(context):yield row
+        generation=Replies();app,images,vision,_,_=app_for(generation=generation)
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);image_done(client,path,headers)
+            generation.rows=[candidate(image=False)];submit(client,path,headers,activity=2)
+            wait_until(lambda:client.get(path,headers=headers).json()['phase']=='error')
+            assert client.get(path,headers=headers).json()['story_image']['state']=='qualified'
+            submit(client,path,headers,activity=3);state=settled(client,path,headers)
+>           assert any(e['kind']=='media' for e in state['active_grants'])
+E           assert False
+E            +  where False = any(<generator object test_ready_job_survives_unrelated_failed_chat_then_presents.<locals>.<genexpr> at 0x7f61582d35e0>)
+
+tests/contracts/test_background_story_images.py:92: AssertionError
+_ test_fixed_display_close_keeps_pending_job_and_future_generated_display[True] _
+
+explicit = True
+
+    @pytest.mark.parametrize('explicit',[True,False])
+    def test_fixed_display_close_keeps_pending_job_and_future_generated_display(explicit):
+        app,images=fixed_and_pending_app()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=settled(client,path,headers)
+            try:
+                assert images.arrived.wait(1)
+                fixed=next(e for e in state['active_grants'] if e['value']=='trip_photo');receipt(client,path,headers,fixed,1)
+                body={'request_id':str(uuid4()),'expected_revision':0,'presentation_cutoff':1}
+                if explicit:body.update(target='display',expected_photo_effect_id=fixed['id'])
+                response=client.post(path+'/photo-dismissals',headers=headers,json=body)
+>               assert response.status_code==200 and response.json()['story_image']['state']=='generating'
+E               assert (422 == 200)
+E                +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/contracts/test_background_story_images.py:135: AssertionError
+_ test_fixed_display_close_keeps_pending_job_and_future_generated_display[False] _
+
+explicit = False
+
+    @pytest.mark.parametrize('explicit',[True,False])
+    def test_fixed_display_close_keeps_pending_job_and_future_generated_display(explicit):
+        app,images=fixed_and_pending_app()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=settled(client,path,headers)
+            try:
+                assert images.arrived.wait(1)
+                fixed=next(e for e in state['active_grants'] if e['value']=='trip_photo');receipt(client,path,headers,fixed,1)
+                body={'request_id':str(uuid4()),'expected_revision':0,'presentation_cutoff':1}
+                if explicit:body.update(target='display',expected_photo_effect_id=fixed['id'])
+                response=client.post(path+'/photo-dismissals',headers=headers,json=body)
+>               assert response.status_code==200 and response.json()['story_image']['state']=='generating'
+E               AssertionError: assert (200 == 200 and 'cancelled' == 'generating'
+E                +  where 200 = <Response [200 OK]>.status_code
+E                 
+E                 - generating
+E                 + cancelled)
+
+tests/contracts/test_background_story_images.py:135: AssertionError
+___ test_pending_job_cancel_keeps_visible_fixed_photo_and_rejects_wrong_job ____
+
+    def test_pending_job_cancel_keeps_visible_fixed_photo_and_rejects_wrong_job():
+        app,images=fixed_and_pending_app()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=settled(client,path,headers)
+            try:
+                assert images.arrived.wait(1)
+                fixed=next(e for e in state['active_grants'] if e['value']=='trip_photo');receipt(client,path,headers,fixed,1)
+                body={'request_id':str(uuid4()),'expected_revision':0,'presentation_cutoff':1,'target':'image_job','expected_image_request_id':str(uuid4())}
+>               assert client.post(path+'/photo-dismissals',headers=headers,json=body).status_code==409
+E               AssertionError: assert 422 == 409
+E                +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+E                +    where <Response [422 Unprocessable Entity]> = post(('/api/v1/sessions/202760cc-4ac4-41c2-8612-f5023427ae50' + '/photo-dismissals'), headers={'X-Mira-Session-Token': 'WiophFPKQKOAPSInzudc6uQJMwfKqVDiVZkCE6haO98'}, json={'expected_image_request_id': 'f67c4139-27b3-4755-890a-8719d82df381', 'expected_revision': 0, 'presentation_cutoff': 1, 'request_id': '32ec516d-9b08-45ce-b845-454aec45a51b', ...})
+E                +      where post = <starlette.testclient.TestClient object at 0x7f615967b5f0>.post
+
+tests/contracts/test_background_story_images.py:151: AssertionError
+______ test_completion_requires_display_is_one_shot_and_receipt_distinct _______
+
+    def test_completion_requires_display_is_one_shot_and_receipt_distinct():
+        backend=CompletionBackend();app,_,_,_,_=app_for()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            actor=actor_for(app,state,headers);actor._tool_generation=backend
+            prior={e['id'] for e in state['active_grants']}
+>           assert client.post(path+'/story-image-completions',headers=headers,json=completion_body(state)).status_code==409
+E           AssertionError: assert 404 == 409
+E            +  where 404 = <Response [404 Not Found]>.status_code
+E            +    where <Response [404 Not Found]> = post(('/api/v1/sessions/a68f0a97-61e8-4058-a1a9-e2b4f2e78116' + '/story-image-completions'), headers={'X-Mira-Session-Token': 'ffwMK-bKTU8dluH5XfliT01BvB3IvxHYpY27xgdk8sI'}, json={'activity_seq': 1, 'output_epoch': 1, 'parent_request_id': '30c87bf6-efe1-4688-9a6f-0a6cbe9e4389', 'presented_effect_id': None, ...})
+E            +      where post = <starlette.testclient.TestClient object at 0x7f61580c5c70>.post
+E            +      and   {'activity_seq': 1, 'output_epoch': 1, 'parent_request_id': '30c87bf6-efe1-4688-9a6f-0a6cbe9e4389', 'presented_effect_id': None, ...} = completion_body({'active_grants': [{'activity_seq': 1, 'caption_chunk': None, 'cue_id': '76f0b192-3d73-4f71-9a96-0851167504cb', 'cue_s...ve_gift_offer_id': None, 'completed': False, 'gift_offer_effect_digest': None, 'gift_offer_effect_id': None, ...}, ...})
+
+tests/contracts/test_background_story_images.py:185: AssertionError
+_ test_completion_abort_or_failure_keeps_picture_and_never_retries[new_input] __
+
+event = 'new_input'
+
+    @pytest.mark.parametrize('event',['new_input','stop','failure','admission'])
+    def test_completion_abort_or_failure_keeps_picture_and_never_retries(event):
+        backend=CompletionBackend(blocked=event!='failure',fail=event=='failure');app,_,_,generation,_=app_for()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            actor=actor_for(app,state,headers);actor._tool_generation=backend
+            try:
+                for seq,e in enumerate(state['active_grants'],1):receipt(client,path,headers,e,seq)
+                state=client.get(path,headers=headers).json();body=completion_body(state)
+>               assert client.post(path+'/story-image-completions',headers=headers,json=body).status_code==202
+E               AssertionError: assert 404 == 202
+E                +  where 404 = <Response [404 Not Found]>.status_code
+E                +    where <Response [404 Not Found]> = post(('/api/v1/sessions/b91457f8-43b0-4ad8-a039-8d3c2a4faf20' + '/story-image-completions'), headers={'X-Mira-Session-Token': 'AyDbJcCm7Q9n77Kvw-X9iGPtdnITiKOn9EJHoZfdLPk'}, json={'activity_seq': 1, 'output_epoch': 1, 'parent_request_id': '148297d4-a4a7-426a-ae4c-e389969266a2', 'presented_effect_id': '04c46ecf-8841-4817-886d-bb935e57b85b', ...})
+E                +      where post = <starlette.testclient.TestClient object at 0x7f615813da00>.post
+
+tests/contracts/test_background_story_images.py:210: AssertionError
+____ test_completion_abort_or_failure_keeps_picture_and_never_retries[stop] ____
+
+event = 'stop'
+
+    @pytest.mark.parametrize('event',['new_input','stop','failure','admission'])
+    def test_completion_abort_or_failure_keeps_picture_and_never_retries(event):
+        backend=CompletionBackend(blocked=event!='failure',fail=event=='failure');app,_,_,generation,_=app_for()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            actor=actor_for(app,state,headers);actor._tool_generation=backend
+            try:
+                for seq,e in enumerate(state['active_grants'],1):receipt(client,path,headers,e,seq)
+                state=client.get(path,headers=headers).json();body=completion_body(state)
+>               assert client.post(path+'/story-image-completions',headers=headers,json=body).status_code==202
+E               AssertionError: assert 404 == 202
+E                +  where 404 = <Response [404 Not Found]>.status_code
+E                +    where <Response [404 Not Found]> = post(('/api/v1/sessions/8fb74226-d6ac-4ef6-8fe3-9ad6d7701cd8' + '/story-image-completions'), headers={'X-Mira-Session-Token': 'Yq8qsty77GdDPh4TaAc-st4IUtvAZY5dGOMCcNFJTxU'}, json={'activity_seq': 1, 'output_epoch': 1, 'parent_request_id': '03a2e474-dd70-47d2-ac43-9adfba10e5ff', 'presented_effect_id': 'e66716c7-88b2-433a-8618-f5ecc1469486', ...})
+E                +      where post = <starlette.testclient.TestClient object at 0x7f6150600b60>.post
+
+tests/contracts/test_background_story_images.py:210: AssertionError
+__ test_completion_abort_or_failure_keeps_picture_and_never_retries[failure] ___
+
+event = 'failure'
+
+    @pytest.mark.parametrize('event',['new_input','stop','failure','admission'])
+    def test_completion_abort_or_failure_keeps_picture_and_never_retries(event):
+        backend=CompletionBackend(blocked=event!='failure',fail=event=='failure');app,_,_,generation,_=app_for()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            actor=actor_for(app,state,headers);actor._tool_generation=backend
+            try:
+                for seq,e in enumerate(state['active_grants'],1):receipt(client,path,headers,e,seq)
+                state=client.get(path,headers=headers).json();body=completion_body(state)
+>               assert client.post(path+'/story-image-completions',headers=headers,json=body).status_code==202
+E               AssertionError: assert 404 == 202
+E                +  where 404 = <Response [404 Not Found]>.status_code
+E                +    where <Response [404 Not Found]> = post(('/api/v1/sessions/6559a01e-c006-4ab1-8088-b305cdf3a2e8' + '/story-image-completions'), headers={'X-Mira-Session-Token': '3s9mxogl0-Ui8fHanCrM7eMZvm82tqHrvegpIQrZhbQ'}, json={'activity_seq': 1, 'output_epoch': 1, 'parent_request_id': '2f990162-466c-4789-a450-18199442ac97', 'presented_effect_id': '833457df-ed97-4064-894e-e99498ca1f56', ...})
+E                +      where post = <starlette.testclient.TestClient object at 0x7f6150678ce0>.post
+
+tests/contracts/test_background_story_images.py:210: AssertionError
+_ test_completion_abort_or_failure_keeps_picture_and_never_retries[admission] __
+
+event = 'admission'
+
+    @pytest.mark.parametrize('event',['new_input','stop','failure','admission'])
+    def test_completion_abort_or_failure_keeps_picture_and_never_retries(event):
+        backend=CompletionBackend(blocked=event!='failure',fail=event=='failure');app,_,_,generation,_=app_for()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            actor=actor_for(app,state,headers);actor._tool_generation=backend
+            try:
+                for seq,e in enumerate(state['active_grants'],1):receipt(client,path,headers,e,seq)
+                state=client.get(path,headers=headers).json();body=completion_body(state)
+>               assert client.post(path+'/story-image-completions',headers=headers,json=body).status_code==202
+E               AssertionError: assert 404 == 202
+E                +  where 404 = <Response [404 Not Found]>.status_code
+E                +    where <Response [404 Not Found]> = post(('/api/v1/sessions/e5425962-5eff-4a4b-ab30-4ea577e09d0d' + '/story-image-completions'), headers={'X-Mira-Session-Token': 'xSqimKFB_5qIAP2jBIXvfie8-ZAnQJN4ec3CN-yza9w'}, json={'activity_seq': 1, 'output_epoch': 1, 'parent_request_id': 'b6f441ce-f074-4591-85e5-dff98921123e', 'presented_effect_id': 'b647cbf4-e636-40ca-924a-a2cde8f1030f', ...})
+E                +      where post = <starlette.testclient.TestClient object at 0x7f6150629b20>.post
+
+tests/contracts/test_background_story_images.py:210: AssertionError
+___ test_next_ordinary_context_consumes_event_without_claiming_notification ____
+
+    def test_next_ordinary_context_consumes_event_without_claiming_notification():
+        app,_,_,generation,_=app_for()
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            for seq,e in enumerate(state['active_grants'],1):receipt(client,path,headers,e,seq)
+            generation.rows=[candidate(image=False)];submit(client,path,headers,activity=2,cutoff=2);state=settled(client,path,headers)
+>           assert len(generation.contexts[-1].story_image_completions)==1
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'GenerationContext' object has no attribute 'story_image_completions'
+
+tests/contracts/test_background_story_images.py:229: AttributeError
+_____ test_completion_adapter_subscription_only_and_exact_existing_ledger ______
+
+    @pytest.mark.asyncio
+    async def test_completion_adapter_subscription_only_and_exact_existing_ledger():
+        from mira.adapters.generation.direct_codex_responses import ResponsesRoute,DirectResponsesError
+        from tests.contracts.test_direct_luna_tools import backend,CONTEXT,response,wire,message
+        async def handle(request):
+            body=json.loads(request.content);assert body['tools']==[] and body['tool_choice']=='none'
+            return response(wire([message('找到了，给你看看。')]))
+        instance,source,requests=backend(handle,route=ResponsesRoute.CHATGPT_SUBSCRIPTION,request_limit=1)
+>       assert instance.supports_image_completion
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'DirectCodexResponsesGenerationBackend' object has no attribute 'supports_image_completion'
+
+tests/contracts/test_background_story_images.py:244: AttributeError
+_______ test_native_cancel_tool_uses_exact_job_and_no_image_retry[True] ________
+
+correct = True
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('correct',[True,False])
+    async def test_native_cancel_tool_uses_exact_job_and_no_image_retry(correct):
+        from tests.contracts.test_image_operation_diagnostics import native_actor,image_turn
+        from tests.contracts.test_luna_tool_actor import ToolTurn,wait_state
+        from tests.contracts.test_development_review_composition import finish
+        images=Images(blocked=True,ignore=False);vision=Vision()
+        runtime=StoryImageRuntime(images,vision,Decoder(),StoryImageAdmission('offline',True,timeout_seconds=4,authorized_custom_brief=True))
+        actor=native_actor(runtime,[image_turn('start')])
+        try:
+            await actor.submit(request_id='turn1',activity_seq=1,cutoff=0,text='想看看别的画面')
+            state=await wait_state(actor,lambda s:s.story_image.state=='generating')
+            while not images.arrived.is_set():await asyncio.sleep(.001)
+            turn=ToolTurn(GenerationToolCall('cancel','cancel_story_image',json.dumps({'request_id':state.story_image.request_id if correct else str(uuid4())})))
+            actor._tool_generation.turns.append(turn)
+            await actor.submit(request_id='turn2',activity_seq=2,cutoff=0,text='别找这张了')
+            await finish(actor);state=await actor.snapshot()
+>           assert 'cancel_story_image' in {t.name for t in actor._tool_generation.opens[-1][1]}
+E           AssertionError: assert 'cancel_story_image' in {'advance_story', 'generate_story_image', 'perform_action', 'show_photo'}
+
+tests/contracts/test_background_story_images.py:272: AssertionError
+_______ test_native_cancel_tool_uses_exact_job_and_no_image_retry[False] _______
+
+correct = False
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('correct',[True,False])
+    async def test_native_cancel_tool_uses_exact_job_and_no_image_retry(correct):
+        from tests.contracts.test_image_operation_diagnostics import native_actor,image_turn
+        from tests.contracts.test_luna_tool_actor import ToolTurn,wait_state
+        from tests.contracts.test_development_review_composition import finish
+        images=Images(blocked=True,ignore=False);vision=Vision()
+        runtime=StoryImageRuntime(images,vision,Decoder(),StoryImageAdmission('offline',True,timeout_seconds=4,authorized_custom_brief=True))
+        actor=native_actor(runtime,[image_turn('start')])
+        try:
+            await actor.submit(request_id='turn1',activity_seq=1,cutoff=0,text='想看看别的画面')
+            state=await wait_state(actor,lambda s:s.story_image.state=='generating')
+            while not images.arrived.is_set():await asyncio.sleep(.001)
+            turn=ToolTurn(GenerationToolCall('cancel','cancel_story_image',json.dumps({'request_id':state.story_image.request_id if correct else str(uuid4())})))
+            actor._tool_generation.turns.append(turn)
+            await actor.submit(request_id='turn2',activity_seq=2,cutoff=0,text='别找这张了')
+            await finish(actor);state=await actor.snapshot()
+>           assert 'cancel_story_image' in {t.name for t in actor._tool_generation.opens[-1][1]}
+E           AssertionError: assert 'cancel_story_image' in {'advance_story', 'generate_story_image', 'perform_action', 'show_photo'}
+
+tests/contracts/test_background_story_images.py:272: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_background_story_images.py::test_review_survives_three_turns_and_uses_current_exact_receipt
+FAILED tests/contracts/test_background_story_images.py::test_qualified_rollover_revokes_old_grant_without_more_image_or_review
+FAILED tests/contracts/test_background_story_images.py::test_reply_stop_preserves_job_global_stop_cancels_and_never_refunds
+FAILED tests/contracts/test_background_story_images.py::test_ready_job_survives_unrelated_failed_chat_then_presents
+FAILED tests/contracts/test_background_story_images.py::test_fixed_display_close_keeps_pending_job_and_future_generated_display[True]
+FAILED tests/contracts/test_background_story_images.py::test_fixed_display_close_keeps_pending_job_and_future_generated_display[False]
+FAILED tests/contracts/test_background_story_images.py::test_pending_job_cancel_keeps_visible_fixed_photo_and_rejects_wrong_job
+FAILED tests/contracts/test_background_story_images.py::test_completion_requires_display_is_one_shot_and_receipt_distinct
+FAILED tests/contracts/test_background_story_images.py::test_completion_abort_or_failure_keeps_picture_and_never_retries[new_input]
+FAILED tests/contracts/test_background_story_images.py::test_completion_abort_or_failure_keeps_picture_and_never_retries[stop]
+FAILED tests/contracts/test_background_story_images.py::test_completion_abort_or_failure_keeps_picture_and_never_retries[failure]
+FAILED tests/contracts/test_background_story_images.py::test_completion_abort_or_failure_keeps_picture_and_never_retries[admission]
+FAILED tests/contracts/test_background_story_images.py::test_next_ordinary_context_consumes_event_without_claiming_notification
+FAILED tests/contracts/test_background_story_images.py::test_completion_adapter_subscription_only_and_exact_existing_ledger
+FAILED tests/contracts/test_background_story_images.py::test_native_cancel_tool_uses_exact_job_and_no_image_retry[True]
+FAILED tests/contracts/test_background_story_images.py::test_native_cancel_tool_uses_exact_job_and_no_image_retry[False]
+16 failed, 1 passed in 3.47s

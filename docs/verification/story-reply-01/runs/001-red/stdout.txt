@@ -1,0 +1,88 @@
+FFFFFFFFFFF.FFF                                                          [100%]
+=================================== FAILURES ===================================
+_____ test_presented_gift_survives_reply_fence_and_one_current_acceptance ______
+tests/contracts/test_story_reply_fence.py:32: in test_presented_gift_survives_reply_fence_and_one_current_acceptance
+    c.reply_fence(8,())
+    ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_reply_fence_clears_pending_immediately_without_advancing_late_history[x.recognize] _
+tests/contracts/test_story_reply_fence.py:50: in test_reply_fence_clears_pending_immediately_without_advancing_late_history
+    c.reply_fence(c.runtime.story.epoch+1,())
+    ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_reply_fence_clears_pending_immediately_without_advancing_late_history[x.gift_offer] _
+tests/contracts/test_story_reply_fence.py:50: in test_reply_fence_clears_pending_immediately_without_advancing_late_history
+    c.reply_fence(c.runtime.story.epoch+1,())
+    ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer[1] _
+tests/contracts/test_story_reply_fence.py:61: in test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer
+    for epoch in range(2,2+controls): c.reply_fence(epoch,shown)
+                                      ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer[2] _
+tests/contracts/test_story_reply_fence.py:61: in test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer
+    for epoch in range(2,2+controls): c.reply_fence(epoch,shown)
+                                      ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer[3] _
+tests/contracts/test_story_reply_fence.py:61: in test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer
+    for epoch in range(2,2+controls): c.reply_fence(epoch,shown)
+                                      ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[unshown] _
+tests/contracts/test_story_reply_fence.py:79: in test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question
+    else: c.reply_fence(2,shown)
+          ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[wrong_reference] _
+tests/contracts/test_story_reply_fence.py:79: in test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question
+    else: c.reply_fence(2,shown)
+          ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[skipped_epoch] _
+tests/contracts/test_story_reply_fence.py:79: in test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question
+    else: c.reply_fence(2,shown)
+          ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[intervening_input] _
+tests/contracts/test_story_reply_fence.py:76: in test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question
+    c.begin_input('different-input',2);c.reply_fence(3,shown)
+                                       ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[later_subtitle] _
+tests/contracts/test_story_reply_fence.py:79: in test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question
+    else: c.reply_fence(2,shown)
+          ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_ test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[other_runtime] _
+tests/contracts/test_story_reply_fence.py:78: in test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question
+    c=character();c.begin_input('new-session',1);c.reply_fence(2,shown)
+                                                 ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+___ test_global_stop_and_decline_suspension_are_never_cleared_by_reply_fence ___
+tests/contracts/test_story_reply_fence.py:89: in test_global_stop_and_decline_suspension_are_never_cleared_by_reply_fence
+    c.reply_fence(9,())
+    ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+_______ test_reply_fence_is_idempotent_but_rejects_unrecorded_epoch_gap ________
+tests/contracts/test_story_reply_fence.py:94: in test_reply_fence_is_idempotent_but_rejects_unrecorded_epoch_gap
+    c,q,shown=asked();c.reply_fence(2,shown);before=c.runtime.story
+                      ^^^^^^^^^^^^^
+E   AttributeError: 'SessionCharacterRuntime' object has no attribute 'reply_fence'
+=========================== short test summary info ============================
+FAILED tests/contracts/test_story_reply_fence.py::test_presented_gift_survives_reply_fence_and_one_current_acceptance
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_clears_pending_immediately_without_advancing_late_history[x.recognize]
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_clears_pending_immediately_without_advancing_late_history[x.gift_offer]
+FAILED tests/contracts/test_story_reply_fence.py::test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer[1]
+FAILED tests/contracts/test_story_reply_fence.py::test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer[2]
+FAILED tests/contracts/test_story_reply_fence.py::test_presented_question_crosses_only_recorded_reply_controls_to_one_actual_answer[3]
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[unshown]
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[wrong_reference]
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[skipped_epoch]
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[intervening_input]
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[later_subtitle]
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_does_not_revive_unshown_wrong_consumed_or_cross_session_question[other_runtime]
+FAILED tests/contracts/test_story_reply_fence.py::test_global_stop_and_decline_suspension_are_never_cleared_by_reply_fence
+FAILED tests/contracts/test_story_reply_fence.py::test_reply_fence_is_idempotent_but_rejects_unrecorded_epoch_gap
+14 failed, 1 passed in 0.69s

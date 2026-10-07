@@ -1,7 +1,7 @@
 """Validated immutable configuration, never instantiated at import time."""
 from typing import Literal
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, model_validator
 
 from mira.config.base import FrozenSettings
 from mira.config.diagnostic_settings import DiagnosticSettings
@@ -9,15 +9,23 @@ from mira.config.service_settings import ServiceSettings
 
 
 class HttpSettings(FrozenSettings):
-    host: Literal["127.0.0.1", "localhost"] = "127.0.0.1"
+    host: str = "127.0.0.1"
+    private_network: bool = False
     port: int = Field(default=8000, ge=1024, le=65535)
     allowed_origins: tuple[str, ...] = ("http://127.0.0.1:8000", "http://localhost:8000")
+
+
+    @model_validator(mode="after")
+    def validate_access(self):
+        from mira.config.http_access import validate_http_access
+        validate_http_access(self.host, self.port, self.allowed_origins, self.private_network)
+        return self
 
 
 class RuntimeSettings(FrozenSettings):
     timeout_seconds: float = Field(default=10, gt=0, le=120)
     max_sessions: int = Field(default=32, ge=1, le=1000)
-    max_turns: int = Field(default=64, ge=1, le=1000)
+    max_turns: int | None = Field(default=64, ge=1, le=1000)
     max_effects: int = Field(default=256, ge=1, le=10000)
     journal_capacity: int = Field(default=2048, ge=10, le=100000)
 

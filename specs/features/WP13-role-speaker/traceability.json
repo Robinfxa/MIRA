@@ -1,0 +1,35 @@
+{
+  "feature": "WP13SPEAKER",
+  "spec": "specs/features/WP13-role-speaker/spec.md",
+  "requirements": [
+    {
+      "id": "WP13SPEAKER-001",
+      "tests": [
+        "tests/contracts/test_role_canon_speaker.py::test_role_address_changes_only_after_matching_receipt_and_stays_inactive_after_exit",
+        "tests/contracts/test_role_canon_speaker.py::test_stopped_or_spoken_recognition_never_unlocks_authored_friend_history",
+        "tests/contracts/test_role_canon_speaker.py::test_tool_wire_tracks_stranger_pending_receipt_and_exit_without_dialogue_identity"
+      ]
+    },
+    {
+      "id": "WP13SPEAKER-002",
+      "tests": [
+        "tests/contracts/test_role_canon_speaker.py::test_released_same_source_canon_survives_history_cutback_without_future_layers"
+      ]
+    },
+    {
+      "id": "WP13SPEAKER-003",
+      "tests": [
+        "tests/contracts/test_role_canon_speaker.py::test_short_visual_followup_retains_latest_outfit_evidence_and_excludes_pending_photo",
+        "tests/contracts/test_role_canon_speaker.py::test_canon_speaker_policy_has_one_shared_consumer_and_preserves_budget"
+      ]
+    },
+    {
+      "id": "WP13SPEAKER-004",
+      "tests": [
+        "tests/contracts/test_role_canon_speaker.py::test_actual_serialized_requests_keep_role_canon_after_history_cutback",
+        "tests/contracts/test_role_canon_speaker.py::test_tool_wire_tracks_stranger_pending_receipt_and_exit_without_dialogue_identity",
+        "tests/contracts/test_role_canon_speaker.py::test_native_speaker_serializes_same_released_canon_contract"
+      ]
+    }
+  ]
+}

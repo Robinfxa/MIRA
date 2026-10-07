@@ -6,6 +6,7 @@ import time
 from uuid import uuid4
 
 import pytest
+from tests.integration.test_voice_http import Tts
 from fastapi.testclient import TestClient
 
 from mira.adapters.diagnostics.privacy import encode_event
@@ -206,7 +207,11 @@ async def test_late_failure_cannot_replace_cleared_or_new_turn_locator(action):
             await submit(value, 2, new_id)
             await asyncio.gather(*(task for task in value._tasks if task not in old))
         release.set()
-        await asyncio.gather(*old)
+        # A superseded generation is cancelled even if its provider catches the
+        # first cancellation and later throws another exception. It cannot publish
+        # that late exception as the new turn's failure or locator.
+        outcomes = await asyncio.gather(*old, return_exceptions=True)
+        assert all(result is None or isinstance(result, asyncio.CancelledError) for result in outcomes)
         state = session_view(await value.snapshot()).model_dump()
         assert state['last_error_diagnostic_id'] == (None if action == 'stop' else hashed(new_id))
         assert state['request_id'] is None
@@ -219,6 +224,7 @@ async def test_late_failure_cannot_replace_cleared_or_new_turn_locator(action):
 async def test_playback_failure_snapshot_matches_its_logged_receipt_context():
     sink = Events()
     value = actor(Generate(), sink)
+    value._speech_synthesis = Tts()  # Explicit synthetic voice capability for this audio-fact test.
     try:
         await asyncio.gather(*await submit(value, 1, str(uuid4())))
         effect = (await value.snapshot()).active_grants[0]

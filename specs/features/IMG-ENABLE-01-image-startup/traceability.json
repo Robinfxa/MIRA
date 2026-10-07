@@ -1,0 +1,26 @@
+{
+  "feature": "IMG-ENABLE-01",
+  "spec": "specs/features/IMG-ENABLE-01-image-startup/spec.md",
+  "requirements": [
+    {
+      "id": "IMGENABLE01-001",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_startup_records_explicit_image_opt_ins_without_enabling_or_qualifying"
+      ]
+    },
+    {
+      "id": "IMGENABLE01-002",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_documented_subscription_voice_image_command_checks_without_jev_or_provider"
+      ]
+    },
+    {
+      "id": "IMGENABLE01-003",
+      "tests": [
+        "tests/contracts/test_image_readiness_diagnostics.py::test_local_readiness_is_current_and_content_free",
+        "tests/contracts/test_image_readiness_diagnostics.py::test_process_budget_exhaustion_after_new_session_removes_only_generated_tool",
+        "tests/contracts/test_image_readiness_diagnostics.py::test_provider_failure_is_observed_separately_and_never_guessed_from_local_failure"
+      ]
+    }
+  ]
+}

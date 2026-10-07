@@ -1,0 +1,16 @@
+
+==================================== ERRORS ====================================
+_ ERROR collecting mira-natural-followthrough-fix-evidence-20261006T2111Z/checkpoint-compatibility/test_original_2012_completed_reader.py _
+ImportError while importing test module '/workspace/shared/mira-natural-followthrough-fix-evidence-20261006T2111Z/checkpoint-compatibility/test_original_2012_completed_reader.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../mira-natural-followthrough-fix-evidence-20261006T2111Z/checkpoint-compatibility/test_original_2012_completed_reader.py:7: in <module>
+    from mira.adapters.memory.story import StoryCheckpointStore
+E   ModuleNotFoundError: No module named 'mira'
+=========================== short test summary info ============================
+ERROR ../mira-natural-followthrough-fix-evidence-20261006T2111Z/checkpoint-compatibility/test_original_2012_completed_reader.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.09s

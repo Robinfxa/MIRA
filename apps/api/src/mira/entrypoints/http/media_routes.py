@@ -5,7 +5,7 @@ import binascii
 import json
 from uuid import UUID, uuid4
 
-from fastapi import APIRouter, WebSocket
+from fastapi import APIRouter, Request, WebSocket
 from fastapi.responses import StreamingResponse
 from pydantic import ValidationError
 from starlette.websockets import WebSocketDisconnect
@@ -38,12 +38,13 @@ router = APIRouter(prefix="/api/v1", responses={
 
 
 @router.get("/voice-capabilities", response_model=VoiceCapabilities)
-async def voice_capabilities(container: ContainerDependency) -> VoiceCapabilities:
+async def voice_capabilities(request: Request, container: ContainerDependency) -> VoiceCapabilities:
     return VoiceCapabilities(generation_mode=container.generation_mode,
-                             speech_enabled=container.speech_enabled,
-                             microphone_enabled=container.microphone_enabled,
+                             speech_enabled=container.speech_enabled and getattr(request.state, "mira_voice_allowed", True),
+                             microphone_enabled=container.microphone_enabled and getattr(request.state, "mira_voice_allowed", True),
+                             continuous_listening_enabled=container.continuous_listening_enabled and getattr(request.state, "mira_voice_allowed", True),
                              qualification="offline_fixture" if container.generation_mode == "rehearsal" else "injected_unverified" if (
-                                 container.speech_enabled or container.microphone_enabled
+                                 (container.speech_enabled or container.microphone_enabled) and getattr(request.state, "mira_voice_allowed", True)
                              ) else "unavailable")
 
 
@@ -189,7 +190,7 @@ async def _send_transcripts(websocket: WebSocket, buffer: MicrophoneBuffer, acto
 async def microphone(websocket: WebSocket, session_id: str) -> None:
     container = websocket.app.state.container
     # Browser cookies are never authority. No token is accepted in a logged URL.
-    if (websocket.headers.get("origin") not in container.settings.http.allowed_origins
+    if (websocket.headers.get("origin") not in getattr(websocket.app.state, "http_allowed_origins", container.settings.http.allowed_origins)
             or websocket.query_params):
         await websocket.close(code=1008)
         return

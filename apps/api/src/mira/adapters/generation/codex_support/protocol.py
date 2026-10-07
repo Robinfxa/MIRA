@@ -4,7 +4,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 
-from .payload import AUTHOR_INSTRUCTIONS, canonical, output_schema, parse_effects, strict_json
+from .payload import author_instructions, canonical, output_schema, parse_effects, strict_json
 from .types import (
     DISABLED_FEATURES, MODEL, PINNED_VERSION, CodexGenerationError, CodexLimits, CodexRuntime,
     CodexTransport,
@@ -18,6 +18,7 @@ _IGNORED_TURN_EVENTS = frozenset((
 ))
 _ALLOWED_ITEM_KINDS = frozenset(('agentMessage', 'userMessage', 'reasoning', 'plan',
                                 'functionCallOutput'))
+_REMOTE_CONTROL_STATUSES = frozenset(('disabled', 'connecting', 'connected', 'errored'))
 
 
 def _require(condition: bool, code='codex_protocol_invalid'):
@@ -44,46 +45,62 @@ def _verify_thread(thread: dict, runtime: CodexRuntime):
         _require(thread['cwd'] == str(runtime.runtime_cwd), 'codex_thread_isolation_drift')
 
 
+class _ConfigValidationError(CodexGenerationError):
+    def __init__(self, check_code: str):
+        super().__init__('codex_config_drift')
+        self.check_code = check_code
+
+
+def _config_require(condition: bool, check_code: str) -> None:
+    if not condition:
+        raise _ConfigValidationError(check_code)
+
+
 def _verify_config(result, runtime):
     config = result.get('config')
-    _require(type(config) is dict, 'codex_config_drift')
+    _config_require(type(config) is dict, 'config_object')
     if runtime.expected_config_sha256 is not None:
-        _require(hashlib.sha256(canonical(config)).hexdigest() == runtime.expected_config_sha256,
-                 'codex_config_drift')
+        _config_require(hashlib.sha256(canonical(config)).hexdigest() == runtime.expected_config_sha256,
+                 'config_digest')
     features = config.get('features')
-    _require(type(features) is dict and all(features.get(flag) is False
-                                           for flag in DISABLED_FEATURES), 'codex_config_drift')
+    _config_require(type(features) is dict and all(features.get(flag) is False
+                                           for flag in DISABLED_FEATURES), 'features_disabled')
     development = runtime.development_context
-    _require(features.get('respect_system_proxy') is (None if development else True),
-             'codex_config_drift')
+    _config_require(features.get('respect_system_proxy') is (None if development else True),
+             'proxy_policy')
     if development is not None:
-        _require((config.get('orchestrator') or {}).get('mcp', {}).get('enabled') is False
+        _config_require((config.get('orchestrator') or {}).get('mcp', {}).get('enabled') is False
                  and (config.get('cloud') or {}).get('skills', {}).get('enabled') is False,
-                 'codex_config_drift')
+                 'managed_capabilities')
         route = config.get('openai_base_url')
-        _require(type(route) is str and hashlib.sha256(route.encode()).hexdigest()
-                 == development.route_value_sha256, 'codex_config_drift')
-    _require(type(config.get('mcp_servers')) is dict and not config['mcp_servers'],
-             'codex_config_drift')
-    _require(config.get('web_search') == 'disabled', 'codex_config_drift')
-    _require(config.get('model') in (None, MODEL)
+        _config_require(type(route) is str and hashlib.sha256(route.encode()).hexdigest()
+                 == development.route_value_sha256, 'managed_route')
+    _config_require(type(config.get('mcp_servers')) is dict and not config['mcp_servers'],
+             'mcp_empty')
+    _config_require(config.get('web_search') == 'disabled', 'web_search_disabled')
+    _config_require(config.get('model') in (None, MODEL)
              and config.get('model_provider') in (None, 'openai')
-             and config.get('forced_login_method') in (None, 'chatgpt'), 'codex_config_drift')
+             and config.get('forced_login_method') in (None, 'chatgpt'), 'model_provider_auth')
     # Never accept caller-customized backend routes or executable hooks, even under a digest.
-    _require(config.get('chatgpt_base_url') in (None, 'https://chatgpt.com/backend-api',
+    _config_require(config.get('chatgpt_base_url') in (None, 'https://chatgpt.com/backend-api',
                                                        'https://chatgpt.com/backend-api/'),
-             'codex_config_drift')
+             'chatgpt_route')
     fields = ('hooks', 'notify', 'model_providers', 'model_instructions_file',
               'experimental_thread_store_endpoint')
     if development is None:
         fields += ('openai_base_url',)
     for field in fields:
-        _require(config.get(field) in (None, {}, [], ''), 'codex_config_drift')
+        _config_require(config.get(field) in (None, {}, [], ''), 'forbidden_' + field)
 
 
 class Session:
-    def __init__(self, transport: CodexTransport, runtime: CodexRuntime, limits: CodexLimits):
+    def __init__(self, transport: CodexTransport, runtime: CodexRuntime, limits: CodexLimits,
+                 *, speech_enabled: bool = True, memory_enabled: bool = False):
+        if type(speech_enabled) is not bool or type(memory_enabled) is not bool:
+            raise CodexGenerationError('codex_capability_invalid')
         self.transport, self.runtime, self.limits = transport, runtime, limits
+        self.speech_enabled = speech_enabled
+        self.memory_enabled = memory_enabled
         self.thread_id = None
         self.turn_id = None
         self._request_id = 0
@@ -165,7 +182,9 @@ class Session:
             'cwd': str(self.runtime.runtime_cwd), 'model': MODEL,
             'allowProviderModelFallback': False, 'approvalPolicy': 'never',
             'approvalsReviewer': 'user', 'sandbox': 'read-only',
-            'baseInstructions': AUTHOR_INSTRUCTIONS, 'developerInstructions': '',
+            'baseInstructions': author_instructions(speech_enabled=self.speech_enabled,
+                                                    memory_enabled=self.memory_enabled),
+            'developerInstructions': '',
             'experimentalRawEvents': False, 'serviceTier': 'default',
         })
         _require(result.get('model') == MODEL and result.get('modelProvider') == 'openai',
@@ -186,7 +205,7 @@ class Session:
             'threadId': self.thread_id, 'input': [{'type': 'text', 'text': prompt}],
             'environments': [], 'runtimeWorkspaceRoots': [], 'model': MODEL,
             'effort': 'low', 'summary': 'none', 'serviceTierForTurn': 'default',
-            'outputSchema': output_schema(),
+            'outputSchema': output_schema(speech_enabled=self.speech_enabled),
         })
         turn = result.get('turn')
         _require(type(turn) is dict)
@@ -199,7 +218,8 @@ class Session:
             self._notification(message)
             del message
         _require(not self._open_messages, 'codex_incomplete_output')
-        return parse_effects(list(self._messages.values()), self.limits)
+        return parse_effects(list(self._messages.values()), self.limits,
+                             speech_enabled=self.speech_enabled)
 
     def _turn_identity(self, params):
         _require(self.thread_id is not None and params.get('threadId') == self.thread_id,
@@ -296,7 +316,23 @@ class Session:
             _require(params.get('authMode') == 'chatgpt', 'codex_subscription_required')
             return
         if method == 'remoteControl/status/changed':
-            _require(params.get('status') == 'disabled', 'codex_remote_control_forbidden')
+            # Pinned v0.159.2 status notifications are informational only. Validate the
+            # envelope/body but discard all identity/status values and never issue RC RPCs.
+            _require(set(message) <= {'jsonrpc', 'method', 'params', 'emittedAtMs'}
+                     and message.get('jsonrpc', '2.0') == '2.0',
+                     'codex_remote_control_notification_invalid')
+            stamp = message.get('emittedAtMs')
+            _require(stamp is None or type(stamp) is int and -(2**63) <= stamp < 2**63,
+                     'codex_remote_control_notification_invalid')
+            _require(set(params) <= {'status', 'serverName', 'installationId', 'environmentId'}
+                     and {'status', 'serverName', 'installationId'} <= set(params)
+                     and type(params.get('status')) is str
+                     and params['status'] in _REMOTE_CONTROL_STATUSES
+                     and type(params.get('serverName')) is str
+                     and type(params.get('installationId')) is str
+                     and ('environmentId' not in params or params['environmentId'] is None
+                          or type(params['environmentId']) is str),
+                     'codex_remote_control_notification_invalid')
             return
         if method == 'warning':
             _require(type(params.get('message')) is str)

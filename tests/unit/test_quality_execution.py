@@ -137,3 +137,42 @@ def test_evidence_recorder_uses_complete_quality_source_boundary(tmp_path, monke
     monkeypatch.setattr(record_check, "ROOT", tmp_path)
     assert record_check.fingerprints() == fingerprints(tmp_path)
     assert set(record_check.fingerprints()) == set(paths)
+
+
+def test_web_lane_artifact_inside_repo_uses_external_disposable_build(tmp_path, monkeypatch):
+    import sys
+    from tools import check_web
+
+    root = tmp_path / "project"
+    (root / "tests/web").mkdir(parents=True)
+    (root / "tests/web/sentinel.test.mjs").write_text("// synthetic lane inventory\n")
+    output = root / "var/quality/run/web/build"
+    output.parent.mkdir(parents=True)
+    monkeypatch.setattr(check_web, "ROOT", root)
+    monkeypatch.setattr(check_web.shutil, "which", lambda _name: "node")
+    monkeypatch.setattr(sys, "argv", ["tools/check_web.py", "--output-dir", str(output)])
+
+    calls = []
+    def fake_run(command, *, cwd, check, env=None):
+        assert cwd == root and check is True
+        if len(calls) == 0:
+            assert command[1:3] == ["tools/build_web.mjs", "--outdir"]
+            dist = Path(command[3]).resolve()
+            assert not dist.is_relative_to(root.resolve())
+            assert not root.resolve().is_relative_to(dist)
+            assert (dist.parent / "package.json").read_text() == '{"type":"module"}\n'
+            calls.append(("build", dist))
+        else:
+            assert command[1] == "--test"
+            dist = Path(env["MIRA_TEST_WEB_DIST"]).resolve()
+            assert dist == calls[0][1]
+            assert not dist.is_relative_to(root.resolve())
+            calls.append(("tests", dist))
+    monkeypatch.setattr(check_web.subprocess, "run", fake_run)
+
+    check_web.main()
+
+    assert [kind for kind, _ in calls] == ["build", "tests"]
+    assert output.is_dir()
+    assert (output / "package.json").is_file()
+    assert not calls[0][1].exists(), "disposable external bundle must be cleaned after the lane"

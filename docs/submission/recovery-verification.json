@@ -1,0 +1,102 @@
+{
+  "date_utc": "2026-10-07",
+  "scope": "Restoration of published source and published patches; no new runtime changes.",
+  "inputs": [
+    {
+      "role": "published_2012_complete",
+      "file": "MIRA-20261006-2012-COMPLETE-READY-ad99ab2e.zip",
+      "bytes": 43571631,
+      "sha256": "ad99ab2e4dc7112710a06b7f99d51f2306a5217b27091bb093096bfb661341e3"
+    },
+    {
+      "role": "published_image_review_source",
+      "file": "review-hotfix-source-and-evidence.zip",
+      "bytes": 599428,
+      "sha256": "6385e861721ecee92f3dd6cf030e76dd152c814057869e9e82382433a21c018f"
+    },
+    {
+      "role": "published_natural_followthrough_source",
+      "file": "MIRA-dialogue-followthrough-final-evidence.zip",
+      "bytes": 5100968,
+      "sha256": "c164a471e91070a0da721541d53fde8b03103f766f4dbd803d27326936959459"
+    },
+    {
+      "role": "published_image_review_installer",
+      "file": "mira_fix_image_review_2012.py",
+      "bytes": 45699,
+      "sha256": "2c648bcf912c3defc89bbd33d43a0291344714c0dd280f43de8fe3791c8acace"
+    },
+    {
+      "role": "published_natural_followthrough_installer",
+      "file": "mira_fix_dialogue_followthrough_2012.py",
+      "bytes": 57153,
+      "sha256": "6a905dcb03ff06aed4a950e91b268b713b3bfc73701abb38bb35682116cdcb45"
+    }
+  ],
+  "base_restore": {
+    "files": 1589,
+    "verified": true
+  },
+  "runtime_patches": [
+    {
+      "path": "apps/api/src/mira/adapters/generation/direct_codex_responses.py",
+      "published_after": "836b4a93216e71d907e395938b4a04767a8d345506769cd4dbdfd255826cb69f",
+      "actual": "836b4a93216e71d907e395938b4a04767a8d345506769cd4dbdfd255826cb69f"
+    },
+    {
+      "path": "apps/api/src/mira/adapters/media/subscription_vision_review.py",
+      "published_after": "abe89217660e44ad92c7f2e47eb454bcc5b84da898b66b1ddf940fa3fa7c5ab8",
+      "actual": "abe89217660e44ad92c7f2e47eb454bcc5b84da898b66b1ddf940fa3fa7c5ab8"
+    },
+    {
+      "path": "apps/api/src/mira/application/generation_diagnostics.py",
+      "published_after": "4930b19a0f0b9ffcaa1e5f815383c4252253ee0d2af6f458a2ab4aa40cc9b6cd",
+      "actual": "4930b19a0f0b9ffcaa1e5f815383c4252253ee0d2af6f458a2ab4aa40cc9b6cd"
+    },
+    {
+      "path": "apps/api/src/mira/application/image_operation_diagnostics.py",
+      "published_after": "117ecdedd7cd1ff22d63be577cc4abb2f7e6e5ec00a76b92a1b041dbf8a07fe8",
+      "actual": "117ecdedd7cd1ff22d63be577cc4abb2f7e6e5ec00a76b92a1b041dbf8a07fe8"
+    },
+    {
+      "path": "apps/api/src/mira/application/image_readiness.py",
+      "published_after": "8c2d04ea0637489a646fc49ccb4556fd951a268010af33ee6c634abdb9679b67",
+      "actual": "8c2d04ea0637489a646fc49ccb4556fd951a268010af33ee6c634abdb9679b67"
+    },
+    {
+      "path": "tools/check_subscription_image.py",
+      "published_after": "7158f383bd08ef21a2f545943854c2493b97fa211d7ac9cf7264b64a1a22216f",
+      "actual": "7158f383bd08ef21a2f545943854c2493b97fa211d7ac9cf7264b64a1a22216f"
+    },
+    {
+      "path": "apps/api/src/mira/adapters/generation/direct_tools.py",
+      "published_after": "a6990242a73ba20ebfd67d1251c8a347a4517a49f7f233cc3ae7a979d72e3469",
+      "actual": "a6990242a73ba20ebfd67d1251c8a347a4517a49f7f233cc3ae7a979d72e3469"
+    },
+    {
+      "path": "apps/api/src/mira/adapters/memory/story.py",
+      "published_after": "f884a19e088061b760699092d9c7e0db0667477f39c430db182cad24dc06ec7a",
+      "actual": "f884a19e088061b760699092d9c7e0db0667477f39c430db182cad24dc06ec7a"
+    },
+    {
+      "path": "apps/api/src/mira/application/generation_tool_execution.py",
+      "published_after": "69d842e2595e7b527749abf8950f3ec590a7765204cdf3a0e087bdd79f7c98cb",
+      "actual": "69d842e2595e7b527749abf8950f3ec590a7765204cdf3a0e087bdd79f7c98cb"
+    },
+    {
+      "path": "apps/api/src/mira/application/native_character_tools.py",
+      "published_after": "f67d45b6e4beb353d0e010726544fa5d91acf95ec62ff08d234b03e54724c1ee",
+      "actual": "f67d45b6e4beb353d0e010726544fa5d91acf95ec62ff08d234b03e54724c1ee"
+    },
+    {
+      "path": "apps/api/src/mira/application/ports/generation_tools.py",
+      "published_after": "49f4e1866089a46296c88f310cf6ef1218f454d49590a326c5c84e4d918c5a22",
+      "actual": "49f4e1866089a46296c88f310cf6ef1218f454d49590a326c5c84e4d918c5a22"
+    },
+    {
+      "path": "apps/api/src/mira/domain/xiahe_chapter.py",
+      "published_after": "99eb54dfef99edaf61a59774b380b7460ca795d7523ef0db31b78b67e7ce522b",
+      "actual": "99eb54dfef99edaf61a59774b380b7460ca795d7523ef0db31b78b67e7ce522b"
+    }
+  ]
+}

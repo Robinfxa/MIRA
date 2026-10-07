@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "logicalSize": { "width": 560, "height": 720 },
+  "logicalRootAnchor": { "x": 280, "y": 720 },
+  "base": {
+    "src": "mira-neutral-bust-v3.png",
+    "pixelSize": { "width": 1102, "height": 1428 },
+    "sourceAnchor": { "x": 551, "y": 1428 },
+    "sha256": "34122fa55fa8e6c871d63efa77fb22ca28227c1d920347a8175aebd6156ee9c0"
+  },
+  "expressionVariants": {
+    "warm": {
+      "src": "mira-expression-warm-v1.png",
+      "pixelSize": { "width": 1101, "height": 1428 },
+      "sourceAnchor": { "x": 550.5, "y": 1428 },
+      "sha256": "96ff60573d3a253fd983fe6951e5970fa4fa8d2807dbcdf49262a34ee0139bd7"
+    },
+    "curious": {
+      "src": "mira-expression-curious-v1.png",
+      "pixelSize": { "width": 1101, "height": 1428 },
+      "sourceAnchor": { "x": 550.5, "y": 1428 },
+      "sha256": "279b24aa64108c577123c2aa4283b2f89444c8d311eed79b4b4123ba8887ff9b"
+    },
+    "reflective": {
+      "src": "mira-expression-reflective-v1.png",
+      "pixelSize": { "width": 1101, "height": 1428 },
+      "sourceAnchor": { "x": 550.5, "y": 1428 },
+      "sha256": "03439bf7c9c5e36f8cea6e3406df1420d0a89edec34c35a7a67b717d28b0c93b"
+    }
+  },
+  "actionVariants": {
+    "camera_lowered": {
+      "calm": {
+        "src": "mira-action-camera-lowered-v1.png",
+        "pixelSize": { "width": 1101, "height": 1428 },
+        "sourceAnchor": { "x": 550.5, "y": 1428 },
+        "sha256": "b6e74ddde141d20516bd7ad7137435fe852c8037bbd4fc29c73477a22201dee9"
+      },
+      "warm": {
+        "src": "mira-combo-camera-lowered-warm-v1.png",
+        "pixelSize": { "width": 1101, "height": 1429 },
+        "sourceAnchor": { "x": 550.5, "y": 1429 },
+        "sha256": "4ad401aee5395905644e3582a1c06bc327ef81466965c1ea7b9d14ddd631beb4"
+      },
+      "curious": {
+        "src": "mira-combo-camera-lowered-curious-v1.png",
+        "pixelSize": { "width": 1101, "height": 1429 },
+        "sourceAnchor": { "x": 550.5, "y": 1429 },
+        "sha256": "b636ddaac7e7ee8cb55795d85ef53db4b92cac7ffdf5d47857e65fb8bac0f574"
+      },
+      "reflective": {
+        "src": "mira-combo-camera-lowered-reflective-v1.png",
+        "pixelSize": { "width": 1101, "height": 1429 },
+        "sourceAnchor": { "x": 550.5, "y": 1429 },
+        "sha256": "43eee3b8662f33ba408cdca51d17a587b6453525e4a7a95b123d096b5411cd84"
+      }
+    },
+    "look_at_rain": {
+      "calm": {
+        "src": "mira-action-look-at-rain-v1.png",
+        "pixelSize": { "width": 1101, "height": 1428 },
+        "sourceAnchor": { "x": 550.5, "y": 1428 },
+        "sha256": "9a8ba88073ec6934b23cdaefc02895aaed13b76fd873ed0e720d6dfd73bb4089"
+      },
+      "warm": {
+        "src": "mira-combo-look-at-rain-warm-v1.png",
+        "pixelSize": { "width": 1101, "height": 1429 },
+        "sourceAnchor": { "x": 550.5, "y": 1429 },
+        "sha256": "e26b6df6bcc1cd3cb472932688c08f545c2ab4c2f187b74af6bed84e6c6f5216"
+      },
+      "curious": {
+        "src": "mira-combo-look-at-rain-curious-v1.png",
+        "pixelSize": { "width": 1101, "height": 1429 },
+        "sourceAnchor": { "x": 550.5, "y": 1429 },
+        "sha256": "aae6af4c4989804efbb1877c7d48e96deb9dc9c42d096c12cf2533d1495d59e9"
+      },
+      "reflective": {
+        "src": "mira-combo-look-at-rain-reflective-v1.png",
+        "pixelSize": { "width": 1101, "height": 1429 },
+        "sourceAnchor": { "x": 550.5, "y": 1429 },
+        "sha256": "44697e7684a9df3f5a2a70099cbf479c76c60910865291d094186f2910743180"
+      }
+    }
+  }
+}

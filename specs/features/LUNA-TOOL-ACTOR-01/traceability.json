@@ -1,0 +1,35 @@
+{
+  "feature": "LTA-01",
+  "spec": "specs/features/LUNA-TOOL-ACTOR-01/spec.md",
+  "requirements": [
+    {
+      "id": "LTA01-001",
+      "tests": [
+        "tests/contracts/test_luna_tool_actor.py::test_tool_shown_requires_exact_receipt_and_refreshes_same_turn_context",
+        "tests/contracts/test_luna_tool_actor.py::test_visible_photo_reuses_accepted_receipt_without_render_or_second_review",
+        "tests/contracts/test_luna_tool_actor.py::test_generated_image_qualifies_exact_bytes_before_receipted_shown_result",
+        "tests/contracts/test_luna_tool_actor.py::test_real_photo_receipt_arriving_after_result_wait_is_reprojected_with_context"
+      ]
+    },
+    {
+      "id": "LTA01-002",
+      "tests": [
+        "tests/contracts/test_luna_tool_actor.py::test_optional_result_is_truthful_and_does_not_block_followup_text",
+        "tests/contracts/test_luna_tool_actor.py::test_invalid_tool_arguments_never_execute_and_continue_as_held",
+        "tests/contracts/test_luna_tool_actor.py::test_continuation_cannot_execute_old_media_or_image_proposals_again",
+        "tests/contracts/test_luna_tool_actor.py::test_empty_image_contract_is_opt_in_and_empty_or_forged_candidates_stay_closed",
+        "tests/contracts/test_luna_tool_actor.py::test_image_failures_are_truthful_nonfatal_and_respect_call_scope",
+        "tests/contracts/test_luna_tool_actor.py::test_tool_path_uses_existing_caption_chunker_once"
+      ]
+    },
+    {
+      "id": "LTA01-003",
+      "tests": [
+        "tests/contracts/test_luna_tool_actor.py::test_uncooperative_tool_turn_cannot_revive_after_fence",
+        "tests/contracts/test_luna_tool_actor.py::test_long_image_returns_pending_then_finishes_without_third_generation_call",
+        "tests/contracts/test_luna_tool_actor.py::test_pending_uncooperative_image_cannot_revive_after_fence",
+        "tests/contracts/test_luna_tool_actor.py::test_late_accepted_receipt_after_stop_updates_history_without_continuation"
+      ]
+    }
+  ]
+}

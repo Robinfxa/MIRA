@@ -1,0 +1,15 @@
+{
+  "feature": "M06-CLOSE",
+  "spec": "specs/features/M06-STORY-CLOSE-worker-exit/spec.md",
+  "requirements": [
+    {
+      "id": "M06CLOSE-001",
+      "tests": [
+        "tests/contracts/test_story_worker_termination.py::test_close_waits_for_actual_worker_return_without_blocking_event_loop",
+        "tests/contracts/test_story_worker_termination.py::test_thread_exit_consumes_same_finite_close_deadline_and_can_be_reconciled",
+        "tests/contracts/test_story_worker_termination.py::test_never_opened_close_is_still_inert_and_idempotent",
+        "tests/contracts/test_story_worker_termination.py::test_executor_wait_is_also_inside_the_close_deadline"
+      ]
+    }
+  ]
+}

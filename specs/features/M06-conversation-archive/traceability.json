@@ -1,0 +1,45 @@
+{
+  "feature": "M06CA",
+  "spec": "specs/features/M06-conversation-archive/spec.md",
+  "requirements": [
+    {
+      "id": "M06CA-001",
+      "tests": [
+        "tests/contracts/test_actor_conversation_archive.py::test_recording_provider_and_google_authorizations_are_independent",
+        "tests/contracts/test_conversation_archive.py::test_conversation_store_default_off_requires_distinct_consent_and_pairing"
+      ]
+    },
+    {
+      "id": "M06CA-002",
+      "tests": [
+        "tests/contracts/test_actor_conversation_archive.py::test_actor_records_only_accepted_and_actual_then_reentry_is_separately_labelled",
+        "tests/contracts/test_conversation_archive.py::test_partial_audio_is_never_recalled_as_presented_or_heard_words",
+        "tests/contracts/test_conversation_archive.py::test_maximum_source_text_and_full_legal_audio_progress_are_not_shortened"
+      ]
+    },
+    {
+      "id": "M06CA-003",
+      "tests": [
+        "tests/contracts/test_conversation_archive.py::test_exact_original_input_and_actual_receipts_survive_restart",
+        "tests/contracts/test_actor_conversation_archive.py::test_100_turn_archive_retains_oldest_source_while_wire_is_bounded"
+      ]
+    },
+    {
+      "id": "M06CA-004",
+      "tests": [
+        "tests/contracts/test_conversation_archive.py::test_correct_forget_and_replayed_old_capture_never_revive_derived_history",
+        "tests/contracts/test_actor_conversation_archive.py::test_revoke_during_generation_prevents_recalled_output"
+      ]
+    },
+    {
+      "id": "M06CA-005",
+      "tests": [
+        "tests/contracts/test_actor_conversation_archive.py::test_corrected_source_during_generation_fences_stale_recall",
+        "tests/contracts/test_actor_conversation_archive.py::test_stop_never_waits_for_archive_read_and_late_read_cannot_generate",
+        "tests/contracts/test_actor_conversation_archive.py::test_new_turn_discards_old_late_reentry_read",
+        "tests/contracts/test_actor_conversation_archive.py::test_cross_session_reader_packet_fails_before_generation",
+        "tests/contracts/test_actor_conversation_archive.py::test_operational_archive_absence_degrades_without_extra_generation"
+      ]
+    }
+  ]
+}

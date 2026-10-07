@@ -1,0 +1,52 @@
+{
+  "feature": "DELIVERY-LOCAL",
+  "requirements": [
+    {
+      "id": "DELIVERYLOCAL-001",
+      "tests": [
+        "tests/unit/test_local_unlimited_interaction.py::test_local_none_accepts_more_than_twenty_turns_with_bounded_reliable_history",
+        "tests/unit/test_local_unlimited_interaction.py::test_finite_actor_limit_remains_irreversible",
+        "tests/unit/test_local_unlimited_interaction.py::test_none_lease_passes_old_duration_with_finite_audio_backpressure",
+        "tests/unit/test_local_unlimited_interaction.py::test_none_commits_and_restarts_keep_bounded_records_and_isolate_sessions"
+      ]
+    },
+    {
+      "id": "DELIVERYLOCAL-002",
+      "tests": [
+        "tests/unit/test_local_unlimited_interaction.py::test_duration_rollover_keeps_every_sample_and_final_then_stops_at_shared_service_budget",
+        "tests/unit/test_local_unlimited_interaction.py::test_two_clients_share_attempts_cancel_and_failure_never_refund_or_retry",
+        "tests/unit/test_local_unlimited_interaction.py::test_rollover_mid_utterance_commits_both_final_pieces_exactly_once",
+        "tests/unit/test_local_unlimited_interaction.py::test_hard_duration_drain_timeout_does_not_loop_or_erase_final"
+      ]
+    },
+    {
+      "id": "DELIVERYLOCAL-003",
+      "tests": [
+        "tests/unit/test_local_unlimited_interaction.py::test_local_none_accepts_more_than_twenty_turns_with_bounded_reliable_history",
+        "tests/unit/test_local_unlimited_interaction.py::test_retired_receipts_cannot_reuse_sequence_and_remaining_facts_keep_provenance",
+        "tests/unit/test_local_unlimited_interaction.py::test_history_retains_exact_latest_audio_and_old_control_without_raw_progress_growth",
+        "tests/unit/test_local_unlimited_interaction.py::test_archive_pending_records_backpressure_before_retirement_and_keep_absolute_indices"
+      ]
+    },
+    {
+      "id": "DELIVERYLOCAL-004",
+      "tests": [
+        "tests/contracts/test_subscription_unlimited_budget.py::test_route_defaults_and_explicit_finite_values_are_separate",
+        "tests/contracts/test_subscription_unlimited_budget.py::test_three_hundred_real_actor_turns_and_one_hundred_tools_stay_bounded",
+        "tests/contracts/test_subscription_unlimited_budget.py::test_official_api_and_probe_cannot_take_unlimited_generation",
+        "tests/contracts/test_subscription_unlimited_budget.py::test_unlimited_cancel_releases_reservation_without_retry_or_stale_continuation"
+      ]
+    },
+    {
+      "id": "DELIVERYLOCAL-005",
+      "tests": [
+        "tests/contracts/test_subscription_unlimited_budget.py::test_unlimited_voice_defaults_preserve_explicit_service_caps_and_legacy_opt_in",
+        "tests/contracts/test_subscription_unlimited_budget.py::test_check_renders_null_limits_without_auth_or_generation",
+        "tests/contracts/test_subscription_unlimited_budget.py::test_story_image_readiness_accepts_unlimited_dialogue_without_expanding_image_budget",
+        "tests/contracts/test_subscription_unlimited_budget.py::test_actor_preserves_presented_history_on_finite_budget_exhaustion",
+        "tests/contracts/test_subscription_unlimited_budget.py::test_final_reserved_continuation_and_provider_429_remain_distinct"
+      ]
+    }
+  ],
+  "spec": "specs/features/DELIVERY-local-unlimited/spec.md"
+}

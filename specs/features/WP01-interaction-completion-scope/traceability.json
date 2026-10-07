@@ -1,0 +1,28 @@
+{
+  "feature": "WP01INTERACTIONSCOPE",
+  "spec": "specs/features/WP01-interaction-completion-scope/spec.md",
+  "requirements": [
+    {
+      "id": "WP01INTERACTIONSCOPE-001",
+      "tests": [
+        "tests/contracts/test_jev_interaction_completion_scope.py::test_authored_fiction_and_noncompletion_use_bound_scope_without_receipt",
+        "tests/contracts/test_jev_interaction_completion_scope.py::test_current_execution_and_shared_history_still_require_receipts",
+        "tests/contracts/test_jev_interaction_completion_scope.py::test_fiction_label_does_not_exempt_actual_execution_claim"
+      ]
+    },
+    {
+      "id": "WP01INTERACTIONSCOPE-002",
+      "tests": [
+        "tests/contracts/test_jev_interaction_completion_scope.py::test_generation_instructions_allow_ordinary_chat_without_fabricating_user_facts",
+        "tests/contracts/test_jev_interaction_completion_scope.py::test_scope_change_preserves_other_gates_and_weak_rejection"
+      ]
+    },
+    {
+      "id": "WP01INTERACTIONSCOPE-003",
+      "tests": [
+        "tests/contracts/test_jev_interaction_completion_scope.py::test_legacy_completion_scope_stays_replayable",
+        "tests/contracts/test_character_control_bridge.py::test_four_turn_actual_semantic_pipeline_keeps_full_review_within_wire_budgets"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+MIRA Web Workbench — third-party runtime licenses
+
+PixiJS 8.19.0 is bundled into the local browser JavaScript. The following
+locked PixiJS runtime dependency packages are also incorporated into the
+bundle as applicable. Full copyright and license texts are included in the
+adjacent files and are served with the application at /assets/licenses/.
+
+- pixi.js 8.19.0 — MIT — pixi.js-8.19.0-MIT.txt
+- @pixi/colord 2.9.6 — MIT — pixi-colord-2.9.6-MIT.txt
+- @xmldom/xmldom 0.8.15 — MIT — xmldom-0.8.15-MIT.txt
+- earcut 3.2.4 — ISC — earcut-3.2.4-ISC.txt
+- eventemitter3 5.0.4 — MIT — eventemitter3-5.0.4-MIT.txt
+- gifuct-js 2.1.2 — MIT — gifuct-js-2.1.2-MIT.txt
+- ismobilejs 1.1.1 — MIT — ismobilejs-1.1.1-MIT.txt
+- js-binary-schema-parser 2.0.3 — MIT — js-binary-schema-parser-2.0.3-MIT.txt
+- parse-svg-path 0.2.0 — MIT — parse-svg-path-0.2.0-MIT.txt
+- tiny-lru 11.4.7 — BSD-3-Clause — tiny-lru-11.4.7-BSD-3-Clause.txt
+
+Versions are taken from package-lock.json. PixiJS and all declared production
+runtime transitive dependencies are listed, even where tree-shaking may omit a
+specific module from a particular build. Type-only packages and build-only
+TypeScript/esbuild tooling are not browser runtime dependencies. esbuild's
+linked bundle notices remain alongside their respective emitted chunks under
+/dist/.

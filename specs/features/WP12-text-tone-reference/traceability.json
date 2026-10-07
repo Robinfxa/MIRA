@@ -1,0 +1,38 @@
+{
+  "feature": "WP12TONE",
+  "spec": "specs/features/WP12-text-tone-reference/spec.md",
+  "requirements": [
+    {
+      "id": "WP12TONE-001",
+      "tests": [
+        "tests/contracts/test_character_text_tone_reference.py::test_tone_refinement_is_fixed_once_on_each_existing_capability_path",
+        "tests/contracts/test_character_text_tone_reference.py::test_native_request_keeps_tone_and_complete_authored_cue",
+        "tests/contracts/test_character_text_tone_reference.py::test_direct_request_keeps_tone_and_complete_authored_cue",
+        "tests/contracts/test_character_text_tone_reference.py::test_authored_tone_dialogue_through_actual_asgi_keeps_receipts_and_reference_boundary"
+      ]
+    },
+    {
+      "id": "WP12TONE-002",
+      "tests": [
+        "tests/contracts/test_character_text_tone_reference.py::test_tone_refinement_is_fixed_once_on_each_existing_capability_path",
+        "tests/contracts/test_character_text_tone_reference.py::test_authored_tone_dialogue_through_actual_asgi_keeps_receipts_and_reference_boundary"
+      ]
+    },
+    {
+      "id": "WP12TONE-003",
+      "tests": [
+        "tests/contracts/test_character_text_tone_reference.py::test_tone_refinement_is_fixed_once_on_each_existing_capability_path",
+        "tests/contracts/test_character_text_tone_reference.py::test_native_request_keeps_tone_and_complete_authored_cue",
+        "tests/contracts/test_character_text_tone_reference.py::test_direct_request_keeps_tone_and_complete_authored_cue",
+        "tests/contracts/test_character_text_tone_reference.py::test_tone_refinement_does_not_relax_json_or_full_speech_cue_contract",
+        "tests/contracts/test_character_text_tone_reference.py::test_authored_tone_dialogue_through_actual_asgi_keeps_receipts_and_reference_boundary"
+      ]
+    },
+    {
+      "id": "WP12TONE-004",
+      "tests": [
+        "tests/contracts/test_character_text_tone_reference.py::test_authored_tone_dialogue_through_actual_asgi_keeps_receipts_and_reference_boundary"
+      ]
+    }
+  ]
+}

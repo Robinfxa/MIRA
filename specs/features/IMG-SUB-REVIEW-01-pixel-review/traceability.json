@@ -1,0 +1,34 @@
+{
+  "spec": "specs/features/IMG-SUB-REVIEW-01-pixel-review/spec.md",
+  "requirements": [
+    {
+      "id": "IMGSUBREVIEW01-001",
+      "tests": [
+        "tests/contracts/test_subscription_vision_review.py::test_exact_multimodal_route_model_headers_and_canonical_pixels",
+        "tests/contracts/test_subscription_vision_review.py::test_invalid_inputs_fail_before_credentials_or_http",
+        "tests/contracts/test_subscription_vision_review.py::test_large_canonical_png_uses_image_request_budget"
+      ]
+    },
+    {
+      "id": "IMGSUBREVIEW01-002",
+      "tests": [
+        "tests/contracts/test_subscription_vision_review.py::test_supported_complete_stream_shapes",
+        "tests/contracts/test_subscription_vision_review.py::test_bad_binding_or_unknown_check_never_yields_observation",
+        "tests/contracts/test_subscription_vision_review.py::test_invalid_or_partial_stream_never_approves",
+        "tests/contracts/test_subscription_vision_review.py::test_negative_observations_are_preserved",
+        "tests/contracts/test_subscription_vision_review.py::test_complete_json_at_sse_eof_matches_existing_subscription_transport",
+        "tests/contracts/test_subscription_vision_review.py::test_grounded_subscription_transport_compatibility",
+        "tests/contracts/test_subscription_vision_review.py::test_compressed_response_bounds_both_wire_and_decoded_bytes"
+      ]
+    },
+    {
+      "id": "IMGSUBREVIEW01-003",
+      "tests": [
+        "tests/contracts/test_subscription_vision_review.py::test_suppressed_cancellation_never_revives_late_review",
+        "tests/contracts/test_subscription_vision_review.py::test_http_failures_are_safe_and_single_attempt",
+        "tests/contracts/test_subscription_vision_review.py::test_auth_failure_is_sanitized_before_http"
+      ]
+    }
+  ],
+  "feature": "IMG-SUB-REVIEW-01"
+}

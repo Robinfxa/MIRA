@@ -1,0 +1,37 @@
+{
+  "feature": "DEV-RUNTIME-ADMISSION-01",
+  "spec": "specs/features/DEV-RUNTIME-ADMISSION-01/spec.md",
+  "requirements": [
+    {
+      "id": "DEVRUNTIMEADMISSION01-001",
+      "tests": [
+        "tests/contracts/test_runtime_admission_preparation.py::test_no_args_is_unarmed_and_performs_zero_setup_io",
+        "tests/contracts/test_runtime_admission_preparation.py::test_policy_confirmation_alone_cannot_probe_or_write"
+      ]
+    },
+    {
+      "id": "DEVRUNTIMEADMISSION01-002",
+      "tests": [
+        "tests/contracts/test_runtime_admission_preparation.py::test_preflight_sends_only_initialize_initialized_and_config_read_without_claims",
+        "tests/contracts/test_runtime_admission_preparation.py::test_preflight_rejects_wrong_version_custom_route_and_server_rpc",
+        "tests/contracts/test_runtime_admission_preparation.py::test_preflight_rejects_disallowed_rpc_before_transport_send",
+        "tests/contracts/test_codex_platform_pins.py::test_macos_codex_runtime_selects_only_the_verified_host_architecture",
+        "tests/contracts/test_codex_platform_pins.py::test_linux_alias_remains_the_original_verified_x86_64_pin",
+        "tests/contracts/test_codex_platform_pins.py::test_macos_runtime_rejects_explicit_cross_platform_or_arbitrary_digest",
+        "tests/contracts/test_codex_platform_pins.py::test_unpinned_os_or_architecture_fails_closed_at_runtime_construction",
+        "tests/contracts/test_codex_platform_pins.py::test_prepare_helper_uses_actual_macos_architecture_not_environment_override",
+        "tests/contracts/test_codex_platform_pins.py::test_preflight_accepts_only_the_exact_host_reported_macos_platform",
+        "tests/contracts/test_codex_platform_pins.py::test_macos_preflight_rejects_other_missing_or_wrong_platform_facts",
+        "tests/contracts/test_codex_platform_pins.py::test_process_validation_rejects_runtime_reused_under_different_host_pin"
+      ]
+    },
+    {
+      "id": "DEVRUNTIMEADMISSION01-003",
+      "tests": [
+        "tests/contracts/test_runtime_admission_preparation.py::test_environment_rejects_api_key_presence_and_proxy_userinfo_without_echoing_values",
+        "tests/contracts/test_runtime_admission_preparation.py::test_private_writer_creates_exact_mode_no_overwrite_and_rejects_symlink_parent",
+        "tests/contracts/test_runtime_admission_preparation.py::test_explicit_content_ack_writes_reader_compatible_public_declaration"
+      ]
+    }
+  ]
+}

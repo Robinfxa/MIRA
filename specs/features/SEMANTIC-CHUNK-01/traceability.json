@@ -1,0 +1,12 @@
+{
+  "feature": "SEMANTIC-CHUNK-01",
+  "spec": "specs/features/SEMANTIC-CHUNK-01/spec.md",
+  "requirements": [
+    {"id":"SEMANTICCHUNK01-001","tests":["tests/contracts/test_semantic_chunking.py::test_first_complete_sentence_does_not_wait_for_boundary_judgment","tests/contracts/test_semantic_chunking.py::test_speech_bearing_candidate_stays_whole_and_actual_actor_calls_tts_once","tests/contracts/test_semantic_chunking.py::test_optional_event_candidates_keep_exact_original_cue","tests/contracts/test_semantic_chunking.py::test_speech_permission_timeout_never_drops_caption_tail","tests/contracts/test_semantic_chunking_composition.py::test_direct_factory_enables_real_chunk_consumer_with_one_bounded_output_transport_call"]},
+    {"id":"SEMANTICCHUNK01-002","tests":["tests/contracts/test_semantic_chunking.py::test_selected_tail_partition_changes_real_ranges_without_text_loss","tests/contracts/test_semantic_chunking.py::test_original_codepoint_ranges_preserve_emoji_combining_marks_and_qualifiers"]},
+    {"id":"SEMANTICCHUNK01-003","tests":["tests/contracts/test_semantic_chunking.py::test_timeout_is_hard_even_when_backend_ignores_cancellation_and_late_result_is_discarded","tests/contracts/test_jev_chunking.py::test_boundary_budget_defaults_to_zero_and_attempts_never_retry","tests/contracts/test_semantic_chunking_composition.py::test_check_declares_separate_finite_boundary_and_total_jev_allowances","tests/contracts/test_semantic_chunking_composition.py::test_check_rejects_invalid_boundary_configuration"]},
+    {"id":"SEMANTICCHUNK01-004","tests":["tests/contracts/test_semantic_chunking.py::test_actor_cancellation_preserves_only_actual_prefix_receipt","tests/contracts/test_semantic_chunking.py::test_cancelled_stream_never_yields_tail_after_uncooperative_judgment"]},
+    {"id":"SEMANTICCHUNK01-005","tests":["tests/contracts/test_semantic_chunking.py::test_compiler_binds_original_metadata_and_keeps_speech_independent"]},
+    {"id":"SEMANTICCHUNK01-006","tests":["tests/contracts/test_jev_chunking.py::test_jev_selects_exact_application_partition_without_grading_text_or_permissions","tests/contracts/test_jev_chunking.py::test_invalid_or_uncertain_wire_keeps_the_original_tail","tests/contracts/test_jev_chunking.py::test_replayed_answer_cannot_bind_to_next_attempt"]}
+  ]
+}

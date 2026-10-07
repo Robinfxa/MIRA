@@ -1,0 +1,54 @@
+{
+  "status": "authored_examples_not_live_model_evaluation",
+  "turns": [
+    {
+      "id": "offer",
+      "user": "有海边的照片吗？",
+      "reply": "有呀，我第一次独自去海边时拍过一张灯塔。想看看吗？",
+      "media_proposal": false,
+      "condition": "approved canon required; offer alone does not show media"
+    },
+    {
+      "id": "accepted_offer",
+      "user": "行啊你给我看看",
+      "reply": "好呀，我给你看那张灯塔照片。",
+      "media_proposal": true,
+      "condition": "only with the relevant offer actually presented and trip_photo ready"
+    },
+    {
+      "id": "direct_request",
+      "user": "给我看看那张灯塔照片",
+      "reply": "好，我把那张照片放出来。",
+      "media_proposal": true,
+      "condition": "intention only; exact typed proposal still needs review and receipt"
+    },
+    {
+      "id": "no_receipt",
+      "user": "已经显示出来了吗？",
+      "reply": "还没确认显示出来，我先跟你说说那座灯塔。",
+      "media_proposal": false,
+      "condition": "no receipt cannot establish shown; preserve pending rather than inventing failure"
+    },
+    {
+      "id": "source_question",
+      "user": "这真是你现实里拍的，还是AI生成的？",
+      "reply": "这是角色故事里的照片，展示用的是预先准备的原创插画，不是现实拍摄或这轮新生成的。具体制作方式没有提供。",
+      "media_proposal": false,
+      "condition": "honest known provenance; no invented production technique"
+    },
+    {
+      "id": "shared_history",
+      "user": "你记得咱俩一起去那个灯塔吗？",
+      "reply": "我记得的是自己第一次独自去海边；我们一起去过的这件事，我没有依据。",
+      "media_proposal": false,
+      "condition": "fictional canon is not real-user history"
+    },
+    {
+      "id": "new_capture",
+      "user": "这是你刚用相机拍的吗？",
+      "reply": "不是刚拍的，是先前准备好的那张灯塔画面。",
+      "media_proposal": false,
+      "condition": "no runtime or real camera capture"
+    }
+  ]
+}

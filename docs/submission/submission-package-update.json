@@ -1,0 +1,47 @@
+{
+  "date_utc": "2026-10-07",
+  "baseline_archive": "MIRA-20261007-final-source.zip",
+  "baseline_sha256": "0f5260007f2b43ed542bab081ec3a4de8b081ef061afd2e3d773398b729433f7",
+  "change_scope": "submission documentation only; runtime, assets, launcher, dependency locks and compiled frontend unchanged",
+  "changed_documents": [
+    "AI_USAGE.md",
+    "FIRST-RUN.md",
+    "README.md",
+    "START-HERE.md",
+    "docs/SUBMISSION-CHECKLIST.md",
+    "docs/development/DEMO-RECORDING.md",
+    "docs/mission/CURRENT-ACCEPTANCE.md",
+    "docs/submission/VERIFICATION.md"
+  ],
+  "unchanged_baseline_files_before_manifest_refresh": 1815,
+  "author_effort": {
+    "approximate_total_hours": 100,
+    "includes_ai_runtime": true,
+    "personal_human_hours": null,
+    "continuous_calendar_hours": null,
+    "breakdown_hours": {
+      "design": 5,
+      "backend": 30,
+      "character": 30,
+      "integration": 10,
+      "rework": 20,
+      "testing": 5
+    }
+  },
+  "video": {
+    "author_reports_recorded": true,
+    "delivery": "separate attachment in author email",
+    "included_in_zip": false,
+    "file_or_link_received": false,
+    "playback_duration_audio_and_required_scenes_checked": false
+  },
+  "new_runtime_checks": "not_run; fixed-byte previous evidence retained",
+  "new_paid_calls": 0,
+  "new_mac_operations": 0,
+  "pdf_requirements_review": "six pages checked; page4 sources/privacy, page5 submission requirements, page6 incomplete capabilities",
+  "remaining_submitter_items": [
+    "separately attach and verify 3–5 minute video",
+    "provide a source repository accessible to reviewers or confirm archive acceptance",
+    "verify real target-device operation and new-install timing where required"
+  ]
+}

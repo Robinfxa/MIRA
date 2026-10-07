@@ -70,7 +70,10 @@ class SyntheticJevTransport:
         answers = {}
         for key, question in request["questions"].items():
             if output:
-                answers[key] = _choice(self.output_choice)
+                if question["type"] == "noul":
+                    answers[key] = {"type": "noul", "noul": 0.0}
+                else:
+                    answers[key] = _choice(self.output_choice)
             elif question["type"] == "noul":
                 value = (0.5 if self.input_unknown and key.endswith("capture_restriction")
                          else self.capture if key.endswith("capture_restriction") else 0.0)

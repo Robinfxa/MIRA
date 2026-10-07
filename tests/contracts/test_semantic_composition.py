@@ -5,12 +5,13 @@ from dataclasses import asdict, replace
 import pytest
 
 from mira.adapters.review.jev import (
-    JevReviewBackend, JevReviewContract, QUESTION_SET_VERSION, candidate_digest, context_digest,
+    JevReviewBackend, JevReviewContract, OUTPUT_QUESTION_SET_V2, QUESTION_SET_VERSION,
+    candidate_digest, context_digest,
 )
-from mira.application.contracts import GenerationContext, ReviewVerdict
+from mira.application.contracts import GenerationContext, ReviewVerdict, generation_context_data
 from mira.application.decision_contracts import (
-    InputDecisionStatus, ReliableUserInput, ResponseContractProducer, evidence_digest,
-    mira26_author_policy, valid_snapshot,
+    InputDecisionStatus, ReliableUserInput, ResponseContractProducer, decision_snapshot_data,
+    evidence_digest, mira26_author_policy, valid_snapshot,
 )
 from mira.application.decision_runtime import (
     DecisionSnapshotOwner, SemanticReviewCoordinator, snapshot_matches_state, snapshot_same_branch,
@@ -158,13 +159,40 @@ async def test_output_typed_snapshot_and_observation_serialize_without_loss():
     result = await output_backend(transport).review_contract(snap.context, candidate(), contract)
     assert result.verdict == ReviewVerdict.ALLOW
     data = transport.calls[0]["state"]["contract"]
-    assert data["snapshot"] == json.loads(json.dumps(asdict(snap)))
+    assert data["snapshot"] == json.loads(json.dumps(decision_snapshot_data(snap)))
     assert data["input_observation"] == json.loads(json.dumps(asdict(observation(snap))))
     assert data["basis_snapshot_digest"] == evidence_digest(snap)
     assert data["response_contract_digest"] == contract.contract_digest
     assert data["effective_constraints"] == list(contract.effective_constraints)
     assert data["snapshot"]["author_policy"]["policy_revision"] == contract.policy_revision
     assert data["policy_revision"] == QUESTION_SET_VERSION
+
+
+@pytest.mark.asyncio
+async def test_output_typed_contract_can_select_question_set_v2_without_losing_evidence():
+    snap = snapshot()
+    contract = typed_contract(snap)
+    transport = SyntheticTransport()
+    backend = output_backend(transport, question_set_revision=OUTPUT_QUESTION_SET_V2)
+
+    result = await backend.review_contract(snap.context, candidate(), contract)
+
+    assert result.verdict == ReviewVerdict.ALLOW
+    state = transport.calls[0]["state"]
+    assert state["contract"]["policy_revision"] == OUTPUT_QUESTION_SET_V2
+    assert state["context"] == json.loads(json.dumps(generation_context_data(snap.context)))
+    assert state["contract"]["snapshot"] == json.loads(json.dumps(decision_snapshot_data(snap)))
+    assert state["contract"]["input_observation"] == json.loads(json.dumps(asdict(observation(snap))))
+    assert state["contract"]["basis_snapshot_digest"] == evidence_digest(snap)
+    assert state["contract"]["response_contract_digest"] == contract.contract_digest
+    assert state["contract"]["effective_constraints"] == list(contract.effective_constraints)
+    assert state["contract"]["response_obligations"] == list(contract.response_obligations)
+    assert state["contract"]["character_facts"] == list(contract.character_facts)
+    assert state["contract"]["allowed_controls"] == json.loads(
+        json.dumps(asdict(contract)["allowed_controls"]))
+    o3 = next(question for key, question in transport.calls[0]["questions"].items()
+              if key.endswith(":o3"))
+    assert o3["instructions"]["question"].startswith("Are all completed factual claims")
 
 
 @pytest.mark.asyncio

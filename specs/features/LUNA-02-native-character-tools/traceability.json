@@ -1,0 +1,49 @@
+{
+  "feature": "LUNA-02",
+  "spec": "specs/features/LUNA-02-native-character-tools/spec.md",
+  "requirements": [
+    {
+      "id": "LUNA02-001",
+      "tests": [
+        "tests/contracts/test_native_character_tools.py::test_native_ordinary_dialogue_never_calls_review",
+        "tests/contracts/test_native_character_tools.py::test_native_commentary_is_available_before_optional_render_and_continuation",
+        "tests/contracts/test_native_character_tools.py::test_native_optional_continuation_error_keeps_issued_independent_commentary",
+        "tests/contracts/test_native_character_tools.py::test_native_real_wire_known_optional_fields_hold_without_losing_dialogue"
+      ]
+    },
+    {
+      "id": "LUNA02-002",
+      "tests": [
+        "tests/contracts/test_native_character_tools.py::test_native_control_waits_for_own_exact_receipt",
+        "tests/contracts/test_native_character_tools.py::test_native_missing_receipt_returns_pending_without_changing_displayed_outfit",
+        "tests/contracts/test_native_character_tools.py::test_native_uncooperative_model_is_fenced",
+        "tests/contracts/test_native_character_tools.py::test_native_two_actors_never_accept_each_others_receipts",
+        "tests/contracts/test_native_character_tools.py::test_native_ready_control_runtime_receipt_updates_actual_appearance_without_fake_review"
+      ]
+    },
+    {
+      "id": "LUNA02-003",
+      "tests": [
+        "tests/contracts/test_native_character_tools.py::test_native_mixed_script_role_claim_uses_typed_semantics_and_real_scene_receipt",
+        "tests/contracts/test_native_character_tools.py::test_native_confirmation_requires_own_immediately_previous_presented_question",
+        "tests/contracts/test_native_character_tools.py::test_native_role_cannot_derive_authority_from_other_text_or_unknown_confirmation",
+        "tests/contracts/test_native_character_tools.py::test_native_unused_confirmation_is_consumed_by_next_dialogue_or_explicit_exit"
+      ]
+    },
+    {
+      "id": "LUNA02-004",
+      "tests": [
+        "tests/contracts/test_native_character_tools.py::test_native_story_continuation_unlocks_only_on_its_actual_receipt",
+        "tests/contracts/test_native_character_tools.py::test_native_rain_offer_then_exact_accept_advances_only_on_wardrobe_receipt",
+        "tests/contracts/test_native_character_tools.py::test_native_chapter_preview_and_handover_are_distinct_complete_receipt_steps",
+        "tests/contracts/test_native_character_tools.py::test_native_decline_chat_reinvite_requires_explicit_current_reopen"
+      ]
+    },
+    {
+      "id": "LUNA02-005",
+      "tests": [
+        "tests/contracts/test_native_character_tools.py::test_native_photo_dismiss_preserves_dialogue_continuation_and_actual_history"
+      ]
+    }
+  ]
+}

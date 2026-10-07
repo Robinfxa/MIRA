@@ -1,0 +1,34 @@
+{
+  "feature": "M06-PAIR",
+  "spec": "specs/features/M06-operator-pairing/spec.md",
+  "requirements": [
+    {
+      "id": "M06PAIR-001",
+      "tests": [
+        "tests/contracts/test_memory_operator_pairing.py::test_memory_mode_rejects_missing_ephemeral_pairing",
+        "tests/contracts/test_memory_operator_pairing.py::test_private_http_and_recording_apis_are_blocked_pre_pair",
+        "tests/contracts/test_memory_operator_pairing.py::test_websocket_private_path_is_blocked_before_pair",
+        "tests/contracts/test_memory_operator_pairing.py::test_nonmemory_app_behavior_remains_unchanged"
+      ]
+    },
+    {
+      "id": "M06PAIR-002",
+      "tests": [
+        "tests/contracts/test_memory_operator_pairing.py::test_operator_status_does_not_report_another_clients_pairing",
+        "tests/contracts/test_memory_operator_pairing.py::test_browser_same_origin_get_without_origin_is_authenticated",
+        "tests/contracts/test_memory_operator_pairing.py::test_cookie_is_bound_to_exact_origin_and_host",
+        "tests/contracts/test_memory_operator_pairing.py::test_invalid_pair_bodies_never_echo_synthetic_input",
+        "tests/contracts/test_memory_operator_pairing.py::test_pair_code_is_one_use_and_failed_attempt_bound"
+      ]
+    },
+    {
+      "id": "M06PAIR-003",
+      "tests": [
+        "tests/contracts/test_memory_operator_pairing.py::test_revocation_closes_runtime_invalidates_cookie_and_prevents_replay",
+        "tests/contracts/test_memory_operator_pairing.py::test_stop_does_not_unpair_operator",
+        "tests/contracts/test_memory_operator_pairing.py::test_cancellation_resistant_late_factory_result_is_closed",
+        "tests/contracts/test_memory_operator_pairing.py::test_application_shutdown_invalidates_cookie_and_closes_reader"
+      ]
+    }
+  ]
+}

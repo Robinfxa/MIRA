@@ -1,0 +1,30 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+___________ test_dry_run_is_exact_original_profile_without_mutation ____________
+
+project = PosixPath('/tmp/pytest-of-agent/pytest-38/test_dry_run_is_exact_original0/MIRA source with spaces')
+capsys = <_pytest.capture.CaptureFixture object at 0x7fd9bbae9910>
+
+    def test_dry_run_is_exact_original_profile_without_mutation(project, capsys):
+        before = set(project.rglob("*"))
+>       assert cli.main(["--dry-run"]) == 0
+E       AssertionError: assert 2 == 0
+E        +  where 2 = <function main at 0x7fd9bbb40b80>(['--dry-run'])
+E        +    where <function main at 0x7fd9bbb40b80> = cli.main
+
+tests/contracts/test_start_mira_launcher.py:26: AssertionError
+______ test_template_supported_voice_fields_and_chinese_style_round_trip _______
+
+    def test_template_supported_voice_fields_and_chinese_style_round_trip():
+        from mira.config.loader import load_settings
+        settings = load_settings(root=ROOT, env_file=ROOT / ".env.example", environ={})
+        speech = settings.services.speech
+>       assert speech.tts_voice == "Gacrux"
+E       AssertionError: assert None == 'Gacrux'
+E        +  where None = SpeechSettings(asr_provider='google_cloud', tts_provider='google_cloud', auth='google_adc', project_id=None, quota_pro...one, tts_endpoint='aiplatform.googleapis.com', tts_model='gemini-3.8-flash-tts', tts_location='global', tts_style=None).tts_voice
+
+tests/contracts/test_start_mira_launcher.py:195: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_start_mira_launcher.py::test_dry_run_is_exact_original_profile_without_mutation
+FAILED tests/contracts/test_start_mira_launcher.py::test_template_supported_voice_fields_and_chinese_style_round_trip
+2 failed in 0.13s

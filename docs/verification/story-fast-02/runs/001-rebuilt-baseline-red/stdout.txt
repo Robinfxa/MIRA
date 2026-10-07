@@ -1,0 +1,74 @@
+FFFFFFFFF                                                                [100%]
+=================================== FAILURES ===================================
+_ test_interested_visitor_recognition_offer_one_acceptance_and_actual_handover _
+tests/contracts/test_native_photo_handover_flow.py:46: in test_interested_visitor_recognition_offer_one_acceptance_and_actual_handover
+    assert chapter.stage is ChapterStage.GIFT_OFFERED
+E   AssertionError: assert <ChapterStage.RECOGNIZED: 'recognized'> is <ChapterStage.GIFT_OFFERED: 'gift_offered'>
+E    +  where <ChapterStage.RECOGNIZED: 'recognized'> = ChapterState(schema='mira.xiahe-chapter.v1', source_hash='1416a3fbb9b619f923e4b6da10f98e2e36ff7f4a96a9d15a6feac1a8218b...y='fresh_chapter_v1', suspended=False, last_progress_input_id='audit-2', last_progress_epoch=2, preview_reference=None).stage
+E    +  and   <ChapterStage.GIFT_OFFERED: 'gift_offered'> = ChapterStage.GIFT_OFFERED
+__ test_recognition_alone_releases_shared_canon_without_narration_milestones ___
+tests/contracts/test_native_photo_handover_flow.py:73: in test_recognition_alone_releases_shared_canon_without_narration_milestones
+    assert all(raw.count(text)==1 for _,_,text in CHAPTER_CANON)
+E   assert False
+E    +  where False = all(<generator object test_recognition_alone_releases_shared_canon_without_narration_milestones.<locals>.<genexpr> at 0x7fc35aa789e0>)
+_ test_recognition_receipt_precedes_offer_and_offer_needs_own_real_subtitle_receipt _
+tests/contracts/test_native_photo_handover_flow.py:96: in test_recognition_receipt_precedes_offer_and_offer_needs_own_real_subtitle_receipt
+    assert c.runtime.story.chapter.pending.transition=='x.gift_offer'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute 'transition'
+_ test_initial_waiting_and_unfulfilled_concern_are_superseded_by_typed_current_receipts _
+tests/contracts/test_native_photo_handover_flow.py:112: in test_initial_waiting_and_unfulfilled_concern_are_superseded_by_typed_current_receipts
+    assert not any(r['source_id']=='canon.waiting' for r in memory['current_intentions_and_concerns'])
+E   assert not True
+E    +  where True = any(<generator object test_initial_waiting_and_unfulfilled_concern_are_superseded_by_typed_current_receipts.<locals>.<genexpr> at 0x7fc35b1c4930>)
+_ test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u6211\u662f\u590f\u79be-True] _
+tests/contracts/test_native_photo_handover_flow.py:134: in test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword
+    assert local_role_proposal(proposal,text) is allowed
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+apps/api/src/mira/application/actor_chapter.py:28: in local_role_proposal
+    awaited_friend=awaited_friend,native_act=native_act))
+                                             ^^^^^^^^^^
+E   NameError: name 'native_act' is not defined
+_ test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u6211\u4e0d\u662f\u590f\u79be-False] _
+tests/contracts/test_native_photo_handover_flow.py:134: in test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword
+    assert local_role_proposal(proposal,text) is allowed
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+apps/api/src/mira/application/actor_chapter.py:28: in local_role_proposal
+    awaited_friend=awaited_friend,native_act=native_act))
+                                             ^^^^^^^^^^
+E   NameError: name 'native_act' is not defined
+_ test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u4ed6\u8bf4\u201c\u6211\u662f\u590f\u79be\u201d-False] _
+tests/contracts/test_native_photo_handover_flow.py:134: in test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword
+    assert local_role_proposal(proposal,text) is allowed
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+apps/api/src/mira/application/actor_chapter.py:28: in local_role_proposal
+    awaited_friend=awaited_friend,native_act=native_act))
+                                             ^^^^^^^^^^
+E   NameError: name 'native_act' is not defined
+_ test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u5982\u679c\u6211\u662f\u590f\u79be\u5462-False] _
+tests/contracts/test_native_photo_handover_flow.py:134: in test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword
+    assert local_role_proposal(proposal,text) is allowed
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+apps/api/src/mira/application/actor_chapter.py:28: in local_role_proposal
+    awaited_friend=awaited_friend,native_act=native_act))
+                                             ^^^^^^^^^^
+E   NameError: name 'native_act' is not defined
+_ test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u201c\u6211\u662f\u590f\u79be\u201d\u8fd9\u53e5\u53f0\u8bcd\u662f\u4ec0\u4e48\u610f\u601d-False] _
+tests/contracts/test_native_photo_handover_flow.py:134: in test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword
+    assert local_role_proposal(proposal,text) is allowed
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+apps/api/src/mira/application/actor_chapter.py:28: in local_role_proposal
+    awaited_friend=awaited_friend,native_act=native_act))
+                                             ^^^^^^^^^^
+E   NameError: name 'native_act' is not defined
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_interested_visitor_recognition_offer_one_acceptance_and_actual_handover
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_recognition_alone_releases_shared_canon_without_narration_milestones
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_recognition_receipt_precedes_offer_and_offer_needs_own_real_subtitle_receipt
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_initial_waiting_and_unfulfilled_concern_are_superseded_by_typed_current_receipts
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u6211\u662f\u590f\u79be-True]
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u6211\u4e0d\u662f\u590f\u79be-False]
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u4ed6\u8bf4\u201c\u6211\u662f\u590f\u79be\u201d-False]
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u5982\u679c\u6211\u662f\u590f\u79be\u5462-False]
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword[\u201c\u6211\u662f\u590f\u79be\u201d\u8fd9\u53e5\u53f0\u8bcd\u662f\u4ec0\u4e48\u610f\u601d-False]
+9 failed in 0.84s

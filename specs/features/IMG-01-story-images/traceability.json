@@ -1,0 +1,68 @@
+{
+  "feature": "IMG-01",
+  "spec": "specs/features/IMG-01-story-images/spec.md",
+  "requirements": [
+    {
+      "id": "IMG01-001",
+      "tests": [
+        "tests/contracts/test_story_images.py::test_proposal_is_closed_and_compiles_only_released_fiction",
+        "tests/contracts/test_story_images.py::test_budget_reserved_before_calls_and_private_input_excluded"
+      ]
+    },
+    {
+      "id": "IMG01-002",
+      "tests": [
+        "tests/contracts/test_story_images.py::test_every_pixel_binding_and_required_check_is_enforced",
+        "tests/contracts/test_story_images.py::test_bad_pixel_review_holds_only_image"
+      ]
+    },
+    {
+      "id": "IMG01-003",
+      "tests": [
+        "tests/contracts/test_story_images.py::test_actor_postseal_exact_pixel_asgi_receipt_and_context",
+        "tests/contracts/test_story_images.py::test_unqualified_reservation_cannot_admit_arbitrary_pixels",
+        "tests/contracts/test_story_images.py::test_uncooperative_image_cannot_revive_after_fence"
+      ]
+    },
+    {
+      "id": "IMG01-004",
+      "tests": [
+        "tests/contracts/test_story_images.py::test_resource_bytes_cannot_drift_after_qualification",
+        "tests/contracts/test_story_images.py::test_late_vision_cannot_survive_dismissal_and_receipts_do_not_fabricate_display",
+        "tests/contracts/test_story_images.py::test_generated_picture_never_claims_fixed_authored_photo_is_visible"
+      ]
+    },
+    {
+      "id": "IMG01-005",
+      "tests": [
+        "tests/contracts/test_story_images.py::test_absent_or_unapproved_images_never_call_provider_or_fail_chat",
+        "tests/contracts/test_story_images.py::test_image_timeout_is_finite_even_when_provider_ignores_cancel"
+      ]
+    },
+    {
+      "id": "IMG01-006",
+      "tests": [
+        "tests/contracts/test_story_image_lifecycle_audit.py::test_configured_intent_exposes_pending_while_jev_waits",
+        "tests/contracts/test_story_image_lifecycle_audit.py::test_one_intent_is_not_repeatedly_reviewed_across_duplicate_candidates",
+        "tests/contracts/test_story_image_lifecycle_controls.py::test_late_old_intent_review_error_cannot_hold_new_epoch_pending_image"
+      ]
+    },
+    {
+      "id": "IMG01-007",
+      "tests": [
+        "tests/contracts/test_story_image_lifecycle_audit.py::test_dismiss_immediately_updates_stored_current_visibility_fact",
+        "tests/contracts/test_story_image_lifecycle_controls.py::test_mixed_photo_projection_preserves_caption_audio_positions_and_snapshot_binding",
+        "tests/contracts/test_story_image_lifecycle_controls.py::test_fixed_only_legacy_caption_audio_and_photo_order_stays_unchanged",
+        "tests/contracts/test_story_image_lifecycle_controls.py::test_mixed_photo_serialization_and_archive_replay_keep_exact_receipt_identity"
+      ]
+    },
+    {
+      "id": "IMG01-008",
+      "tests": [
+        "tests/contracts/test_story_image_lifecycle_controls.py::test_operation_admission_rejection_calls_no_provider_and_does_not_release",
+        "tests/contracts/test_story_image_lifecycle_controls.py::test_operation_admission_releases_once_after_every_terminal_path",
+        "tests/contracts/test_story_image_lifecycle_controls.py::test_operation_admission_waits_for_cancellation_ignoring_backend_to_settle"
+      ]
+    }
+  ]
+}

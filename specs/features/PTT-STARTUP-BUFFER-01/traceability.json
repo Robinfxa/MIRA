@@ -1,0 +1,21 @@
+{
+  "feature": "PTTSTARTUPBUFFER",
+  "spec": "specs/features/PTT-STARTUP-BUFFER-01/spec.md",
+  "requirements": [
+    {
+      "id": "PTTSTARTUPBUFFER-001",
+      "tests": [
+        "tests/contracts/test_ptt_startup_buffer.py::test_twenty_ms_audio_survives_one_second_google_startup_without_frame_loss"
+      ]
+    },
+    {
+      "id": "PTTSTARTUPBUFFER-002",
+      "tests": [
+        "tests/integration/test_voice_http.py::test_microphone_buffer_duration_pacing_and_capacity_are_bounded",
+        "tests/contracts/test_ptt_startup_buffer.py::test_buffer_capacity_tracks_pcm_duration_and_releases_when_consumed",
+        "tests/contracts/test_ptt_startup_buffer.py::test_buffer_has_independent_packet_bound_and_cancel_discards_immediately",
+        "tests/contracts/test_ptt_startup_buffer.py::test_large_valid_packets_cannot_expand_duration_bound"
+      ]
+    }
+  ]
+}

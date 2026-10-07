@@ -1,0 +1,270 @@
+{
+  "date_utc": "2026-10-07",
+  "runtime_files_checked": 324,
+  "runtime_bytes_unchanged": true,
+  "changed_document_paths": [
+    "README.md",
+    "AI_USAGE.md",
+    "START-HERE.md",
+    "docs/development/DEMO-RECORDING.md",
+    "docs/SUBMISSION-CHECKLIST.md",
+    "docs/mission/CURRENT-ACCEPTANCE.md",
+    "docs/submission/VERIFICATION.md",
+    "docs/images/PROVENANCE.md"
+  ],
+  "relative_links_checked": 50,
+  "missing_links": [],
+  "links": [
+    {
+      "source": "README.md",
+      "target": "START-HERE.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/SUBMISSION-CHECKLIST.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/development/DEMO-RECORDING.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "AI_USAGE.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/submission/VERIFICATION.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/images/01-current-stage.png",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/images/02-current-wardrobes.png",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/images/04-current-phases.png",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/images/03-current-emotions.png",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/images/05-historical-browser.png",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/images/PROVENANCE.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/development/API_ENV.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/development/GOOGLE_VOICE_CONFIGURATION.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "apps/web/public/scene/ORIGINAL-ASSETS.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "AI_USAGE.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/development/ATTRIBUTION-INVENTORY.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/development/third-party-notices/README.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/submission/VERIFICATION.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/development/PRIVATE-DEVICE-TESTING.md",
+      "exists": true
+    },
+    {
+      "source": "README.md",
+      "target": "docs/development/DEMO-RECORDING.md",
+      "exists": true
+    },
+    {
+      "source": "AI_USAGE.md",
+      "target": "docs/changes/FND-02/verification.md",
+      "exists": true
+    },
+    {
+      "source": "AI_USAGE.md",
+      "target": "docs/changes/NATIVE-FOLLOWTHROUGH-01/verification.md",
+      "exists": true
+    },
+    {
+      "source": "AI_USAGE.md",
+      "target": "docs/submission/VERIFICATION.md",
+      "exists": true
+    },
+    {
+      "source": "AI_USAGE.md",
+      "target": "apps/web/public/scene/ORIGINAL-ASSETS.md",
+      "exists": true
+    },
+    {
+      "source": "AI_USAGE.md",
+      "target": "docs/development/ATTRIBUTION-INVENTORY.md",
+      "exists": true
+    },
+    {
+      "source": "START-HERE.md",
+      "target": "README.md",
+      "exists": true
+    },
+    {
+      "source": "START-HERE.md",
+      "target": "AI_USAGE.md",
+      "exists": true
+    },
+    {
+      "source": "START-HERE.md",
+      "target": "docs/submission/VERIFICATION.md",
+      "exists": true
+    },
+    {
+      "source": "START-HERE.md",
+      "target": "docs/SUBMISSION-CHECKLIST.md",
+      "exists": true
+    },
+    {
+      "source": "START-HERE.md",
+      "target": "docs/development/DEMO-RECORDING.md",
+      "exists": true
+    },
+    {
+      "source": "START-HERE.md",
+      "target": "README.md",
+      "exists": true
+    },
+    {
+      "source": "START-HERE.md",
+      "target": "docs/submission/VERIFICATION.md",
+      "exists": true
+    },
+    {
+      "source": "docs/development/DEMO-RECORDING.md",
+      "target": "../../README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/SUBMISSION-CHECKLIST.md",
+      "target": "mission/requirements-and-acceptance.md",
+      "exists": true
+    },
+    {
+      "source": "docs/SUBMISSION-CHECKLIST.md",
+      "target": "../README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/SUBMISSION-CHECKLIST.md",
+      "target": "development/DEMO-RECORDING.md",
+      "exists": true
+    },
+    {
+      "source": "docs/SUBMISSION-CHECKLIST.md",
+      "target": "../README.md",
+      "exists": true
+    },
+    {
+      "source": "docs/SUBMISSION-CHECKLIST.md",
+      "target": "../AI_USAGE.md",
+      "exists": true
+    },
+    {
+      "source": "docs/SUBMISSION-CHECKLIST.md",
+      "target": "../THIRD_PARTY.md",
+      "exists": true
+    },
+    {
+      "source": "docs/SUBMISSION-CHECKLIST.md",
+      "target": "development/ATTRIBUTION-INVENTORY.md",
+      "exists": true
+    },
+    {
+      "source": "docs/SUBMISSION-CHECKLIST.md",
+      "target": "images/PROVENANCE.md",
+      "exists": true
+    },
+    {
+      "source": "docs/mission/CURRENT-ACCEPTANCE.md",
+      "target": "../submission/VERIFICATION.md",
+      "exists": true
+    },
+    {
+      "source": "docs/mission/CURRENT-ACCEPTANCE.md",
+      "target": "requirements-and-acceptance.md",
+      "exists": true
+    },
+    {
+      "source": "docs/mission/CURRENT-ACCEPTANCE.md",
+      "target": "../development/DEMO-RECORDING.md",
+      "exists": true
+    },
+    {
+      "source": "docs/mission/CURRENT-ACCEPTANCE.md",
+      "target": "history/acceptance-before-next-20261006.md",
+      "exists": true
+    },
+    {
+      "source": "docs/submission/VERIFICATION.md",
+      "target": "offline-failure-recovery.json",
+      "exists": true
+    },
+    {
+      "source": "docs/submission/VERIFICATION.md",
+      "target": "verification-summary.json",
+      "exists": true
+    },
+    {
+      "source": "docs/submission/VERIFICATION.md",
+      "target": "../development/DEMO-RECORDING.md",
+      "exists": true
+    },
+    {
+      "source": "docs/submission/VERIFICATION.md",
+      "target": "../../START-HERE.md",
+      "exists": true
+    },
+    {
+      "source": "docs/images/PROVENANCE.md",
+      "target": "image-provenance.json",
+      "exists": true
+    }
+  ],
+  "scope": "documentation/source recovery checks only, not a new runtime test pass"
+}

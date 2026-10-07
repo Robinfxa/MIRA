@@ -1,0 +1,30 @@
+{
+  "feature": "WP01-JEV-CHOICE-WIRE-COMPAT",
+  "spec": "specs/features/WP01-JEV-CHOICE-WIRE-COMPAT/spec.md",
+  "requirements": [
+    {
+      "id": "WP01JEVCHOICEWIRECOMPAT-001",
+      "tests": [
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_probability_sum_wire_compatibility_uses_intersecting_cent_intervals",
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_output_parser_sum_boundaries_match_mathematical_feasibility"
+      ]
+    },
+    {
+      "id": "WP01JEVCHOICEWIRECOMPAT-002",
+      "tests": [
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_joint_choice_confidence_requires_one_feasible_distribution",
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_cent_branch_does_not_relax_numeric_or_precision_validation",
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_noncent_confidence_mismatch_does_not_enter_the_cent_branch"
+      ]
+    },
+    {
+      "id": "WP01JEVCHOICEWIRECOMPAT-003",
+      "tests": [
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_output_parser_accepts_feasible_cent_grid_and_preserves_reported_values",
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_input_referent_parser_preserves_raw_cent_grid_for_thresholds",
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_diagnostics_keep_raw_sum_while_reporting_joint_compatibility",
+        "tests/contracts/test_jev_choice_wire_compatibility.py::test_raw_allow_threshold_is_never_satisfied_by_rounding_up_confidence"
+      ]
+    }
+  ]
+}

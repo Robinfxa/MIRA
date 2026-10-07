@@ -1,0 +1,71 @@
+{
+  "feature": "UNKNOWN-FALLBACK-UI",
+  "spec": "specs/features/UNKNOWN-FALLBACK-UI/spec.md",
+  "checker_note": "Web-specific sidecar. tools/check_specs.py accepts only collected pytest node IDs; these Node tests are executed by the unique web lane instead.",
+  "owner": "tests/quality.toml web lane: tests/web/*.test.mjs",
+  "requirements": [
+    {
+      "id": "UNKNOWNUI-001",
+      "tests": [
+        {
+          "file": "tests/web/controller-uncertain-notice.test.mjs",
+          "case": "review_uncertain is one nonfatal notice per activity/epoch and a later input still works"
+        },
+        {
+          "file": "tests/web/controller-uncertain-notice.test.mjs",
+          "case": "legacy views receive at most one fallback and it clears on the next input"
+        },
+        {
+          "file": "tests/web/controller-uncertain-notice.test.mjs",
+          "case": "explicit rejection and technical/format errors keep the existing error path"
+        },
+        {
+          "file": "tests/web/controller-main.test.mjs",
+          "case": "semantic uncertainty uses the dedicated status region and never the generic error alert"
+        }
+      ]
+    },
+    {
+      "id": "UNKNOWNUI-002",
+      "tests": [
+        {
+          "file": "tests/web/controller-uncertain-notice.test.mjs",
+          "case": "review_uncertain is one nonfatal notice per activity/epoch and a later input still works"
+        },
+        {
+          "file": "tests/web/controller-uncertain-notice.test.mjs",
+          "case": "Stop and Close clear an uncertainty notice before asynchronous cleanup settles"
+        },
+        {
+          "file": "tests/web/controller-uncertain-notice.test.mjs",
+          "case": "a semantic uncertainty notice leaves an already rendered partial prefix untouched"
+        }
+      ]
+    }
+  ],
+  "executions": [
+    {
+      "run_id": "unknown-fallback-ui-20261004T0321Z-red",
+      "command": "git archive 424b3bfbb4a9b21db9ffe15bf025cdbddfd10650 | tar -x into isolated /tmp checkout; copy controller-uncertain-notice.test.mjs; npm run build; node --test tests/web/controller-uncertain-notice.test.mjs",
+      "result": "Expected RED on baseline source: 1 passed, 4 failed. Nonfatal notice, immediate clearing and prefix preservation were absent. The explicit rejection/technical control passed.",
+      "scope": "synthetic local ports and tests only; no provider or browser"
+    },
+    {
+      "run_id": "unknown-fallback-ui-20261004T0321Z-green-focused",
+      "command": "node --test tests/web/controller-uncertain-notice.test.mjs tests/web/controller-main.test.mjs",
+      "environment": "Node v24.19.0",
+      "result": "18 passed, 0 failed"
+    },
+    {
+      "run_id": "unknown-fallback-ui-20261004T0321Z-green-web",
+      "command": "npm run build && python tools/check_web.py --output-dir /tmp/mira-uncertain-web-final-3-20261004",
+      "result": "TypeScript build passed; web lane: 233 passed, 0 failed"
+    },
+    {
+      "run_id": "unknown-fallback-ui-20261004T0321Z-spec-links",
+      "command": ".venv/bin/python tools/check_specs.py",
+      "result": "167 existing pytest requirement mappings collected; this checker does not validate this web sidecar"
+    }
+  ],
+  "verification_boundary": "All receipts are synthetic software tests. They do not establish real-browser rendering, actual device audio, or human visibility."
+}

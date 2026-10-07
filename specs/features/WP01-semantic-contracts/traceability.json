@@ -59,6 +59,26 @@
         "tests/contracts/test_jev_input_corpus.py::test_chinese_corpus_is_synthetic_bounded_and_preserves_simultaneous_labels",
         "tests/contracts/test_decision_contracts.py::test_snapshot_repr_does_not_expose_raw_presented_or_partial_text"
       ]
+    },
+    {
+      "id": "WP01SEM-007",
+      "tests": [
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_v2_no_referent_need_accepts_empty_set_and_retains_uncertainty",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_absent_photo_question_stays_blocked_without_identity",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_midband_referent_necessity_remains_unknown_and_blocking",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_nonempty_ambiguous_referent_set_stays_blocked_when_identity_is_required",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_exact_presented_identity_can_bind_when_needed",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_high_scoring_unpresented_identity_is_not_admitted",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_display_request_requires_presented_target_even_when_identity_is_irrelevant",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_newly_generated_text_is_not_preexisting_display_request",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_referent_exemption_does_not_override_speech_or_media_controls",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_output_review_sees_retained_uncertainty_and_can_reject_object_claim",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_unresolved_marker_is_exact_required_evidence_for_v2_contract",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_forged_resolved_identity_must_meet_probability_floor_and_be_distribution_max",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_stale_or_stopped_snapshot_cannot_enter_v2_observation",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_two_argument_question_helper_keeps_historical_v1_evaluator_shape",
+        "tests/contracts/test_jev_referent_relevance_v2.py::test_development_factory_explicitly_selects_v2_without_io"
+      ]
     }
   ]
 }

@@ -1,0 +1,839 @@
+{
+  "schema": "mira.character-experience-source-index.v3",
+  "revision": "character-experience-1810-r3",
+  "checked_at_utc": "2026-10-06T19:13:00Z",
+  "recovery_basis": "Recovery-r2 remains frozen. This revision rechecks selected source bytes against the supplied verified 1810 capture manifest.",
+  "historical_review_baseline": "mira-regression-integration-20261006T1803Z",
+  "current_baseline": "MIRA-1810-20261006",
+  "baseline_identity_status": "release_label_from_verified_handoff_selected_sources_independently_match_capture",
+  "baseline_verification_receipt_sha256": "c625aa104cc311712b212bc7c64a4bc14da784cd1420bb42d04910968eddc88e",
+  "capture_file_count": 1515,
+  "selected_sources_only": true,
+  "old_validation_inherited": false,
+  "new_web_or_provider_calls": 0,
+  "source_dates": "Original archived research/slice dates, not new upstream verification.",
+  "sources": [
+    {
+      "id": "R01",
+      "path": "docs/reference/architecture-v0.6/docs/reference/snapshots/companion-research.md",
+      "original_record_date": "2026-10-02",
+      "topic": "固定提交与官方文档/论文分级的长期陪伴研究",
+      "historical_adoption_status": "historical_research_not_implementation",
+      "decision": "保留身份、事实、回想、修订、行动、表达分层；未移植整套MaiBot/Hindsight，未复现长期试验",
+      "upstream_links_from_rechecked_archive_inventory": [
+        "https://github.com/Mai-with-u/MaiBot/tree/e60ad286364ffaa27779b6065bfc682590c3af9a"
+      ],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "b7414c5c7860c88acee1c051e9595605b21774d9fb66b8395db0996c6badde0b",
+      "bytes": 85481,
+      "mode": "0644"
+    },
+    {
+      "id": "R02",
+      "path": "docs/reference/architecture-v0.6/docs/reference/snapshots/character-scene-research.md",
+      "original_record_date": "2026-10-02",
+      "topic": "表现层与场景驱动候选研究",
+      "historical_adoption_status": "historical_recommendation_not_current_renderer",
+      "decision": "应用掌握剧情与打断；旧Charivo推荐不等于当前renderer实现",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "dd4066e6b61c9a0d4a931af9d86148891e925d23b44db18a353384e9e804d030",
+      "bytes": 20528,
+      "mode": "0644"
+    },
+    {
+      "id": "R03",
+      "path": "specs/features/WP12-conversation-perspective/evaluation.md",
+      "original_record_date": "2026-10-05",
+      "topic": "MaiBot人格/行为/回复职责分离",
+      "historical_adoption_status": "historically_adopted_prompt_contract_live_eval_not_run",
+      "decision": "兴趣影响深度，话题不限canon；不采用人类身份否认、群聊沉默门控或随机口癖",
+      "upstream_links_from_rechecked_archive_inventory": [
+        "https://docs.mai-mai.org/manual/configuration/bot-config",
+        "https://github.com/Mai-with-u/MaiBot/blob/main/prompts/zh-CN/maisaka_replyer.prompt",
+        "https://github.com/Mai-with-u/MaiBot/blob/main/prompts/zh-CN/maisaka_chat.prompt"
+      ],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "2fd530e9a57dc39214bfbeb9f37aa2a853dbf0cf76727f7c41016585efabf8a1",
+      "bytes": 8329,
+      "mode": "0644"
+    },
+    {
+      "id": "R04",
+      "path": "specs/features/WP12-text-tone-reference/evaluation.md",
+      "original_record_date": "2026-10-05 slice date from paired spec",
+      "topic": "八组自写语气场景与未来评审方案",
+      "historical_adoption_status": "historically_adopted_voice_rule_not_model_evaluation",
+      "decision": "语境优先、不复制关系人生、不设字数标点延迟配额；原始第三方语料未在此存档提供",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "d97dfb3097e2c1f2cdd6bf91f73ac9d4ce4bf8d8f1eddce973f8e6e0dfa4c0af",
+      "bytes": 4493,
+      "mode": "0644"
+    },
+    {
+      "id": "R05",
+      "path": "specs/features/WP12-personal-memory/research.md",
+      "original_record_date": "2026-10-06",
+      "topic": "A_Memorix/release/PR2007与社区记忆插件",
+      "historical_adoption_status": "historically_adopted_source_separation_not_learning",
+      "decision": "记住、检索、编辑分开；不复制自动写回、全局共享和无确认导入",
+      "upstream_links_from_rechecked_archive_inventory": [
+        "https://docs.mai-mai.org/manual/configuration/amemorix-config",
+        "https://github.com/Mai-with-u/MaiBot/releases/tag/1.3.0",
+        "https://github.com/Mai-with-u/MaiBot/pull/2007",
+        "https://github.com/A-Dawn/Mai_Forever_memories",
+        "https://github.com/clfr41/local.part.think"
+      ],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "7f6fb89fc8ce11bb127e0388ca13d97cedad230381113a895676a24ea82978b0",
+      "bytes": 4448,
+      "mode": "0644"
+    },
+    {
+      "id": "R06",
+      "path": "docs/changes/M06-recall-content-ranking/research-20261006.zh.md",
+      "original_record_date": "2026-10-06",
+      "topic": "A_Memorix实现、heuristic/mid-term、FAQ、SQLite反例",
+      "historical_adoption_status": "historically_implemented_bounded_lexical_ranking",
+      "decision": "已授权档案本地内容匹配；不是语义向量、自动摘要或新资料权限",
+      "upstream_links_from_rechecked_archive_inventory": [
+        "https://docs.mai-mai.org/manual/configuration/a-memorix",
+        "https://github.com/Mai-with-u/MaiBot/blob/main/src/A_memorix/core/runtime/sdk_memory_kernel.py",
+        "https://github.com/Mai-with-u/MaiBot/blob/main/src/maisaka/memory/heuristic_injector.py",
+        "https://github.com/Mai-with-u/MaiBot/blob/main/src/maisaka/memory/mid_term.py",
+        "https://docs.mai-mai.org/faq/memory-and-learning",
+        "https://docs.mai-mai.org/manual/webui/memory-management",
+        "https://github.com/Mai-with-u/MaiBot/issues/1896"
+      ],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "b9cc2b2193509b50b121f6febae27b73a444f9319fe8d6ee717daac3b7b77b61",
+      "bytes": 10309,
+      "mode": "0644"
+    },
+    {
+      "id": "R07",
+      "path": "docs/changes/WP12PROMPT/research-and-findings.md",
+      "original_record_date": "2026-10-06 16:12–16:30 UTC",
+      "topic": "官方配置模板实现及社区提示/协议报告",
+      "historical_adoption_status": "historically_adopted_prompt_cleanup_not_live_causality",
+      "decision": "删旧pose/review与native冲突、取消每轮设定配额；518/1790不作成熟当前实践依据",
+      "upstream_links_from_rechecked_archive_inventory": [
+        "https://docs.mai-mai.org/manual/configuration/bot-config",
+        "https://github.com/Mai-with-u/MaiBot/blob/main/src/chat/replyer/maisaka_generator_base.py",
+        "https://github.com/Mai-with-u/MaiBot/issues/2069",
+        "https://github.com/Mai-with-u/MaiBot/issues/2051",
+        "https://github.com/TAIY2020/smart_poke_plugin",
+        "https://github.com/Mai-with-u/MaiBot/discussions/518",
+        "https://github.com/Mai-with-u/MaiBot/discussions/1790"
+      ],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "4d19aa6df4c6e0e86462386272c63ad141078a2652191a81ec9929c3c15904a8",
+      "bytes": 10601,
+      "mode": "0644"
+    },
+    {
+      "id": "R08",
+      "path": "docs/changes/WP12PROMPT/result-reason-followup.md",
+      "original_record_date": "2026-10-06 16:39 UTC",
+      "topic": "失败解释来源约束",
+      "historical_adoption_status": "historical_truthfulness_next_delivery_boundary_pending",
+      "decision": "不猜失败原因；NEXT普通台词不主动报技术诊断",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "15ce8be2675af8eae85deb28ecea8244e7850b118ecb4f1c79402ff35cae6add",
+      "bytes": 1765,
+      "mode": "0644"
+    },
+    {
+      "id": "R09",
+      "path": "docs/changes/WP12-character-choices/verification.md",
+      "original_record_date": "2026-10-06",
+      "topic": "官方speaker/planner、generator/reply；13对编辑例子",
+      "historical_adoption_status": "historically_adopted_choices_not_model_ab",
+      "decision": "已有喜好影响取舍，不新添人生；A/B请求差分不等于模型效果",
+      "upstream_links_from_rechecked_archive_inventory": [
+        "https://github.com/Mai-with-u/MaiBot/blob/main/src/maisaka/builtin_tool/reply.py"
+      ],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "2aac4773fd080fa5594c6d96ee9d05bdeea2223a08dbf9026a4c927bc0c0d5dc",
+      "bytes": 7552,
+      "mode": "0644"
+    },
+    {
+      "id": "R10",
+      "path": "specs/features/WP12-ordinary-scene/evaluation.md",
+      "original_record_date": "2026-10-06 slice date from paired spec",
+      "topic": "日常场景与明确现实问题边界",
+      "historical_adoption_status": "historically_adopted_voice_old_pose_contract_historical",
+      "decision": "普通第一人称不主动出戏，明确现实问题诚实；旧pose/review不覆盖native",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "e15edf83653b9373034b8f7f501824aa69c7d2931d12a401f02c00f39c4cf73d",
+      "bytes": 2929,
+      "mode": "0644"
+    },
+    {
+      "id": "R11",
+      "path": "docs/changes/WP13-native-tool-context/research-and-verification.md",
+      "original_record_date": "2026-10-06",
+      "topic": "官方function calling/协议与社区回放反例",
+      "historical_adoption_status": "historically_implemented_native_context_next_gift_supersedes_gate",
+      "decision": "保持严格参数、call/result匹配、当前能力与pending；NEXT不强制先preview再gift",
+      "upstream_links_from_rechecked_archive_inventory": [
+        "https://developers.openai.com/api/docs/guides/function-calling",
+        "https://github.com/openai/codex/blob/main/codex-rs/protocol/src/models.rs",
+        "https://github.com/open-webui/open-webui/issues/29630",
+        "https://github.com/anomalyco/opencode/issues/48441"
+      ],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "be06a72b0b429f3d84626f04a20c12f32c3669e33a90e623514fcc897dc1eb5e",
+      "bytes": 2854,
+      "mode": "0644"
+    },
+    {
+      "id": "R12",
+      "path": "specs/features/WP12-prompt-refinement/fixtures/behavior-review.json",
+      "original_record_date": "paired 2026-10-06 record",
+      "topic": "13对人工正反例",
+      "historical_adoption_status": "editorial_examples_not_model_outputs",
+      "decision": "保留历史例句；NEXT场景取代旧beat释放与失败表达门槛",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "d60891c8f5fee6542d4e251125fb0db6918d1d4175c30736ca260a87f6270c19",
+      "bytes": 7713,
+      "mode": "0644"
+    },
+    {
+      "id": "R13",
+      "path": "specs/features/WP12-dialogue-continuity/verification.md",
+      "original_record_date": "no explicit date in original record",
+      "topic": "连续性与精确来源历史验证",
+      "historical_adoption_status": "historical_offline_record",
+      "decision": "当前话题、最近真实回复，不重复开场；外部evidence路径不表示日志随包",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "1bd6b2f9b2bfb386ca45bac78cd0718d88d1f626192d4c9f46c0da8d279c8cdd",
+      "bytes": 3335,
+      "mode": "0644"
+    },
+    {
+      "id": "R14",
+      "path": "specs/features/WP12-dialogue-topics/verification-integration.md",
+      "original_record_date": "2026-10-06",
+      "topic": "可选话题投影集成记录",
+      "historical_adoption_status": "historically_implemented_optional_retrieval_not_classifier",
+      "decision": "仅检索相关写作素材，不以词命中执行动作/同意/认人",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "abd51a8e9eae011e8e5645f08a3f783211c8fbe90718e9ba7f78b290ad139ba8",
+      "bytes": 4918,
+      "mode": "0644"
+    },
+    {
+      "id": "R15",
+      "path": "specs/features/WP12-personal-memory/verification.md",
+      "original_record_date": "2026-10-06 evidence-root date",
+      "topic": "self-continuity、unavailable recall及wire历史验证",
+      "historical_adoption_status": "historical_offline_record",
+      "decision": "来源版本状态区分，不代表永久人格、当前库启用或本次重跑",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "2d11acaf76cffcf4100c7322ca563a93c7554a2f6f17a8af2b5589d6beff3906",
+      "bytes": 5088,
+      "mode": "0644"
+    },
+    {
+      "id": "R16",
+      "path": "docs/changes/M06-recall-content-ranking/verification.md",
+      "original_record_date": "2026-10-06",
+      "topic": "本地排序RED/GREEN边界",
+      "historical_adoption_status": "historical_checks_four_logs_previously_located",
+      "decision": "原审查发现runs/008–011；恢复后重查，不复用历史计数为本次通过",
+      "upstream_links_from_rechecked_archive_inventory": [],
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "8616f0549028b2f714957d6d133de95502b4b81a899c9fde8b0632fc1f02c636",
+      "bytes": 4339,
+      "mode": "0644"
+    }
+  ],
+  "inspected_runtime_sources": [
+    {
+      "path": "apps/api/src/mira/adapters/generation/codex_support/character_voice.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "c9c4a58c294f469d64908500589ed7189032357437228d1933149c8a7e98e4ff",
+      "bytes": 7443,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/adapters/generation/codex_support/payload.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "3bb556bb85cc550740b40b9230d51ed99e4ca4d5b7556ffd898ba098879d0b2e",
+      "bytes": 19689,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/adapters/generation/direct_tools.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "66435b2a05a3b8a463619abae173af843a96bfe6885a6251bfe853335d08241f",
+      "bytes": 42870,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/character_memory.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "54b5bbd976de0def7b21636ad2644db60dfb20cc7645b14a158fcf576d13eee4",
+      "bytes": 6568,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/contracts.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "d9e57e9e45e711d341cacda57fec5a64ceec605b265cc557fd06b8db2295d557",
+      "bytes": 16399,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/decision_contracts.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "6ecaba6de294fc24e9ff1ae22125fb0c780a33ac3467d0310ee26b5be34cce04",
+      "bytes": 36736,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/dialogue_topics.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "34fe8a4a53e15b08946c9d13b2bedac6fb5f16e48d4a4360a53ee2554d4d8908",
+      "bytes": 10842,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/native_character_tools.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "2324684e7611e26539f84eaca0fac00dcf86a4720467a817ede1a2200b966c25",
+      "bytes": 10420,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/generation_tool_execution.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "7517e40091d2789fc573bfdee66ea4bdd8ab8c85d033442ba4792b595e532d63",
+      "bytes": 13758,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/actor_chapter.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "82d31902c81f91fed040bb1d95a5533f9e9bd1b5d9acae58b42f1824b5a901ff",
+      "bytes": 6947,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/session_actor.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "2cf3129e18ad8b6747043956bd4507e72f16af2bb044f27c86252bc91482cf15",
+      "bytes": 133602,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/conversation_recall_ranking.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "7e9d51a8d3f046f9d82cdd76bf97d91f01085e83f800e9447feffbf00a59b86f",
+      "bytes": 2877,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/domain/story.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "8bf5c3be973661db5eca29f6482fe483e24fd767b1d3a28a55e4bd5ac19657b2",
+      "bytes": 100747,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/domain/story_memory.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "2f703b495d1c3c1870278c4605e056118be3a27e2a04b4ab69414421ca02f221",
+      "bytes": 4511,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/domain/xiahe_chapter.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "28c31e5730c920532ce576127a49df1cc2704a9d884913727e694ff0d3b240ea",
+      "bytes": 24681,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/domain/story_images.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "65bd614fb481de121578f92abd4648c343495aa4e1aed8cf7271c28c06abfe48",
+      "bytes": 8005,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/adapters/story/assets/mira.story-seed.v1.json",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "50390ed34eb35076c370b615c6b7031b63c708b57214d61a39f1a52f689e3966",
+      "bytes": 95493,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/api/src/mira/application/ports/generation_tools.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "3a535bb912d2093534e5322944e336aa23d7ed946d062afd4fcf33a60333c011",
+      "bytes": 3889,
+      "mode": "0644"
+    }
+  ],
+  "supplemental_voice_sources": [
+    {
+      "path": "tools/live_provider.py",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "6960d45066f7e620c921ce61b518882ba81ee87bd71edfb00cb1440504c1c58b",
+      "bytes": 53276,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/web/src/features/session/continuous-listening.ts",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "b97fd67c69817e8512c81d4994291842a319099a1c00fe4edb4a3f99a80c6ced",
+      "bytes": 69957,
+      "mode": "0644"
+    },
+    {
+      "path": "apps/web/src/app/main.ts",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "8004dc52226cb841ca91450265018dd53179e20d89f76cff241bb62edb4d341c",
+      "bytes": 52730,
+      "mode": "0644"
+    }
+  ],
+  "in_snapshot_logs": [
+    {
+      "path": "docs/changes/M06-recall-content-ranking/runs/008-final-red.txt",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "9116f7f1cb888eb4e65bd8712dc48d439d7963c00ef7240a88785bcafd33e25b",
+      "bytes": 11606,
+      "mode": "0644"
+    },
+    {
+      "path": "docs/changes/M06-recall-content-ranking/runs/009-final-green-regression.txt",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "50579ecc4b1e3087004e2858462d1277030d0278a1fddf3d9d47a16a22c182ff",
+      "bytes": 180,
+      "mode": "0644"
+    },
+    {
+      "path": "docs/changes/M06-recall-content-ranking/runs/010-spec-links.txt",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "99395bb834578f553f78707d5437a2ba82a08145ebfb00aa97ff49c22d3f29a7",
+      "bytes": 86,
+      "mode": "0644"
+    },
+    {
+      "path": "docs/changes/M06-recall-content-ranking/runs/011-architecture.txt",
+      "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+      "sha256": "320eb1a84c1b10ee7cab107f165cf1af7ff5ddf056494ed03c0759885f58af00",
+      "bytes": 98,
+      "mode": "0644"
+    }
+  ],
+  "readme_baseline": {
+    "path": "README.md",
+    "current_verification": "bytes_hash_mode_match_supplied_capture_manifest",
+    "sha256": "327b9632170c7598d6f2fe5db177285f61e2dd2db0f9d7a991f865e95bcb560e",
+    "bytes": 22149,
+    "mode": "0644"
+  },
+  "approved_next_voice_contract": {
+    "local_voice_count_default": "unlimited",
+    "stt_request_count_default": "unlimited",
+    "barge_in_default": true,
+    "explicit_conservative_choice_preserved": true,
+    "tts_api_image_other_budgets": "unchanged",
+    "implementation_status": "Implemented in current integrated candidate; actual default values and selected runtime hashes are in current_merged_implementation. Not a device or service acceptance pass.",
+    "historical_implementation_status": "NEXT target; no runtime edit or behavior pass claimed by this documentation artifact"
+  },
+  "evidence_limits": [
+    "Source hashes and local citations are newly checked; historical test counts are not rerun.",
+    "The entire capture recovery was verified separately; this index independently checks only its listed files.",
+    "WP12PROMPT and character-choices complete A/B captures still referenced outside the source snapshot.",
+    "No live model, provider, voice, image or device test is performed here.",
+    "No automatic persistent personality learning is implied."
+  ],
+  "historical_1810_field_scope": {
+    "fields": [
+      "sources",
+      "inspected_runtime_sources",
+      "supplemental_voice_sources",
+      "in_snapshot_logs",
+      "readme_baseline",
+      "historical_review_baseline",
+      "current_baseline",
+      "baseline_identity_status",
+      "baseline_verification_receipt_sha256",
+      "capture_file_count",
+      "checked_at_utc"
+    ],
+    "meaning": "All preserved fields, including current_baseline/current_verification names inside them, describe the verified1810 capture only. They are not hashes or passes for the current integrated source.",
+    "preserved_without_rewriting_historical_hashes": true
+  },
+  "current_merged_implementation": {
+    "revision": "character-experience-integrated-20261006T2003Z",
+    "checked_at_utc": "2026-10-06T20:03:00Z",
+    "status": "all_named_runtime_slices_merged_final_same_source_gates_reported_separately",
+    "source_binding": "Selected current runtime bytes below; full final capture and release are bound by same-stage START-HERE, not inherited1810 evidence.",
+    "runtime_sources": [
+      {
+        "path": "apps/api/src/mira/adapters/generation/codex_support/character_voice.py",
+        "sha256": "c9c4a58c294f469d64908500589ed7189032357437228d1933149c8a7e98e4ff",
+        "bytes": 7443,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": true
+      },
+      {
+        "path": "apps/api/src/mira/adapters/generation/codex_support/payload.py",
+        "sha256": "3bb556bb85cc550740b40b9230d51ed99e4ca4d5b7556ffd898ba098879d0b2e",
+        "bytes": 19689,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": true
+      },
+      {
+        "path": "apps/api/src/mira/adapters/generation/direct_tools.py",
+        "sha256": "a0426c6b2090b45375fe7081a65fb86d5336b6bbc8c162f2ef96e7b7e7efe853",
+        "bytes": 43753,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/character_memory.py",
+        "sha256": "71f3861a3fc252a480a7036ca5c3d517d2ed47f8e1aa48fb86a677211291ddaf",
+        "bytes": 6787,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/contracts.py",
+        "sha256": "3fb94400d5074ecbf3a706a5fb58f836f1dcac503cb76a8d26de2a03e9869ec8",
+        "bytes": 16686,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/decision_contracts.py",
+        "sha256": "6ecaba6de294fc24e9ff1ae22125fb0c780a33ac3467d0310ee26b5be34cce04",
+        "bytes": 36736,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": true
+      },
+      {
+        "path": "apps/api/src/mira/application/dialogue_topics.py",
+        "sha256": "bbe186da9236c62a2521f729f87abac8ebd1266cca0494fec80f25c8de235515",
+        "bytes": 10833,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/native_character_tools.py",
+        "sha256": "193fe5e58b3ad9126559af4082a676672c85c30098d67320b526cb15104863fa",
+        "bytes": 12033,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/generation_tool_execution.py",
+        "sha256": "69dd0ab991c4745e65de0b536695b71ee6c2342ebee979ce3d34fc699a46e792",
+        "bytes": 15079,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/actor_chapter.py",
+        "sha256": "e230cb69ba3cff455cc9b7984b520d141e32a83ec2699590237bf0177ccb58c4",
+        "bytes": 6923,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/session_actor.py",
+        "sha256": "3ad193b4aa810f8f23ea9db6c6ea7703e11249acb2a3b81d1330f3307bed2223",
+        "bytes": 151193,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/conversation_recall_ranking.py",
+        "sha256": "7e9d51a8d3f046f9d82cdd76bf97d91f01085e83f800e9447feffbf00a59b86f",
+        "bytes": 2877,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": true
+      },
+      {
+        "path": "apps/api/src/mira/domain/story.py",
+        "sha256": "0fcc7cde4367083580a69758449d4bd284121b89342ff388fed69045dd204801",
+        "bytes": 101879,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/domain/story_memory.py",
+        "sha256": "4e946f02451bc54a6aa3efcde9150196284ddc6bf828a8c366a3c79aa329c721",
+        "bytes": 5267,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/domain/xiahe_chapter.py",
+        "sha256": "e6704feb0c386c0d60ae6c0d9e4a5959f654ebff25352357f780510adc6efb55",
+        "bytes": 25838,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/domain/story_images.py",
+        "sha256": "38f371cf467319e0dcab031d5e1893713c23bfc741a2cdd890babbaa479d578d",
+        "bytes": 8387,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/adapters/story/assets/mira.story-seed.v1.json",
+        "sha256": "50390ed34eb35076c370b615c6b7031b63c708b57214d61a39f1a52f689e3966",
+        "bytes": 95493,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": true
+      },
+      {
+        "path": "apps/api/src/mira/application/ports/generation_tools.py",
+        "sha256": "6ef9db820e27999350f97674e34aec1cd47fa64a447e0d8f4daa14564546b582",
+        "bytes": 4007,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "tools/live_provider.py",
+        "sha256": "3275ec332de04d069ba059ea320b3a5acc5830272a63570ee372c5da94315f87",
+        "bytes": 55718,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/web/src/features/session/continuous-listening.ts",
+        "sha256": "69a9f7f182c98959c0d018e0ece962be162b29c866a8aee2284203d0f81a0a94",
+        "bytes": 70677,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/web/src/app/main.ts",
+        "sha256": "4154aca27a41b4498463f1b4c40844e4d85d684c8d2a4d31490fbf35ab51ca09",
+        "bytes": 53479,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": false
+      },
+      {
+        "path": "apps/api/src/mira/application/story_images.py",
+        "sha256": "4674d7b5081e9e68f30fa4f623a5dccaa502e7136eadedfa89ed57f15f0b3445",
+        "bytes": 21988,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      },
+      {
+        "path": "apps/api/src/mira/application/continuous_listening.py",
+        "sha256": "4fe6851cb00391a8d469b6c549988fda776c0451816e556d7463a0ecbeff9d9a",
+        "bytes": 80180,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      },
+      {
+        "path": "apps/api/src/mira/bootstrap/development_voice.py",
+        "sha256": "ab06c132aabd479b64570741ab7ec444424faab31a73f00ed4021c7ee2f328cd",
+        "bytes": 17438,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      },
+      {
+        "path": "apps/api/src/mira/bootstrap/direct_provider_app.py",
+        "sha256": "88cb0fa9e586b73c9e1a8764ca98fcaf1aff5e72c1996b94ef67c2955c2f4acb",
+        "bytes": 22521,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      },
+      {
+        "path": "apps/api/src/mira/adapters/speech/google_stt_continuous_v2.py",
+        "sha256": "560b906730208316c42be7e2b67883c22132e300dc076df067f5937bc974f01d",
+        "bytes": 11614,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      },
+      {
+        "path": "apps/api/src/mira/entrypoints/http/schemas.py",
+        "sha256": "48925ae0986df8766dd00322b038f348959934219288d479851ad7e9ad3344fb",
+        "bytes": 29957,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      },
+      {
+        "path": "apps/api/src/mira/entrypoints/http/story_image_routes.py",
+        "sha256": "adb22b24ddc6b47c01704bdbe9f33d21b10061d71d3e5f1d0221cd080ec5ccc6",
+        "bytes": 1414,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      },
+      {
+        "path": "apps/web/src/features/session/controller.ts",
+        "sha256": "69b839c2cb6b749140cf46c9ca9eb5d00e6553df09787f45fc3a2d08d66faa56",
+        "bytes": 84009,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      },
+      {
+        "path": "apps/web/src/features/presentation/scene-executor.ts",
+        "sha256": "5db58662ef14131e2cbfc52e3cc3c27d01b5e278605ff126988d0995e4122d01",
+        "bytes": 33540,
+        "mode": "0644",
+        "source_scope": "current_integration_selected_runtime_only",
+        "matches_recorded_1810_source": null
+      }
+    ],
+    "implementation_map": [
+      {
+        "id": "CE-story",
+        "status": "merged_implementation_not_live_quality_pass",
+        "paths": [
+          "apps/api/src/mira/domain/xiahe_chapter.py",
+          "apps/api/src/mira/application/native_character_tools.py",
+          "apps/api/src/mira/application/actor_chapter.py",
+          "apps/api/src/mira/adapters/generation/direct_tools.py"
+        ],
+        "behavior": "Typed question/current role claim, actual recognition, bounded same-continuation sourced memory plus offer, subtitle-receipt binding, one acceptance and actual handover. Pending/old offers remain invalid."
+      },
+      {
+        "id": "CE-authored-memory",
+        "status": "merged_implementation_not_personal_memory_learning",
+        "paths": [
+          "apps/api/src/mira/application/character_memory.py",
+          "apps/api/src/mira/domain/story_memory.py"
+        ],
+        "behavior": "Recognized authored shared canon is available without three recitations; initial waiting/gift intentions no longer override actual recognition/handover. Private persistence still opt-in."
+      },
+      {
+        "id": "CE-voice",
+        "status": "merged_defaults_and_parser_verified_not_device_acceptance",
+        "paths": [
+          "tools/live_provider.py",
+          "apps/api/src/mira/application/continuous_listening.py",
+          "apps/api/src/mira/bootstrap/development_voice.py",
+          "apps/api/src/mira/adapters/speech/google_stt_continuous_v2.py",
+          "apps/web/src/features/session/continuous-listening.ts",
+          "apps/web/src/app/main.ts"
+        ],
+        "behavior": "STT and local/listening caps default None; explicit finite values retained. Default barge-in and explicit guarded choice preserved. TTS/API/image budgets, per-RPC timeout, backpressure and Stop remain finite where previously finite."
+      },
+      {
+        "id": "CE-background-image",
+        "status": "merged_implementation_final_same_source_gate_separate",
+        "paths": [
+          "apps/api/src/mira/application/session_actor.py",
+          "apps/api/src/mira/application/story_images.py",
+          "apps/api/src/mira/domain/story_images.py",
+          "apps/api/src/mira/entrypoints/http/story_image_routes.py",
+          "apps/web/src/features/session/controller.ts",
+          "apps/web/src/app/main.ts"
+        ],
+        "behavior": "One immutable job survives normal input/reply interruption, real display receipt then one tools-disabled budget-counted quiet-point notice, exact display/job/fixed-photo cancellation and global stop fencing."
+      },
+      {
+        "id": "CE-voice-failure-wording",
+        "status": "existing_truthfulness_guard_with_route_specific_natural_delivery",
+        "paths": [
+          "apps/api/src/mira/adapters/generation/codex_support/character_voice.py",
+          "apps/api/src/mira/adapters/generation/direct_tools.py"
+        ],
+        "behavior": "The existing character_voice rule bounds claims to actual known facts; it does not require technical reasons in every reply. Native image outcome wording remains natural; explicit cause questions use known diagnostics. No new prompt layer."
+      },
+      {
+        "id": "CE-further-structural-cleanup",
+        "status": "optional_refactoring_not_current_product_completion_blocker",
+        "paths": [
+          "apps/api/src/mira/adapters/generation/direct_tools.py",
+          "apps/api/src/mira/domain/story_memory.py",
+          "apps/api/src/mira/application/decision_contracts.py"
+        ],
+        "behavior": "Native and legacy each construct one route-specific media projection; two source definitions do not prove duplicate injection in one request. Dialogue-shaped story metadata stays internal and must not be spoken. Further helper/metadata/author-policy deduplication is optional structure work, not evidence that promised current behavior is missing."
+      },
+      {
+        "id": "CE-vision",
+        "status": "explicit_capability_gap",
+        "behavior": "Local snapshot/reference/current appearance state does not prove dialogue-model pixel consumption. Pixel qualification is not a complete scene-description channel; no scope expansion or inferred visual facts."
+      }
+    ],
+    "actual_defaults": {
+      "subscription_generation_limit": null,
+      "subscription_turn_limit": null,
+      "stt_request_limit": null,
+      "listening_max_seconds": null,
+      "listening_max_utterances": null,
+      "listening_session_starts": null,
+      "listening_total_starts": null,
+      "listening_recognition_streams": null,
+      "barge_in_default": true,
+      "explicit_guarded_choice_preserved": true,
+      "tts_request_limit": 20,
+      "tts_max_seconds": 30,
+      "stt_rpc_max_seconds": 120,
+      "api_generation_limit": 20,
+      "api_turn_limit": 20,
+      "image_max_jobs": 1,
+      "image_generation_per_job": 1,
+      "image_pixel_reviews_per_job_at_most": 1,
+      "new_local_unlimited_flag_required": false
+    },
+    "editorial_golden": {
+      "path": "docs/changes/CHARACTER-EXPERIENCE-NEXT/golden-dialogues.json",
+      "examples": 20,
+      "classification": "editorial_examples_and_acceptance_intent_not_real_model_outputs_or_live_pass",
+      "historical_per_example_implementation_status": "Original revision status; use implementation_map for current integrated software state.",
+      "send_to_provider": false
+    },
+    "validation_limits": [
+      "No provider call or private corpus submission by this document task.",
+      "No real model, device voice, phone, image entitlement or video acceptance claimed.",
+      "Same-source runtime gates belong to the director and are not repeated by this document task."
+    ],
+    "runtime_manifest_sha256": "3c5156d898193f10eff8f1f16283cf5d09de4aebf082b146ce4fc768e43c1f3c",
+    "runtime_manifest_status": "merged_runtime_candidate_for_independent_acceptance",
+    "selected_runtime_hashes_match_director_manifest": true,
+    "runtime_manifest_rebound_at_utc": "2026-10-06T20:10:00Z",
+    "runtime_manifest_rebind_note": "The fixed runtime changes domain/transitions.py to preserve accepted background-image reservations through history compaction. All30 selected runtime hashes above are unchanged and rechecked; no golden/release pass is claimed by this rebinding."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "feature": "WEB-UNLIMITED",
+  "spec": "specs/features/WEB-UNLIMITED/spec.md",
+  "requirements": [
+    {
+      "id": "WEBUNLIMITED-001",
+      "tests": [
+        "tests/contracts/test_continuous_unlimited_schema.py::test_null_local_limits_and_finite_service_budget_are_distinct"
+      ]
+    },
+    {
+      "id": "WEBUNLIMITED-002",
+      "tests": [
+        "tests/contracts/test_continuous_unlimited_schema.py::test_cumulative_counters_outlive_old_quotas_without_relaxing_messages"
+      ]
+    },
+    {
+      "id": "WEBUNLIMITED-003",
+      "tests": [
+        "tests/contracts/test_continuous_unlimited_schema.py::test_service_exhaustion_and_pending_capacity_are_closed_reasons"
+      ]
+    }
+  ]
+}

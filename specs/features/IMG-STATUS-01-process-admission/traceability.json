@@ -1,0 +1,21 @@
+{
+  "feature": "IMG-STATUS-01",
+  "spec": "specs/features/IMG-STATUS-01-process-admission/spec.md",
+  "requirements": [
+    {
+      "id": "IMGSTATUS01-001",
+      "tests": [
+        "tests/contracts/test_story_image_admission_status.py::test_process_exhaustion_after_close_is_held_budget_without_extra_http",
+        "tests/contracts/test_story_image_admission_status.py::test_busy_process_is_held_ineligible_and_does_not_consume_another_allowance",
+        "tests/contracts/test_story_image_admission_status.py::test_untyped_provider_error_text_cannot_impersonate_admission",
+        "tests/contracts/test_story_image_admission_status.py::test_admission_error_has_closed_reason_and_legacy_value_error_contract"
+      ]
+    },
+    {
+      "id": "IMGSTATUS01-002",
+      "tests": [
+        "tests/contracts/test_story_image_admission_status.py::test_late_typed_denial_cannot_relabel_stop_or_new_input"
+      ]
+    }
+  ]
+}

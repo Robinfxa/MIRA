@@ -1,0 +1,65 @@
+{
+  "feature": "LUNA-01",
+  "spec": "specs/features/LUNA-01-bounded-tool-protocol/spec.md",
+  "requirements": [
+    {
+      "id": "LUNA01-001",
+      "tests": [
+        "tests/contracts/test_direct_luna_tools.py::test_actual_call_output_roundtrip_preserves_reasoning_and_fresh_context",
+        "tests/contracts/test_direct_luna_tools.py::test_invalid_or_mixed_calls_fail_closed",
+        "tests/contracts/test_direct_luna_tools.py::test_incomplete_conflicting_or_late_protocol_is_rejected",
+        "tests/contracts/test_direct_luna_tools.py::test_full_argument_stream_never_returns_before_terminal"
+      ]
+    },
+    {
+      "id": "LUNA01-002",
+      "tests": [
+        "tests/contracts/test_direct_luna_tools.py::test_continuation_rejects_more_tools_and_all_action_proposals",
+        "tests/contracts/test_direct_luna_tools.py::test_wrong_result_id_and_oversized_result_do_not_make_second_request",
+        "tests/contracts/test_direct_luna_tools.py::test_epoch_changed_context_cannot_continue_an_old_call"
+      ]
+    },
+    {
+      "id": "LUNA01-003",
+      "tests": [
+        "tests/contracts/test_direct_luna_tools.py::test_reservation_prevents_parallel_consumer_spending_continuation",
+        "tests/contracts/test_direct_luna_tools.py::test_cancel_clears_state_and_closes_response_stream",
+        "tests/contracts/test_direct_luna_tools.py::test_timeout_covers_application_wait_and_does_not_restart_budget",
+        "tests/contracts/test_direct_luna_tools.py::test_close_fences_pending_continuation_and_releases_only_unused_slot"
+      ]
+    },
+    {
+      "id": "LUNA01-004",
+      "tests": [
+        "tests/contracts/test_direct_luna_tools.py::test_http_error_is_sanitized_consumes_attempt_and_never_retries_or_falls_back",
+        "tests/contracts/test_direct_luna_tools.py::test_reasoning_carry_is_bounded_before_call_is_released",
+        "tests/contracts/test_direct_luna_tools.py::test_request_bound_is_checked_before_credentials_and_counting_attempt",
+        "tests/contracts/test_direct_luna_tools.py::test_ordinary_text_uses_one_request_and_releases_reserved_slot",
+        "tests/contracts/test_direct_luna_tools.py::test_full_advertised_brief_length_accepts_unicode_and_escaped_json",
+        "tests/contracts/test_direct_luna_tools.py::test_brief_character_scalar_and_wire_envelope_limits",
+        "tests/contracts/test_direct_luna_tools.py::test_first_ordinary_candidate_requires_native_tools_for_authored_controls",
+        "tests/contracts/test_direct_luna_tools.py::test_first_ordinary_candidate_holds_legacy_story_and_affect_proposals",
+        "tests/contracts/test_direct_luna_tools.py::test_first_ordinary_candidate_cannot_bypass_covered_image_tools"
+      ]
+    },
+    {
+      "id": "LUNA01-005",
+      "tests": [
+        "tests/contracts/test_direct_luna_validation_diagnostics.py::test_tool_candidate_validation_retains_safe_reason_and_json_classes",
+        "tests/contracts/test_direct_luna_validation_diagnostics.py::test_tool_candidate_error_boundary_never_copies_arbitrary_exception_text"
+      ]
+    },
+    {
+      "id": "LUNA01-006",
+      "tests": [
+        "tests/contracts/test_direct_tool_structured_output.py::test_first_request_has_strict_dialogue_schema_and_tools_own_actions",
+        "tests/contracts/test_direct_tool_structured_output.py::test_story_proposals_cannot_bypass_native_function_authority",
+        "tests/contracts/test_direct_tool_structured_output.py::test_tool_call_keeps_ordinary_commentary_and_continuation_is_text_only",
+        "tests/contracts/test_direct_tool_structured_output.py::test_call_commentary_never_discards_nonnull_proposals_or_unknown_fields",
+        "tests/contracts/test_direct_tool_structured_output.py::test_story_disabled_call_commentary_still_rejects_nullable_proposal_slots",
+        "tests/contracts/test_direct_tool_structured_output.py::test_last_request_slot_still_sends_schema_with_tools_disabled",
+        "tests/contracts/test_direct_tool_structured_output.py::test_unsupported_format_or_noncompliant_text_never_retries_or_falls_back"
+      ]
+    }
+  ]
+}

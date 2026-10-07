@@ -1,0 +1,31 @@
+{
+  "feature": "WP12CONTINUITY",
+  "spec": "specs/features/WP12-dialogue-continuity/spec.md",
+  "requirements": [
+    {
+      "id": "WP12CONTINUITY-001",
+      "tests": [
+        "tests/contracts/test_dialogue_continuity.py::test_fixed_prompt_uses_dialogue_continuity_without_canned_opening"
+      ]
+    },
+    {
+      "id": "WP12CONTINUITY-002",
+      "tests": [
+        "tests/contracts/test_dialogue_continuity.py::test_four_recent_distinct_reply_texts_do_not_spend_slots_on_paired_modalities",
+        "tests/contracts/test_dialogue_continuity.py::test_equal_words_in_separate_turns_remain_separate_qualified_sources"
+      ]
+    },
+    {
+      "id": "WP12CONTINUITY-003",
+      "tests": [
+        "tests/contracts/test_dialogue_continuity.py::test_actor_direct_request_preserves_second_greeting_and_photo_followup"
+      ]
+    },
+    {
+      "id": "WP12CONTINUITY-004",
+      "tests": [
+        "tests/contracts/test_dialogue_continuity.py::test_bounded_dialogue_references_remap_to_exact_source_rows"
+      ]
+    }
+  ]
+}

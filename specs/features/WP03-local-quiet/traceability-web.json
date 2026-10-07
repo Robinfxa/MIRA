@@ -1,0 +1,54 @@
+{
+  "feature": "WP03-local-quiet",
+  "spec": "specs/features/WP03-local-quiet/spec.md",
+  "checker_note": "Web sidecar; test files have unique web lane ownership through tests/quality.toml wildcard.",
+  "owner": "web",
+  "requirements": [
+    {
+      "id": "LQ-001",
+      "tests": [
+        {
+          "file": "tests/web/continuous-quiet.test.mjs",
+          "case": "captured quiet requests an endpoint without Google END or final and revisions do not reset silence"
+        }
+      ]
+    },
+    {
+      "id": "LQ-002",
+      "tests": [
+        {
+          "file": "tests/web/continuous-quiet.test.mjs",
+          "case": "steady low background before and after speech reaches captured quiet without waiting for lease expiry"
+        }
+      ]
+    },
+    {
+      "id": "LQ-003",
+      "tests": [
+        {
+          "file": "tests/web/continuous-quiet.test.mjs",
+          "case": "resumed voice cancels the exact pending endpoint and drain timeout preserves text"
+        }
+      ]
+    },
+    {
+      "id": "LQ-004",
+      "tests": [
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "quiet gates one initial dispatch and keeps all reply packets on the same existing PCM queue"
+        }
+      ]
+    },
+    {
+      "id": "LQ-005",
+      "tests": [
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "voice supplement names the interrupted request and a later ordinary text request remains independent"
+        }
+      ]
+    }
+  ],
+  "verification_boundary": "Synthetic PCM, actual compiled controllers, fake clock and socket; no physical microphone/provider/device acceptance."
+}

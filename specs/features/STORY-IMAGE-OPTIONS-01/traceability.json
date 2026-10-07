@@ -1,0 +1,47 @@
+{
+  "feature": "STORY-IMAGE-OPTIONS-01",
+  "spec": "specs/features/STORY-IMAGE-OPTIONS-01/spec.md",
+  "requirements": [
+    {
+      "id": "STORYIMAGEOPTIONS01-001",
+      "tests": [
+        "tests/contracts/test_story_image_options.py::test_default_check_declares_images_disabled_and_preserves_fast",
+        "tests/contracts/test_story_image_options.py::test_model_alone_never_enables_image_provider",
+        "tests/contracts/test_story_image_options.py::test_existing_configured_image_models_do_not_enable_or_allocate"
+      ]
+    },
+    {
+      "id": "STORYIMAGEOPTIONS01-002",
+      "tests": [
+        "tests/contracts/test_story_image_options.py::test_missing_fields_only_are_safe_and_never_allocate",
+        "tests/contracts/test_story_image_options.py::test_configured_check_is_not_live_verification_or_spend_cap",
+        "tests/contracts/test_story_image_options.py::test_invalid_options_fail_closed_with_names_only",
+        "tests/contracts/test_story_image_options.py::test_missing_api_key_is_named_without_fallback_or_secret_unwrapping",
+        "tests/contracts/test_story_image_options.py::test_serve_denies_missing_image_admission_before_resources",
+        "tests/contracts/test_story_image_options.py::test_serve_composes_only_explicit_image_factory_independent_of_text"
+      ]
+    },
+    {
+      "id": "STORYIMAGEOPTIONS01-003",
+      "tests": [
+        "tests/contracts/test_story_image_options.py::test_factory_shares_process_limit_across_sessions_without_clients",
+        "tests/contracts/test_story_image_options.py::test_process_gate_spans_whole_job_and_releases_after_cancel_settles",
+        "tests/contracts/test_story_image_options.py::test_failed_job_does_not_refund_process_byte_or_planning_reservation"
+      ]
+    },
+    {
+      "id": "STORYIMAGEOPTIONS01-004",
+      "tests": [
+        "tests/contracts/test_story_image_options.py::test_subscription_default_check_never_constructs_auth_or_reads_api_settings",
+        "tests/contracts/test_story_image_options.py::test_subscription_serve_denies_before_either_credential_route_or_adapter",
+        "tests/contracts/test_story_image_options.py::test_subscription_factory_requires_injected_source_without_api_discovery",
+        "tests/contracts/test_story_image_options.py::test_subscription_rejects_unsupported_declarations_without_route_fallback",
+        "tests/contracts/test_story_image_options.py::test_subscription_shares_opaque_credentials_and_process_gate_without_dollar_reservations",
+        "tests/contracts/test_story_image_options.py::test_subscription_failure_never_falls_back_and_keeps_process_reservation",
+        "tests/contracts/test_story_image_options.py::test_api_text_requires_explicit_image_route_before_subscription_auth",
+        "tests/contracts/test_story_image_options.py::test_subscription_serve_reuses_one_source_for_text_and_both_image_transports",
+        "tests/contracts/test_story_image_options.py::test_factory_forwards_only_explicit_injected_transports"
+      ]
+    }
+  ]
+}

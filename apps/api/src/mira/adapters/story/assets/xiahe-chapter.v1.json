@@ -1,0 +1,125 @@
+{
+  "schema": "mira.xiahe-chapter-definition.v1",
+  "runtime_schema": "mira.xiahe-chapter.v1",
+  "source_hash": "1416a3fbb9b619f923e4b6da10f98e2e36ff7f4a96a9d15a6feac1a8218bf785",
+  "runtime_owner": "mira.domain.xiahe_chapter",
+  "canonical_name": "夏禾",
+  "identity_scope": "current fictional role only; never identity authentication or private-memory scope",
+  "base_compatibility": "Additive chapter schema; original rain graph and canon identities remain exact. Checkpoint schemas 3/4/5 read explicitly; ordinary new state saves use schema 6.",
+  "recognition": "The visitor is unrecognized until a current typed role declaration is program-validated and its recognition scene has an exact completed receipt. No third NPC arrives.",
+  "steps": [
+    {
+      "stage": "stranger_cafe",
+      "next": "x.recognize",
+      "requirement": "current typed fictional claim, or confirmation of current presented role question; nonempty offer_id selects bounded recognition+continuation offer",
+      "receipt": "scene/xiahe_recognition activates role; subsequent real subtitle receipt alone establishes compound offer"
+    },
+    {
+      "stage": "recognized",
+      "next": "x.gift_offer",
+      "requirement": "active role; authored shared history available without retelling milestones; preview optional",
+      "receipt": "standalone gift-offer scene or exact real same-turn recognition continuation subtitle"
+    },
+    {
+      "stage": "recognized",
+      "next": "optional_x.story_x.promise_show_photo",
+      "requirement": "optional retelling/viewing, not prerequisites",
+      "receipt": "each exact subtitle/media receipt proves only its own presentation"
+    },
+    {
+      "stage": "gift_offered",
+      "next": "x.gift_accept",
+      "requirement": "one clear current acceptance of current offer",
+      "receipt": "scene/xiahe_photo_handover"
+    },
+    {
+      "stage": "gift_offered",
+      "next": "x.gift_decline",
+      "requirement": "current refusal, no penalty",
+      "receipt": null
+    },
+    {
+      "stage": "gift_declined",
+      "next": "x.gift_offer",
+      "requirement": "explicit current reopen_gift",
+      "receipt": "scene/xiahe_gift_offer"
+    },
+    {
+      "stage": "completed",
+      "next": "free_chat_or_exit",
+      "requirement": "no repeated handover",
+      "receipt": null
+    }
+  ],
+  "all_stages": [
+    "free chat without progress",
+    "current correction or exit",
+    "Stop",
+    "reentry without replaying grants"
+  ],
+  "optional_branches": "Existing raincoat and window grants/receipts are independent, optional and supported in either order.",
+  "canon": [
+    {
+      "beat": "old_friend",
+      "source_id": "chapter.xiahe.canon.contact_sheet",
+      "text": "有一次我们在这家店摊开一桌试印，我每张都想重选。你把它们按明暗排成一排，问我：哪张让你想起按快门的那一秒？我才发现自己一直盯着小缺点。",
+      "source": "authored_backstory",
+      "author_created": true,
+      "source_revision": 1,
+      "is_user_fact": false,
+      "is_real_shared_experience": false
+    },
+    {
+      "beat": "old_friend_2",
+      "source_id": "chapter.xiahe.canon.electronic_copy",
+      "text": "海边那次是我一个人去的，回来后把灯塔电子版发给你。我先解释风怎么把背带吹到镜头前，你却先问雨后的海是什么味道。我讲了半天湿石头，才想起来还没说照片。",
+      "source": "authored_backstory",
+      "author_created": true,
+      "source_revision": 1,
+      "is_user_fact": false,
+      "is_real_shared_experience": false
+    },
+    {
+      "beat": "old_friend_3",
+      "source_id": "chapter.xiahe.canon.unfinished_print",
+      "text": "后来我们在这儿看纸样，你说可以留一点不完美，我嘴上答应，还是把照片塞回纸袋，说再选一次。你没有催，只替我把杯子挪远了，怕咖啡洒上去。那一点体贴，我一直记得。",
+      "source": "authored_backstory",
+      "author_created": true,
+      "source_revision": 1,
+      "is_user_fact": false,
+      "is_real_shared_experience": false
+    },
+    {
+      "beat": "photo_promise",
+      "source_id": "canon.photo_promise",
+      "text": "旅行前我答应给你一张洗出来的旅行照片。电子版早发过，纸质照片却被我借口还想再选一张，拖了很久。今晚想正式把选好的灯塔照片交给你。",
+      "source": "authored_backstory",
+      "author_created": true,
+      "source_revision": 1,
+      "is_user_fact": false,
+      "is_real_shared_experience": false
+    }
+  ],
+  "presentations": [
+    {
+      "transition": "x.recognize",
+      "scene_value": "xiahe_recognition",
+      "capability": "chapter.xiahe.recognition",
+      "asset": "chapter.recognition.composition"
+    },
+    {
+      "transition": "x.gift_offer",
+      "scene_value": "xiahe_gift_offer",
+      "capability": "chapter.xiahe.gift_offer",
+      "asset": "chapter.gift_offer.composition"
+    },
+    {
+      "transition": "x.gift_accept",
+      "scene_value": "xiahe_photo_handover",
+      "capability": "chapter.xiahe.photo_handover",
+      "asset": "chapter.photo_handover.composition"
+    }
+  ],
+  "claim_boundary": "Receipt-backed fictional software presentation only; not physical delivery, real shared history or human perception.",
+  "calls": "Interest chat + recognition/offer + acceptance: three inputs, five existing model requests. A role clarification may add one question/confirmation. One operation plus one continuation per tool turn; no new budget."
+}

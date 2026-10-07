@@ -1,5 +1,5 @@
 import { StreamingPcm16Resampler } from './pcm.js';
-import type { AudioRuntimeError, CapturedAudio } from './types.js';
+import type { AudioRuntimeError, CapturedAudio, CaptureDeliveryDiagnostic, CaptureProcessingState } from './types.js';
 
 export type CaptureState = 'starting' | 'recording' | 'stopped' | 'closed';
 export interface CaptureOptions {
@@ -7,7 +7,10 @@ export interface CaptureOptions {
   readonly onChunk: (chunk: CapturedAudio) => void | Promise<void>;
   readonly onError?: (error: AudioRuntimeError) => void;
   readonly onState?: (state: CaptureState) => void;
+  /** Local-only, privacy-minimal snapshot. Null clears it after this capture stops. */
+  readonly onProcessing?: (state: CaptureProcessingState | null) => void;
   readonly getUserMedia?: (constraints: MediaStreamConstraints) => Promise<MediaStream>;
+  readonly getSupportedConstraints?: () => MediaTrackSupportedConstraints;
   readonly createContext?: () => AudioContext;
   readonly createWorkletNode?: (context: AudioContext, name: string, options: AudioWorkletNodeOptions) => AudioWorkletNode;
   readonly workletUrl?: string;
@@ -86,7 +89,24 @@ export class MicrophoneCapture {
       if (!this.alive(session)) return false;
       const tracks = stream.getAudioTracks();
       if (tracks.length === 0) throw new SetupError('capture-failed');
-      const reportedRate = tracks[0]?.getSettings().sampleRate;
+      let reportedRate: number | undefined;
+      let reportedEcho: boolean | null = null;
+      let supportedEcho: boolean | null = null;
+      try {
+        // Select only these fields; never serialize settings or inspect device identifiers.
+        const settings = tracks[0]?.getSettings();
+        reportedRate = settings?.sampleRate;
+        const value = settings?.echoCancellation;
+        reportedEcho = typeof value === 'boolean' ? value : null;
+      } catch { /* Optional diagnostics cannot prevent ordinary microphone capture. */ }
+      try {
+        const supported = this.options.getSupportedConstraints ?? (typeof navigator !== 'undefined'
+          ? navigator.mediaDevices?.getSupportedConstraints?.bind(navigator.mediaDevices) : undefined);
+        if (supported) {
+          const value = supported().echoCancellation;
+          supportedEcho = value === undefined ? false : typeof value === 'boolean' ? value : null;
+        }
+      } catch { /* Unknown support stays unknown. */ }
       session.sourceSampleRate = Number.isFinite(reportedRate) && (reportedRate ?? 0) > 0 ? reportedRate! : null;
       const node = createNode(context, 'mira-pcm-capture', {numberOfInputs: 1, numberOfOutputs: 1,
         outputChannelCount: [1], channelCount: 1, channelCountMode: 'explicit',
@@ -102,6 +122,9 @@ export class MicrophoneCapture {
       session.source.connect(node);
       // The processor writes silence; microphone sound is never routed to speakers.
       node.connect(context.destination);
+      this.processing(Object.freeze({echoCancellationRequested: true,
+        echoCancellationSupported: supportedEcho, echoCancellationReported: reportedEcho}));
+      if (!this.alive(session)) return false;
       this.state('recording');
       return this.alive(session);
     } catch (error) {
@@ -134,9 +157,13 @@ export class MicrophoneCapture {
     catch { this.fail(session, 'capture-failed'); return; }
     const sequence = session.sequence++;
     session.nextCaptureFrame = frame + samples.length;
+    const contextTime = session.context!.currentTime;
+    const deliveryLagMilliseconds = Number.isFinite(contextTime) && contextTime >= 0
+      ? Math.max(0, (contextTime - session.nextCaptureFrame / session.context!.sampleRate) * 1000) : undefined;
     const chunk: CapturedAudio = Object.freeze({pcm16le, sampleRate: 16000, channels: 1,
       captureSampleRate: session.context!.sampleRate, sourceSampleRate: session.sourceSampleRate,
-      sequence, startSample: session.outputFrames, endSample: session.outputFrames + pcm16le.length / 2, captureStartFrame: frame});
+      sequence, startSample: session.outputFrames, endSample: session.outputFrames + pcm16le.length / 2, captureStartFrame: frame,
+      ...(deliveryLagMilliseconds === undefined ? {} : {deliveryLagMilliseconds})});
     session.outputFrames = chunk.endSample;
     session.pending++;
     try {
@@ -144,9 +171,10 @@ export class MicrophoneCapture {
       void Promise.resolve(result).then(() => {
         if (!this.alive(session)) return;
         session.pending--;
-        session.node!.port.postMessage({type: 'ack', sequence});
-      }).catch(() => this.fail(session, 'consumer-failed'));
-    } catch { this.fail(session, 'consumer-failed'); }
+        try { session.node!.port.postMessage({type: 'ack', sequence}); }
+        catch { this.fail(session, 'consumer-failed', 'acknowledgement'); }
+      }, () => this.fail(session, 'consumer-failed', 'chunk'));
+    } catch { this.fail(session, 'consumer-failed', 'chunk'); }
   }
   stop(): void {
     const session = this.current;
@@ -154,6 +182,7 @@ export class MicrophoneCapture {
     this.generation++;
     if (!session) return;
     this.release(session);
+    this.processing(null);
     this.state('stopped');
   }
   private stopTracks(stream: MediaStream): void {
@@ -188,24 +217,32 @@ export class MicrophoneCapture {
     }
     session.resampler = null;
   }
-  private fail(session: CaptureSession, code: AudioRuntimeError['code']): void {
+  private fail(session: CaptureSession, code: AudioRuntimeError['code'], stage?: CaptureDeliveryDiagnostic['stage']): void {
     if (!this.alive(session)) return;
+    const delivery = stage === undefined ? undefined : Object.freeze({stage,
+      emittedChunks: session.sequence, outputSamples: session.outputFrames});
     this.stop();
-    this.error(code);
+    this.error(code, delivery);
   }
   private state(state: CaptureState): void {
     try { this.options.onState?.(state); }
-    catch { if (this.current) this.fail(this.current, 'consumer-failed'); }
+    catch { if (this.current) this.fail(this.current, 'consumer-failed', 'state'); }
   }
-  private error(code: AudioRuntimeError['code']): void {
+  private processing(state: CaptureProcessingState | null): void {
+    try { this.options.onProcessing?.(state); } catch { /* Optional diagnostics cannot own or revive capture. */ }
+  }
+  private error(code: AudioRuntimeError['code'], delivery?: CaptureDeliveryDiagnostic): void {
     const messages: Partial<Record<AudioRuntimeError['code'], string>> = {
       unsupported: 'Microphone capture is unavailable in this browser. Text input is still available.',
       'permission-denied': 'Microphone permission was denied. Text input is still available.',
       'capture-overflow': 'Microphone delivery fell behind and was stopped. Retry or use text input.',
-      'consumer-failed': 'Microphone delivery failed. Retry or use text input.',
+      'consumer-failed': delivery
+        ? `Microphone delivery failed [stage=${delivery.stage}; chunks=${delivery.emittedChunks}; samples=${delivery.outputSamples}]. Retry or use text input.`
+        : 'Microphone delivery failed. Retry or use text input.',
       'device-ended': 'The microphone disconnected. Retry or use text input.',
     };
-    try { this.options.onError?.(Object.freeze({code, message: messages[code] ?? 'Microphone capture failed. Text input is still available.'})); }
+    try { this.options.onError?.(Object.freeze({code, message: messages[code] ?? 'Microphone capture failed. Text input is still available.',
+      ...(delivery === undefined ? {} : {delivery})})); }
     catch { /* Error observers cannot start or retain microphone resources. */ }
   }
   async close(): Promise<void> {

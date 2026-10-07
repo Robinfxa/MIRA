@@ -1,0 +1,53 @@
+{
+  "feature": "DEV-ENTRY-01",
+  "spec": "specs/features/DEV-ENTRY-01-approved-runtime/spec.md",
+  "requirements": [
+    {
+      "id": "DEVENTRY01-001",
+      "tests": [
+        "tests/contracts/test_development_app_entry.py::test_unarmed_or_voice_required_factory_is_rejected",
+        "tests/contracts/test_development_app_entry.py::test_timeout_limit_rejects_huge_or_invalid_values_before_transport"
+      ]
+    },
+    {
+      "id": "DEVENTRY01-002",
+      "tests": [
+        "tests/contracts/test_codex_text_only.py::test_text_only_candidate_has_independent_subtitle_and_pose_without_audio",
+        "tests/contracts/test_codex_text_only.py::test_text_only_parser_rejects_speech_even_when_caption_is_present",
+        "tests/contracts/test_codex_text_only.py::test_legacy_generation_keeps_speech_schema_and_text_only_does_not"
+      ]
+    },
+    {
+      "id": "DEVENTRY01-003",
+      "tests": [
+        "tests/contracts/test_development_app_entry.py::test_real_asgi_session_renders_generated_text_and_pose_without_audio",
+        "tests/contracts/test_development_app_entry.py::test_unknown_input_blocks_presentation_and_reject_stops_presentation",
+        "tests/contracts/test_development_app_entry.py::test_http_stop_cancels_inflight_codex_and_shutdown_closes_session"
+      ]
+    },
+    {
+      "id": "DEVENTRY01-004",
+      "tests": [
+        "tests/contracts/test_live_dev_launcher.py::test_no_argument_subprocess_is_unarmed_without_pythonpath",
+        "tests/contracts/test_live_dev_launcher.py::test_check_reports_only_private_config_declarations_and_never_calls_providers",
+        "tests/contracts/test_live_dev_launcher.py::test_clean_no_dist_copy_builds_and_serves_compiled_main_js"
+      ]
+    },
+    {
+      "id": "DEVENTRY01-005",
+      "tests": [
+        "tests/contracts/test_development_entry_diagnostics.py::test_text_entry_persists_safe_correlated_review_diagnostics",
+        "tests/contracts/test_development_entry_diagnostics.py::test_text_entry_preserves_explicit_disabled_logging",
+        "tests/contracts/test_development_entry_diagnostics.py::test_text_entry_never_enables_raw_recording_from_config"
+      ]
+    },
+    {
+      "id": "DEVENTRY01-006",
+      "tests": [
+        "tests/contracts/test_managed_home_factory.py::test_managed_factory_accepts_official_home_codex_default_without_side_effects",
+        "tests/contracts/test_managed_home_factory.py::test_managed_factory_rejects_invalid_home_bindings",
+        "tests/contracts/test_managed_home_factory.py::test_managed_default_does_not_bypass_route_authorization_or_policy_gates"
+      ]
+    }
+  ]
+}

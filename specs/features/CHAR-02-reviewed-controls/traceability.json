@@ -1,0 +1,58 @@
+{
+  "feature": "CHAR-02",
+  "spec": "specs/features/CHAR-02-reviewed-controls/spec.md",
+  "requirements": [
+    {
+      "id": "CHAR02-001",
+      "tests": [
+        "tests/contracts/test_character_control_bridge.py::test_direct_reviewed_controls_work_without_story_progress_and_only_receipts_are_history",
+        "tests/contracts/test_character_control_bridge.py::test_full_independent_no_unknown_still_blocks_ready_controls",
+        "tests/contracts/test_character_control_bridge.py::test_actual_jev_user_restriction_no_still_blocks_ready_wardrobe",
+        "tests/contracts/test_character_control_bridge.py::test_unavailable_control_is_dropped_before_full_review_preserving_text"
+      ]
+    },
+    {
+      "id": "CHAR02-002",
+      "tests": [
+        "tests/contracts/test_character_control_bridge.py::test_happy_hysteresis_drops_first_visual_but_preserves_exact_reviewed_speech_pair",
+        "tests/contracts/test_character_control_bridge.py::test_guarded_happy_shy_normal_are_independent_of_plot_and_phase",
+        "tests/contracts/test_character_control_bridge.py::test_actual_jev_confidence_threshold_controls_emotion_with_hysteresis",
+        "tests/contracts/test_character_control_bridge.py::test_only_unadmitted_visual_returns_bounded_unknown_without_inventing_normal_effect"
+      ]
+    },
+    {
+      "id": "CHAR02-003",
+      "tests": [
+        "tests/contracts/test_character_control_bridge.py::test_stop_before_receipt_rejects_new_presentation_and_stop_after_keeps_history",
+        "tests/contracts/test_character_control_bridge.py::test_stopped_during_independent_review_cannot_later_grant_control",
+        "tests/contracts/test_character_control_bridge.py::test_late_receipt_for_stopped_story_raincoat_is_history_without_plot_progress",
+        "tests/contracts/test_character_control_bridge.py::test_reentry_exposes_historical_appearance_without_grants_or_restore_claim",
+        "tests/contracts/test_character_control_bridge.py::test_visual_slots_survive_episode_rotation_and_store_round_trip"
+      ]
+    },
+    {
+      "id": "CHAR02-004",
+      "tests": [
+        "tests/contracts/test_character_control_bridge.py::test_schema3_migrates_unknown_visual_fields_and_next_revision_writes_schema4"
+      ]
+    },
+    {
+      "id": "CHAR02-005",
+      "tests": [
+        "tests/contracts/test_character_control_bridge.py::test_four_turn_actual_semantic_pipeline_keeps_full_review_within_wire_budgets",
+        "tests/contracts/test_character_control_bridge.py::test_v4_wire_compacts_only_exact_evidence_and_losslessly_preserves_mismatches",
+        "tests/contracts/test_character_control_bridge.py::test_v4_question_boundary_references_preserve_full_original_text_and_criteria",
+        "tests/contracts/test_character_control_bridge.py::test_v4_oversized_review_remains_unknown_without_transport_or_evidence_truncation"
+      ]
+    },
+    {
+      "id": "CHAR02-006",
+      "tests": [
+        "tests/contracts/test_character_review_wire_limits.py::test_backend_envelope_rejects_invalid_configuration",
+        "tests/contracts/test_character_review_wire_limits.py::test_factory_selects_explicit_bounded_character_application_envelopes",
+        "tests/contracts/test_character_review_wire_limits.py::test_character_application_five_ten_twenty_turns_keep_full_semantic_review",
+        "tests/contracts/test_character_review_wire_limits.py::test_explicit_small_envelope_fails_closed_in_real_asgi_and_does_not_call_oversized_track"
+      ]
+    }
+  ]
+}

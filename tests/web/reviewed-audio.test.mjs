@@ -149,7 +149,9 @@ test('audition is refused while character playback owns the sink and after a sta
 test('review UI stays secondary, default-off and separate from export, with exact-buffer privacy copy',async()=>{
   const html=await (await import('node:fs/promises')).readFile(new URL('../../apps/web/index.html',import.meta.url),'utf8');
   const panelStart=html.indexOf('data-review-audio-panel'),fieldset=html.indexOf('<fieldset class="conversation-controls"');
-  assert.ok(panelStart>0&&panelStart<fieldset);assert.match(html,/data-review-audio-panel[^>]*>/);
+  assert.ok(panelStart>fieldset, "recording controls are secondary to the conversation");
+  assert.ok(html.indexOf('<details class="settings-panel"') < panelStart, "recording controls remain in settings");
+  assert.match(html,/data-review-audio-panel[^>]*>/);
   assert.match(html,/data-review-audio-notice[^>]*hidden/);assert.match(html,/data-review-audio-consent/);
   assert.match(html,/ASR 转写不是隐私审核/);assert.match(html,/试听这段原音/);assert.match(html,/排入本机私有队列/);
   assert.match(html,/未能自动做秘密检测|不会自动做秘密检测/);assert.ok(!/data-review-audio.*export/i.test(html));

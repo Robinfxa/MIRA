@@ -1,0 +1,53 @@
+{
+  "feature": "WP13",
+  "spec": "specs/features/WP13-xiahe-chapter/spec.md",
+  "requirements": [
+    {
+      "id": "WP13-001",
+      "tests": [
+        "tests/contracts/test_xiahe_chapter.py::test_current_typed_assertion_and_ack_are_both_required",
+        "tests/contracts/test_xiahe_chapter.py::test_ambiguous_mentions_do_not_recognize",
+        "tests/contracts/test_xiahe_chapter.py::test_unambiguous_role_clause_is_not_a_magic_phrase",
+        "tests/contracts/test_xiahe_chapter.py::test_reported_or_retracted_multiclause_claim_is_not_current_role"
+      ]
+    },
+    {
+      "id": "WP13-002",
+      "tests": [
+        "tests/contracts/test_xiahe_chapter.py::test_old_friend_history_reveals_three_layers_without_dumping_or_skipping",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_bridge_completes_only_after_distinct_handover_ack_and_same_version_context",
+        "tests/contracts/test_xiahe_chapter.py::test_same_input_cannot_advance_two_revelation_beats",
+        "tests/contracts/test_xiahe_chapter_wires.py::test_active_chapter_long_short_chat_keeps_one_version_and_original_budgets",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_dormant_chapter_preserves_legacy_model_wire_and_authored_dialogue_has_no_setup_jargon",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_explicit_visible_photo_reuse_unlocks_preview_without_fabricating_new_presentation"
+      ]
+    },
+    {
+      "id": "WP13-003",
+      "tests": [
+        "tests/contracts/test_xiahe_chapter.py::test_finite_receipted_chapter_decline_reopen_and_no_autoadvance",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_stop_late_receipt_is_history_only_correction_preserves_provenance",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_old_four_node_checkpoint_reads_explicitly_without_disk_mutation",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_save_resume_keeps_qualified_finite_history_but_requires_fresh_role",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_stop_revokes_a_presented_gift_offer_then_explicit_reopen_is_possible",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_new_checkpoint_roundtrip_preserves_chapter_receipts_without_replaying_pending"
+      ]
+    },
+    {
+      "id": "WP13-004",
+      "tests": [
+        "tests/contracts/test_xiahe_chapter_actor.py::test_optional_rain_paths_can_run_in_either_order",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_actor_bridge_passes_only_current_explicit_reopen_after_decline",
+        "tests/contracts/test_xiahe_chapter_wires.py::test_chapter_beat_cannot_evict_latest_environment_from_bounded_conversation"
+      ]
+    },
+    {
+      "id": "WP13-005",
+      "tests": [
+        "tests/contracts/test_xiahe_chapter_actor.py::test_explicit_gift_button_compiles_without_generation_guess_and_rejects_stale_identity",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_missing_scene_resource_stays_visible_text_and_does_not_recognize",
+        "tests/contracts/test_xiahe_chapter.py::test_contradictory_gift_reply_does_not_accept"
+      ]
+    }
+  ]
+}

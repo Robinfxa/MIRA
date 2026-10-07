@@ -1,8 +1,8 @@
 """Provider-neutral validation for the reported normalized Choice statistic.
 
-The cent-grid branch checks whether independently rounded wire values are
-mathematically compatible. It does not replace those values; decision thresholds
-must always be applied to the original reported probability and confidence.
+TypeSafe's Choice wire fields can be rounded independently. This module accepts
+nearest-cent representations only when one normalized latent distribution can
+produce every reported value. It never replaces the values used by policy.
 """
 from __future__ import annotations
 
@@ -10,38 +10,108 @@ import math
 from collections.abc import Mapping
 from fractions import Fraction
 
+CHOICE_WIRE_COMPATIBILITY_VERSION = "jev-choice-cent-interval-v1"
+_PROBABILITY_SUM_TOLERANCE = 0.00001
+_CONFIDENCE_TOLERANCE = 0.0001
+_HALF_CENT = Fraction(1, 200)
+
+
+def _valid_probabilities(probabilities: object) -> bool:
+    return (isinstance(probabilities, Mapping) and len(probabilities) >= 2
+            and all(type(value) in (int, float) and 0 <= value <= 1
+                    and (type(value) is int or math.isfinite(value))
+                    for value in probabilities.values()))
+
+
+def _cent_interval(value: int | float) -> tuple[Fraction, Fraction] | None:
+    """Return the clipped nearest-cent interval only for exact decimal cents."""
+    reported = Fraction(str(value))
+    if (reported * 100).denominator != 1:
+        return None
+    return max(Fraction(0), reported - _HALF_CENT), min(Fraction(1), reported + _HALF_CENT)
+
+
+def choice_probability_sum_compatible(probabilities: Mapping[str, int | float]) -> bool:
+    """Check that the reported probability vector can sum to one on the wire.
+
+    Preserve the pre-existing full-precision sum tolerance. Otherwise, accept only
+    cent-grid values whose closed, clipped rounding intervals contain a normalized
+    vector. This preliminary predicate intentionally does not check confidence.
+    """
+    if not _valid_probabilities(probabilities):
+        return False
+    total = sum(probabilities.values())
+    if math.isclose(total, 1, abs_tol=_PROBABILITY_SUM_TOLERANCE):
+        return True
+    intervals = [_cent_interval(value) for value in probabilities.values()]
+    if any(interval is None for interval in intervals):
+        return False
+    return (sum(interval[0] for interval in intervals) <= 1
+            <= sum(interval[1] for interval in intervals))
+
+
+def _joint_cent_feasible(
+    probabilities: Mapping[str, int | float], confidence: int | float,
+) -> bool:
+    values = [_cent_interval(value) for value in probabilities.values()]
+    confidence_interval = _cent_interval(confidence)
+    if confidence_interval is None or any(interval is None for interval in values):
+        return False
+    intervals = [interval for interval in values if interval is not None]
+    count = len(intervals)
+    confidence_low, confidence_high = confidence_interval
+
+    # Invert TypeSafe's Choice confidence equation exactly over rationals.
+    top_from_confidence_low = (1 + (count - 1) * confidence_low) / count
+    top_from_confidence_high = (1 + (count - 1) * confidence_high) / count
+
+    reported_top = max(probabilities.values())
+    top_index = next(index for index, value in enumerate(probabilities.values())
+                     if value == reported_top)
+    top_low, top_high = intervals[top_index]
+    other_intervals = [interval for index, interval in enumerate(intervals)
+                       if index != top_index]
+    other_lower_sum = sum(lower for lower, _ in other_intervals)
+
+    # A top value x must (1) be report-compatible, (2) match the confidence
+    # interval, (3) dominate every other lower bound, and (4) leave enough mass
+    # for the other intervals. After intersecting those constraints, feasibility
+    # is monotone in x, so checking the highest allowed x is sufficient.
+    lower = max(top_low, top_from_confidence_low,
+                *(item_lower for item_lower, _ in other_intervals))
+    upper = min(top_high, top_from_confidence_high, 1 - other_lower_sum)
+    if lower > upper:
+        return False
+    other_capacity = sum(min(item_upper, upper) for _, item_upper in other_intervals)
+    return upper + other_capacity >= 1
+
 
 def choice_confidence_consistent(
     probabilities: Mapping[str, int | float], confidence: int | float,
 ) -> bool:
-    """Accept exact values or overlapping nearest-cent intervals for the statistic.
+    """Accept the legacy exact statistic or jointly feasible rounded wire values.
 
-    This matches the existing wire compatibility rule used by JEV parsers. Inputs
-    are still required to be finite, normalized probability data. The interval path
-    validates representation only; it never rounds a value into an admission gate.
+    The legacy branch keeps its prior sum/confidence tolerances. The new branch is
+    restricted to exact cent-grid reporting and proves existence of one normalized
+    latent vector whose maximum yields the confidence interval. No input is mutated,
+    rounded, normalized, or used to change an admission threshold.
     """
-    if not isinstance(probabilities, Mapping) or len(probabilities) < 2:
+    if (not _valid_probabilities(probabilities)
+            or type(confidence) not in (int, float)
+            or not 0 <= confidence <= 1
+            or (type(confidence) is float and not math.isfinite(confidence))
+            or not choice_probability_sum_compatible(probabilities)):
         return False
-    if (type(confidence) not in (int, float) or not 0 <= confidence <= 1
-            or not math.isfinite(confidence)
-            or any(type(value) not in (int, float) or not 0 <= value <= 1
-                   or not math.isfinite(value) for value in probabilities.values())
-            or not math.isclose(sum(probabilities.values()), 1, abs_tol=0.00001)):
-        return False
+
     count = len(probabilities)
     probability = max(probabilities.values())
     expected = (probability - 1 / count) / (1 - 1 / count)
-    if math.isclose(confidence, expected, abs_tol=0.0001):
+    # The historical formula shortcut is valid only when the raw reported vector
+    # itself passes the historical normalization tolerance. Cent-grid sums outside
+    # that window must pass joint latent-vector feasibility below.
+    if (math.isclose(sum(probabilities.values()), 1,
+                     abs_tol=_PROBABILITY_SUM_TOLERANCE)
+            and math.isclose(confidence, expected, abs_tol=_CONFIDENCE_TOLERANCE)):
         return True
-    values = [Fraction(str(value)) for value in (*probabilities.values(), confidence)]
-    if any((value * 100).denominator != 1 for value in values):
-        return False
-    # Rational endpoints avoid adding an arbitrary epsilon to the rounding interval.
-    top, reported = max(values[:-1]), values[-1]
-    half_cent = Fraction(1, 200)
-    lower = max(Fraction(1, count), top - half_cent)
-    upper = min(Fraction(1), top + half_cent)
-    expected_lower = (count * lower - 1) / (count - 1)
-    expected_upper = (count * upper - 1) / (count - 1)
-    return (expected_lower <= min(Fraction(1), reported + half_cent)
-            and expected_upper >= max(Fraction(0), reported - half_cent))
+
+    return _joint_cent_feasible(probabilities, confidence)

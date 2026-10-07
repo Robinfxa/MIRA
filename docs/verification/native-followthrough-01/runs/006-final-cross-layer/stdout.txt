@@ -1,0 +1,108 @@
+........................................................................ [ 39%]
+FF...................................................................... [ 79%]
+......................................                                   [100%]
+=================================== FAILURES ===================================
+_ test_all_shared_canon_recent_dialogue_and_large_recall_fit_real_tool_continuation_wire[chatgpt_subscription] _
+
+route_name = 'chatgpt_subscription'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-7/test_all_shared_canon_recent_d0')
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route_name',['chatgpt_subscription','openai_api'])
+    async def test_all_shared_canon_recent_dialogue_and_large_recall_fit_real_tool_continuation_wire(route_name,tmp_path):
+        from mira.adapters.generation.direct_codex_responses import ResponsesRoute,DirectResponsesLimits
+        from mira.application.generation_tool_execution import tool_definitions,tool_result
+        from mira.application.memory_context import valid_context_packet
+        from mira.domain.models import SessionState
+        from tests.contracts.test_role_canon_speaker import context,recognize
+        from tests.contracts.test_xiahe_chapter_actor import prepare,complete
+        from tests.contracts.test_actor_memory_recall import packet,valid_past_line
+        from tests.contracts.test_character_prompt_refinement import backend
+        from tests.contracts.test_direct_codex_responses import response
+        from tests.contracts.test_direct_luna_tools import wire,tool,message
+        c=character();recognize(c)
+        for epoch in (2,3,4):
+            _,effects=prepare(c,'x.story',epoch);complete(c,effects,epoch*2)
+        ctx=replace(context(c,long=True),character_assets=c.readiness)
+        memory=packet(ctx.user_text,past_candidates=tuple(valid_past_line('synthetic-'+str(i)+':'+'m'*4000,
+            evidence_id='synthetic-'+str(i)) for i in range(7)))
+        assert valid_context_packet(memory,request_text=ctx.user_text)
+        ctx=replace(ctx,memory_packet=memory)
+        defs=tool_definitions(ctx,SessionState('capacity','client'),None,review_available=True,image_task_count=0,max_effects=128,native_authority=True)
+        planned=story_call('x.gift_offer',offer='capacity-offer')
+        async def handle(request):
+            body=json.loads(request.content)
+            if any(i.get('type')=='function_call_output' for i in body['input']): return response(wire([message('这张照片，送给你好吗？')]))
+            return response(wire([tool(name=planned.name,arguments=planned.arguments_json)]))
+        direct,source,requests=backend(handle,route=ResponsesRoute(route_name),request_limit=2,native_character_tools=True,speech_enabled=False)
+        turn=direct.open_tool_turn(ctx,defs)
+        try:
+            call=await turn.start();await turn.continue_after_tool(tool_result(call,'pending'),ctx)
+        finally: turn.close()
+        sizes=[]
+        for request in requests:
+            body=json.loads(request.content);payloads=[i['content'][0]['text'] for i in body['input'] if i.get('role')=='user']
+            facts=json.loads(payloads[-1])['facts']
+            assert len(facts['memory_evidence']['past_candidates'])==7
+            assert all(json.dumps(facts,ensure_ascii=False).count(text)==1 for _,_,text in CHAPTER_CANON)
+>           assert len(body['instructions'].encode())<12000
+E           assert 12050 < 12000
+E            +  where 12050 = len(b"You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools gover... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.")
+E            +    where b"You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools gover... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle." = <built-in method encode of str object at 0x41e60560>()
+E            +      where <built-in method encode of str object at 0x41e60560> = 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.'.encode
+
+tests/contracts/test_native_photo_handover_flow.py:409: AssertionError
+_ test_all_shared_canon_recent_dialogue_and_large_recall_fit_real_tool_continuation_wire[openai_api] _
+
+route_name = 'openai_api'
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-7/test_all_shared_canon_recent_d1')
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route_name',['chatgpt_subscription','openai_api'])
+    async def test_all_shared_canon_recent_dialogue_and_large_recall_fit_real_tool_continuation_wire(route_name,tmp_path):
+        from mira.adapters.generation.direct_codex_responses import ResponsesRoute,DirectResponsesLimits
+        from mira.application.generation_tool_execution import tool_definitions,tool_result
+        from mira.application.memory_context import valid_context_packet
+        from mira.domain.models import SessionState
+        from tests.contracts.test_role_canon_speaker import context,recognize
+        from tests.contracts.test_xiahe_chapter_actor import prepare,complete
+        from tests.contracts.test_actor_memory_recall import packet,valid_past_line
+        from tests.contracts.test_character_prompt_refinement import backend
+        from tests.contracts.test_direct_codex_responses import response
+        from tests.contracts.test_direct_luna_tools import wire,tool,message
+        c=character();recognize(c)
+        for epoch in (2,3,4):
+            _,effects=prepare(c,'x.story',epoch);complete(c,effects,epoch*2)
+        ctx=replace(context(c,long=True),character_assets=c.readiness)
+        memory=packet(ctx.user_text,past_candidates=tuple(valid_past_line('synthetic-'+str(i)+':'+'m'*4000,
+            evidence_id='synthetic-'+str(i)) for i in range(7)))
+        assert valid_context_packet(memory,request_text=ctx.user_text)
+        ctx=replace(ctx,memory_packet=memory)
+        defs=tool_definitions(ctx,SessionState('capacity','client'),None,review_available=True,image_task_count=0,max_effects=128,native_authority=True)
+        planned=story_call('x.gift_offer',offer='capacity-offer')
+        async def handle(request):
+            body=json.loads(request.content)
+            if any(i.get('type')=='function_call_output' for i in body['input']): return response(wire([message('这张照片，送给你好吗？')]))
+            return response(wire([tool(name=planned.name,arguments=planned.arguments_json)]))
+        direct,source,requests=backend(handle,route=ResponsesRoute(route_name),request_limit=2,native_character_tools=True,speech_enabled=False)
+        turn=direct.open_tool_turn(ctx,defs)
+        try:
+            call=await turn.start();await turn.continue_after_tool(tool_result(call,'pending'),ctx)
+        finally: turn.close()
+        sizes=[]
+        for request in requests:
+            body=json.loads(request.content);payloads=[i['content'][0]['text'] for i in body['input'] if i.get('role')=='user']
+            facts=json.loads(payloads[-1])['facts']
+            assert len(facts['memory_evidence']['past_candidates'])==7
+            assert all(json.dumps(facts,ensure_ascii=False).count(text)==1 for _,_,text in CHAPTER_CANON)
+>           assert len(body['instructions'].encode())<12000
+E           assert 12050 < 12000
+E            +  where 12050 = len(b"You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools gover... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.")
+E            +    where b"You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools gover... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle." = <built-in method encode of str object at 0x41dc1b60>()
+E            +      where <built-in method encode of str object at 0x41dc1b60> = 'You are MIRA. Use natural concise Chinese unless requested otherwise. Current author_policy and supplied tools govern... outputs are not completed history. This turn dialogue is text-only: speech is forbidden; author dialogue as subtitle.'.encode
+
+tests/contracts/test_native_photo_handover_flow.py:409: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_all_shared_canon_recent_dialogue_and_large_recall_fit_real_tool_continuation_wire[chatgpt_subscription]
+FAILED tests/contracts/test_native_photo_handover_flow.py::test_all_shared_canon_recent_dialogue_and_large_recall_fit_real_tool_continuation_wire[openai_api]
+2 failed, 180 passed in 15.98s

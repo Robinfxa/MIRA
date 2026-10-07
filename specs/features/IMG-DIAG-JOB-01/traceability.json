@@ -1,0 +1,33 @@
+{
+  "feature": "IMG-DIAG-JOB-01",
+  "spec": "specs/features/IMG-DIAG-JOB-01/spec.md",
+  "requirements": [
+    {
+      "id": "IMGDIAGJOB01-001",
+      "tests": [
+        "tests/contracts/test_background_image_diagnostic_identity.py::test_same_job_operation_facts_survive_a_new_reply_epoch"
+      ]
+    },
+    {
+      "id": "IMGDIAGJOB01-002",
+      "tests": [
+        "tests/contracts/test_background_image_diagnostic_identity.py::test_new_job_resets_observation_and_old_duplicate_writes_cannot_pollute_it",
+        "tests/contracts/test_background_image_diagnostic_identity.py::test_same_failed_job_duplicate_callbacks_never_erase_its_terminal_cause",
+        "tests/contracts/test_image_operation_diagnostics.py::test_new_input_without_image_does_not_inherit_late_image_metadata"
+      ]
+    },
+    {
+      "id": "IMGDIAGJOB01-003",
+      "tests": [
+        "tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata",
+        "tests/contracts/test_background_image_diagnostic_identity.py::test_unknown_review_exception_text_is_never_exported"
+      ]
+    },
+    {
+      "id": "IMGDIAGJOB01-004",
+      "tests": [
+        "tests/contracts/test_background_image_diagnostic_identity.py::test_real_actor_preserves_review_metadata_across_input_and_failure"
+      ]
+    }
+  ]
+}

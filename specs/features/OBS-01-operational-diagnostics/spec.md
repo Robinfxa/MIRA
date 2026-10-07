@@ -41,6 +41,15 @@ It never opens arbitrary paths, environment files or credentials; symlinks and m
 records are skipped. Raw inclusion needs a separate explicit consent switch and warning; normal
 exports exclude raw files even while recording is active. Export is local, not automatic sharing.
 
+Reported-confidence Choice summaries emitted by the current encoder omit the
+NOUL-only probability field while retaining their confidence-warning boolean. Given
+such an existing metadata record, revalidation and re-export preserve its bounded
+numeric diagnostics without another provider call or source-log modification.
+Unexpected fields, non-null NOUL probabilities on Choice answers, and all existing
+privacy and numeric violations remain rejected. The correction does not recover
+records from an already filtered ZIP; it re-reads the operator-selected original
+metadata log and writes a new export without overwriting an existing destination.
+
 ## Acceptance limits
 
 Core offline tests prove contract/IO boundaries, not live integration, browser UI visibility, true

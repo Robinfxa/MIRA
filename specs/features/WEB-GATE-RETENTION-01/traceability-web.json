@@ -1,0 +1,20 @@
+{
+  "feature": "WEB-GATE-RETENTION-01",
+  "spec": "specs/features/WEB-GATE-RETENTION-01/spec.md",
+  "owner": "web",
+  "checker_note": "Node sidecar; tests/quality.toml web wildcard uniquely owns this file. Python spec collector does not claim these Node cases executed.",
+  "requirements": [
+    {"id": "WEBGATERETENTION-001", "tests": [
+      {"file": "tests/web/permit-gate-retention.test.mjs", "case": "160 successive turns keep only current activity identities and preserve every exact prefix cutoff"},
+      {"file": "tests/web/permit-gate-retention.test.mjs", "case": "retired old snapshots and late callbacks cannot repopulate histories or replay after Stop and new input"}
+    ]},
+    {"id": "WEBGATERETENTION-002", "tests": [
+      {"file": "tests/web/permit-gate-retention.test.mjs", "case": "current activity deduplication and audio survive compaction, revocation, regrant and local block"},
+      {"file": "tests/web/permit-gate-retention.test.mjs", "case": "same activity effect identity remains immutable after its grant temporarily disappears"}
+    ]},
+    {"id": "WEBGATERETENTION-003", "tests": [
+      {"file": "tests/web/permit-gate-retention.test.mjs", "case": "epoch revocation retains pending exact interruption but a higher revision cannot roll epoch back"},
+      {"file": "tests/web/permit-gate-retention.test.mjs", "case": "125 compiled controller turns retain bounded gate state with exact partial audio and real sink Stop ordering"}
+    ]}
+  ]
+}

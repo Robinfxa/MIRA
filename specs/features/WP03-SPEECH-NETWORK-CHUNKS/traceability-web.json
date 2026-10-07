@@ -1,0 +1,39 @@
+{
+  "feature": "WP03-SPEECH-NETWORK-CHUNKS",
+  "spec": "specs/features/WP03-SPEECH-NETWORK-CHUNKS/spec.md",
+  "owner": "web",
+  "checker_note": "Node test sidecar; existing web wildcard uniquely owns both files. Python-only spec checker does not claim execution of these cases. Explicit changed-file quality selection conservatively expands this feature to all offline lanes.",
+  "requirements": [
+    {
+      "id": "WP03SPEECHNETWORKCHUNKS-001",
+      "tests": [
+        {
+          "file": "tests/web/transport-speech-network-chunks.test.mjs",
+          "case": "one valid 6.25 second response decodes identically for coalesced and fragmented reads"
+        }
+      ]
+    },
+    {
+      "id": "WP03SPEECHNETWORKCHUNKS-002",
+      "tests": [
+        {
+          "file": "tests/web/controller-speech-network-chunks.test.mjs",
+          "case": "three cues advance only after natural drain across slow and coalesced network chunks"
+        }
+      ]
+    },
+    {
+      "id": "WP03SPEECHNETWORKCHUNKS-003",
+      "tests": [
+        {
+          "file": "tests/web/controller-speech-network-chunks.test.mjs",
+          "case": "late malformed speech preserves shown text and prefix facts, then accepts voice and text turns"
+        },
+        {
+          "file": "tests/web/transport-speech-network-chunks.test.mjs",
+          "case": "cumulative 300 second transport sample ceiling still rejects the next valid PCM frame"
+        }
+      ]
+    }
+  ]
+}

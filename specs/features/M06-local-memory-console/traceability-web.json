@@ -1,0 +1,21 @@
+{
+  "feature": "M06-local-memory-console",
+  "checker_note": "Supplemental browser tests; the standard Python traceability checker collects traceability.json. The web lane uniquely owns tests/web/*.test.mjs.",
+  "owner": "tests/quality.toml web lane: tests/web/*.test.mjs",
+  "requirements": [
+    {
+      "id": "M06LMC-001",
+      "tests": [
+        {"file": "tests/web/local-memory-console.test.mjs", "case": "dedicated page and mount bundle stay local-only"}
+      ]
+    },
+    {
+      "id": "M06LMC-005",
+      "tests": [
+        {"file": "tests/web/local-memory-console.test.mjs", "case": "dedicated page and mount bundle stay local-only"},
+        {"file": "tests/web/memory-management.test.mjs", "case": "standalone local-only disclosure never implies inherited provider permission"},
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "local-only pairing copy names only the local management capability"}
+      ]
+    }
+  ]
+}

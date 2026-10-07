@@ -1,0 +1,45 @@
+{
+  "schema": "mira.story-canon-selection.v1",
+  "selection_id": "mira26.optional-topics-20261006",
+  "story_id": "mira.rain_window.unfinished_print",
+  "seed_source": {
+    "path": "apps/api/src/mira/adapters/story/assets/mira.story-seed.v1.json",
+    "seed_revision": 3,
+    "sha256": "50390ed34eb35076c370b615c6b7031b63c708b57214d61a39f1a52f689e3966"
+  },
+  "authorization_scope": "explicitly selected fictional character canon for the MIRA writing/integration task only",
+  "not_user_data": true,
+  "never_auto_create_user_memory": true,
+  "default_selection": [
+    "canon.identity",
+    "canon.world",
+    "canon.visual_boundary"
+  ],
+  "explicit_composition_selection": [
+    "canon.appearance",
+    "canon.layers",
+    "canon.attention",
+    "canon.voice",
+    "canon.flaw",
+    "canon.first_trip",
+    "canon.photo_promise",
+    "canon.waiting",
+    "canon.personal_stakes",
+    "canon.star_clip",
+    "canon.raincoat",
+    "canon.relationship",
+    "canon.small_delights",
+    "canon.shy_response",
+    "canon.hurried_arrival"
+  ],
+  "promotion_rule": "Only exact IDs in explicit_composition_selection may map source author_draft to runtime approved_author_canon. Keep source status, source revision, source refs, and authored_backstory provenance in every projection.",
+  "story_node_disclosure_gates": {
+    "canon.first_trip": "story.photo_detail",
+    "canon.photo_promise": "story.waiting_reason",
+    "canon.waiting": "story.waiting_reason",
+    "canon.personal_stakes": "story.imperfect_print",
+    "canon.star_clip": "story.star_clip",
+    "canon.raincoat": "story.amber_raincoat"
+  },
+  "current_graph_scope": "The four-node graph remains unchanged. All explicitly selected author canon may inform the first-person internal character view; released_story_events remains a separate disclosure record and does not establish shared history. No keyword or timer automatically releases a node. Optional topics reference selected canon only; no new execution node, disclosure event or completion authority."
+}

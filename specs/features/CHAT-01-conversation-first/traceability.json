@@ -1,0 +1,11 @@
+{
+  "feature": "CHAT-01",
+  "spec": "specs/features/CHAT-01-conversation-first/spec.md",
+  "requirements": [
+    {"id":"CHAT01-001","tests":["tests/contracts/test_conversation_first.py::test_plain_text_needs_no_jev_grade"]},
+    {"id":"CHAT01-002","tests":["tests/contracts/test_conversation_first.py::test_optional_failure_preserves_text_and_never_grants_controls","tests/contracts/test_conversation_first.py::test_optional_questions_do_not_grade_ordinary_text","tests/contracts/test_conversation_first.py::test_explicit_turn_mute_keeps_independent_subtitle_without_speech_jev"]},
+    {"id":"CHAT01-003","tests":["tests/contracts/test_conversation_first.py::test_text_is_available_before_optional_review_and_stop_blocks_late_action"]},
+    {"id":"CHAT01-004","tests":["tests/contracts/test_plain_chat_literals.py::test_literal_text_survives_without_becoming_an_effect","tests/contracts/test_plain_chat_literals.py::test_native_adapter_preserves_literal_cue_with_existing_speech_capability","tests/contracts/test_plain_chat_literals.py::test_direct_asgi_literal_cue_survives_held_optional_action","tests/contracts/test_plain_chat_literals.py::test_author_prompt_allows_inert_literals_without_growing_past_existing_budget"]},
+    {"id":"CHAT01-005","tests":["tests/contracts/test_plain_chat_literals.py::test_literal_text_does_not_relax_structured_control_fields","tests/contracts/test_plain_chat_literals.py::test_literal_text_still_requires_one_strict_effects_json","tests/contracts/test_plain_chat_literals.py::test_existing_control_characters_still_reject_the_whole_cue","tests/contracts/test_plain_chat_literals.py::test_literal_text_keeps_character_byte_count_and_cue_limits","tests/contracts/test_plain_chat_literals.py::test_story_authority_is_still_checked_after_literal_text"]}
+  ]
+}

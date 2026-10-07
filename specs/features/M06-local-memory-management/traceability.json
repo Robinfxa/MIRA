@@ -1,0 +1,50 @@
+{
+  "feature": "M06-LOCAL-MEMORY-MANAGEMENT",
+  "spec": "specs/features/M06-local-memory-management/spec.md",
+  "requirements": [
+    {
+      "id": "M06LOCALMEMORYMANAGEMENT-001",
+      "tests": [
+        "tests/unit/test_memory_management_worker.py::test_management_requires_explicit_authorization_and_existing_store"
+      ]
+    },
+    {
+      "id": "M06LOCALMEMORYMANAGEMENT-002",
+      "tests": [
+        "tests/unit/test_memory_management.py::test_list_is_bounded_to_user_statement_heads_and_reversible_tombstone",
+        "tests/unit/test_memory_management_page_budget.py::test_page_byte_budget_continues_without_trimming_or_skipping_heads"
+      ]
+    },
+    {
+      "id": "M06LOCALMEMORYMANAGEMENT-003",
+      "tests": [
+        "tests/unit/test_memory_management.py::test_expected_revision_compare_and_write_is_atomic_and_scope_fixed"
+      ]
+    },
+    {
+      "id": "M06LOCALMEMORYMANAGEMENT-004",
+      "tests": [
+        "tests/unit/test_memory_management.py::test_exact_operation_replay_is_idempotent_and_changed_body_conflicts"
+      ]
+    },
+    {
+      "id": "M06LOCALMEMORYMANAGEMENT-005",
+      "tests": [
+        "tests/integration/test_memory_management_http.py::test_unpaired_and_cross_origin_requests_do_not_open_private_store"
+      ]
+    },
+    {
+      "id": "M06LOCALMEMORYMANAGEMENT-006",
+      "tests": [
+        "tests/unit/test_memory_management_worker.py::test_one_worker_rejects_second_active_request_and_closes_after_cancel",
+        "tests/unit/test_memory_management_worker.py::test_backend_unopened_or_closed_operations_have_safe_unavailable_error"
+      ]
+    },
+    {
+      "id": "M06LOCALMEMORYMANAGEMENT-007",
+      "tests": [
+        "tests/integration/test_memory_management_http.py::test_strict_http_errors_never_reflect_memory_text_or_scope_fields"
+      ]
+    }
+  ]
+}

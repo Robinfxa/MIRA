@@ -1,0 +1,31 @@
+{
+  "feature": "DIRECT-PROVIDER-ENTRY",
+  "spec": "specs/features/DIRECT-PROVIDER-ENTRY-01/spec.md",
+  "requirements": [
+    {
+      "id": "DIRECTPROVIDERENTRY-001",
+      "tests": [
+        "tests/contracts/test_direct_provider_app.py::test_invalid_or_unacknowledged_route_does_not_compose",
+        "tests/contracts/test_direct_provider_app.py::test_api_route_requires_explicit_billing_and_never_substitutes_subscription",
+        "tests/contracts/test_live_provider_launcher.py::test_check_uses_explicit_env_without_auth_network_or_native_admission",
+        "tests/contracts/test_live_provider_launcher.py::test_explicit_route_selection_never_loads_other_credentials",
+        "tests/contracts/test_live_provider_launcher.py::test_serve_checks_data_and_api_billing_before_frontend_or_credentials"
+      ]
+    },
+    {
+      "id": "DIRECTPROVIDERENTRY-002",
+      "tests": [
+        "tests/contracts/test_direct_provider_app.py::test_direct_composition_needs_no_native_runtime_and_keeps_review_ports",
+        "tests/contracts/test_direct_provider_app.py::test_direct_asgi_review_and_receipts_work_without_codex_subprocess",
+        "tests/contracts/test_direct_provider_app.py::test_httpx_sse_adapter_through_actual_asgi_actor_and_review",
+        "tests/contracts/test_live_provider_launcher.py::test_voice_wrapper_preserves_continuous_port_shared_budget_and_closes"
+      ]
+    },
+    {
+      "id": "DIRECTPROVIDERENTRY-003",
+      "tests": [
+        "tests/contracts/test_direct_provider_app.py::test_existing_memory_consent_does_not_authorize_new_direct_transmission"
+      ]
+    }
+  ]
+}

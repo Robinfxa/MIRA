@@ -1,0 +1,100 @@
+.F..F.                                                                   [100%]
+=================================== FAILURES ===================================
+__ test_late_typed_denial_cannot_relabel_stop_or_new_input[budget-new_input] ___
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1d19043b90>
+fence = 'new_input', reason = 'budget'
+
+    @pytest.mark.parametrize('fence',['stop','new_input','dismiss'])
+    @pytest.mark.parametrize('reason',['budget','busy'])
+    def test_late_typed_denial_cannot_relabel_stop_or_new_input(monkeypatch,fence,reason):
+        app,calls,_,_,generation=process_app(monkeypatch,limit='none')
+        arrived=threading.Event();release=threading.Event();denied=threading.Event()
+        with TestClient(app) as client:
+            path,headers=session(client);actor=actor_for(app,client.get(path,headers=headers).json(),headers)
+            async def late_denial(*_):
+                arrived.set()
+                while not release.is_set():
+                    try:await asyncio.sleep(.002)
+                    except asyncio.CancelledError:pass
+                denied.set()
+                raise media.ImageOperationAdmissionDenied(reason)
+            monkeypatch.setattr(actor._story_images,'generate_and_review',late_denial)
+            try:
+                submit(client,path,headers);settled(client,path,headers);assert arrived.wait(1)
+                if fence=='stop':
+                    assert client.post(path+'/stop',headers=headers,json={'activity_seq':2,'presentation_cutoff':0}).status_code==200
+                elif fence=='dismiss':
+                    # Dismissal stays in the same epoch; reservation/visibility still fence it.
+                    from uuid import uuid4
+                    assert client.post(path+'/photo-dismissals',headers=headers,json={'request_id':str(uuid4()),'expected_revision':0,'presentation_cutoff':0,'target':'all_photos'}).status_code==200
+                    assert actor._state.output_epoch==1
+                else:
+                    generation.rows=[candidate(image=False)]
+                    submit(client,path,headers,activity=2);settled(client,path,headers)
+                expected=actor._state
+            finally:release.set()
+            assert denied.wait(1);wait_until(lambda:not actor._image_tasks)
+            if fence=='new_input':
+                assert actor._state.story_image.state=='held'
+                assert actor._state.story_image.failure_code==('budget' if reason=='budget' else 'ineligible')
+                assert actor._state.story_image_facts[0].state=='held'
+                submit(client,path,headers,activity=3);settled(client,path,headers)
+>               assert generation.contexts[-1].story_images[0].state=='held'
+E               AssertionError: assert 'cancelled' == 'held'
+E                 
+E                 - held
+E                 + cancelled
+
+tests/contracts/test_story_image_admission_status.py:157: AssertionError
+___ test_late_typed_denial_cannot_relabel_stop_or_new_input[busy-new_input] ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f1d184eff80>
+fence = 'new_input', reason = 'busy'
+
+    @pytest.mark.parametrize('fence',['stop','new_input','dismiss'])
+    @pytest.mark.parametrize('reason',['budget','busy'])
+    def test_late_typed_denial_cannot_relabel_stop_or_new_input(monkeypatch,fence,reason):
+        app,calls,_,_,generation=process_app(monkeypatch,limit='none')
+        arrived=threading.Event();release=threading.Event();denied=threading.Event()
+        with TestClient(app) as client:
+            path,headers=session(client);actor=actor_for(app,client.get(path,headers=headers).json(),headers)
+            async def late_denial(*_):
+                arrived.set()
+                while not release.is_set():
+                    try:await asyncio.sleep(.002)
+                    except asyncio.CancelledError:pass
+                denied.set()
+                raise media.ImageOperationAdmissionDenied(reason)
+            monkeypatch.setattr(actor._story_images,'generate_and_review',late_denial)
+            try:
+                submit(client,path,headers);settled(client,path,headers);assert arrived.wait(1)
+                if fence=='stop':
+                    assert client.post(path+'/stop',headers=headers,json={'activity_seq':2,'presentation_cutoff':0}).status_code==200
+                elif fence=='dismiss':
+                    # Dismissal stays in the same epoch; reservation/visibility still fence it.
+                    from uuid import uuid4
+                    assert client.post(path+'/photo-dismissals',headers=headers,json={'request_id':str(uuid4()),'expected_revision':0,'presentation_cutoff':0,'target':'all_photos'}).status_code==200
+                    assert actor._state.output_epoch==1
+                else:
+                    generation.rows=[candidate(image=False)]
+                    submit(client,path,headers,activity=2);settled(client,path,headers)
+                expected=actor._state
+            finally:release.set()
+            assert denied.wait(1);wait_until(lambda:not actor._image_tasks)
+            if fence=='new_input':
+                assert actor._state.story_image.state=='held'
+                assert actor._state.story_image.failure_code==('budget' if reason=='budget' else 'ineligible')
+                assert actor._state.story_image_facts[0].state=='held'
+                submit(client,path,headers,activity=3);settled(client,path,headers)
+>               assert generation.contexts[-1].story_images[0].state=='held'
+E               AssertionError: assert 'cancelled' == 'held'
+E                 
+E                 - held
+E                 + cancelled
+
+tests/contracts/test_story_image_admission_status.py:157: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_story_image_admission_status.py::test_late_typed_denial_cannot_relabel_stop_or_new_input[budget-new_input]
+FAILED tests/contracts/test_story_image_admission_status.py::test_late_typed_denial_cannot_relabel_stop_or_new_input[busy-new_input]
+2 failed, 4 passed in 1.34s

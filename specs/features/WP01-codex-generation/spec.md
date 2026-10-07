@@ -29,8 +29,10 @@ of a coding agent, environment, process output, filesystem or credential enters 
 ### WP01CX-004 Complete structured candidates only
 Given all AgentMessage output including async delivery, treat it as untrusted effects
 JSON. Parse duplicate-free bounded exact schema; only separate subtitle/speech and known
-pose/scene controls are supported. MEDIA, IDs, paths, URLs and code-bearing payloads are
-unsupported. No delta, partial item, malformed/truncated output or failed/cancelled turn
+authored pose/scene/media controls are supported. IDs and unregistered action values
+are unsupported. Per CHAT01-004/005 (2026-10-05), paths, URLs, markup and code quoted
+inside subtitle/speech are literal text only; the earlier lexical text ban is superseded.
+No delta, partial item, malformed/truncated output or failed/cancelled turn
 is a candidate. Yield one complete CandidateRange only after clean terminal completion.
 The adapter assigns opaque origin identity; fixture_id does not confer fixture approval.
 
@@ -46,6 +48,15 @@ bounded queue. Bound startup, total turn, line, wire, events, output, and shutdo
 Cancellation attempts turn/interrupt for the identified turn, then terminates/reaps the
 process within bounded cleanup. Cancelled or late output never yields a candidate.
 Stderr is drained/discarded; only fixed error codes leave the adapter.
+Given a queue failure followed by OS pipe backpressure, close must finish the pipe
+lifecycle as well as reap the child. A known exit code alone is insufficient.
+Given cancellation during this cleanup, kill and reap the child and await pipe shutdown
+before propagating cancellation; discarded bytes must not re-enter the candidate queue.
+
+2026-10-05 cleanup regression baseline: frozen paired source quality digest
+`0d0f19f8d935684f2f7e7dc078e78f0a799eec1e46ab4a23717d3a212e5a8146`.
+Owner remains the existing providers contract-file glob; consumers and resources above
+are unchanged. Local synthetic Python processes only; no provider or device acceptance.
 
 ### WP01CX-007 Integration boundaries
 No alternate Actor, history, review, permit, HTTP, configuration, bootstrap or auth system.

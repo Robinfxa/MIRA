@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "kind": "independent_pre_archive_checks",
+  "checked_at_utc": "2026-10-07T02:24:11.746954+00:00",
+  "scope": "Expanded source, public launch preset and offline packaging evidence only. Archive SHA/CRC/fresh-restore readback is recorded after packaging and is not self-certified by this file.",
+  "results": {
+    "frozen_runtime": {
+      "files": 328,
+      "matches": true,
+      "changed": []
+    },
+    "released_runtime_patch_bytes": {
+      "image_review": 6,
+      "natural_followthrough": 6,
+      "default_lan": 18,
+      "matches": true
+    },
+    "frontend": {
+      "output_files": 85,
+      "independent_rebuild_identical": true,
+      "notes": "Existing locked development dependencies reused. Four inherited CommonJS-in-ESM warnings; build exit 0. Not a fresh installation."
+    },
+    "contracts": {
+      "export_contracts_check": "passed"
+    },
+    "readiness": {
+      "native_outfits_emotions_phases_camera_photo_scene_chapter": "ready",
+      "meaning": "Software source/asset readiness only; not art, animation, audio or device acceptance."
+    },
+    "images": {
+      "count": 5,
+      "hashes_and_dimensions_match": true,
+      "renderer_source_hashes_match": true,
+      "historical_crop_pixel_identical": true,
+      "metadata_keys_empty": true,
+      "visual_review": "Four accurately labeled offline code-render illustrations and one accurately labeled historical browser screenshot; no credentials, browser tabs, developer tools or private dialogue visible."
+    },
+    "dependencies": {
+      "python_top_level_versions_match_locks": true,
+      "node_top_level_versions_match_lock": true,
+      "new_dependencies": false
+    },
+    "launcher": {
+      "sha256": "198f4a0ee4b9ffce0c047476086a944312c915466623ccc409a8e878f927a364",
+      "independent_checks": [
+        {
+          "name": "empty preview from source path with spaces",
+          "passed": true
+        },
+        {
+          "name": "unattended first run requires explicit choice",
+          "passed": true
+        },
+        {
+          "name": "existing env selected without overwriting or secret output",
+          "passed": true
+        },
+        {
+          "name": "explicit flags and finite budget override env",
+          "passed": true
+        },
+        {
+          "name": "env cannot select official API",
+          "passed": true
+        },
+        {
+          "name": "env cannot grant authorization",
+          "passed": true
+        },
+        {
+          "name": "invalid model value is never echoed",
+          "passed": true
+        },
+        {
+          "name": "accepted empty config seeds only private public template and stops",
+          "passed": true
+        },
+        {
+          "name": "missing auth stops before service",
+          "passed": true
+        },
+        {
+          "name": "missing ADC stops without reading fake auth content",
+          "passed": true
+        },
+        {
+          "name": "missing frontend dependencies gives setup guidance",
+          "passed": true
+        },
+        {
+          "name": "custom missing env is never seeded",
+          "passed": true
+        },
+        {
+          "name": "real terminal cancel writes nothing",
+          "passed": true
+        },
+        {
+          "name": "saved offline dry-run respects selected mode without env reads",
+          "passed": true
+        },
+        {
+          "name": "saved offline check respects selected mode without auth/ADC reads or writes",
+          "passed": true
+        }
+      ],
+      "passed": 15,
+      "failed": 0,
+      "verification_scope": "Synthetic temporary configurations, actual subprocess previews and local preflight, one terminal cancel; no account, provider, install or running service."
+    },
+    "documentation": {
+      "files_checked": [
+        "README.md",
+        "START-HERE.md",
+        "FIRST-RUN.md",
+        "AI_USAGE.md",
+        "docs/mission/CURRENT-ACCEPTANCE.md",
+        "docs/SUBMISSION-CHECKLIST.md",
+        "docs/development/DEMO-RECORDING.md",
+        "docs/submission/VERIFICATION.md",
+        "docs/development/PRIVATE-DEVICE-TESTING.md",
+        "docs/images/PROVENANCE.md"
+      ],
+      "relative_links_checked": 70,
+      "missing_links": [],
+      "shell_blocks_checked": 20,
+      "shell_failures": []
+    }
+  },
+  "limits": [
+    "No new full/release suite rerun. Historical evidence remains separately scoped.",
+    "No real account, paid model/image/Google request, Mac, physical LAN, TLS, firewall or mobile test.",
+    "Fresh-install <=15 minutes remains unmeasured.",
+    "Complete real voice/interruption/mobile acceptance and the 3–5 minute user recording remain pending.",
+    "User-confirmed one generated image and its proactive notice are not bound to this archive hash."
+  ],
+  "next_validation": "Final ZIP manifest, complete CRC pass, safe fresh extraction, source/build hashes, permissions, relative links and excluded sensitive/runtime files are checked against the completed archive before delivery."
+}

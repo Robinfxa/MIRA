@@ -1,0 +1,81 @@
+{
+  "feature": "WP03-recovered-voice-lineage",
+  "spec": "specs/features/WP03-recovered-voice-lineage/spec.md",
+  "owner": "web",
+  "checker_note": "Actual compiled main/controller/continuous/playback with synthetic DOM/transport, not human device acceptance. Existing tests/quality.toml web wildcard is the unique owner. Parameterized Stop/new-input and limit/permission-loss cases additionally execute in the same test file. Explicit post-Stop manual recovery and completed/muted reply cases are included; source lineage is distinct from execution cancellation.",
+  "requirements": [
+    {
+      "id": "RECOVERED-LINEAGE-001",
+      "tests": [
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "reply-only interrupt preserves recognized overlap; later clean supplement commits once as continuation; Stop fences late original stream"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "held-overlap restore through actual composer preserves original-request linkage without inventing an ASR commit"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "manual current stable send after explicit interrupt retains original link; later ordinary new topic stays independent"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "edited recovered supplement visibly keeps its reviewed parent and never claims ASR authority"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "explicit new-topic choice detaches a recovered supplement"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "restoring requires exact lease utterance and revision; repeated click consumes only once"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "old source ranges stay tied to the captured turn when a newer reply exists before finalization"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "mixed playback parents require an explicit new-topic decision rather than choosing the latest reply"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "same-value cloned or foreign-controller target is not an issued continuation capability"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "reviewed recovery waits for the interrupted playback receipt before dispatch"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "Close rejects a retained target and cannot revive original playback or dispatch"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "Stop during composer teardown cancels old send but a fresh click continues the accepted parent"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "Stop during receipt drain cancels old send and preserves the exact draft for a fresh Send"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "receipt timeout before dispatch retains source metadata and a fresh retry waits for the same facts"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "a failed receipt still blocks retries without discarding the reviewed source"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "dispatch of a newer input invalidates old source even before its response settles"
+        },
+        {
+          "file": "tests/web/recovered-voice-lineage.test.mjs",
+          "case": "definitive history_pending rejection retains reviewed parent for a fresh manual retry"
+        }
+      ]
+    }
+  ]
+}

@@ -16,7 +16,10 @@ def imports(path):
 
 
 def test_domain_has_no_framework_config_or_adapter_dependencies():
-    allowed={"dataclasses","enum","typing","mira.domain"}
+    # Pure deterministic story documents need canonical JSON hashing; bounded
+    # typed input-clause validation additionally uses stdlib regular expressions.
+    # no filesystem, network, SDK, environment or adapter dependency is allowed.
+    allowed={"__future__","dataclasses","enum","typing","hashlib","json","re","mira.domain"}
     for path in (SOURCE/"domain").glob("*.py"):
         for name in imports(path):
             assert any(name==root or name.startswith(root+".") for root in allowed),(path,name)

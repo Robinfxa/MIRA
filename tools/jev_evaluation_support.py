@@ -10,10 +10,11 @@ from pathlib import Path
 
 from mira.adapters.review import jev, jev_input
 from mira.adapters.review.jev_support.http import SYSTEMONE_URL
+from mira.application.contracts import candidate_data
 from mira.application.contracts import CandidateRange, EffectProposal, GenerationContext
 from mira.application.decision_contracts import (
     AuthorPolicy, ControlledReferent, DecisionSnapshot, DirectiveFact, PresentationFact,
-    ReliableUserInput, canonical_bytes, valid_snapshot,
+    ReliableUserInput, canonical_bytes, decision_snapshot_data, valid_snapshot,
 )
 from mira.domain.models import AudioProgress, AudioStatus, Effect, EffectKind
 
@@ -92,6 +93,15 @@ def effect(row):
 
 def snapshot(row):
     c, p = row["context"], row["author_policy"]
+    # This evaluator codec reads the frozen pre-memory corpus format only.  Keep its
+    # accepted wire shape explicit so adding a dataclass field cannot turn arbitrary
+    # corpus JSON into an imported ContextPacket (or smuggle it under another key).
+    legacy_context_fields = {
+        "user_text", "user_inputs", "presented_effects", "output_epoch",
+        "accepted_prefix", "audio_progress",
+    }
+    if type(c) is not dict or set(c) != legacy_context_fields:
+        raise EvaluationStop("snapshot_context_schema_invalid")
     context = GenerationContext(**{**c, "user_inputs": tuple(c["user_inputs"]),
         "presented_effects": tuple(effect(e) for e in c["presented_effects"]),
         "accepted_prefix": tuple(effect(e) for e in c["accepted_prefix"]),
@@ -107,7 +117,7 @@ def snapshot(row):
         "referents": tuple(ControlledReferent(**r) for r in row["referents"]),
         "effective_constraints": tuple(DirectiveFact(**d) for d in row["effective_constraints"]),
         "response_obligations": tuple(DirectiveFact(**d) for d in row["response_obligations"])})
-    if not valid_snapshot(result) or json.loads(canonical_bytes(asdict(result))) != row:
+    if not valid_snapshot(result) or json.loads(canonical_bytes(decision_snapshot_data(result))) != row:
         raise EvaluationStop("snapshot_invalid_or_lossy")
     return result
 
@@ -115,7 +125,7 @@ def snapshot(row):
 def review_fixture(case, snap):
     candidate = CandidateRange(**{**case["candidate"],
         "effects": tuple(proposal(e) for e in case["candidate"]["effects"])})
-    if json.loads(canonical_bytes(asdict(candidate))) != case["candidate"]:
+    if json.loads(canonical_bytes(candidate_data(candidate))) != case["candidate"]:
         raise EvaluationStop("candidate_lossy")
     obligations = tuple(d.raw_text for d in snap.response_obligations)
     if snap.context.user_text not in obligations:
@@ -349,7 +359,7 @@ def _wire_type(value):
 
 
 def _bounded_probability(value):
-    return (type(value) in (int, float) and math.isfinite(value) and 0 <= value <= 1)
+    return (type(value) in (int, float) and 0 <= value <= 1 and math.isfinite(value))
 
 
 def _known_question_map(payload, track):
@@ -359,7 +369,7 @@ def _known_question_map(payload, track):
         questions = request.get("questions") if type(request) is dict else None
         if type(questions) is not dict:
             return {}
-        known = (set(jev_input.INPUT_PREDICATES) | {"referent"} if track == "input" else
+        known = (set(jev_input.INPUT_PREDICATES_V2) | {"referent"} if track == "input" else
                  {*(f"o{i}" for i in range(1, 7)), *(f"effect_{i}" for i in range(8))})
         result = {}
         for key, question in questions.items():

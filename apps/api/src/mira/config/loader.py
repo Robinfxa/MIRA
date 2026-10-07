@@ -113,7 +113,10 @@ def project_root() -> Path:
 
 def load_settings(*, root: Path | None = None, env_file: Path | None = None,
                   environ: Mapping[str, str] | None = None,
-                  overrides: Mapping[str, Any] | None = None) -> Settings:
+                  overrides: Mapping[str, Any] | None = None,
+                  load_legacy_jev: bool = True) -> Settings:
+    if type(load_legacy_jev) is not bool:
+        raise ConfigurationError("Legacy JEV configuration selection must be explicit.")
     root = root or project_root()
     source_env = dict(os.environ if environ is None else environ)
     file_env: dict[str, str] = {}
@@ -121,6 +124,13 @@ def load_settings(*, root: Path | None = None, env_file: Path | None = None,
         if not env_file.is_file():
             raise ConfigurationError("Explicit dotenv file does not exist.")
         file_env = {k: v for k, v in dotenv_values(env_file, interpolate=False).items() if v is not None}
+    if not load_legacy_jev:
+        # The explicitly selected file is still read as a whole. Do not resolve,
+        # validate or retain inactive legacy secrets/aliases in native mode.
+        ignored = {name for name, location in ENV_FIELDS.items()
+                   if location[:2] == ("services", "jev")} | {"TYPESAFE_API_KEY"}
+        file_env = {key: value for key, value in file_env.items() if key not in ignored}
+        source_env = {key: value for key, value in source_env.items() if key not in ignored}
     combined = normalized_aliases(file_env) | normalized_aliases(source_env)
     profile = combined.get("MIRA_PROFILE", "mock")
     if not re.fullmatch(r"[a-z][a-z0-9_-]{0,31}", profile):
@@ -149,6 +159,8 @@ def load_settings(*, root: Path | None = None, env_file: Path | None = None,
                 raise ConfigurationError("Allowed origins must be a JSON string array.") from None
         target[location[-1]] = value
     config = merge(config, overrides or {})
+    if not load_legacy_jev and "services" in config:
+        config["services"].pop("jev", None)
     try:
         return Settings.model_validate(config)
     except ValidationError as error:

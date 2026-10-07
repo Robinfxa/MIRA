@@ -1,0 +1,43 @@
+{
+  "feature": "M06-operator-pairing-ui",
+  "spec": "specs/features/M06-operator-pairing-ui/spec.md",
+  "checker_note": "Web-specific sidecar. tools/check_specs.py accepts pytest node IDs only; these cases run in the unique web lane.",
+  "owner": "tests/quality.toml web lane: tests/web/*.test.mjs",
+  "requirements": [
+    {
+      "id": "M06OP-001",
+      "tests": [
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "memory page marker gates controller startup; static page stays unmarked"},
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "marked main page constructs no private API, watcher, or controller until gate callback"},
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "unpaired page only makes public status request; success requires exact 204 and clears code before sending"},
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "status accepts only the three contracted booleans and rejects unexpected fields"}
+      ]
+    },
+    {
+      "id": "M06OP-002",
+      "tests": [
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "memory page marker gates controller startup; static page stays unmarked"},
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "HTTP failure never reads its body or produces a fake paired state"},
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "revoked status requires a fresh local launch and cannot re-pair"},
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "status response parsing stays inside the abort deadline"}
+      ]
+    },
+    {
+      "id": "M06OP-003",
+      "tests": [
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "cancelling during late pair response cannot unlock UI and revokes after local closure"},
+        {"file": "tests/web/operator-pairing.test.mjs", "case": "existing same-process app cookie is revoked only after local stop and close"}
+      ]
+    }
+  ],
+  "executions": [
+    {
+      "run_id": "m06-operator-pairing-ui-20261004T1453Z-web",
+      "command": "python tools/check_web.py --output-dir /workspace/shared/mira-memory-operator-evidence/frontend/20261004T1453Z/build",
+      "environment": "Node v24.19.0; Python 3.12.14",
+      "result": "TypeScript/browser bundle build passed; web lane 291 passed, 0 failed. Includes all 9 pairing UI cases and the existing browser-unit tests.",
+      "scope": "fake DOM/fetch only; no real browser, local operator service, provider, real pairing code, or real cookie"
+    }
+  ],
+  "verification_boundary": "Fake DOM and fetch only. No real browser, local service, provider, code, or cookie was used."
+}

@@ -1,0 +1,35 @@
+{
+  "feature": "DEFAULT-LAN-01",
+  "spec": "specs/features/DEFAULT-LAN-01/spec.md",
+  "requirements": [
+    {
+      "id": "DEFAULTLAN01-001",
+      "tests": [
+        "tests/contracts/test_default_lan.py::test_default_serve_keeps_local_origin_and_admits_more_than_two_browsers",
+        "tests/contracts/test_default_lan.py::test_uncertain_discovery_warns_and_preserves_loopback",
+        "tests/contracts/test_default_lan.py::test_check_and_loopback_only_do_not_discover_network",
+        "tests/contracts/test_default_lan.py::test_existing_persistence_stays_loopback_but_explicit_lan_is_rejected"
+      ]
+    },
+    {
+      "id": "DEFAULTLAN01-002",
+      "tests": [
+        "tests/contracts/test_default_lan.py::test_default_serve_keeps_local_origin_and_admits_more_than_two_browsers",
+        "tests/contracts/test_default_lan.py::test_lan_text_generation_uses_shared_request_budget_without_tts"
+      ]
+    },
+    {
+      "id": "DEFAULTLAN01-003",
+      "tests": [
+        "tests/contracts/test_default_lan.py::test_default_voice_stays_local_and_private_actor_cannot_upgrade",
+        "tests/contracts/test_default_lan.py::test_text_actor_state_and_local_microphone_websocket_remain_correct"
+      ]
+    },
+    {
+      "id": "DEFAULTLAN01-004",
+      "tests": [
+        "tests/contracts/test_default_lan.py::test_exact_socket_bindings_precede_one_server_and_partial_failure_closes_all"
+      ]
+    }
+  ]
+}

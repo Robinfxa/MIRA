@@ -7,6 +7,8 @@ permission. All messages, including async delivery, remain untrusted candidate c
 from __future__ import annotations
 
 import asyncio
+
+from mira.application.response_preference import generation_speech_enabled
 import uuid
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import suppress
@@ -30,8 +32,10 @@ TransportFactory = Callable[[CodexRuntime, CodexLimits], Awaitable[CodexTranspor
 class CodexAppServerGenerationBackend:
     def __init__(self, *, runtime: CodexRuntime, admitted: bool = False,
                  request_limit: int = 0, limits: CodexLimits | None = None,
-                 transport_factory: TransportFactory | None = None) -> None:
-        if type(runtime) is not CodexRuntime or type(admitted) is not bool:
+                 transport_factory: TransportFactory | None = None,
+                 speech_enabled: bool = True) -> None:
+        if (type(runtime) is not CodexRuntime or type(admitted) is not bool
+                or type(speech_enabled) is not bool):
             raise ValueError('codex_admission_invalid')
         if type(request_limit) is not int or not 0 <= request_limit <= 100:
             raise ValueError('codex_request_limit_invalid')
@@ -42,13 +46,15 @@ class CodexAppServerGenerationBackend:
         self._remaining = request_limit
         self._limits = limits or CodexLimits()
         self._factory = transport_factory or open_stdio
+        self._speech_enabled = speech_enabled
 
     async def generate(self, context: GenerationContext) -> AsyncIterator[CandidateRange]:
         if not self._admitted:
             raise CodexGenerationError('codex_not_admitted')
         if not self._remaining:
             raise CodexGenerationError('codex_budget_exhausted')
-        prompt = build_prompt(context, self._limits)
+        speech_enabled = generation_speech_enabled(context, self._speech_enabled)
+        prompt = build_prompt(context, self._limits, speech_enabled=speech_enabled)
         self._remaining -= 1  # Reserve before the first await; failures consume admission.
         transport = None
         session = None
@@ -57,7 +63,9 @@ class CodexAppServerGenerationBackend:
         try:
             async with asyncio.timeout(self._limits.startup_seconds):
                 transport = await self._factory(self._runtime, self._limits)
-                session = Session(transport, self._runtime, self._limits)
+                session = Session(transport, self._runtime, self._limits,
+                                  speech_enabled=speech_enabled,
+                                  memory_enabled=context.memory_packet is not None)
                 await session.start()
             async with asyncio.timeout(self._limits.turn_seconds):
                 effects = await session.run(prompt)

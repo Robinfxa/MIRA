@@ -1,0 +1,75 @@
+FFF....                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_observed_decline_global_stop_then_explicit_reconsideration_is_one_new_handover _
+
+    @pytest.mark.asyncio
+    async def test_observed_decline_global_stop_then_explicit_reconsideration_is_one_new_handover():
+        s=Flow()
+        try:
+            original=await declined(s)
+            s.epoch+=1;await s.a.stop(activity_seq=s.epoch,cutoff=s.seq)
+            chapter=s.c.runtime.story.chapter
+            assert chapter.stage is ChapterStage.GIFT_DECLINED and chapter.role_active
+            assert chapter.suspended and chapter.active_gift_offer_id is None and chapter.pending is None
+>           assert chapter.declined_gift_offer is not None
+E           AssertionError: assert None is not None
+E            +  where None = ChapterState(schema='mira.xiahe-chapter.v1', source_hash='1416a3fbb9b619f923e4b6da10f98e2e36ff7f4a96a9d15a6feac1a8218b...pended=True, last_progress_input_id='audit-1', last_progress_epoch=1, preview_reference=None, declined_gift_offer=None).declined_gift_offer
+
+tests/contracts/test_native_reconsideration_after_stop.py:21: AssertionError
+_ test_cancelled_reconsideration_keeps_history_but_requires_new_input_and_new_handover_receipt[global_stop] _
+
+fence = 'global_stop'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('fence',['global_stop','ordinary_input'])
+    async def test_cancelled_reconsideration_keeps_history_but_requires_new_input_and_new_handover_receipt(fence):
+        s=Flow()
+        try:
+            original=await declined(s)
+            r,state=await s.say(RECONSIDER,reconsider(original),acknowledge=False)
+            assert r['status']=='pending'
+            old=next(e for e in state.active_grants if e.value=='xiahe_photo_handover')
+            if fence=='global_stop':
+                s.epoch+=1;await s.a.stop(activity_seq=s.epoch,cutoff=s.seq)
+            else:await s.say('等一下先说另一件事','好。')
+            with pytest.raises(DomainError):await s.a.receipt(receipt(old,s.seq+1))
+            assert 'photo_handover' not in dict(s.c.runtime.story.chapter.milestones)
+            r,state=await s.say(RECONSIDER,reconsider(original),acknowledge=False)
+>           assert r['status']=='pending'
+E           AssertionError: assert 'held' == 'pending'
+E             
+E             - pending
+E             + held
+
+tests/contracts/test_native_reconsideration_after_stop.py:52: AssertionError
+_ test_cancelled_reconsideration_keeps_history_but_requires_new_input_and_new_handover_receipt[ordinary_input] _
+
+fence = 'ordinary_input'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('fence',['global_stop','ordinary_input'])
+    async def test_cancelled_reconsideration_keeps_history_but_requires_new_input_and_new_handover_receipt(fence):
+        s=Flow()
+        try:
+            original=await declined(s)
+            r,state=await s.say(RECONSIDER,reconsider(original),acknowledge=False)
+            assert r['status']=='pending'
+            old=next(e for e in state.active_grants if e.value=='xiahe_photo_handover')
+            if fence=='global_stop':
+                s.epoch+=1;await s.a.stop(activity_seq=s.epoch,cutoff=s.seq)
+            else:await s.say('等一下先说另一件事','好。')
+            with pytest.raises(DomainError):await s.a.receipt(receipt(old,s.seq+1))
+            assert 'photo_handover' not in dict(s.c.runtime.story.chapter.milestones)
+            r,state=await s.say(RECONSIDER,reconsider(original),acknowledge=False)
+>           assert r['status']=='pending'
+E           AssertionError: assert 'held' == 'pending'
+E             
+E             - pending
+E             + held
+
+tests/contracts/test_native_reconsideration_after_stop.py:52: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_reconsideration_after_stop.py::test_observed_decline_global_stop_then_explicit_reconsideration_is_one_new_handover
+FAILED tests/contracts/test_native_reconsideration_after_stop.py::test_cancelled_reconsideration_keeps_history_but_requires_new_input_and_new_handover_receipt[global_stop]
+FAILED tests/contracts/test_native_reconsideration_after_stop.py::test_cancelled_reconsideration_keeps_history_but_requires_new_input_and_new_handover_receipt[ordinary_input]
+3 failed, 4 passed in 2.61s

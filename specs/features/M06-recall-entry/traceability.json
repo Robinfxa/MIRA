@@ -1,0 +1,41 @@
+{
+  "feature": "M06-RECALL-ENTRY",
+  "spec": "specs/features/M06-recall-entry/spec.md",
+  "requirements": [
+    {
+      "id": "M06RECALLENTRY-001",
+      "tests": [
+        "tests/unit/test_memory_recall_configuration.py::test_missing_transmission_consent_does_not_access_paths",
+        "tests/unit/test_memory_recall_configuration.py::test_writable_nonsticky_ancestor_is_rejected",
+        "tests/contracts/test_memory_recall_launcher.py::test_partial_memory_flags_fail_before_admission_or_memory_reads",
+        "tests/contracts/test_memory_recall_launcher.py::test_memory_pairing_flag_required_before_reads",
+        "tests/contracts/test_memory_recall_launcher.py::test_check_never_creates_operator_credential",
+        "tests/contracts/test_memory_recall_launcher.py::test_serve_creates_only_explicit_synthetic_pairing_and_never_prints_code",
+        "tests/contracts/test_memory_recall_launcher.py::test_failed_frontend_build_does_not_create_pairing"
+      ]
+    },
+    {
+      "id": "M06RECALLENTRY-002",
+      "tests": [
+        "tests/contracts/test_memory_recall_app_lifecycle.py::test_memory_factory_is_inert_until_operator_pairing_and_app_owns_close",
+        "tests/contracts/test_memory_recall_app_lifecycle.py::test_startup_container_failure_still_closes_memory",
+        "tests/contracts/test_memory_recall_app_lifecycle.py::test_memory_cannot_silently_expand_transmission_to_voice",
+        "tests/contracts/test_memory_recall_app_lifecycle.py::test_http_cannot_select_memory_scope_or_return_private_binding"
+      ]
+    },
+    {
+      "id": "M06RECALLENTRY-003",
+      "tests": [
+        "tests/integration/test_memory_recall_http.py::test_opted_in_asgi_turn_uses_same_scoped_packet_without_recording",
+        "tests/integration/test_memory_recall_http.py::test_public_development_factory_binds_memory_to_real_adapter_wires"
+      ]
+    },
+    {
+      "id": "M06RECALLENTRY-004",
+      "tests": [
+        "tests/contracts/test_actor_memory_recall.py::test_generation_capture_excludes_stored_memory_text",
+        "tests/contracts/test_actor_memory_recall.py::test_memory_reader_failure_uses_stable_nonrevealing_error"
+      ]
+    }
+  ]
+}

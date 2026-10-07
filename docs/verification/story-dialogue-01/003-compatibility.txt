@@ -1,0 +1,581 @@
+........F...FF...........F.............FFF......F...F................... [ 40%]
+........................................................................ [ 80%]
+..................................                                       [100%]
+=================================== FAILURES ===================================
+_ test_native_confirmation_requires_own_immediately_previous_presented_question _
+
+    @pytest.mark.asyncio
+    async def test_native_confirmation_requires_own_immediately_previous_presented_question():
+        ask=ToolTurn(story_call('x.ask_role',act='ask_role_confirmation',text='你说的是我吗',cue='你是说，在这里你就是夏禾，对吗？'))
+        confirm=ToolTurn();tools=Tools(ask,confirm);c=character();a=native(ask,c=c,tools=tools)
+        try:
+            await a.submit(request_id='i1',activity_seq=1,cutoff=0,text='你说的是我吗');s=await finish(a)
+>           question=next(e for e in s.active_grants if '你是说' in e.value)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           StopIteration
+
+tests/contracts/test_native_character_tools.py:90: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+self = <Coroutine test_native_confirmation_requires_own_immediately_previous_presented_question>
+
+    def runtest(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        runner = self._request.getfixturevalue(runner_fixture_id)
+        context = contextvars.copy_context()
+        synchronized_obj = _synchronize_coroutine(
+            getattr(*self._synchronization_target_attr), runner, context
+        )
+        with MonkeyPatch.context() as c:
+            c.setattr(*self._synchronization_target_attr, synchronized_obj)
+>           super().runtest()
+
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:469: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:716: in inner
+    runner.run(coro, context=context)
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_UnixSelectorEventLoop running=False closed=False debug=False>
+future = <Task finished name='Task-33' coro=<test_native_confirmation_requires_own_immediately_previous_presented_question() do...1006T1746Z/tests/contracts/test_native_character_tools.py:84> exception=RuntimeError('coroutine raised StopIteration')>
+
+    def run_until_complete(self, future):
+        """Run until the Future is done.
+    
+        If the argument is a coroutine, it is wrapped in a Task.
+    
+        WARNING: It would be disastrous to call run_until_complete()
+        with the same coroutine twice -- it would wrap it in two
+        different Tasks and that can't be good.
+    
+        Return the Future's result, or raise its exception.
+        """
+        self._check_closed()
+        self._check_running()
+    
+        new_task = not futures.isfuture(future)
+        future = tasks.ensure_future(future, loop=self)
+        if new_task:
+            # An exception is raised if the future didn't complete, so there
+            # is no need to log the "destroy pending task" message
+            future._log_destroy_pending = False
+    
+        future.add_done_callback(_run_until_complete_cb)
+        try:
+            self.run_forever()
+        except:
+            if new_task and future.done() and not future.cancelled():
+                # The coroutine raised a BaseException. Consume the exception
+                # to not log a warning, the caller doesn't have access to the
+                # local task.
+                future.exception()
+            raise
+        finally:
+            future.remove_done_callback(_run_until_complete_cb)
+        if not future.done():
+            raise RuntimeError('Event loop stopped before Future completed.')
+    
+>       return future.result()
+               ^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:691: RuntimeError
+_ test_native_story_cue_is_presented_before_continuation_and_unlocks_only_on_receipt _
+
+value = <tests.contracts.test_luna_tool_actor.ObservedActor object at 0x7f0fc058f770>
+predicate = <function test_native_story_cue_is_presented_before_continuation_and_unlocks_only_on_receipt.<locals>.<lambda> at 0x7f0fc05c3b00>
+
+    async def wait_state(value, predicate):
+        async with asyncio.timeout(2):
+            while True:
+                value.changed.clear()
+                state=await value.snapshot()
+                if predicate(state): return state
+>               await value.changed.wait()
+
+tests/contracts/test_luna_tool_actor.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.locks.Event object at 0x7f0fc058f290 [unset]>
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+>           await fut
+E           asyncio.exceptions.CancelledError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/locks.py:212: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.mark.asyncio
+    async def test_native_story_cue_is_presented_before_continuation_and_unlocks_only_on_receipt():
+        c=character();from tests.contracts.test_xiahe_chapter_actor import prepare,complete
+        _,effects=prepare(c,'x.recognize',1,'我是夏禾',act='claim_role');complete(c,effects)
+        # Fresh Actor and runtime must agree on monotonic source epoch.
+        t=ToolTurn(story_call('x.story',cue='我想起我们在这家店一起挑试印的那一回。'));a=native(t,c=c,wait=1)
+        a._state=replace(a._state,output_epoch=1)
+        try:
+            await a.submit(request_id='i2',activity_seq=2,cutoff=0,text='你接着说')
+>           s=await wait_state(a,lambda s:any('一起挑试印' in e.value for e in s.active_grants))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/contracts/test_native_character_tools.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/contracts/test_luna_tool_actor.py:99: in wait_state
+    async with asyncio.timeout(2):
+               ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Timeout [expired]>
+exc_type = <class 'asyncio.exceptions.CancelledError'>
+exc_val = CancelledError(), exc_tb = <traceback object at 0x7f0fc04cbac0>
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() <= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+>               raise TimeoutError from exc_val
+E               TimeoutError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/timeouts.py:115: TimeoutError
+__ test_native_rain_offer_then_exact_accept_advances_only_on_wardrobe_receipt __
+
+    @pytest.mark.asyncio
+    async def test_native_rain_offer_then_exact_accept_advances_only_on_wardrobe_receipt():
+        offer=ToolTurn(story_call('t.offer',offer='rain-1',cue='要看看我的雨衣吗？',target='amber_raincoat'))
+        accept=ToolTurn(story_call('t.yes',act='accept_rain',text='看看',offer='rain-1',target='amber_raincoat'))
+        c=character();a=native(offer,c=c,tools=Tools(offer,accept))
+        try:
+            await a.submit(request_id='i1',activity_seq=1,cutoff=0,text='聊聊你的雨衣');s=await finish(a)
+>           question=next(e for e in s.active_grants if '雨衣吗' in e.value)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           StopIteration
+
+tests/contracts/test_native_character_tools.py:139: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+self = <Coroutine test_native_rain_offer_then_exact_accept_advances_only_on_wardrobe_receipt>
+
+    def runtest(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        runner = self._request.getfixturevalue(runner_fixture_id)
+        context = contextvars.copy_context()
+        synchronized_obj = _synchronize_coroutine(
+            getattr(*self._synchronization_target_attr), runner, context
+        )
+        with MonkeyPatch.context() as c:
+            c.setattr(*self._synchronization_target_attr, synchronized_obj)
+>           super().runtest()
+
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:469: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:716: in inner
+    runner.run(coro, context=context)
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_UnixSelectorEventLoop running=False closed=False debug=False>
+future = <Task finished name='Task-53' coro=<test_native_rain_offer_then_exact_accept_advances_only_on_wardrobe_receipt() done,...006T1746Z/tests/contracts/test_native_character_tools.py:132> exception=RuntimeError('coroutine raised StopIteration')>
+
+    def run_until_complete(self, future):
+        """Run until the Future is done.
+    
+        If the argument is a coroutine, it is wrapped in a Task.
+    
+        WARNING: It would be disastrous to call run_until_complete()
+        with the same coroutine twice -- it would wrap it in two
+        different Tasks and that can't be good.
+    
+        Return the Future's result, or raise its exception.
+        """
+        self._check_closed()
+        self._check_running()
+    
+        new_task = not futures.isfuture(future)
+        future = tasks.ensure_future(future, loop=self)
+        if new_task:
+            # An exception is raised if the future didn't complete, so there
+            # is no need to log the "destroy pending task" message
+            future._log_destroy_pending = False
+    
+        future.add_done_callback(_run_until_complete_cb)
+        try:
+            self.run_forever()
+        except:
+            if new_task and future.done() and not future.cancelled():
+                # The coroutine raised a BaseException. Consume the exception
+                # to not log a warning, the caller doesn't have access to the
+                # local task.
+                future.exception()
+            raise
+        finally:
+            future.remove_done_callback(_run_until_complete_cb)
+        if not future.done():
+            raise RuntimeError('Event loop stopped before Future completed.')
+    
+>       return future.result()
+               ^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:691: RuntimeError
+_ test_native_chapter_preview_and_handover_are_distinct_complete_receipt_steps _
+
+    @pytest.mark.asyncio
+    async def test_native_chapter_preview_and_handover_are_distinct_complete_receipt_steps():
+        from mira.domain.xiahe_chapter import ChapterStage
+        calls=[story_call('x.recognize',act='claim_role',text='我就是夏he啊')]
+        calls += [story_call('x.story',cue=cue) for cue in ('我记得我们一起挑试印。','那次灯塔是我自己去拍的。','后来你帮我把咖啡杯挪开。')]
+        calls += [story_call('x.promise',cue='我答应给你的那张旅行照片，今晚带来了。'),
+            GenerationToolCall('preview','show_photo','{"photo_id":"trip_photo"}'),
+            story_call('x.gift_offer',offer='gift1'),
+            story_call('x.gift_accept',act='accept_gift',text='我收下啦',offer='gift1')]
+        turns=[ToolTurn(call) for call in calls];c=character();a=native(turns[0],c=c,tools=Tools(*turns),wait=1)
+        seq=0
+        try:
+            for i,t in enumerate(turns,1):
+                text='我就是夏he啊' if i==1 else '我收下啦' if i==8 else '继续吧'
+                await a.submit(request_id=f'i{i}',activity_seq=i,cutoff=seq,text=text)
+                s=await wait_state(a,lambda s:bool(s.active_grants));e=s.active_grants[0]
+                seq+=1;await a.receipt(receipt(e,seq));s=await finish(a)
+                for cue in s.active_grants:
+                    if cue.id!=e.id:seq+=1;await a.receipt(receipt(cue,seq))
+>               assert result(t)['status']=='shown'
+E               AssertionError: assert 'pending' == 'shown'
+E                 
+E                 - shown
+E                 + pending
+
+tests/contracts/test_native_character_tools.py:240: AssertionError
+_ test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[missing] _
+
+reference_mode = 'missing'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('reference_mode', ['missing', 'wrong', 'stale'])
+    async def test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue(reference_mode):
+        s = WireSession()
+        try:
+            _, state = await s.turn('你认得我吗', story_call('x.ask_role',
+                act='ask_role_confirmation', text='你认得我吗', cue='你是夏禾吗？'))
+>           question = next(e for e in state.presented_effects if e.value == '你是夏禾吗？')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           StopIteration
+
+tests/contracts/test_native_chapter_wire.py:137: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+self = <Coroutine test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[missing]>
+
+    def runtest(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        runner = self._request.getfixturevalue(runner_fixture_id)
+        context = contextvars.copy_context()
+        synchronized_obj = _synchronize_coroutine(
+            getattr(*self._synchronization_target_attr), runner, context
+        )
+        with MonkeyPatch.context() as c:
+            c.setattr(*self._synchronization_target_attr, synchronized_obj)
+>           super().runtest()
+
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:469: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:716: in inner
+    runner.run(coro, context=context)
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_UnixSelectorEventLoop running=False closed=False debug=False>
+future = <Task finished name='Task-190' coro=<test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue() done, de...261006T1746Z/tests/contracts/test_native_chapter_wire.py:130> exception=RuntimeError('coroutine raised StopIteration')>
+
+    def run_until_complete(self, future):
+        """Run until the Future is done.
+    
+        If the argument is a coroutine, it is wrapped in a Task.
+    
+        WARNING: It would be disastrous to call run_until_complete()
+        with the same coroutine twice -- it would wrap it in two
+        different Tasks and that can't be good.
+    
+        Return the Future's result, or raise its exception.
+        """
+        self._check_closed()
+        self._check_running()
+    
+        new_task = not futures.isfuture(future)
+        future = tasks.ensure_future(future, loop=self)
+        if new_task:
+            # An exception is raised if the future didn't complete, so there
+            # is no need to log the "destroy pending task" message
+            future._log_destroy_pending = False
+    
+        future.add_done_callback(_run_until_complete_cb)
+        try:
+            self.run_forever()
+        except:
+            if new_task and future.done() and not future.cancelled():
+                # The coroutine raised a BaseException. Consume the exception
+                # to not log a warning, the caller doesn't have access to the
+                # local task.
+                future.exception()
+            raise
+        finally:
+            future.remove_done_callback(_run_until_complete_cb)
+        if not future.done():
+            raise RuntimeError('Event loop stopped before Future completed.')
+    
+>       return future.result()
+               ^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:691: RuntimeError
+_ test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[wrong] _
+
+reference_mode = 'wrong'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('reference_mode', ['missing', 'wrong', 'stale'])
+    async def test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue(reference_mode):
+        s = WireSession()
+        try:
+            _, state = await s.turn('你认得我吗', story_call('x.ask_role',
+                act='ask_role_confirmation', text='你认得我吗', cue='你是夏禾吗？'))
+>           question = next(e for e in state.presented_effects if e.value == '你是夏禾吗？')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           StopIteration
+
+tests/contracts/test_native_chapter_wire.py:137: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+self = <Coroutine test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[wrong]>
+
+    def runtest(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        runner = self._request.getfixturevalue(runner_fixture_id)
+        context = contextvars.copy_context()
+        synchronized_obj = _synchronize_coroutine(
+            getattr(*self._synchronization_target_attr), runner, context
+        )
+        with MonkeyPatch.context() as c:
+            c.setattr(*self._synchronization_target_attr, synchronized_obj)
+>           super().runtest()
+
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:469: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:716: in inner
+    runner.run(coro, context=context)
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_UnixSelectorEventLoop running=False closed=False debug=False>
+future = <Task finished name='Task-194' coro=<test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue() done, de...261006T1746Z/tests/contracts/test_native_chapter_wire.py:130> exception=RuntimeError('coroutine raised StopIteration')>
+
+    def run_until_complete(self, future):
+        """Run until the Future is done.
+    
+        If the argument is a coroutine, it is wrapped in a Task.
+    
+        WARNING: It would be disastrous to call run_until_complete()
+        with the same coroutine twice -- it would wrap it in two
+        different Tasks and that can't be good.
+    
+        Return the Future's result, or raise its exception.
+        """
+        self._check_closed()
+        self._check_running()
+    
+        new_task = not futures.isfuture(future)
+        future = tasks.ensure_future(future, loop=self)
+        if new_task:
+            # An exception is raised if the future didn't complete, so there
+            # is no need to log the "destroy pending task" message
+            future._log_destroy_pending = False
+    
+        future.add_done_callback(_run_until_complete_cb)
+        try:
+            self.run_forever()
+        except:
+            if new_task and future.done() and not future.cancelled():
+                # The coroutine raised a BaseException. Consume the exception
+                # to not log a warning, the caller doesn't have access to the
+                # local task.
+                future.exception()
+            raise
+        finally:
+            future.remove_done_callback(_run_until_complete_cb)
+        if not future.done():
+            raise RuntimeError('Event loop stopped before Future completed.')
+    
+>       return future.result()
+               ^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:691: RuntimeError
+_ test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[stale] _
+
+reference_mode = 'stale'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('reference_mode', ['missing', 'wrong', 'stale'])
+    async def test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue(reference_mode):
+        s = WireSession()
+        try:
+            _, state = await s.turn('你认得我吗', story_call('x.ask_role',
+                act='ask_role_confirmation', text='你认得我吗', cue='你是夏禾吗？'))
+>           question = next(e for e in state.presented_effects if e.value == '你是夏禾吗？')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           StopIteration
+
+tests/contracts/test_native_chapter_wire.py:137: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+self = <Coroutine test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[stale]>
+
+    def runtest(self) -> None:
+        runner_fixture_id = f"_{self._loop_scope}_scoped_runner"
+        runner = self._request.getfixturevalue(runner_fixture_id)
+        context = contextvars.copy_context()
+        synchronized_obj = _synchronize_coroutine(
+            getattr(*self._synchronization_target_attr), runner, context
+        )
+        with MonkeyPatch.context() as c:
+            c.setattr(*self._synchronization_target_attr, synchronized_obj)
+>           super().runtest()
+
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:469: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/workspace/scratch/96ff05e059bf/mira-image-runtime-20261005T2253Z/.venv/lib/python3.12/site-packages/pytest_asyncio/plugin.py:716: in inner
+    runner.run(coro, context=context)
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <_UnixSelectorEventLoop running=False closed=False debug=False>
+future = <Task finished name='Task-198' coro=<test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue() done, de...261006T1746Z/tests/contracts/test_native_chapter_wire.py:130> exception=RuntimeError('coroutine raised StopIteration')>
+
+    def run_until_complete(self, future):
+        """Run until the Future is done.
+    
+        If the argument is a coroutine, it is wrapped in a Task.
+    
+        WARNING: It would be disastrous to call run_until_complete()
+        with the same coroutine twice -- it would wrap it in two
+        different Tasks and that can't be good.
+    
+        Return the Future's result, or raise its exception.
+        """
+        self._check_closed()
+        self._check_running()
+    
+        new_task = not futures.isfuture(future)
+        future = tasks.ensure_future(future, loop=self)
+        if new_task:
+            # An exception is raised if the future didn't complete, so there
+            # is no need to log the "destroy pending task" message
+            future._log_destroy_pending = False
+    
+        future.add_done_callback(_run_until_complete_cb)
+        try:
+            self.run_forever()
+        except:
+            if new_task and future.done() and not future.cancelled():
+                # The coroutine raised a BaseException. Consume the exception
+                # to not log a warning, the caller doesn't have access to the
+                # local task.
+                future.exception()
+            raise
+        finally:
+            future.remove_done_callback(_run_until_complete_cb)
+        if not future.done():
+            raise RuntimeError('Event loop stopped before Future completed.')
+    
+>       return future.result()
+               ^^^^^^^^^^^^^^^
+E       RuntimeError: coroutine raised StopIteration
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/base_events.py:691: RuntimeError
+_________ test_real_wire_typed_question_allows_next_exact_confirmation _________
+
+    @pytest.mark.asyncio
+    async def test_real_wire_typed_question_allows_next_exact_confirmation():
+        s = WireSession()
+        try:
+            result, state = await s.turn('你不记得我啦？', story_call('x.ask_role',
+                act='ask_role_confirmation', text='你不记得我啦？', cue='你是夏禾吗，给我个准话？'))
+>           assert result['status'] == 'shown'
+E           AssertionError: assert 'pending' == 'shown'
+E             
+E             - shown
+E             + pending
+
+tests/contracts/test_native_chapter_wire.py:245: AssertionError
+_ test_entire_real_wire_chapter_reuses_early_photo_and_hands_over_after_acceptance _
+
+    @pytest.mark.asyncio
+    async def test_entire_real_wire_chapter_reuses_early_photo_and_hands_over_after_acceptance():
+        s = WireSession()
+        try:
+            photo_call = GenerationToolCall('photo', 'show_photo', '{"photo_id":"trip_photo"}')
+            first, state = await s.turn('看看照片', photo_call)
+            first_photo_id = first['receipt']['effect_id']
+            await s.turn('我是夏he', story_call('x.recognize', act='claim_role', text='我是夏he'))
+            for beat, source, cue in CHAPTER_CANON:
+                transition = 'x.promise' if beat == 'photo_promise' else 'x.story'
+                result, state = await s.turn('接着说吧', story_call(transition, cue=cue))
+>               assert result['status'] == 'shown'
+E               AssertionError: assert 'pending' == 'shown'
+E                 
+E                 - shown
+E                 + pending
+
+tests/contracts/test_native_chapter_wire.py:316: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_character_tools.py::test_native_confirmation_requires_own_immediately_previous_presented_question
+FAILED tests/contracts/test_native_character_tools.py::test_native_story_cue_is_presented_before_continuation_and_unlocks_only_on_receipt
+FAILED tests/contracts/test_native_character_tools.py::test_native_rain_offer_then_exact_accept_advances_only_on_wardrobe_receipt
+FAILED tests/contracts/test_native_character_tools.py::test_native_chapter_preview_and_handover_are_distinct_complete_receipt_steps
+FAILED tests/contracts/test_native_chapter_wire.py::test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[missing]
+FAILED tests/contracts/test_native_chapter_wire.py::test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[wrong]
+FAILED tests/contracts/test_native_chapter_wire.py::test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue[stale]
+FAILED tests/contracts/test_native_chapter_wire.py::test_real_wire_typed_question_allows_next_exact_confirmation
+FAILED tests/contracts/test_native_chapter_wire.py::test_entire_real_wire_chapter_reuses_early_photo_and_hands_over_after_acceptance
+9 failed, 169 passed in 10.40s

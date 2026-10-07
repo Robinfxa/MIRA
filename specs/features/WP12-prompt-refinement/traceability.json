@@ -1,0 +1,46 @@
+{
+  "feature": "WP12PROMPT",
+  "spec": "specs/features/WP12-prompt-refinement/spec.md",
+  "requirements": [
+    {
+      "id": "WP12PROMPT-001",
+      "tests": [
+        "tests/contracts/test_character_prompt_refinement.py::test_all_author_capabilities_fit_unchanged_instruction_bound"
+      ]
+    },
+    {
+      "id": "WP12PROMPT-002",
+      "tests": [
+        "tests/contracts/test_character_prompt_refinement.py::test_serialized_native_and_legacy_keep_latest_referent_without_old_action_instruction"
+      ]
+    },
+    {
+      "id": "WP12PROMPT-003",
+      "tests": [
+        "tests/contracts/test_role_canon_speaker.py::test_stopped_or_spoken_recognition_never_unlocks_authored_friend_history",
+        "tests/contracts/test_role_canon_speaker.py::test_released_same_source_canon_survives_history_cutback_without_future_layers"
+      ]
+    },
+    {
+      "id": "WP12PROMPT-004",
+      "tests": [
+        "tests/contracts/test_character_prompt_refinement.py::test_function_call_is_not_json_dialogue_and_continuation_receives_exact_result",
+        "tests/contracts/test_character_prompt_refinement.py::test_strict_output_failures_remain_failures_without_guessing_live_output"
+      ]
+    },
+    {
+      "id": "WP12PROMPT-005",
+      "tests": [
+        "tests/contracts/test_character_ordinary_scene.py::test_editorial_pairs_are_not_mistaken_for_a_semantic_oracle"
+      ]
+    },
+    {
+      "id": "WP12PROMPT-006",
+      "tests": [
+        "tests/contracts/test_character_behavior_review.py::test_choice_policy_is_shared_and_fits_existing_instruction_budget",
+        "tests/contracts/test_character_behavior_review.py::test_ab_uses_identical_real_serialized_context_and_protocol",
+        "tests/contracts/test_character_behavior_review.py::test_large_synthetic_recall_and_canon_keep_separate_payload_and_instruction_limits"
+      ]
+    }
+  ]
+}

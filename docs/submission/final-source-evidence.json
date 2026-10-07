@@ -1,0 +1,77 @@
+{
+  "date_utc": "2026-10-07",
+  "scope": "previous fixed-byte evidence bound to integrated runtime; no new fulltest claim",
+  "records": [
+    {
+      "name": "natural-followthrough",
+      "receipt_sha256": "9018efa50a2335d7482f53d749e150c4e3294687614e21381bc94bf0112a9493",
+      "status": "passed",
+      "selected_lanes": [
+        "architecture",
+        "domain",
+        "env",
+        "config",
+        "actor",
+        "providers",
+        "http",
+        "tooling",
+        "specs",
+        "web",
+        "continuous"
+      ],
+      "not_run": [
+        "package",
+        "smoke"
+      ],
+      "interruption": null
+    },
+    {
+      "name": "image-review",
+      "receipt_sha256": "061a9c8be99b83fa000e816898187309cfe6e695189dd33d8cd9abb7efbe6d5a",
+      "status": "passed",
+      "selected_lanes": [
+        "architecture",
+        "config",
+        "actor",
+        "providers",
+        "http",
+        "tooling",
+        "specs",
+        "continuous"
+      ],
+      "not_run": [
+        "domain",
+        "env",
+        "web",
+        "package",
+        "smoke"
+      ],
+      "interruption": null
+    },
+    {
+      "name": "default-lan-recovered",
+      "receipt_sha256": "76f6a1c9a6857cabe0b08210fe34c9577255b82604e28dd4f99dc601191323b5",
+      "status": "passed_via_recovered_affected_evidence",
+      "selected_lanes": [
+        "config",
+        "tooling",
+        "actor",
+        "env",
+        "continuous",
+        "domain",
+        "web",
+        "architecture",
+        "http",
+        "specs",
+        "providers"
+      ],
+      "not_run": [
+        "package",
+        "smoke"
+      ],
+      "interruption": "interrupted_during_providers_no_original_summary"
+    }
+  ],
+  "real_service_new_calls": 0,
+  "real_devices_new_tests": false
+}

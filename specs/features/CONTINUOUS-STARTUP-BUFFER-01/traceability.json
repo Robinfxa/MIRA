@@ -1,0 +1,29 @@
+{
+  "feature": "CONTINUOUSSTARTUPBUFFER",
+  "spec": "specs/features/CONTINUOUS-STARTUP-BUFFER-01/spec.md",
+  "requirements": [
+    {
+      "id": "CONTINUOUSSTARTUPBUFFER-001",
+      "tests": [
+        "tests/contracts/test_continuous_startup_buffer.py::test_twenty_ms_audio_survives_one_second_google_rpc_startup"
+      ]
+    },
+    {
+      "id": "CONTINUOUSSTARTUPBUFFER-002",
+      "tests": [
+        "tests/contracts/test_continuous_startup_buffer.py::test_two_second_capacity_returns_exactly_and_finish_drains_all_frames",
+        "tests/contracts/test_continuous_startup_buffer.py::test_large_frames_cannot_bypass_pending_pcm_bound",
+        "tests/contracts/test_continuous_startup_buffer.py::test_packet_capacity_configuration_remains_finite"
+      ]
+    },
+    {
+      "id": "CONTINUOUSSTARTUPBUFFER-003",
+      "tests": [
+        "tests/contracts/test_continuous_startup_buffer.py::test_packet_cap_cancel_clear_and_late_push_rejection",
+        "tests/contracts/test_continuous_startup_buffer.py::test_explicit_small_packet_capacity_still_drains_full_queue",
+        "tests/unit/test_continuous_listening.py::test_audio_buffer_enforces_identity_sequence_pacing_and_queue_cap",
+        "tests/unit/test_continuous_listening.py::test_stop_discards_audio_and_future_chunks_are_rejected"
+      ]
+    }
+  ]
+}

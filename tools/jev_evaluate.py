@@ -27,6 +27,8 @@ LEGACY_POLICY_ID = "jev-evaluation-legacy-20-001-v1"
 APPROVED_CONTINUATION_POLICY_ID = "jev-zh-approved-continuation-20261003-v1"
 CONTINUATION_MAX_ATTEMPTS = 35
 CONTINUATION_TOTAL_LIMIT = Decimal("0.05")
+HISTORICAL_AGGREGATE_FIELD = "historical_aggregate"
+HISTORICAL_AGGREGATE_VERSION = 1
 
 
 def utc_now():
@@ -36,31 +38,76 @@ def utc_now():
 def load_ledger(root, *, continuation=False):
     # Never initialize/reset the approved global budget, even if its file is missing.
     ledger = support.read_json(root / LEDGER_RELATIVE)
+    if type(ledger) is not dict:
+        raise support.EvaluationStop("ledger_invalid")
+    _historical_totals(ledger)
     expected_attempts = CONTINUATION_MAX_ATTEMPTS if continuation else MAX_ATTEMPTS
     expected_usd = CONTINUATION_TOTAL_LIMIT if continuation else smoke.TOTAL_LIMIT
+    try:
+        ledger_attempt_limit = ledger.get("maximum_attempts")
+        ledger_usd_limit = Decimal(ledger.get("maximum_usd", "NaN"))
+    except (ArithmeticError, TypeError, ValueError):
+        raise support.EvaluationStop("ledger_invalid") from None
     allowed_old_ledger = (continuation and ledger.get("maximum_attempts") == MAX_ATTEMPTS
                           and type(ledger.get("maximum_attempts")) is int
-                          and Decimal(ledger.get("maximum_usd", "NaN")) == smoke.TOTAL_LIMIT
+                          and ledger_usd_limit == smoke.TOTAL_LIMIT
                           and ledger.get("budget_policy_id") in (None, LEGACY_POLICY_ID))
-    if ((ledger.get("maximum_attempts") != expected_attempts and not allowed_old_ledger)
-            or type(ledger.get("maximum_attempts")) is not int
-            or (Decimal(ledger.get("maximum_usd", "NaN")) != expected_usd and not allowed_old_ledger)
+    if ((ledger_attempt_limit != expected_attempts and not allowed_old_ledger)
+            or type(ledger_attempt_limit) is not int
+            or not ledger_usd_limit.is_finite()
+            or (ledger_usd_limit != expected_usd and not allowed_old_ledger)
             or (continuation and ledger.get("budget_policy_id") not in
                 (None, LEGACY_POLICY_ID, APPROVED_CONTINUATION_POLICY_ID))
             or (not continuation and ledger.get("budget_policy_id") not in (None, LEGACY_POLICY_ID))
             or type(ledger.get("attempts")) is not list):
         raise support.EvaluationStop("ledger_invalid")
     for attempt in ledger["attempts"]:
-        value = Decimal(attempt["budget_charge_usd"])
-        if not value.is_finite() or value < Decimal("0.00001"):
+        try:
+            value = Decimal(attempt["budget_charge_usd"])
+        except (ArithmeticError, KeyError, TypeError, ValueError):
+            raise support.EvaluationStop("ledger_invalid") from None
+        if (type(attempt) is not dict or not value.is_finite()
+                or value < Decimal("0.00001") or value > CONTINUATION_TOTAL_LIMIT):
             raise support.EvaluationStop("ledger_invalid")
     return ledger
+
+
+def _historical_totals(ledger):
+    """Read the optional versioned aggregate without inventing historical attempt rows."""
+    if HISTORICAL_AGGREGATE_FIELD not in ledger:
+        return 0, Decimal(0)
+    history = ledger[HISTORICAL_AGGREGATE_FIELD]
+    if (type(history) is not dict
+            or set(history) != {"schema_version", "attempt_count", "reserved_or_charged_usd"}
+            or type(history["schema_version"]) is not int
+            or history["schema_version"] != HISTORICAL_AGGREGATE_VERSION
+            or type(history["attempt_count"]) is not int
+            or not 0 <= history["attempt_count"] <= CONTINUATION_MAX_ATTEMPTS):
+        raise support.EvaluationStop("ledger_invalid")
+    raw_charge = history["reserved_or_charged_usd"]
+    if type(raw_charge) is not str or len(raw_charge) > 64:
+        raise support.EvaluationStop("ledger_invalid")
+    try:
+        charge = Decimal(raw_charge)
+    except (ArithmeticError, TypeError, ValueError):
+        raise support.EvaluationStop("ledger_invalid") from None
+    if (not charge.is_finite() or charge < 0 or charge > CONTINUATION_TOTAL_LIMIT
+            or (charge.is_zero() and charge.is_signed())):
+        raise support.EvaluationStop("ledger_invalid")
+    return history["attempt_count"], charge
+
+
+def total_attempts(ledger):
+    """Global sequence: retained aggregate count plus rows created after recovery."""
+    historical_attempts, _ = _historical_totals(ledger)
+    return historical_attempts + len(ledger["attempts"])
 
 
 def _upgrade_ledger_for_continuation(root, ledger):
     """Widen only the recorded ceiling under the existing global lock; retain every row."""
     if ledger.get("maximum_attempts") == MAX_ATTEMPTS:
-        if len(ledger["attempts"]) > CONTINUATION_MAX_ATTEMPTS or charged(ledger) > CONTINUATION_TOTAL_LIMIT:
+        if (total_attempts(ledger) > CONTINUATION_MAX_ATTEMPTS
+                or charged(ledger) > CONTINUATION_TOTAL_LIMIT):
             raise support.EvaluationStop("local_budget_exhausted")
         ledger["maximum_attempts"] = CONTINUATION_MAX_ATTEMPTS
         ledger["maximum_usd"] = str(CONTINUATION_TOTAL_LIMIT)
@@ -73,13 +120,17 @@ def _upgrade_ledger_for_continuation(root, ledger):
 
 
 def charged(ledger):
-    return sum((Decimal(a["budget_charge_usd"]) for a in ledger["attempts"]), Decimal(0))
+    _, historical_charge = _historical_totals(ledger)
+    return historical_charge + sum((Decimal(a["budget_charge_usd"]) for a in ledger["attempts"]), Decimal(0))
 
 
 def request_shape(payload, track, case, snap, candidate=None, contract=None):
     request = json.loads(payload, object_pairs_hook=support.unique)
-    expected_state = (asdict(snap) if track == "input" else {
-        "context": asdict(snap.context), "candidate": asdict(candidate), "contract": asdict(contract)})
+    expected_state = (support.decision_snapshot_data(snap) if track == "input" else {
+        "context": support.jev.generation_context_data(snap.context),
+        "candidate": support.candidate_data(candidate),
+        "contract": support.jev._contract_data(contract),
+    })
     binding = support.digest({"state": expected_state, "model": support.MODEL,
                               "question_set": support.QUESTION_SETS[track]})
     expected_questions = (support.jev_input._questions(snap, binding) if track == "input"
@@ -189,7 +240,7 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
                     ledger = load_ledger(budget_root, continuation=continuation)
                     max_attempts = CONTINUATION_MAX_ATTEMPTS if continuation else MAX_ATTEMPTS
                     total_limit = CONTINUATION_TOTAL_LIMIT if continuation else smoke.TOTAL_LIMIT
-                    if (len(ledger["attempts"]) >= max_attempts
+                    if (total_attempts(ledger) >= max_attempts
                             or charged(ledger) + smoke.PER_ATTEMPT_RESERVE > total_limit):
                         raise support.EvaluationStop("local_budget_exhausted")
                     attempt = {"case": case["id"], "evaluation_run_id": manifest["run_id"],
@@ -197,7 +248,7 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
                         "status": "reserved", "manifest_sha256": manifest_sha256}
                     ledger["attempts"].append(attempt)
                     smoke.save(budget_root / LEDGER_RELATIVE, ledger)
-                    row.update(dispatched=True, attempt=len(ledger["attempts"]),
+                    row.update(dispatched=True, attempt=total_attempts(ledger),
                         request_sha256=support.sha(payload), request_binding=binding,
                         question_sha256=question_hash, started_at=attempt["started_at"])
                     # Persist reservation and in-flight status before any secret/network access.
@@ -243,9 +294,11 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
                         "jev_policy_not_calibrated", "jev_semantic_unknown", "jev_semantic_reject"})
                     if (result.model != support.MODEL or result.request_digest != row["request_binding"]
                             or actual_usage != trace["usage"] or row["runtime_reason"] not in allowed_reasons
-                            or (track == "output" and result.contract_digest != support.digest(asdict(contract)))
+                            or (track == "output" and result.contract_digest !=
+                                support.digest(support.jev._contract_data(contract)))
                             or (track == "input" and (result.snapshot_id != snap.snapshot_id
-                                or result.snapshot_digest != support.digest(asdict(snap))
+                                or result.snapshot_digest !=
+                                    support.digest(support.decision_snapshot_data(snap))
                                 or result.calibration_ref is not None))):
                         trace.update(response_valid=False, stop="runtime_result_mismatch")
                 row["status"] = trace.get("stop", row["runtime_reason"])
@@ -299,7 +352,7 @@ async def run_batch(*, root, manifest_path, manifest_sha256, transport_factory,
         for row in rows:
             if not row["dispatched"] and row["status"] == "not_dispatched":
                 row["status"] = report["status"]
-        report["global_attempts"] = len(ledger["attempts"])
+        report["global_attempts"] = total_attempts(ledger)
         report["global_reserved_or_charged_usd"] = str(charged(ledger))
         persist()
     return report

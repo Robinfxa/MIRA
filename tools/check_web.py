@@ -1,11 +1,48 @@
-"""Build into a fresh lane-owned directory; never overwrite another agent's dist."""
+"""Build in an external disposable directory; keep lane logs/artifacts in the requested output dir."""
 import argparse
+from contextlib import contextmanager
 import os
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _paths_overlap(left: Path, right: Path) -> bool:
+    left = left.resolve()
+    right = right.resolve()
+    return left.is_relative_to(right) or right.is_relative_to(left)
+
+
+@contextmanager
+def _external_build_root(project_root: Path):
+    project = project_root.resolve()
+    candidates = [Path("/tmp"), Path(tempfile.gettempdir()), project.parent]
+    seen = set()
+    for candidate in candidates:
+        try:
+            parent = candidate.resolve(strict=True)
+        except OSError:
+            continue
+        if parent in seen or not parent.is_dir():
+            continue
+        seen.add(parent)
+        try:
+            temporary = tempfile.TemporaryDirectory(prefix="mira-web-check-", dir=parent)
+        except OSError:
+            continue
+        build_root = Path(temporary.name).resolve()
+        if _paths_overlap(build_root / "dist", project):
+            temporary.cleanup()
+            continue
+        try:
+            yield build_root
+        finally:
+            temporary.cleanup()
+        return
+    raise RuntimeError("Cannot create a fresh web build directory outside the project root")
 
 
 def main() -> None:
@@ -14,17 +51,21 @@ def main() -> None:
     args = parser.parse_args()
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=False)
-    # ESM applies even when a caller selects an output directory outside the repository.
+    # Preserve the lane artifact directory while keeping its disposable bundle external.
     (output / "package.json").write_text('{"type":"module"}\n')
-    compiler = ROOT / "node_modules/typescript/bin/tsc"
-    command = ["node", str(compiler)] if compiler.is_file() else [shutil.which("tsc") or "tsc"]
-    subprocess.run([*command, "-p", "apps/web/tsconfig.json", "--outDir", str(output / "dist")],
-                   cwd=ROOT, check=True)
+    node = shutil.which("node")
+    if node is None:
+        raise SystemExit("Missing Node.js; run bootstrap with Node.js 22.12+ installed")
     tests = sorted(str(p) for p in (ROOT / "tests/web").glob("*.test.mjs"))
     if not tests:
         raise SystemExit("No frontend tests found")
-    subprocess.run(["node", "--test", *tests], cwd=ROOT, check=True,
-                   env={**os.environ, "MIRA_TEST_WEB_DIST": str(output / "dist")})
+    with _external_build_root(ROOT) as build_root:
+        dist = build_root / "dist"
+        (build_root / "package.json").write_text('{"type":"module"}\n')
+        subprocess.run([node, "tools/build_web.mjs", "--outdir", str(dist)],
+                       cwd=ROOT, check=True)
+        subprocess.run([node, "--test", *tests], cwd=ROOT, check=True,
+                       env={**os.environ, "MIRA_TEST_WEB_DIST": str(dist)})
 
 
 if __name__ == "__main__":

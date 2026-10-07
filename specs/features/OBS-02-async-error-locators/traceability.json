@@ -25,6 +25,27 @@
         "tests/contracts/test_async_error_locators.py::test_stale_media_failure_never_overwrites_new_generation_locator",
         "tests/contracts/test_async_error_locators.py::test_public_mapper_discards_malformed_error_metadata"
       ]
+    },
+    {
+      "id": "OBS02-004",
+      "tests": [
+        "tests/contracts/test_jev_response_diagnostics.py::test_output_response_summary_contains_only_bounded_safe_facts",
+        "tests/contracts/test_jev_response_diagnostics.py::test_invalid_probability_sum_and_selected_value_remain_observable",
+        "tests/contracts/test_jev_response_diagnostics.py::test_nonfinite_and_huge_probability_values_are_bounded",
+        "tests/contracts/test_jev_response_diagnostics.py::test_asgi_invalid_output_response_has_correlated_diagnostic_event",
+        "tests/contracts/test_jev_response_diagnostics.py::test_logging_failure_keeps_response_fail_closed",
+        "tests/contracts/test_jev_response_diagnostics.py::test_summary_failure_keeps_response_fail_closed",
+        "tests/contracts/test_jev_response_diagnostics.py::test_diagnostic_export_round_trips_only_typed_summary",
+        "tests/contracts/test_jev_diagnostic_tool_bounds.py::test_probability_diagnostics_never_overflow_on_invalid_numeric_input",
+        "tests/contracts/test_jev_diagnostic_tool_bounds.py::test_v2_required_referent_probability_is_observable_without_unknown_strings"
+      ]
+    },
+    {
+      "id": "OBS02-005",
+      "tests": [
+        "tests/contracts/test_jev_response_diagnostics.py::test_semantic_reject_and_unknown_have_distinct_error_codes",
+        "tests/contracts/test_jev_response_diagnostics.py::test_input_invalid_response_remains_a_technical_failure"
+      ]
     }
   ]
 }

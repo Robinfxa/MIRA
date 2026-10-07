@@ -1,4 +1,5 @@
 """Offline lifecycle proof for the isolated Google smoke runner."""
+import asyncio
 import json
 import os
 import stat
@@ -65,6 +66,24 @@ class Resource:
 
     async def aclose(self):
         self.closed = True
+
+
+class FakeClock:
+    def __init__(self):
+        self.now = 0
+
+    def __call__(self):
+        return self.now
+
+    def advance_ms(self, milliseconds):
+        self.now += milliseconds * 1_000_000
+
+
+def tts_latency_trace(clock):
+    # Resolve lazily so the pre-instrumentation baseline can run real RED assertions.
+    import tools.google_voice_smoke as smoke_module
+
+    return smoke_module.TtsLatencyTrace(clock)
 
 
 def synthetic_ca_pem():
@@ -266,6 +285,27 @@ def prior_two_failed_slots(ledger_path):
     ledger.finish(second, "failed_unknown_usage", status_class="4xx", http_status=400,
                   provider_error="invalid_input", terminal_phase="terminal_failure")
     return first, second
+
+
+def final_approved_prior_history(ledger_path):
+    prior_two_failed_slots(ledger_path)
+    diagnostic = SharedLedger(ledger_path).reserve(ADDITIONAL_TTS_KIND, TTS_FULL_RESERVE_USD)
+    SharedLedger(ledger_path).finish(diagnostic, "failed_unknown_usage", status_class="2xx",
+        http_status=200, provider_error="unsupported_audio", terminal_phase="terminal_failure")
+    original_stt = SharedLedger(ledger_path).reserve("stt_v2", STT_RESERVE_USD)
+    SharedLedger(ledger_path).finish(original_stt, "failed_unknown_usage", status_class="transport_error",
+        provider_error="unavailable", terminal_phase="terminal_failure")
+    recovery = SharedLedger(ledger_path).reserve(RECOVERY_TTS_KIND, TTS_FULL_RESERVE_USD)
+    SharedLedger(ledger_path).finish(recovery, "failed_unknown_usage", status_class="2xx",
+        http_status=200, provider_error="unsupported_audio", terminal_phase="terminal_failure",
+        audio_diagnostic={"part_index": 0, "part_type_names": ["text"], "mime_param_names": [],
+                          "candidate_finish_reason": "STOP", "validation_reason": "non_audio_part"})
+    completed_stt = SharedLedger(ledger_path).reserve("stt_v2", STT_RESERVE_USD)
+    SharedLedger(ledger_path).finish(completed_stt, "completed", status_class="2xx", sample_count=147240,
+        duration_seconds=6.135, terminal_phase="stt_completed")
+    old_tts = SharedLedger(ledger_path).reserve(TTS_TEXT_DIAGNOSTIC_KIND, TTS_FULL_RESERVE_USD)
+    SharedLedger(ledger_path).finish(old_tts, "failed_unknown_usage", status_class="2xx", http_status=200,
+        provider_error="timeout", terminal_phase="terminal_failure")
 
 
 @pytest.mark.asyncio
@@ -592,27 +632,11 @@ async def test_text_diagnostic_followup_is_one_tts_only_and_scrubs_provider_exce
 
 
 @pytest.mark.asyncio
-async def test_newly_approved_two_dollar_tts_only_gate_uses_60s_and_saves_private_pcm(tmp_path):
+async def test_newly_approved_two_dollar_tts_only_gate_uses_60s_and_saves_private_pcm(
+        tmp_path, monkeypatch):
     readiness_path, enabled_path = resume_receipts(tmp_path)
     ledger_path, report_path = tmp_path / "ledger.json", tmp_path / "report.json"
-    prior_two_failed_slots(ledger_path)
-    diagnostic = SharedLedger(ledger_path).reserve(ADDITIONAL_TTS_KIND, TTS_FULL_RESERVE_USD)
-    SharedLedger(ledger_path).finish(diagnostic, "failed_unknown_usage", status_class="2xx",
-        http_status=200, provider_error="unsupported_audio", terminal_phase="terminal_failure")
-    original_stt = SharedLedger(ledger_path).reserve("stt_v2", STT_RESERVE_USD)
-    SharedLedger(ledger_path).finish(original_stt, "failed_unknown_usage", status_class="transport_error",
-        provider_error="unavailable", terminal_phase="terminal_failure")
-    recovery = SharedLedger(ledger_path).reserve(RECOVERY_TTS_KIND, TTS_FULL_RESERVE_USD)
-    SharedLedger(ledger_path).finish(recovery, "failed_unknown_usage", status_class="2xx",
-        http_status=200, provider_error="unsupported_audio", terminal_phase="terminal_failure",
-        audio_diagnostic={"part_index": 0, "part_type_names": ["text"], "mime_param_names": [],
-                          "candidate_finish_reason": "STOP", "validation_reason": "non_audio_part"})
-    completed_stt = SharedLedger(ledger_path).reserve("stt_v2", STT_RESERVE_USD)
-    SharedLedger(ledger_path).finish(completed_stt, "completed", status_class="2xx", sample_count=147240,
-        duration_seconds=6.135, terminal_phase="stt_completed")
-    old_tts = SharedLedger(ledger_path).reserve(TTS_TEXT_DIAGNOSTIC_KIND, TTS_FULL_RESERVE_USD)
-    SharedLedger(ledger_path).finish(old_tts, "failed_unknown_usage", status_class="2xx", http_status=200,
-        provider_error="timeout", terminal_phase="terminal_failure")
+    final_approved_prior_history(ledger_path)
 
     old_record = json.loads(ledger_path.read_text(encoding="utf-8"))
     assert old_record["reserved_total_usd"] == "0.978560" and len(old_record["calls"]) == 7
@@ -622,6 +646,16 @@ async def test_newly_approved_two_dollar_tts_only_gate_uses_60s_and_saves_privat
     assert json.loads(ledger_path.read_text(encoding="utf-8")) == old_record
 
     pcm = b"\x24\x00" * 2400
+    clock = FakeClock()
+    import tools.google_voice_smoke as smoke_module
+    monkeypatch.setattr(smoke_module.time, "monotonic_ns", clock)
+    real_write_pcm = smoke_module._write_pcm_private
+
+    def timed_write(path, data):
+        clock.advance_ms(4)
+        real_write_pcm(path, data)
+
+    monkeypatch.setattr(smoke_module, "_write_pcm_private", timed_write)
     resources = []
 
     class Tts:
@@ -633,7 +667,11 @@ async def test_newly_approved_two_dollar_tts_only_gate_uses_60s_and_saves_privat
             self.calls.append((text, stream_id))
             async def source():
                 self.status_callback(200)
-                yield AudioPacket(stream_id, 0, 24000, pcm)
+                clock.advance_ms(5)
+                yield AudioPacket(stream_id, 0, 24000, pcm[: len(pcm) // 2])
+                clock.advance_ms(7)
+                yield AudioPacket(stream_id, len(pcm) // 4, 24000, pcm[len(pcm) // 2 :])
+                clock.advance_ms(2)
             return source()
 
     class NeverStt:
@@ -671,6 +709,285 @@ async def test_newly_approved_two_dollar_tts_only_gate_uses_60s_and_saves_privat
     assert result["duration_seconds"] == 0.1
     assert result["audio_sha256"] == __import__("hashlib").sha256(pcm).hexdigest()
     assert result["audio_artifact_saved"] is True and result["played"] is False
+    completed_event = next(event for event in result["events"] if event["phase"] == "tts_completed")
+    assert completed_event["total_samples"] == 2400
+    assert "first_packet_samples" not in completed_event
+    timing = result["tts_timing"]
+    assert timing["clock"] == "monotonic_elapsed_ms"
+    assert timing["events_ms"]["dispatch_started"] == 0.0
+    assert timing["events_ms"]["http_headers_received"] == 0.0
+    assert timing["events_ms"]["first_valid_pcm_yielded"] == 5.0
+    assert timing["events_ms"]["last_valid_pcm_yielded"] == 12.0
+    assert timing["events_ms"]["stream_terminal"] == 14.0
+    assert timing["events_ms"]["file_save_completed"] == 18.0
+    assert timing["durations_ms"]["dispatch_to_file_save"] == 18.0
+    assert timing["counts"]["valid_pcm_packets"] == 2
+    assert timing["counts"]["total_samples"] == 2400
+    assert timing["stream_outcome"] == "completed"
+    assert timing["file_save_outcome"] == "saved"
+    assert timing["physical_playback"] == "unobserved"
+    assert timing["authentication"] == "unobserved"
+
+
+def test_tts_latency_trace_counts_multiple_pcm_packets_after_non_audio_without_retaining_content():
+    clock = FakeClock()
+    trace = tts_latency_trace(clock)
+    trace.dispatch_started()
+    clock.advance_ms(5)
+    trace.http_headers_received(200)
+    clock.advance_ms(35)
+    trace.non_audio_event_received()  # Metadata is not audio and is never passed to the trace.
+    clock.advance_ms(5)
+    assert trace.pcm_packet_yielded(b"\x00\x00" * 3, 24000)
+    clock.advance_ms(4)
+    assert trace.pcm_packet_yielded(b"\x01\x00" * 2, 24000)
+    clock.advance_ms(2)
+    trace.stream_terminal("completed")
+    clock.advance_ms(3)
+    trace.file_save_completed(True)
+
+    report = trace.to_dict()
+    assert report["durations_ms"]["dispatch_to_headers"] == 5.0
+    assert report["durations_ms"]["dispatch_to_first_valid_pcm"] == 45.0
+    assert report["durations_ms"]["headers_to_first_valid_pcm"] == 40.0
+    assert report["durations_ms"]["dispatch_to_last_pcm"] == 49.0
+    assert report["durations_ms"]["dispatch_to_stream_terminal"] == 51.0
+    assert report["durations_ms"]["dispatch_to_file_save"] == 54.0
+    assert report["durations_ms"]["last_pcm_to_file_save"] == 5.0
+    assert report["counts"]["non_audio_events"] == 1
+    assert report["counts"]["valid_pcm_packets"] == 2
+    assert report["counts"]["total_samples"] == 5
+    assert report["stream_outcome"] == "completed"
+    assert report["file_save_outcome"] == "saved"
+    assert report["cancelled_after_first_valid_pcm"] is None
+    assert report["physical_playback"] == "unobserved"
+    assert "private synthetic words" not in repr(report)
+
+
+def test_tts_latency_trace_invalid_first_pcm_does_not_start_first_valid_clock():
+    clock = FakeClock()
+    trace = tts_latency_trace(clock)
+    trace.dispatch_started()
+    assert not trace.pcm_packet_yielded(b"\x00", 24000)
+    assert not trace.pcm_packet_yielded(b"\x00\x00", 16000)
+    clock.advance_ms(7)
+    assert trace.pcm_packet_yielded(b"\x00\x00", 24000)
+
+    report = trace.to_dict()
+    assert report["events_ms"]["first_valid_pcm_yielded"] == 7.0
+    assert report["counts"]["invalid_pcm_packets"] == 2
+    assert report["counts"]["valid_pcm_packets"] == 1
+    assert report["counts"]["total_samples"] == 1
+
+
+def test_tts_latency_trace_timeout_before_pcm_keeps_first_pcm_unobserved():
+    clock = FakeClock()
+    trace = tts_latency_trace(clock)
+    trace.dispatch_started()
+    trace.http_headers_received(200)
+    clock.advance_ms(60)
+    trace.stream_terminal("error")  # Synthetic timeout before audio.
+
+    report = trace.to_dict()
+    assert report["stream_outcome"] == "error"
+    assert report["events_ms"]["first_valid_pcm_yielded"] is None
+    assert report["durations_ms"]["dispatch_to_first_valid_pcm"] is None
+    assert report["file_save_outcome"] == "not_observed"
+
+
+def test_tts_latency_trace_timeout_after_pcm_keeps_terminal_separate_from_first_pcm():
+    clock = FakeClock()
+    trace = tts_latency_trace(clock)
+    trace.dispatch_started()
+    clock.advance_ms(12)
+    assert trace.pcm_packet_yielded(b"\x00\x00" * 2, 24000)
+    clock.advance_ms(48)
+    trace.stream_terminal("error")  # Synthetic timeout after valid PCM.
+
+    report = trace.to_dict()
+    assert report["stream_outcome"] == "error"
+    assert report["events_ms"]["first_valid_pcm_yielded"] == 12.0
+    assert report["durations_ms"]["dispatch_to_stream_terminal"] == 60.0
+    assert report["file_save_outcome"] == "not_observed"
+
+
+def test_tts_latency_trace_cancellation_after_pcm_is_distinct_from_full_drain():
+    clock = FakeClock()
+    cancelled = tts_latency_trace(clock)
+    cancelled.dispatch_started()
+    assert cancelled.pcm_packet_yielded(b"\x00\x00", 24000)
+    cancelled.stream_terminal("cancelled")
+    cancelled.stream_closed()
+    report = cancelled.to_dict()
+    assert report["stream_outcome"] == "cancelled"
+    assert report["cancelled_after_first_valid_pcm"] is True
+    assert report["events_ms"]["file_save_completed"] is None
+
+    completed = tts_latency_trace(clock)
+    completed.dispatch_started()
+    assert completed.pcm_packet_yielded(b"\x00\x00", 24000)
+    completed.stream_terminal("completed")
+    completed.file_save_completed(True)
+    assert completed.to_dict()["stream_outcome"] == "completed"
+    assert completed.to_dict()["cancelled_after_first_valid_pcm"] is None
+
+
+def test_tts_latency_trace_completed_empty_stream_does_not_claim_pcm():
+    trace = tts_latency_trace(FakeClock())
+    trace.dispatch_started()
+    trace.non_audio_event_received()
+    trace.stream_terminal("completed")
+
+    report = trace.to_dict()
+    assert report["stream_outcome"] == "completed"
+    assert report["events_ms"]["first_valid_pcm_yielded"] is None
+    assert report["counts"]["total_samples"] == 0
+    assert report["durations_ms"]["dispatch_to_first_valid_pcm"] is None
+
+
+def test_tts_latency_trace_times_failed_artifact_save_without_claiming_success():
+    clock = FakeClock()
+    trace = tts_latency_trace(clock)
+    trace.dispatch_started()
+    assert trace.pcm_packet_yielded(b"\x00\x00", 24000)
+    trace.stream_terminal("completed")
+    clock.advance_ms(9)
+    trace.file_save_completed(False)
+
+    report = trace.to_dict()
+    assert report["stream_outcome"] == "completed"
+    assert report["file_save_outcome"] == "failed"
+    assert report["events_ms"]["file_save_completed"] == 9.0
+    assert report["durations_ms"]["last_pcm_to_file_save"] == 9.0
+
+
+@pytest.mark.asyncio
+async def test_final_approved_tts_write_failure_records_timing_without_releasing_or_retrying(
+        tmp_path, monkeypatch):
+    readiness_path, enabled_path = resume_receipts(tmp_path)
+    ledger_path, report_path = tmp_path / "ledger.json", tmp_path / "report.json"
+    final_approved_prior_history(ledger_path)
+
+    clock = FakeClock()
+    import tools.google_voice_smoke as smoke_module
+    monkeypatch.setattr(smoke_module.time, "monotonic_ns", clock)
+
+    def fail_write(_path, _pcm):
+        clock.advance_ms(9)
+        raise OSError("private filesystem detail")
+
+    monkeypatch.setattr(smoke_module, "_write_pcm_private", fail_write)
+
+    class Tts:
+        def __init__(self, status_callback):
+            self.status_callback = status_callback
+            self.calls = []
+
+        def synthesize(self, text, stream_id):
+            self.calls.append((text, stream_id))
+
+            async def source():
+                self.status_callback(200)
+                yield AudioPacket(stream_id, 0, 24000, b"\x00\x00" * 4)
+
+            return source()
+
+    class NeverStt:
+        async def transcribe(self, packets):
+            raise AssertionError("The approved path remains TTS only")
+            yield
+
+    resources, tts_instances = [], []
+
+    def factory(status_callback, timeout_seconds):
+        assert timeout_seconds == 60
+        tts = Tts(status_callback)
+        tts_instances.append(tts)
+        resource = Resource()
+        resources.append(resource)
+        return tts, NeverStt(), [resource]
+
+    with pytest.raises(OSError, match="private filesystem detail"):
+        await run_final_approved_tts_only(
+            readiness_path, enabled_path, ledger_path, report_path,
+            project_id="offline-test", adc_dir=tmp_path, adapter_factory=factory,
+        )
+
+    record = json.loads(ledger_path.read_text(encoding="utf-8"))
+    assert len(record["calls"]) == 8
+    assert record["calls"][-1]["kind"] == TTS_FINAL_APPROVED_KIND
+    assert record["calls"][-1]["state"] == "reserved_unknown_usage"
+    assert record["reserved_total_usd"] == "1.281664"
+    assert len(tts_instances) == 1 and len(tts_instances[0].calls) == 1
+    assert all(resource.closed for resource in resources)
+    report_text = report_path.read_text(encoding="utf-8")
+    report = json.loads(report_text)
+    assert report["tts_timing"]["stream_outcome"] == "completed"
+    assert report["tts_timing"]["file_save_outcome"] == "failed"
+    assert report["tts_timing"]["events_ms"]["file_save_completed"] == 9.0
+    assert report["tts_timing"]["counts"]["total_samples"] == 4
+    assert "private filesystem detail" not in report_text
+    assert "tts_completed" not in [event["phase"] for event in report["events"]]
+
+
+@pytest.mark.asyncio
+async def test_final_approved_tts_cancel_after_first_pcm_records_cancel_not_full_drain(
+        tmp_path, monkeypatch):
+    readiness_path, enabled_path = resume_receipts(tmp_path)
+    ledger_path, report_path = tmp_path / "ledger.json", tmp_path / "report.json"
+    final_approved_prior_history(ledger_path)
+    clock = FakeClock()
+    import tools.google_voice_smoke as smoke_module
+    monkeypatch.setattr(smoke_module.time, "monotonic_ns", clock)
+
+    class Tts:
+        def __init__(self, status_callback):
+            self.status_callback = status_callback
+            self.calls = []
+
+        def synthesize(self, text, stream_id):
+            self.calls.append((text, stream_id))
+
+            async def source():
+                self.status_callback(200)
+                clock.advance_ms(12)
+                yield AudioPacket(stream_id, 0, 24000, b"\x00\x00" * 4)
+                raise asyncio.CancelledError
+
+            return source()
+
+    class NeverStt:
+        async def transcribe(self, packets):
+            raise AssertionError("The approved path remains TTS only")
+            yield
+
+    resources, tts_instances = [], []
+
+    def factory(status_callback, timeout_seconds):
+        assert timeout_seconds == 60
+        tts = Tts(status_callback)
+        tts_instances.append(tts)
+        resource = Resource()
+        resources.append(resource)
+        return tts, NeverStt(), [resource]
+
+    with pytest.raises(asyncio.CancelledError):
+        await run_final_approved_tts_only(
+            readiness_path, enabled_path, ledger_path, report_path,
+            project_id="offline-test", adc_dir=tmp_path, adapter_factory=factory,
+        )
+
+    record = json.loads(ledger_path.read_text(encoding="utf-8"))
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    assert len(record["calls"]) == 8 and record["reserved_total_usd"] == "1.281664"
+    assert record["calls"][-1]["state"] == "reserved_unknown_usage"
+    assert len(tts_instances) == 1 and len(tts_instances[0].calls) == 1
+    assert all(resource.closed for resource in resources)
+    assert report["tts_timing"]["stream_outcome"] == "cancelled"
+    assert report["tts_timing"]["cancelled_after_first_valid_pcm"] is True
+    assert report["tts_timing"]["events_ms"]["first_valid_pcm_yielded"] == 12.0
+    assert report["tts_timing"]["events_ms"]["file_save_completed"] is None
+    assert "tts_completed" not in [event["phase"] for event in report["events"]]
     assert not any(call["kind"] == "stt_v2" and call["call_id"] == "google-voice-9"
                    for call in record["calls"])
     assert all(resource.closed for resource in resources)

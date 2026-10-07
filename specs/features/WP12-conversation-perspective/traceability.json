@@ -1,0 +1,41 @@
+{
+  "feature": "WP12PERSPECTIVE",
+  "spec": "specs/features/WP12-conversation-perspective/spec.md",
+  "requirements": [
+    {
+      "id": "WP12PERSPECTIVE-001",
+      "tests": [
+        "tests/contracts/test_character_conversation_perspective.py::test_speaker_perspective_is_fixed_on_every_existing_capability_path",
+        "tests/contracts/test_character_conversation_perspective.py::test_authored_multiturn_through_real_adapter_asgi_retains_topic_and_receipt_context"
+      ]
+    },
+    {
+      "id": "WP12PERSPECTIVE-002",
+      "tests": [
+        "tests/contracts/test_character_conversation_perspective.py::test_speaker_perspective_is_fixed_on_every_existing_capability_path",
+        "tests/contracts/test_character_conversation_perspective.py::test_authored_multiturn_through_real_adapter_asgi_retains_topic_and_receipt_context"
+      ]
+    },
+    {
+      "id": "WP12PERSPECTIVE-003",
+      "tests": [
+        "tests/contracts/test_character_conversation_perspective.py::test_speaker_perspective_is_fixed_on_every_existing_capability_path",
+        "tests/contracts/test_character_conversation_perspective.py::test_native_adapter_serializes_perspective_and_preserves_authored_candidate",
+        "tests/contracts/test_character_conversation_perspective.py::test_authored_multiturn_through_real_adapter_asgi_retains_topic_and_receipt_context"
+      ]
+    },
+    {
+      "id": "WP12PERSPECTIVE-004",
+      "tests": [
+        "tests/contracts/test_character_conversation_perspective.py::test_authored_multiturn_through_real_adapter_asgi_retains_topic_and_receipt_context"
+      ]
+    },
+    {
+      "id": "WP12PERSPECTIVE-005",
+      "tests": [
+        "tests/contracts/test_character_embodiment_perspective.py::test_fiction_and_explicit_reality_have_distinct_speaker_guidance",
+        "tests/contracts/test_character_embodiment_perspective.py::test_paired_body_questions_through_actual_direct_asgi_keep_fiction_and_reality_context"
+      ]
+    }
+  ]
+}

@@ -5,6 +5,106 @@
     "version": "0.1.0"
   },
   "paths": {
+    "/api/v1/sessions/{session_id}/story-images/{resource_id}": {
+      "post": {
+        "summary": "Story Image Resource",
+        "operationId": "story_image_resource_api_v1_sessions__session_id__story_images__resource_id__post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "resource_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Resource Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoryImageResourceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/health": {
       "get": {
         "summary": "Health",
@@ -427,6 +527,95 @@
         }
       }
     },
+    "/api/v1/sessions/{session_id}/response-preference": {
+      "post": {
+        "summary": "Set Response Preference",
+        "operationId": "set_response_preference_api_v1_sessions__session_id__response_preference_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResponsePreferenceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/sessions/{session_id}/stop": {
       "post": {
         "summary": "Stop Session",
@@ -458,6 +647,184 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/StopRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/photo-dismissals": {
+      "post": {
+        "summary": "Dismiss Photo",
+        "operationId": "dismiss_photo_api_v1_sessions__session_id__photo_dismissals_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhotoDismissRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/fixed-photo-progress": {
+      "post": {
+        "summary": "Fixed Photo Progress",
+        "operationId": "fixed_photo_progress_api_v1_sessions__session_id__fixed_photo_progress_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FixedPhotoProgressRequest"
               }
             }
           }
@@ -730,6 +1097,95 @@
                     "$ref": "#/components/schemas/AuditEventView"
                   },
                   "title": "Response Events Api V1 Sessions  Session Id  Events Get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/{session_id}/story-image-completions": {
+      "post": {
+        "summary": "Story Image Completion",
+        "operationId": "story_image_completion_api_v1_sessions__session_id__story_image_completions_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "X-Mira-Session-Token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Mira-Session-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoryImageCompletionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionView"
                 }
               }
             }
@@ -1406,6 +1862,765 @@
           }
         }
       }
+    },
+    "/api/v1/memory-management/status": {
+      "get": {
+        "tags": [
+          "local memory management"
+        ],
+        "summary": "Memory Management Status",
+        "operationId": "memory_management_status_api_v1_memory_management_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryManagementStatusView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/memory-management/entries": {
+      "get": {
+        "tags": [
+          "local memory management"
+        ],
+        "summary": "List Memory Entries",
+        "operationId": "list_memory_entries_api_v1_memory_management_entries_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryManagementPageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/memory-management/operations": {
+      "post": {
+        "tags": [
+          "local memory management"
+        ],
+        "summary": "Apply Memory Operation",
+        "operationId": "apply_memory_operation_api_v1_memory_management_operations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemoryManagementOperationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryManagementOperationView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/status": {
+      "get": {
+        "tags": [
+          "paired conversation archive"
+        ],
+        "summary": "Status",
+        "operationId": "status_api_v1_conversations_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationStatusView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/sessions": {
+      "get": {
+        "tags": [
+          "paired conversation archive"
+        ],
+        "summary": "Sessions",
+        "operationId": "sessions_api_v1_conversations_sessions_get",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationSessionsView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/entries": {
+      "get": {
+        "tags": [
+          "paired conversation archive"
+        ],
+        "summary": "Entries",
+        "operationId": "entries_api_v1_conversations_entries_get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationPageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/selection": {
+      "post": {
+        "tags": [
+          "paired conversation archive"
+        ],
+        "summary": "Select",
+        "operationId": "select_api_v1_conversations_selection_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversationSelectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationStatusView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/operations": {
+      "post": {
+        "tags": [
+          "paired conversation archive"
+        ],
+        "summary": "Operation",
+        "operationId": "operation_api_v1_conversations_operations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversationOperationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryManagementOperationView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/revoke": {
+      "post": {
+        "tags": [
+          "paired conversation archive"
+        ],
+        "summary": "Revoke",
+        "operationId": "revoke_api_v1_conversations_revoke_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConversationRevokeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationStatusView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1559,6 +2774,686 @@
         ],
         "title": "AuditEventView"
       },
+      "CaptionChunkView": {
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "title": "Group Id"
+          },
+          "index": {
+            "type": "integer",
+            "title": "Index"
+          },
+          "start": {
+            "type": "integer",
+            "title": "Start"
+          },
+          "end": {
+            "type": "integer",
+            "title": "End"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "source_sha256": {
+            "type": "string",
+            "title": "Source Sha256"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "group_id",
+          "index",
+          "start",
+          "end",
+          "total",
+          "source_sha256"
+        ],
+        "title": "CaptionChunkView"
+      },
+      "ChapterChoiceRequest": {
+        "properties": {
+          "choice": {
+            "type": "string",
+            "enum": [
+              "accept",
+              "decline"
+            ],
+            "title": "Choice"
+          },
+          "offer_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$",
+            "title": "Offer Id"
+          },
+          "offer_effect_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Offer Effect Id"
+          },
+          "offer_effect_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Offer Effect Digest"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "choice",
+          "offer_id",
+          "offer_effect_id",
+          "offer_effect_digest"
+        ],
+        "title": "ChapterChoiceRequest"
+      },
+      "ChapterProjectionView": {
+        "properties": {
+          "schema": {
+            "type": "string",
+            "const": "mira.xiahe-chapter.v1",
+            "title": "Schema"
+          },
+          "source_hash": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Source Hash"
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "stranger_cafe",
+              "recognized",
+              "old_friend_story",
+              "photo_promise",
+              "photo_previewed",
+              "gift_offered",
+              "gift_declined",
+              "completed"
+            ],
+            "title": "Stage"
+          },
+          "role_active": {
+            "type": "boolean",
+            "title": "Role Active"
+          },
+          "role_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "const": "夏禾"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role Name"
+          },
+          "active_gift_offer_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Gift Offer Id"
+          },
+          "gift_offer_effect_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gift Offer Effect Id"
+          },
+          "gift_offer_effect_digest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gift Offer Effect Digest"
+          },
+          "pending_transition": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "x.recognize",
+                  "x.story",
+                  "x.promise",
+                  "x.preview",
+                  "x.gift_offer",
+                  "x.gift_accept",
+                  "x.gift_decline",
+                  "x.exit"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pending Transition"
+          },
+          "completed": {
+            "type": "boolean",
+            "title": "Completed"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "suspended": {
+            "type": "boolean",
+            "title": "Suspended"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema",
+          "source_hash",
+          "stage",
+          "role_active",
+          "role_name",
+          "active_gift_offer_id",
+          "gift_offer_effect_id",
+          "gift_offer_effect_digest",
+          "pending_transition",
+          "completed",
+          "revision",
+          "suspended"
+        ],
+        "title": "ChapterProjectionView"
+      },
+      "ConversationEntryView": {
+        "properties": {
+          "entry_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$",
+            "title": "Entry Id"
+          },
+          "source_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Source Version"
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "accepted_input",
+              "corrected_input",
+              "presented_effect",
+              "audio_progress"
+            ],
+            "title": "Stage"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 8192,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Output Epoch"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x20\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "input_source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "text",
+                  "asr_final"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Source"
+          },
+          "effect_kind": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EffectKind"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rendered_samples": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rendered Samples"
+          },
+          "sample_rate_hz": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 48000.0,
+                "minimum": 8000.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sample Rate Hz"
+          },
+          "audio_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AudioStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "forget_event_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forget Event Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "entry_id",
+          "source_version",
+          "stage",
+          "active",
+          "text",
+          "output_epoch",
+          "request_id",
+          "input_source",
+          "effect_kind",
+          "rendered_samples",
+          "sample_rate_hz",
+          "audio_status",
+          "forget_event_id"
+        ],
+        "title": "ConversationEntryView"
+      },
+      "ConversationOperationRequest": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Revision"
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "correct",
+              "forget",
+              "restore"
+            ],
+            "title": "Operation"
+          },
+          "confirmed": {
+            "type": "boolean",
+            "const": true,
+            "title": "Confirmed"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "episodic",
+                  "boundary"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kind"
+          },
+          "entry_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entry Id"
+          },
+          "forget_event_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forget Event Id"
+          },
+          "session_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[^\\s\\x00-\\x20\\x7f]+$",
+            "title": "Session Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "expected_revision",
+          "operation",
+          "confirmed",
+          "session_id"
+        ],
+        "title": "ConversationOperationRequest"
+      },
+      "ConversationPageView": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[^\\s\\x00-\\x20\\x7f]+$",
+            "title": "Session Id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/ConversationEntryView"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Entries"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "session_id",
+          "revision",
+          "entries",
+          "next_cursor"
+        ],
+        "title": "ConversationPageView"
+      },
+      "ConversationRevokeRequest": {
+        "properties": {
+          "confirmed": {
+            "type": "boolean",
+            "title": "Confirmed"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "confirmed"
+        ],
+        "title": "ConversationRevokeRequest"
+      },
+      "ConversationSelectionRequest": {
+        "properties": {
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x20\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          },
+          "authorize_selected_provider_and_jev": {
+            "type": "boolean",
+            "title": "Authorize Selected Provider And Jev"
+          },
+          "authorize_google_derived_speech": {
+            "type": "boolean",
+            "title": "Authorize Google Derived Speech",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "session_id",
+          "authorize_selected_provider_and_jev"
+        ],
+        "title": "ConversationSelectionRequest"
+      },
+      "ConversationSessionsView": {
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "sessions": {
+            "items": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[^\\s\\x00-\\x20\\x7f]+$"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Sessions"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "sessions",
+          "next_cursor"
+        ],
+        "title": "ConversationSessionsView"
+      },
+      "ConversationStatusView": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "persistence_status": {
+            "type": "string",
+            "enum": [
+              "disabled",
+              "enabled_no_committed_records",
+              "pending",
+              "saved",
+              "unavailable",
+              "write_outcome_unknown",
+              "unavailable_or_write_outcome_unknown",
+              "rejected",
+              "revoked_existing_records_retained"
+            ],
+            "title": "Persistence Status"
+          },
+          "management_enabled": {
+            "type": "boolean",
+            "title": "Management Enabled",
+            "default": false
+          },
+          "recall_session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x20\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recall Session Id"
+          },
+          "current_session_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x20\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Session Id"
+          },
+          "selection_locked": {
+            "type": "boolean",
+            "title": "Selection Locked",
+            "default": false
+          },
+          "recipients": {
+            "type": "string",
+            "title": "Recipients",
+            "default": ""
+          },
+          "speech_enabled": {
+            "type": "boolean",
+            "title": "Speech Enabled",
+            "default": false
+          },
+          "recall_authorized": {
+            "type": "boolean",
+            "title": "Recall Authorized",
+            "default": false
+          },
+          "google_authorized": {
+            "type": "boolean",
+            "title": "Google Authorized",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled",
+          "persistence_status"
+        ],
+        "title": "ConversationStatusView"
+      },
       "CreateSessionRequest": {
         "properties": {
           "client_instance_id": {
@@ -1693,6 +3588,16 @@
               }
             ],
             "title": "Cue Speech Id"
+          },
+          "caption_chunk": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CaptionChunkView"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -1730,6 +3635,128 @@
           "request_id"
         ],
         "title": "ErrorResponse"
+      },
+      "FixedPhotoProgressRequest": {
+        "properties": {
+          "effect_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Effect Id"
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Digest"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Output Epoch"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Activity Seq"
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "preparing",
+              "preparation_failed",
+              "presentation_failed",
+              "receipt_pending"
+            ],
+            "title": "Outcome"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "effect_id",
+          "digest",
+          "output_epoch",
+          "activity_seq",
+          "outcome"
+        ],
+        "title": "FixedPhotoProgressRequest"
+      },
+      "FixedPhotoView": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "idle",
+              "pending",
+              "held",
+              "granted",
+              "preparing",
+              "receipt_pending",
+              "presented",
+              "failed",
+              "cancelled",
+              "dismissed"
+            ],
+            "title": "State",
+            "default": "idle"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unavailable",
+                  "already_visible",
+                  "dismissed",
+                  "review_unknown",
+                  "review_rejected",
+                  "review_failed",
+                  "optional_ineligible",
+                  "preparation_failed",
+                  "presentation_failed",
+                  "receipt_unconfirmed",
+                  "cancelled"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "attempt_seq": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Attempt Seq",
+            "default": 0
+          },
+          "output_epoch": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Output Epoch",
+            "default": 0
+          },
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Activity Seq",
+            "default": 0
+          },
+          "effect_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effect Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FixedPhotoView"
       },
       "HealthResponse": {
         "properties": {
@@ -1824,6 +3851,62 @@
               }
             ],
             "title": "Source Audio Stream Id"
+          },
+          "listening_utterance_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Listening Utterance Id"
+          },
+          "relation": {
+            "type": "string",
+            "enum": [
+              "independent",
+              "continuation",
+              "new_topic"
+            ],
+            "title": "Relation",
+            "default": "independent"
+          },
+          "continuation_of_request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Continuation Of Request Id"
+          },
+          "continuation_of_output_epoch": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Continuation Of Output Epoch"
+          },
+          "chapter_choice": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChapterChoiceRequest"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,
@@ -1836,6 +3919,310 @@
         ],
         "title": "InputRequest"
       },
+      "MemoryManagementEntryView": {
+        "properties": {
+          "entry_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$",
+            "title": "Entry Id"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 16384,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "episodic",
+              "boundary"
+            ],
+            "title": "Kind"
+          },
+          "source": {
+            "type": "string",
+            "const": "user_statement",
+            "title": "Source",
+            "default": "user_statement"
+          },
+          "source_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Source Version"
+          },
+          "recorded_at": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 20,
+            "title": "Recorded At"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          },
+          "forget_event_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forget Event Id"
+          },
+          "forgotten_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forgotten At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "entry_id",
+          "text",
+          "kind",
+          "source_version",
+          "recorded_at",
+          "active",
+          "forget_event_id",
+          "forgotten_at"
+        ],
+        "title": "MemoryManagementEntryView"
+      },
+      "MemoryManagementOperationRequest": {
+        "properties": {
+          "operation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Operation Id"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Revision"
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "record",
+              "correct",
+              "forget",
+              "restore"
+            ],
+            "title": "Operation"
+          },
+          "confirmed": {
+            "type": "boolean",
+            "const": true,
+            "title": "Confirmed"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4096,
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "episodic",
+                  "boundary"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kind"
+          },
+          "entry_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entry Id"
+          },
+          "forget_event_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Forget Event Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "expected_revision",
+          "operation",
+          "confirmed"
+        ],
+        "title": "MemoryManagementOperationRequest"
+      },
+      "MemoryManagementOperationView": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "committed",
+            "title": "Status",
+            "default": "committed"
+          },
+          "operation_id": {
+            "type": "string",
+            "title": "Operation Id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "entry_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entry Id"
+          },
+          "event_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1,
+                "pattern": "^[^\\s\\x00-\\x1f\\x7f]+$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Id"
+          },
+          "replayed": {
+            "type": "boolean",
+            "title": "Replayed",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "operation_id",
+          "revision"
+        ],
+        "title": "MemoryManagementOperationView"
+      },
+      "MemoryManagementPageView": {
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/MemoryManagementEntryView"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Entries"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "entries",
+          "next_cursor"
+        ],
+        "title": "MemoryManagementPageView"
+      },
+      "MemoryManagementStatusView": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "revision": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled",
+          "revision"
+        ],
+        "title": "MemoryManagementStatusView"
+      },
       "Phase": {
         "type": "string",
         "enum": [
@@ -1846,6 +4233,68 @@
           "error"
         ],
         "title": "Phase"
+      },
+      "PhotoDismissRequest": {
+        "properties": {
+          "target": {
+            "type": "string",
+            "enum": [
+              "display",
+              "fixed_photo",
+              "image_job",
+              "all_photos"
+            ],
+            "title": "Target",
+            "default": "display"
+          },
+          "expected_photo_effect_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Photo Effect Id"
+          },
+          "expected_image_request_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Image Request Id"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Revision"
+          },
+          "presentation_cutoff": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Presentation Cutoff"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "expected_revision",
+          "presentation_cutoff"
+        ],
+        "title": "PhotoDismissRequest"
       },
       "ReceiptRequest": {
         "properties": {
@@ -1885,6 +4334,26 @@
           "presentation_seq"
         ],
         "title": "ReceiptRequest"
+      },
+      "ResponsePreferenceRequest": {
+        "properties": {
+          "muted": {
+            "type": "boolean",
+            "title": "Muted"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "muted",
+          "expected_revision"
+        ],
+        "title": "ResponsePreferenceRequest"
       },
       "ReviewedAudioActionResponse": {
         "properties": {
@@ -2144,6 +4613,46 @@
       },
       "SessionView": {
         "properties": {
+          "presentation_floor": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Presentation Floor",
+            "default": 0
+          },
+          "retired_user_inputs": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Retired User Inputs",
+            "default": 0
+          },
+          "chapter_projection": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChapterProjectionView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fixed_photo": {
+            "$ref": "#/components/schemas/FixedPhotoView",
+            "default": {
+              "state": "idle",
+              "attempt_seq": 0,
+              "output_epoch": 0,
+              "activity_seq": 0
+            }
+          },
+          "story_image": {
+            "$ref": "#/components/schemas/StoryImageView",
+            "default": {
+              "capability": "unavailable",
+              "state": "unavailable",
+              "completion_state": "unavailable",
+              "completion_available": false
+            }
+          },
           "schema_version": {
             "type": "string",
             "const": "0.1.0-foundation",
@@ -2217,6 +4726,16 @@
             "type": "array",
             "title": "Audio Progress"
           },
+          "photo_visible": {
+            "type": "boolean",
+            "title": "Photo Visible",
+            "default": false
+          },
+          "photo_visibility_revision": {
+            "type": "integer",
+            "title": "Photo Visibility Revision",
+            "default": 0
+          },
           "last_error": {
             "anyOf": [
               {
@@ -2241,6 +4760,26 @@
               }
             ],
             "title": "Last Error Diagnostic Id"
+          },
+          "response_muted": {
+            "type": "boolean",
+            "title": "Response Muted",
+            "default": false
+          },
+          "response_mode": {
+            "type": "string",
+            "enum": [
+              "voice",
+              "text_only"
+            ],
+            "title": "Response Mode",
+            "default": "voice"
+          },
+          "response_preference_revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Response Preference Revision",
+            "default": 0
           }
         },
         "additionalProperties": false,
@@ -2292,6 +4831,15 @@
       },
       "StopRequest": {
         "properties": {
+          "scope": {
+            "type": "string",
+            "enum": [
+              "all",
+              "reply"
+            ],
+            "title": "Scope",
+            "default": "all"
+          },
           "activity_seq": {
             "type": "integer",
             "minimum": 1.0,
@@ -2310,6 +4858,231 @@
           "presentation_cutoff"
         ],
         "title": "StopRequest"
+      },
+      "StoryImageCompletionRequest": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "parent_request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Parent Request Id"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Output Epoch"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Activity Seq"
+          },
+          "presented_effect_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Presented Effect Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "parent_request_id",
+          "output_epoch",
+          "activity_seq"
+        ],
+        "title": "StoryImageCompletionRequest"
+      },
+      "StoryImageResourceRequest": {
+        "properties": {
+          "effect_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Effect Id"
+          },
+          "digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Digest"
+          },
+          "output_epoch": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Output Epoch"
+          },
+          "activity_seq": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Activity Seq"
+          },
+          "content_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Content Digest"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "effect_id",
+          "digest",
+          "output_epoch",
+          "activity_seq",
+          "content_digest"
+        ],
+        "title": "StoryImageResourceRequest"
+      },
+      "StoryImageView": {
+        "properties": {
+          "capability": {
+            "type": "string",
+            "enum": [
+              "unavailable",
+              "bounded_fiction"
+            ],
+            "title": "Capability",
+            "default": "unavailable"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "unavailable",
+              "idle",
+              "held",
+              "pending",
+              "generating",
+              "reviewing",
+              "qualified",
+              "presented",
+              "failed",
+              "cancelled"
+            ],
+            "title": "State",
+            "default": "unavailable"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "scene_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scene Id"
+          },
+          "resource_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Id"
+          },
+          "content_digest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Digest"
+          },
+          "failure_code": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unavailable",
+                  "ineligible",
+                  "budget",
+                  "generation",
+                  "review",
+                  "timeout",
+                  "cancelled"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Code"
+          },
+          "completion_state": {
+            "type": "string",
+            "enum": [
+              "unavailable",
+              "pending",
+              "context_consumed",
+              "requested",
+              "granted",
+              "presented",
+              "failed",
+              "cancelled"
+            ],
+            "title": "Completion State",
+            "default": "unavailable"
+          },
+          "completion_effect_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completion Effect Id"
+          },
+          "completion_speech_effect_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completion Speech Effect Id"
+          },
+          "completion_available": {
+            "type": "boolean",
+            "title": "Completion Available",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "StoryImageView"
       },
       "VoiceCapabilities": {
         "properties": {
@@ -2330,6 +5103,11 @@
           "microphone_enabled": {
             "type": "boolean",
             "title": "Microphone Enabled"
+          },
+          "continuous_listening_enabled": {
+            "type": "boolean",
+            "title": "Continuous Listening Enabled",
+            "default": false
           },
           "speech_sample_rate_hz": {
             "type": "integer",
@@ -2762,6 +5540,1101 @@
           "code"
         ],
         "title": "MicrophoneError",
+        "type": "object"
+      },
+      "ContinuousListeningStart": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "start",
+            "title": "Type",
+            "type": "string"
+          },
+          "session_token": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Session Token",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "mode": {
+            "default": "manual",
+            "enum": [
+              "manual",
+              "natural"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "client_endpointing": {
+            "default": false,
+            "title": "Client Endpointing",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "session_token",
+          "lease_id"
+        ],
+        "title": "ContinuousListeningStart",
+        "type": "object"
+      },
+      "ContinuousListeningAudio": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "audio",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "sequence": {
+            "minimum": 1,
+            "title": "Sequence",
+            "type": "integer"
+          },
+          "first_sample": {
+            "minimum": 0,
+            "title": "First Sample",
+            "type": "integer"
+          },
+          "pcm_base64": {
+            "maxLength": 16000,
+            "minLength": 4,
+            "title": "Pcm Base64",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "lease_id",
+          "sequence",
+          "first_sample",
+          "pcm_base64"
+        ],
+        "title": "ContinuousListeningAudio",
+        "type": "object"
+      },
+      "ContinuousListeningStop": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "stop",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "reason": {
+            "default": "user_stop",
+            "enum": [
+              "user_stop",
+              "permission_lost"
+            ],
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "lease_id"
+        ],
+        "title": "ContinuousListeningStop",
+        "type": "object"
+      },
+      "ContinuousListeningReady": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "ready",
+            "default": "ready",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "sample_rate_hz": {
+            "const": 16000,
+            "default": 16000,
+            "title": "Sample Rate Hz",
+            "type": "integer"
+          },
+          "max_seconds": {
+            "anyOf": [
+              {
+                "maximum": 290,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Seconds"
+          },
+          "max_samples": {
+            "anyOf": [
+              {
+                "maximum": 4640000,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Samples"
+          },
+          "max_utterances": {
+            "anyOf": [
+              {
+                "maximum": 32,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Utterances"
+          },
+          "max_streams_per_session": {
+            "anyOf": [
+              {
+                "maximum": 16,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Streams Per Session"
+          },
+          "max_total_streams": {
+            "anyOf": [
+              {
+                "maximum": 100,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Total Streams"
+          },
+          "session_lease_starts_used": {
+            "minimum": 1,
+            "title": "Session Lease Starts Used",
+            "type": "integer"
+          },
+          "total_lease_starts_used": {
+            "minimum": 1,
+            "title": "Total Lease Starts Used",
+            "type": "integer"
+          },
+          "stt_requests_used": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stt Requests Used"
+          },
+          "stt_requests_remaining": {
+            "anyOf": [
+              {
+                "maximum": 100,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stt Requests Remaining"
+          },
+          "endpoint_mode": {
+            "enum": [
+              "google_vad_offsets_manual_commit",
+              "google_vad_offsets_natural",
+              "unavailable_manual"
+            ],
+            "title": "Endpoint Mode",
+            "type": "string"
+          },
+          "manual_commit_required": {
+            "default": true,
+            "title": "Manual Commit Required",
+            "type": "boolean"
+          },
+          "client_endpoint_supported": {
+            "default": false,
+            "title": "Client Endpoint Supported",
+            "type": "boolean"
+          },
+          "client_silence_ms": {
+            "default": 700,
+            "maximum": 2000,
+            "minimum": 250,
+            "title": "Client Silence Ms",
+            "type": "integer"
+          },
+          "natural_grace_ms": {
+            "default": 0,
+            "maximum": 2000,
+            "minimum": 0,
+            "title": "Natural Grace Ms",
+            "type": "integer"
+          },
+          "drain_timeout_ms": {
+            "default": 2000,
+            "maximum": 5000,
+            "minimum": 100,
+            "title": "Drain Timeout Ms",
+            "type": "integer"
+          },
+          "max_recognition_streams": {
+            "anyOf": [
+              {
+                "maximum": 32,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": 1,
+            "title": "Max Recognition Streams"
+          }
+        },
+        "required": [
+          "lease_id",
+          "max_seconds",
+          "max_samples",
+          "max_utterances",
+          "max_streams_per_session",
+          "max_total_streams",
+          "session_lease_starts_used",
+          "total_lease_starts_used",
+          "endpoint_mode"
+        ],
+        "title": "ContinuousListeningReady",
+        "type": "object"
+      },
+      "ContinuousListeningTranscript": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "transcript",
+            "default": "transcript",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "text": {
+            "maxLength": 2000,
+            "title": "Text",
+            "type": "string"
+          },
+          "is_final": {
+            "title": "Is Final",
+            "type": "boolean"
+          },
+          "committed_commit_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Committed Commit Id"
+          },
+          "committed_utterance_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Committed Utterance Id"
+          }
+        },
+        "required": [
+          "lease_id",
+          "revision",
+          "text",
+          "is_final"
+        ],
+        "title": "ContinuousListeningTranscript",
+        "type": "object"
+      },
+      "ContinuousListeningCommit": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "commit",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "commit_id": {
+            "format": "uuid",
+            "title": "Commit Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "utterance_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Utterance Id"
+          }
+        },
+        "required": [
+          "type",
+          "lease_id",
+          "commit_id",
+          "revision"
+        ],
+        "title": "ContinuousListeningCommit",
+        "type": "object"
+      },
+      "ContinuousListeningCommitReady": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "commit_ready",
+            "default": "commit_ready",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "commit_id": {
+            "format": "uuid",
+            "title": "Commit Id",
+            "type": "string"
+          },
+          "segment_seq": {
+            "minimum": 1,
+            "title": "Segment Seq",
+            "type": "integer"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          },
+          "utterance_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Utterance Id"
+          }
+        },
+        "required": [
+          "lease_id",
+          "commit_id",
+          "segment_seq",
+          "revision",
+          "text"
+        ],
+        "title": "ContinuousListeningCommitReady",
+        "type": "object"
+      },
+      "ContinuousListeningHold": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "hold",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "utterance_id": {
+            "format": "uuid",
+            "title": "Utterance Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "type",
+          "lease_id",
+          "utterance_id",
+          "revision"
+        ],
+        "title": "ContinuousListeningHold",
+        "type": "object"
+      },
+      "ContinuousListeningHeld": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "utterance_held",
+            "default": "utterance_held",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "utterance_id": {
+            "format": "uuid",
+            "title": "Utterance Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "lease_id",
+          "utterance_id",
+          "revision",
+          "text"
+        ],
+        "title": "ContinuousListeningHeld",
+        "type": "object"
+      },
+      "ContinuousListeningHoldRejected": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "hold_rejected",
+            "default": "hold_rejected",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "utterance_id": {
+            "format": "uuid",
+            "title": "Utterance Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "reason": {
+            "enum": [
+              "stale_revision",
+              "lease_revoked",
+              "identity_conflict",
+              "request_limit"
+            ],
+            "title": "Reason",
+            "type": "string"
+          },
+          "current_revision": {
+            "minimum": 0,
+            "title": "Current Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "lease_id",
+          "utterance_id",
+          "revision",
+          "reason",
+          "current_revision"
+        ],
+        "title": "ContinuousListeningHoldRejected",
+        "type": "object"
+      },
+      "ContinuousListeningUtteranceReady": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "utterance_ready",
+            "default": "utterance_ready",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "utterance_id": {
+            "format": "uuid",
+            "title": "Utterance Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          },
+          "begin_offset_samples": {
+            "minimum": 0,
+            "title": "Begin Offset Samples",
+            "type": "integer"
+          },
+          "end_offset_samples": {
+            "minimum": 0,
+            "title": "End Offset Samples",
+            "type": "integer"
+          },
+          "final_offset_samples": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Offset Samples"
+          },
+          "endpoint_basis": {
+            "default": "offset_coverage",
+            "enum": [
+              "offset_coverage",
+              "vad_final_grace",
+              "stream_finalized",
+              "client_silence_finalized"
+            ],
+            "title": "Endpoint Basis",
+            "type": "string"
+          },
+          "client_endpoint_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Client Endpoint Id"
+          },
+          "source_end_sample": {
+            "minimum": 1,
+            "title": "Source End Sample",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "lease_id",
+          "utterance_id",
+          "revision",
+          "text",
+          "begin_offset_samples",
+          "end_offset_samples",
+          "final_offset_samples",
+          "source_end_sample"
+        ],
+        "title": "ContinuousListeningUtteranceReady",
+        "type": "object"
+      },
+      "ContinuousListeningUtteranceRevision": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "utterance_revision",
+            "default": "utterance_revision",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "utterance_id": {
+            "format": "uuid",
+            "title": "Utterance Id",
+            "type": "string"
+          },
+          "commit_id": {
+            "format": "uuid",
+            "title": "Commit Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          },
+          "reason": {
+            "const": "late_result_after_submission",
+            "default": "late_result_after_submission",
+            "title": "Reason",
+            "type": "string"
+          },
+          "requires_review": {
+            "const": true,
+            "default": true,
+            "title": "Requires Review",
+            "type": "boolean"
+          },
+          "submission_state": {
+            "enum": [
+              "pending",
+              "reserved",
+              "accepted",
+              "revoked",
+              "unknown"
+            ],
+            "title": "Submission State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "lease_id",
+          "utterance_id",
+          "commit_id",
+          "revision",
+          "text",
+          "submission_state"
+        ],
+        "title": "ContinuousListeningUtteranceRevision",
+        "type": "object"
+      },
+      "ContinuousListeningRecognitionStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "recognition_status",
+            "default": "recognition_status",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "stream_index": {
+            "minimum": 1,
+            "title": "Stream Index",
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "opening",
+              "listening",
+              "draining",
+              "awaiting_commit",
+              "completed",
+              "limit"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "stt_requests_used": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stt Requests Used"
+          },
+          "stt_requests_remaining": {
+            "anyOf": [
+              {
+                "maximum": 100,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stt Requests Remaining"
+          }
+        },
+        "required": [
+          "lease_id",
+          "stream_index",
+          "state"
+        ],
+        "title": "ContinuousListeningRecognitionStatus",
+        "type": "object"
+      },
+      "ContinuousListeningClientEndpoint": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "client_endpoint",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "endpoint_id": {
+            "format": "uuid",
+            "title": "Endpoint Id",
+            "type": "string"
+          },
+          "source_end_sample": {
+            "minimum": 1,
+            "title": "Source End Sample",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "type",
+          "lease_id",
+          "endpoint_id",
+          "source_end_sample"
+        ],
+        "title": "ContinuousListeningClientEndpoint",
+        "type": "object"
+      },
+      "ContinuousListeningCancelEndpoint": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "cancel_endpoint",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "endpoint_id": {
+            "format": "uuid",
+            "title": "Endpoint Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "lease_id",
+          "endpoint_id"
+        ],
+        "title": "ContinuousListeningCancelEndpoint",
+        "type": "object"
+      },
+      "ContinuousListeningEndpointStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "endpoint_status",
+            "default": "endpoint_status",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "endpoint_id": {
+            "format": "uuid",
+            "title": "Endpoint Id",
+            "type": "string"
+          },
+          "source_end_sample": {
+            "minimum": 1,
+            "title": "Source End Sample",
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "queued",
+              "draining",
+              "cancelled",
+              "completed"
+            ],
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "lease_id",
+          "endpoint_id",
+          "source_end_sample",
+          "state"
+        ],
+        "title": "ContinuousListeningEndpointStatus",
+        "type": "object"
+      },
+      "ContinuousListeningCommitRejected": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "commit_rejected",
+            "default": "commit_rejected",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "commit_id": {
+            "format": "uuid",
+            "title": "Commit Id",
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "stale_revision",
+              "no_final_text",
+              "request_limit",
+              "lease_revoked",
+              "identity_conflict",
+              "pending_capacity"
+            ],
+            "title": "Reason",
+            "type": "string"
+          },
+          "current_revision": {
+            "minimum": 0,
+            "title": "Current Revision",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "lease_id",
+          "commit_id",
+          "reason",
+          "current_revision"
+        ],
+        "title": "ContinuousListeningCommitRejected",
+        "type": "object"
+      },
+      "ContinuousListeningEndpointPending": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "endpoint_pending",
+            "default": "endpoint_pending",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "revision": {
+            "minimum": 1,
+            "title": "Revision",
+            "type": "integer"
+          },
+          "text": {
+            "maxLength": 2000,
+            "title": "Text",
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "missing_result_offset",
+              "unmatched_activity_end"
+            ],
+            "title": "Reason",
+            "type": "string"
+          },
+          "can_submit_manually": {
+            "default": true,
+            "title": "Can Submit Manually",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "lease_id",
+          "revision",
+          "text",
+          "reason"
+        ],
+        "title": "ContinuousListeningEndpointPending",
+        "type": "object"
+      },
+      "ContinuousListeningStopped": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "stopped",
+            "default": "stopped",
+            "title": "Type",
+            "type": "string"
+          },
+          "lease_id": {
+            "format": "uuid",
+            "title": "Lease Id",
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "user_stop",
+              "permission_lost",
+              "replaced",
+              "max_duration",
+              "max_samples",
+              "queue_limit",
+              "revision_limit",
+              "utterance_limit",
+              "provider_stream_ended",
+              "unavailable",
+              "invalid_input",
+              "invalid_response",
+              "session_closed",
+              "disconnect",
+              "output_limit",
+              "session_capacity",
+              "microphone_unavailable",
+              "input_limit",
+              "invalid_audio",
+              "timeout",
+              "unauthenticated",
+              "permission_denied",
+              "quota_exhausted",
+              "media_cancelled",
+              "incomplete_stream",
+              "blocked",
+              "response_limit",
+              "service_budget_exhausted"
+            ],
+            "title": "Reason",
+            "type": "string"
+          },
+          "diagnostic_id": {
+            "anyOf": [
+              {
+                "maxLength": 34,
+                "minLength": 34,
+                "pattern": "^h_[0-9a-f]{32}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Diagnostic Id"
+          }
+        },
+        "required": [
+          "lease_id",
+          "reason"
+        ],
+        "title": "ContinuousListeningStopped",
         "type": "object"
       }
     }

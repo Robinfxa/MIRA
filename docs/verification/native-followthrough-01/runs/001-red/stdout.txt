@@ -1,0 +1,243 @@
+FFFFFFF.......FFFFF                                                      [100%]
+=================================== FAILURES ===================================
+_ test_receipted_decline_then_present_reconsideration_hands_over_in_one_tool_turn _
+
+    @pytest.mark.asyncio
+    async def test_receipted_decline_then_present_reconsideration_hands_over_in_one_tool_turn():
+        s=Flow()
+        try:
+            original=await declined(s);affect=s.c.runtime.affect
+            await s.say('先聊聊别的','我们接着聊。')
+            before=len(s.requests)
+            r,state=await s.say(RECONSIDER,reconsider(original),'给你，这次终于轮到你保管了。')
+>           assert r is not None and r['status']=='shown'
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:38: AssertionError
+_ test_declined_reference_is_exposed_only_as_receipted_reconsideration_not_active_offer _
+
+    @pytest.mark.asyncio
+    async def test_declined_reference_is_exposed_only_as_receipted_reconsideration_not_active_offer():
+        s=Flow()
+        try:
+            original=await declined(s)
+            chapter=s.c.runtime.story.chapter
+            projected=chapter_projection(chapter)
+            assert projected['active_gift_offer_id'] is None
+>           assert projected['declined_gift_offer']==dict(offer_id='gift',effect_id=original.gift_offer_effect_id,
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                effect_digest=original.gift_offer_effect_digest,receipt_id=dict(original.milestones)['gift_offer'])
+E               KeyError: 'declined_gift_offer'
+
+tests/contracts/test_native_followthrough.py:61: KeyError
+_ test_reconsideration_waits_for_new_handover_receipt_and_never_reuses_preview _
+
+    @pytest.mark.asyncio
+    async def test_reconsideration_waits_for_new_handover_receipt_and_never_reuses_preview():
+        s=Flow()
+        try:
+            preview,_=await s.say('看看灯塔照片',PHOTO)
+            original=await declined(s)
+            r,state=await s.say(RECONSIDER,reconsider(original),acknowledge=False)
+>           assert r is not None and r['status']=='pending' and not r['shown']
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:77: AssertionError
+______ test_reconsideration_rejects_missing_exact_authority[wrong_offer] _______
+
+change = 'wrong_offer'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('change',['wrong_offer','wrong_effect','missing_effect','mismatched_input','plain_accept','reopen_only'])
+    async def test_reconsideration_rejects_missing_exact_authority(change):
+        s=Flow()
+        try:
+            original=await declined(s)
+            kwargs={
+                'wrong_offer':{'offer':'never-presented'},'wrong_effect':{'reference':'other-effect'},
+                'missing_effect':{'reference':''},'mismatched_input':{'text':'我收下'},
+                'plain_accept':{'act':'accept_gift'},'reopen_only':{'act':'reopen_gift'},
+            }[change]
+            r,state=await s.say(RECONSIDER,reconsider(original,**kwargs))
+>           assert r is not None and r['status']=='held'
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:99: AssertionError
+______ test_reconsideration_rejects_missing_exact_authority[wrong_effect] ______
+
+change = 'wrong_effect'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('change',['wrong_offer','wrong_effect','missing_effect','mismatched_input','plain_accept','reopen_only'])
+    async def test_reconsideration_rejects_missing_exact_authority(change):
+        s=Flow()
+        try:
+            original=await declined(s)
+            kwargs={
+                'wrong_offer':{'offer':'never-presented'},'wrong_effect':{'reference':'other-effect'},
+                'missing_effect':{'reference':''},'mismatched_input':{'text':'我收下'},
+                'plain_accept':{'act':'accept_gift'},'reopen_only':{'act':'reopen_gift'},
+            }[change]
+            r,state=await s.say(RECONSIDER,reconsider(original,**kwargs))
+>           assert r is not None and r['status']=='held'
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:99: AssertionError
+_____ test_reconsideration_rejects_missing_exact_authority[missing_effect] _____
+
+change = 'missing_effect'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('change',['wrong_offer','wrong_effect','missing_effect','mismatched_input','plain_accept','reopen_only'])
+    async def test_reconsideration_rejects_missing_exact_authority(change):
+        s=Flow()
+        try:
+            original=await declined(s)
+            kwargs={
+                'wrong_offer':{'offer':'never-presented'},'wrong_effect':{'reference':'other-effect'},
+                'missing_effect':{'reference':''},'mismatched_input':{'text':'我收下'},
+                'plain_accept':{'act':'accept_gift'},'reopen_only':{'act':'reopen_gift'},
+            }[change]
+            r,state=await s.say(RECONSIDER,reconsider(original,**kwargs))
+>           assert r is not None and r['status']=='held'
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:99: AssertionError
+____ test_reconsideration_rejects_missing_exact_authority[mismatched_input] ____
+
+change = 'mismatched_input'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('change',['wrong_offer','wrong_effect','missing_effect','mismatched_input','plain_accept','reopen_only'])
+    async def test_reconsideration_rejects_missing_exact_authority(change):
+        s=Flow()
+        try:
+            original=await declined(s)
+            kwargs={
+                'wrong_offer':{'offer':'never-presented'},'wrong_effect':{'reference':'other-effect'},
+                'missing_effect':{'reference':''},'mismatched_input':{'text':'我收下'},
+                'plain_accept':{'act':'accept_gift'},'reopen_only':{'act':'reopen_gift'},
+            }[change]
+            r,state=await s.say(RECONSIDER,reconsider(original,**kwargs))
+>           assert r is not None and r['status']=='held'
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:99: AssertionError
+________ test_fences_or_replaced_offer_revoke_declined_reference[stop] _________
+
+fence = 'stop'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('fence',['stop','exit','new_offer'])
+    async def test_fences_or_replaced_offer_revoke_declined_reference(fence):
+        s=Flow()
+        try:
+            original=await declined(s)
+            if fence=='stop':
+                s.epoch+=1;await s.a.stop(activity_seq=s.epoch,cutoff=s.seq)
+            elif fence=='exit':
+                await s.say('退出角色',story_call('x.exit',act='exit_role',text='退出角色'))
+                await s.say('我是夏禾',story_call('x.recognize',act='claim_role',text='我是夏禾'))
+            else:
+                await s.say('重新问我一次吧',story_call('x.gift_offer',act='reopen_gift',
+                    text='重新问我一次吧',offer='new-offer'))
+            assert chapter_projection(s.c.runtime.story.chapter).get('declined_gift_offer') is None
+            r,state=await s.say(RECONSIDER,reconsider(original))
+>           assert r is not None and r['status']=='held'
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:133: AssertionError
+________ test_fences_or_replaced_offer_revoke_declined_reference[exit] _________
+
+fence = 'exit'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('fence',['stop','exit','new_offer'])
+    async def test_fences_or_replaced_offer_revoke_declined_reference(fence):
+        s=Flow()
+        try:
+            original=await declined(s)
+            if fence=='stop':
+                s.epoch+=1;await s.a.stop(activity_seq=s.epoch,cutoff=s.seq)
+            elif fence=='exit':
+                await s.say('退出角色',story_call('x.exit',act='exit_role',text='退出角色'))
+                await s.say('我是夏禾',story_call('x.recognize',act='claim_role',text='我是夏禾'))
+            else:
+                await s.say('重新问我一次吧',story_call('x.gift_offer',act='reopen_gift',
+                    text='重新问我一次吧',offer='new-offer'))
+            assert chapter_projection(s.c.runtime.story.chapter).get('declined_gift_offer') is None
+            r,state=await s.say(RECONSIDER,reconsider(original))
+>           assert r is not None and r['status']=='held'
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:133: AssertionError
+______ test_fences_or_replaced_offer_revoke_declined_reference[new_offer] ______
+
+fence = 'new_offer'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('fence',['stop','exit','new_offer'])
+    async def test_fences_or_replaced_offer_revoke_declined_reference(fence):
+        s=Flow()
+        try:
+            original=await declined(s)
+            if fence=='stop':
+                s.epoch+=1;await s.a.stop(activity_seq=s.epoch,cutoff=s.seq)
+            elif fence=='exit':
+                await s.say('退出角色',story_call('x.exit',act='exit_role',text='退出角色'))
+                await s.say('我是夏禾',story_call('x.recognize',act='claim_role',text='我是夏禾'))
+            else:
+                await s.say('重新问我一次吧',story_call('x.gift_offer',act='reopen_gift',
+                    text='重新问我一次吧',offer='new-offer'))
+            assert chapter_projection(s.c.runtime.story.chapter).get('declined_gift_offer') is None
+            r,state=await s.say(RECONSIDER,reconsider(original))
+>           assert r is not None and r['status']=='held'
+E           assert (None is not None)
+
+tests/contracts/test_native_followthrough.py:133: AssertionError
+_____ test_return_camera_wire_and_result_truthfully_keep_camera_held[True] _____
+
+acknowledge = True
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('acknowledge',[True,False])
+    async def test_return_camera_wire_and_result_truthfully_keep_camera_held(acknowledge):
+        s=Flow()
+        try:
+            r,state=await s.say('把相机放一会儿',GenerationToolCall('camera','perform_action',
+                '{"action":"return_camera"}'),acknowledge=acknowledge)
+            definition=next(t for t in json.loads(s.requests[0].content)['tools'] if t['name']=='perform_action')
+>           assert 'remains held' in definition['description'] and 'table' in definition['description']
+E           AssertionError: assert ('remains held' in 'Raise the held camera to chest or return it to its resting endpoint. Never captures a photograph, opens a camera, or grants camera permission.')
+
+tests/contracts/test_native_followthrough.py:150: AssertionError
+____ test_return_camera_wire_and_result_truthfully_keep_camera_held[False] _____
+
+acknowledge = False
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('acknowledge',[True,False])
+    async def test_return_camera_wire_and_result_truthfully_keep_camera_held(acknowledge):
+        s=Flow()
+        try:
+            r,state=await s.say('把相机放一会儿',GenerationToolCall('camera','perform_action',
+                '{"action":"return_camera"}'),acknowledge=acknowledge)
+            definition=next(t for t in json.loads(s.requests[0].content)['tools'] if t['name']=='perform_action')
+>           assert 'remains held' in definition['description'] and 'table' in definition['description']
+E           AssertionError: assert ('remains held' in 'Raise the held camera to chest or return it to its resting endpoint. Never captures a photograph, opens a camera, or grants camera permission.')
+
+tests/contracts/test_native_followthrough.py:150: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_followthrough.py::test_receipted_decline_then_present_reconsideration_hands_over_in_one_tool_turn
+FAILED tests/contracts/test_native_followthrough.py::test_declined_reference_is_exposed_only_as_receipted_reconsideration_not_active_offer
+FAILED tests/contracts/test_native_followthrough.py::test_reconsideration_waits_for_new_handover_receipt_and_never_reuses_preview
+FAILED tests/contracts/test_native_followthrough.py::test_reconsideration_rejects_missing_exact_authority[wrong_offer]
+FAILED tests/contracts/test_native_followthrough.py::test_reconsideration_rejects_missing_exact_authority[wrong_effect]
+FAILED tests/contracts/test_native_followthrough.py::test_reconsideration_rejects_missing_exact_authority[missing_effect]
+FAILED tests/contracts/test_native_followthrough.py::test_reconsideration_rejects_missing_exact_authority[mismatched_input]
+FAILED tests/contracts/test_native_followthrough.py::test_fences_or_replaced_offer_revoke_declined_reference[stop]
+FAILED tests/contracts/test_native_followthrough.py::test_fences_or_replaced_offer_revoke_declined_reference[exit]
+FAILED tests/contracts/test_native_followthrough.py::test_fences_or_replaced_offer_revoke_declined_reference[new_offer]
+FAILED tests/contracts/test_native_followthrough.py::test_return_camera_wire_and_result_truthfully_keep_camera_held[True]
+FAILED tests/contracts/test_native_followthrough.py::test_return_camera_wire_and_result_truthfully_keep_camera_held[False]
+12 failed, 7 passed in 2.72s

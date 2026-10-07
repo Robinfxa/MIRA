@@ -1,0 +1,19 @@
+{
+  "feature": "UI-03",
+  "spec": "docs/changes/UI-03-submission-lifecycle/spec.md",
+  "requirements": [
+    {
+      "id": "UI03-001",
+      "tests": [
+        "tests/web/ui-submission-lifecycle.test.mjs"
+      ]
+    },
+    {
+      "id": "UI03-002",
+      "tests": [
+        "tests/web/continuous-capability-lifecycle.test.mjs"
+      ]
+    }
+  ],
+  "runner": "Existing web lane (Node), not pytest-only check_specs"
+}

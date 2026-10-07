@@ -1,0 +1,155 @@
+{
+  "feature": "WP03",
+  "spec": "specs/features/WP03-continuous-listening/spec.md",
+  "requirements": [
+    {
+      "id": "WP03-001",
+      "tests": [
+        "tests/integration/test_continuous_listening_http.py::test_malformed_and_unauthenticated_first_frames_do_not_dispatch_provider",
+        "tests/unit/test_continuous_listening.py::test_old_callback_cannot_publish_after_new_lease_replaces_it"
+      ]
+    },
+    {
+      "id": "WP03-002",
+      "tests": [
+        "tests/integration/test_continuous_listening_http.py::test_malformed_and_unauthenticated_first_frames_do_not_dispatch_provider",
+        "tests/integration/test_continuous_listening_http.py::test_duration_cap_is_visible_and_stops_without_rollover",
+        "tests/unit/test_continuous_listening.py::test_stop_discards_audio_and_future_chunks_are_rejected"
+      ]
+    },
+    {
+      "id": "WP03-003",
+      "tests": [
+        "tests/unit/test_continuous_listening.py::test_interim_revision_is_preview_only_and_cannot_be_committed",
+        "tests/unit/test_continuous_listening.py::test_late_final_tail_after_endpoint_remains_visible_for_next_manual_confirmation",
+        "tests/unit/test_continuous_listening.py::test_offset_mismatch_is_only_a_hint_and_missing_offset_stays_manual",
+        "tests/contracts/test_google_stt_continuous.py::test_grpc_transport_maps_sdk_vad_and_result_offsets_to_sample_offsets",
+        "tests/contracts/test_google_stt_continuous.py::test_installed_sdk_proto_plus_duration_timedelta_and_absent_field"
+      ]
+    },
+    {
+      "id": "WP03-004",
+      "tests": [
+        "tests/integration/test_continuous_listening_http.py::test_manual_commit_round_trips_through_standard_input_barrier_and_survives_reply_turn",
+        "tests/integration/test_continuous_listening_http.py::test_global_stop_revokes_unaccepted_manual_commit_and_stops_lease",
+        "tests/unit/test_continuous_listening.py::test_stale_display_revision_requires_new_click_without_losing_final_text",
+        "tests/unit/test_continuous_listening.py::test_manual_commit_id_exact_binding_requires_delivery_and_fences_conflicts",
+        "tests/unit/test_continuous_listening.py::test_global_stop_revokes_unaccepted_manual_commit_but_preserves_exact_accepted_retry",
+        "tests/unit/test_continuous_listening.py::test_exact_commit_delivery_retry_preserves_binding_without_consuming_again"
+      ]
+    },
+    {
+      "id": "WP03-005",
+      "tests": [
+        "tests/integration/test_continuous_listening_http.py::test_manual_commit_round_trips_through_standard_input_barrier_and_survives_reply_turn"
+      ]
+    },
+    {
+      "id": "WP03-006",
+      "tests": [
+        "tests/integration/test_continuous_listening_http.py::test_duration_cap_is_visible_and_stops_without_rollover",
+        "tests/unit/test_continuous_listening.py::test_audio_buffer_enforces_identity_sequence_pacing_and_queue_cap",
+        "tests/unit/test_continuous_listening.py::test_three_utterances_and_silence_remain_active_until_explicit_manual_commit"
+      ]
+    },
+    {
+      "id": "WP03-007",
+      "tests": [
+        "tests/contracts/test_development_voice_composition.py::test_ptt_and_continuous_share_one_irreversible_stt_budget",
+        "tests/contracts/test_development_voice_composition.py::test_continuous_first_pcm_reserves_shared_stt_budget_before_ptt",
+        "tests/contracts/test_development_voice_composition.py::test_concurrent_ptt_and_continuous_contend_for_same_atomic_limit_one",
+        "tests/contracts/test_development_voice_composition.py::test_invalid_continuous_pcm_does_not_reserve_shared_stt_attempt",
+        "tests/contracts/test_development_app_entry.py::test_voice_profile_drives_continuous_lease_start_cap_and_shared_stt_budget"
+      ]
+    },
+    {
+      "id": "WP03-008",
+      "tests": [
+        "tests/unit/test_continuous_listening.py::test_output_queue_overflow_always_emits_visible_terminal_stop",
+        "tests/unit/test_continuous_listening.py::test_manual_commit_cap_stops_visibly_after_preserving_ready_snapshot_and_retry"
+      ]
+    },
+    {
+      "id": "WP03-009",
+      "tests": [
+        "tests/integration/test_continuous_listening_http.py::test_google_sdk_final_tail_survives_provider_terminal_before_http_writer",
+        "tests/integration/test_continuous_listening_http.py::test_google_sdk_duplicate_final_retains_interim_at_terminal_without_promoting_it",
+        "tests/integration/test_continuous_listening_http.py::test_simultaneous_stop_frame_fences_unsent_google_sdk_terminal_preview",
+        "tests/unit/test_continuous_listening.py::test_duplicate_final_after_commit_preserves_newer_interim_and_revision",
+        "tests/unit/test_continuous_listening.py::test_explicit_cancellation_clears_already_settled_unsent_preview",
+        "tests/unit/test_continuous_listening.py::test_uncooperative_provider_tail_cannot_publish_after_cancellation",
+        "tests/unit/test_continuous_listening.py::test_first_late_final_after_commit_is_retained_once_and_its_duplicate_is_ignored"
+      ]
+    },
+    {
+      "id": "WP03-010",
+      "tests": [
+        "tests/unit/test_continuous_listening.py::test_natural_endpoint_waits_for_final_coverage_then_emits_one_token",
+        "tests/unit/test_continuous_listening.py::test_natural_endpoint_falls_back_when_boundary_evidence_is_incomplete",
+        "tests/unit/test_continuous_listening.py::test_natural_candidate_is_revoked_by_a_new_begin_before_commit",
+        "tests/unit/test_continuous_listening.py::test_natural_endpoint_waits_for_complete_provider_batch_and_no_interim",
+        "tests/unit/test_continuous_listening.py::test_natural_batch_with_two_final_parts_waits_for_batch_boundary",
+        "tests/unit/test_continuous_listening.py::test_natural_endpoint_does_not_split_one_result_across_two_activities",
+        "tests/unit/test_continuous_listening.py::test_natural_candidate_cannot_commit_after_cancellation",
+        "tests/unit/test_continuous_listening.py::test_natural_candidate_commit_token_and_request_identity_are_one_use",
+        "tests/contracts/test_google_stt_continuous.py::test_sdk_batch_keeps_all_interim_portions_and_marks_final_not_batch_complete",
+        "tests/contracts/test_google_stt_continuous.py::test_invalid_sdk_result_batch_fails_before_any_partial_candidate_is_yielded",
+        "tests/integration/test_continuous_listening_http.py::test_natural_google_sdk_two_turns_preserve_accepted_late_correction_identity"
+      ]
+    },
+    {
+      "id": "WP03-011",
+      "tests": [
+        "tests/unit/test_continuous_listening.py::test_late_natural_tail_stays_with_original_token_and_never_becomes_a_second_turn",
+        "tests/unit/test_continuous_listening.py::test_natural_terminal_preserves_current_interim_and_separate_old_utterance_correction",
+        "tests/integration/test_continuous_listening_http.py::test_natural_google_sdk_two_turns_preserve_accepted_late_correction_identity"
+      ]
+    },
+    {
+      "id": "WP03-012",
+      "tests": [
+        "tests/integration/test_continuous_listening_http.py::test_natural_vad_grace_submits_two_activity_suffixes_without_requiring_offset_equality",
+        "tests/integration/test_continuous_listening_http.py::test_natural_missing_offset_half_close_drains_two_turns_with_exact_pcm_and_shared_budget",
+        "tests/integration/test_continuous_listening_http.py::test_quiet_natural_stream_reports_reserved_attempt_before_any_transcript_and_never_refunds_stop",
+        "tests/integration/test_continuous_listening_http.py::test_natural_pending_commit_audio_queue_limit_is_visible_and_preserves_text"
+      ]
+    },
+    {
+      "id": "WP03-013",
+      "tests": [
+        "tests/unit/test_continuous_listening.py::test_new_activity_can_settle_its_own_suffix_while_older_activity_is_held",
+        "tests/unit/test_continuous_listening.py::test_exact_delivered_commit_retry_remains_deliverable_after_reservation_and_acceptance",
+        "tests/unit/test_continuous_listening.py::test_global_stop_after_finite_limit_still_fences_unsent_terminal_preview",
+        "tests/integration/test_continuous_listening_http.py::test_new_recognition_stream_orphan_final_remains_provisional_instead_of_revising_previous_turn",
+        "tests/integration/test_continuous_listening_http.py::test_natural_vad_grace_submits_two_activity_suffixes_without_requiring_offset_equality"
+      ]
+    },
+    {
+      "id": "WP03-014",
+      "tests": [
+        "tests/integration/test_continuous_listening_http.py::test_held_missing_offset_turn_is_retained_while_acknowledged_hold_allows_only_fresh_turn_input",
+        "tests/integration/test_continuous_listening_http.py::test_failed_hold_ack_cannot_open_next_rpc_or_create_input_and_keeps_observed_text",
+        "tests/integration/test_continuous_listening_http.py::test_later_missing_offset_activity_in_same_rpc_drains_only_after_proven_previous_coverage"
+      ]
+    },
+    {
+      "id": "WP03-015",
+      "tests": [
+        "tests/unit/test_continuous_listening.py::test_client_silence_queued_cancellation_keeps_pcm_and_same_stream_alive",
+        "tests/unit/test_continuous_listening.py::test_client_silence_frontier_drains_queued_pcm_and_preserves_later_packets",
+        "tests/unit/test_continuous_listening.py::test_client_silence_stop_cancels_queued_endpoint_without_reviving",
+        "tests/unit/test_continuous_listening.py::test_client_silence_late_missing_offset_final_stays_linked_after_accepted_input",
+        "tests/unit/test_continuous_listening.py::test_client_silence_queue_wait_has_the_same_bounded_timeout",
+        "tests/unit/test_continuous_listening.py::test_client_silence_limit_rejects_invalid_timing",
+        "tests/integration/test_continuous_listening_http.py::test_client_silence_without_provider_activity_or_offsets_drains_two_exact_turns",
+        "tests/integration/test_continuous_listening_http.py::test_client_silence_empty_or_unstable_drain_stops_visibly_without_a_turn",
+        "tests/integration/test_continuous_listening_http.py::test_client_silence_repeated_endpoint_and_hold_retain_old_text_then_accept_fresh_input",
+        "tests/integration/test_continuous_listening_http.py::test_client_silence_missing_activity_variants_drain_at_exact_sample_limit",
+        "tests/integration/test_continuous_listening_http.py::test_client_silence_rejects_unbound_frontier_without_input",
+        "tests/integration/test_continuous_listening_http.py::test_client_silence_nonclosing_provider_hits_bounded_drain_timeout",
+        "tests/integration/test_continuous_listening_http.py::test_client_silence_real_asgi_cancel_queued_endpoint_then_resend_same_stream",
+        "tests/integration/test_continuous_listening_http.py::test_client_silence_mode_defers_provider_endpoint_until_local_quiet_intent"
+      ]
+    }
+  ]
+}

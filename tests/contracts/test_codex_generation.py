@@ -188,7 +188,7 @@ async def test_noncompleted_terminal_never_yields(status):
 @pytest.mark.asyncio
 @pytest.mark.parametrize('body', [
     '{"effects":', '{"effects":[],"effects":[]}',
-    '{"effects":[{"kind":"media","value":"trip_photo"}]}',
+    '{"effects":[{"kind":"media","value":"unregistered_photo"}]}',
     '{"effects":[{"kind":"pose","value":"run_arbitrary"}]}',
     '{"effects":[{"kind":"scene","value":"https://example.org"}]}',
     '{"effects":[{"kind":"speech","value":"hello","id":"approved"}]}',

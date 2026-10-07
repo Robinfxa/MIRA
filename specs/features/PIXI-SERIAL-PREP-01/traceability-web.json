@@ -1,0 +1,94 @@
+{
+  "feature": "PIXI-SERIAL-PREP-01",
+  "spec": "specs/features/PIXI-SERIAL-PREP-01/spec.md",
+  "checker_note": "Web-specific sidecar. tools/check_specs.py collects Python node IDs only; execute these Node cases through the unique web lane.",
+  "owner": "tests/quality.toml web lane: tests/web/*.test.mjs",
+  "requirements": [
+    {
+      "id": "SERIALVIS-001",
+      "tests": [
+        {
+          "file": "tests/web/controller-visual-preparation.test.mjs",
+          "case": "prepared visuals serialize in grant order through apply and receipt despite repeated snapshots"
+        }
+      ]
+    },
+    {
+      "id": "SERIALVIS-002",
+      "tests": [
+        {
+          "file": "tests/web/controller-visual-preparation.test.mjs",
+          "case": "failed preparation is reported once and does not restart on repeated snapshots"
+        },
+        {
+          "file": "tests/web/controller-visual-preparation.test.mjs",
+          "case": "uncooperative callbacks across Stop and new inputs remain capped and resume the current grant"
+        },
+        {
+          "file": "tests/web/controller-visual-preparation.test.mjs",
+          "case": "media stays fail-closed without prepare while older visual ports retain direct apply"
+        },
+        {
+          "file": "tests/web/controller-visual-preparation.test.mjs",
+          "case": "Stop, newer input, close, and snapshot revocation fence late preparation callbacks"
+        }
+      ]
+    },
+    {
+      "id": "SERIALVIS-003",
+      "tests": [
+        {
+          "file": "tests/web/controller-visual-preparation.test.mjs",
+          "case": "a cue caption newly eligible on audio submission preempts later pending scene preparation"
+        },
+        {
+          "file": "tests/web/controller-cues.test.mjs",
+          "case": "captions wait for their own actual source submission, never grant or queued PCM"
+        },
+        {
+          "file": "tests/web/controller-cues.test.mjs",
+          "case": "independent visual and standalone text cues remain immediate while authored speech controls wait"
+        }
+      ]
+    }
+  ],
+  "executions": [
+    {
+      "run_id": "pixi-serial-prep-20261004t0435z-red-current-tests",
+      "command": "Strict TypeScript compile of frozen 2026-10-04 03:28Z source with the new Pixi work excluded, then node --test tests/web/controller-visual-preparation.test.mjs against frozen controller",
+      "result": "Expected RED: 9 tests, 0 passed, 9 failed. Existing controller immediately applied non-media grants and retried the no-prepare media feedback on polling.",
+      "scope": "Synthetic fake ports; no provider or browser. Source hashes were unchanged during the recorded test run."
+    },
+    {
+      "run_id": "pixi-serial-prep-20261004t0444z-red-cue-preemption",
+      "command": "node --test --test-name-pattern='cue caption newly eligible' tests/web/controller-visual-preparation.test.mjs against frozen 2026-10-04 03:28Z controller build",
+      "result": "Expected RED: the former controller did not enter the visual preparation path for the scene and could not defer/reorder it when the cue caption became eligible.",
+      "scope": "One synthetic cue handoff control; no provider or browser. Source hashes were unchanged during the recorded test run."
+    },
+    {
+      "run_id": "pixi-serial-prep-20261004t0452z-red-stop-cap",
+      "command": "node --test --test-name-pattern='uncooperative callbacks across Stop' tests/web/controller-visual-preparation.test.mjs against frozen 2026-10-04 03:28Z controller build",
+      "result": "Expected RED: the prior media-only cap emitted repeated capacity errors on unchanged snapshots instead of reporting once and resuming its queued current grant when a stale run released.",
+      "scope": "Synthetic uncooperative media callbacks across Stop and newer inputs; no provider or browser. Source hashes were unchanged during the recorded test run."
+    },
+    {
+      "run_id": "pixi-serial-prep-20261004t0445z-green-focused",
+      "command": "Strict TypeScript compile of frozen 2026-10-04 03:28Z source overlaid with current SessionController and EffectExecutor close port, then node --test for controller-visual-preparation, controller-media-readiness, controller-cues, controller-fact-barrier, speech-phase-guard, controller-renderer-close, and controller-uncertain-notice",
+      "result": "75 passed, 0 failed. The compile and seven focused controller suites ran against an isolated copied source tree because in-progress Pixi files in the shared working tree currently fail strict compile due to missing pixi.js and nullable renderer fields.",
+      "scope": "Synthetic fake ports. Existing photo decode/readiness, receipt barrier, actual software-source submission, cue caption gating and phase controls passed; no GPU, live browser or real audio claim. Source hashes were unchanged during the recorded test run."
+    },
+    {
+      "run_id": "pixi-serial-prep-20261004t0453z-green-focused",
+      "command": "Strict TypeScript compile of frozen 2026-10-04 03:28Z source overlaid with current SessionController and EffectExecutor close port, then node --test for controller-visual-preparation, controller-media-readiness, controller-cues, controller-fact-barrier, speech-phase-guard, controller-renderer-close, and controller-uncertain-notice",
+      "result": "75 passed, 0 failed, including the strengthened uncooperative callback cap across Stop, multiple new inputs and capacity resumption.",
+      "scope": "Synthetic fake ports. This isolated copy was used because in-progress Pixi files in the shared working tree did not compile yet; no GPU, live browser or real audio claim. Source hashes were unchanged during the recorded test run."
+    },
+    {
+      "run_id": "pixi-serial-prep-20261004t0454z-green-focused",
+      "command": "Strict TypeScript compile of frozen 2026-10-04 03:28Z source overlaid with current SessionController and EffectExecutor close port, then node --test for controller-visual-preparation, controller-media-readiness, controller-cues, controller-fact-barrier, speech-phase-guard, controller-renderer-close, and controller-uncertain-notice",
+      "result": "75 passed, 0 failed. The cap case now also asserts that each of four ignored-abort promises remains unsettled, and that releasing one stale promise opens exactly one slot for the current grant.",
+      "scope": "Synthetic fake ports. This isolated copy was used because in-progress Pixi files in the shared working tree did not compile yet; no GPU, live browser or real audio claim. Source hashes were unchanged during the recorded test run."
+    }
+  ],
+  "verification_boundary": "Synthetic controller tests do not establish browser/GPU paint, audible output, or human visibility."
+}

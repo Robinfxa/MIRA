@@ -29,7 +29,10 @@ def test_development_template_is_valid_and_keeps_runtime_mock():
     settings = load_settings(root=ROOT, env_file=ROOT / ".env.development.example", environ={})
     assert settings.providers.generation == "mock"
     assert settings.services.jev.model is None
-    assert settings.services.speech.tts_voice is None
+    assert settings.services.speech.tts_voice == "Gacrux"
+    assert settings.services.speech.tts_style == "御姐音，语调轻快，爽朗自然，咬字清晰，亲切有活力，不刻意压低嗓音或拖慢语速。"
+    assert not settings.providers.allow_external_calls
+    assert not settings.providers.allow_paid_api
 
 
 def test_separate_secrets_are_never_serialized_or_in_repr():

@@ -1,0 +1,41 @@
+{
+  "feature": "IMG-DIAG-02",
+  "spec": "specs/features/IMG-DIAG-02-image-operation-diagnostics/spec.md",
+  "requirements": [
+    {
+      "id": "IMGDIAG02-001",
+      "tests": [
+        "tests/contracts/test_image_operation_diagnostics.py::test_invalid_returned_image_contract_is_distinct",
+        "tests/contracts/test_image_operation_diagnostics.py::test_unknown_exception_text_is_not_exported"
+      ]
+    },
+    {
+      "id": "IMGDIAG02-002",
+      "tests": [
+        "tests/contracts/test_image_operation_diagnostics.py::test_png_rejections_preserve_safe_exact_reason",
+        "tests/contracts/test_image_operation_diagnostics.py::test_oversized_ihdr_is_closed_metadata_not_raw_dimensions"
+      ]
+    },
+    {
+      "id": "IMGDIAG02-003",
+      "tests": [
+        "tests/contracts/test_image_operation_diagnostics.py::test_png_rejections_preserve_safe_exact_reason",
+        "tests/contracts/test_image_operation_diagnostics.py::test_diagnostic_projection_failure_cannot_reject_valid_image"
+      ]
+    },
+    {
+      "id": "IMGDIAG02-004",
+      "tests": [
+        "tests/contracts/test_image_operation_diagnostics.py::test_actor_timeout_is_reported_at_decode_stage_without_review",
+        "tests/contracts/test_image_operation_diagnostics.py::test_cancelled_late_job_cannot_overwrite_new_job_diagnostics",
+        "tests/contracts/test_image_operation_diagnostics.py::test_new_input_without_image_does_not_inherit_late_image_metadata"
+      ]
+    },
+    {
+      "id": "IMGDIAG02-005",
+      "tests": [
+        "tests/contracts/test_image_operation_diagnostics.py::test_old_image_events_roundtrip_with_defaults_and_unknown_metadata_rejected"
+      ]
+    }
+  ]
+}

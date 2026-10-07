@@ -1,0 +1,41 @@
+{
+  "feature": "STORY-DIALOGUE-01",
+  "spec": "specs/features/STORY-DIALOGUE-01/spec.md",
+  "requirements": [
+    {
+      "id": "STORYDIALOGUE01-001",
+      "tests": [
+        "tests/contracts/test_native_story_dialogue_boundary.py::test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt",
+        "tests/contracts/test_native_story_dialogue_boundary.py::test_real_wire_control_and_dialogue_have_separate_channels_and_two_requests"
+      ]
+    },
+    {
+      "id": "STORYDIALOGUE01-002",
+      "tests": [
+        "tests/contracts/test_native_story_dialogue_boundary.py::test_fast_own_receipt_before_plan_seal_keeps_dialogue_and_is_idempotent"
+      ]
+    },
+    {
+      "id": "STORYDIALOGUE01-003",
+      "tests": [
+        "tests/contracts/test_native_story_dialogue_boundary.py::test_cancelled_dialogue_binding_cannot_revive_story_or_control_text",
+        "tests/contracts/test_native_story_dialogue_boundary.py::test_invalid_or_missing_dialogue_never_advances_optional_story",
+        "tests/contracts/test_native_story_dialogue_boundary.py::test_held_story_keeps_ordinary_dialogue_without_handover_or_control_cue"
+      ]
+    },
+    {
+      "id": "STORYDIALOGUE01-004",
+      "tests": [
+        "tests/contracts/test_native_story_dialogue_boundary.py::test_only_real_dialogue_reaches_tts_archive_and_next_turn_context"
+      ]
+    },
+    {
+      "id": "STORYDIALOGUE01-005",
+      "tests": [
+        "tests/contracts/test_native_tool_diagnostics.py::test_awaiting_dialogue_reason_survives_actual_actor_privacy_export_and_read",
+        "tests/contracts/test_native_tool_diagnostics.py::test_old_pending_diagnostic_without_dialogue_reason_stays_compatible",
+        "tests/contracts/test_native_tool_diagnostics.py::test_dialogue_diagnostic_still_rejects_arbitrary_original_text"
+      ]
+    }
+  ]
+}

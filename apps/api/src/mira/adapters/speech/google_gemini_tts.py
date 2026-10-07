@@ -49,7 +49,7 @@ class GeminiTtsOptions:
             raise ValueError("Invalid Google project identifier")
         if self.model != MODEL or self.location != "global":
             raise ValueError("Only exact Gemini 3.8 Flash TTS in global is supported")
-        if self.voice not in PREBUILT_VOICES:
+        if not isinstance(self.voice, str) or self.voice not in PREBUILT_VOICES:
             raise ValueError("Select an explicitly supported prebuilt voice")
         if self.style is not None and (not isinstance(self.style, str) or not self.style.strip() or len(self.style) > 1000):
             raise ValueError("Speech style must be bounded nonblank text")

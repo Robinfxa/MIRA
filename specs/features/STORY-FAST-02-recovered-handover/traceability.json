@@ -1,0 +1,39 @@
+{
+  "feature": "STORY-FAST-02",
+  "spec": "specs/features/STORY-FAST-02-recovered-handover/spec.md",
+  "requirements": [
+    {
+      "id": "STORYFAST02-001",
+      "tests": [
+        "tests/contracts/test_native_photo_handover_flow.py::test_recognition_receipt_precedes_offer_and_offer_needs_own_real_subtitle_receipt"
+      ]
+    },
+    {
+      "id": "STORYFAST02-002",
+      "tests": [
+        "tests/contracts/test_native_photo_handover_flow.py::test_initial_waiting_and_unfulfilled_concern_are_superseded_by_typed_current_receipts",
+        "tests/contracts/test_native_photo_handover_flow.py::test_recognition_alone_releases_shared_canon_without_narration_milestones"
+      ]
+    },
+    {
+      "id": "STORYFAST02-003",
+      "tests": [
+        "tests/contracts/test_native_photo_handover_flow.py::test_interested_visitor_recognition_offer_one_acceptance_and_actual_handover",
+        "tests/contracts/test_native_photo_handover_flow.py::test_early_visible_preview_reuse_is_optional_and_never_gift_evidence",
+        "tests/contracts/test_native_photo_handover_flow.py::test_all_shared_canon_recent_dialogue_and_large_recall_fit_real_tool_continuation_wire"
+      ]
+    },
+    {
+      "id": "STORYFAST02-004",
+      "tests": [
+        "tests/contracts/test_native_photo_handover_flow.py::test_existing_legacy_local_role_fallback_has_no_undefined_native_keyword",
+        "tests/contracts/test_native_photo_handover_flow.py::test_optional_recall_preview_cannot_clear_stop_suspension",
+        "tests/contracts/test_native_photo_handover_flow.py::test_optional_recall_preview_preserves_offered_completed_state",
+        "tests/contracts/test_native_photo_handover_flow.py::test_stop_each_compound_boundary_cannot_revive_offer",
+        "tests/contracts/test_native_photo_handover_flow.py::test_checkpoint_reentry_keeps_history_but_needs_current_role_and_offer",
+        "tests/contracts/test_native_photo_handover_flow.py::test_refusal_no_penalty_and_explicit_reopen_before_current_acceptance",
+        "tests/contracts/test_native_photo_handover_flow.py::test_negation_or_quotation_without_typed_model_claim_never_auto_recognizes"
+      ]
+    }
+  ]
+}

@@ -96,3 +96,18 @@ test('current cleanup failure still reports a sanitized release warning',async()
   assert.equal(f.errors.length,1);assert.equal(f.errors[0].code,'capture-failed');
   assert.equal(f.errors[0].message.includes('private'),false);await f.capture.close();
 });
+
+test('consumer failures identify only a closed capture stage and safe counters',async()=>{
+  for(const asynchronous of [false,true]){
+    const problem=new Error('private transcript token path');
+    const f=fixture({onChunk:()=>{if(asynchronous)return Promise.reject(problem);throw problem;}});
+    await f.capture.start();f.emit();await tick();
+    assert.deepEqual(f.errors[0].delivery,{stage:'chunk',emittedChunks:1,outputSamples:320});
+    assert.match(f.errors[0].message,/stage=chunk; chunks=1; samples=320/);
+    assert.doesNotMatch(JSON.stringify(f.errors),/private|transcript|token|path/);
+    assert.equal(f.counts().trackStops,1);
+  }
+  const ack=fixture();await ack.capture.start();ack.node.port.postMessage=value=>{if(value.type==='ack')throw new Error('private ack error');};
+  ack.emit();await tick();assert.deepEqual(ack.errors[0].delivery,{stage:'acknowledgement',emittedChunks:1,outputSamples:320});
+  assert.equal(ack.counts().trackStops,1);
+});

@@ -1,0 +1,23 @@
+{
+  "feature": "CONTINUOUS-DIAGNOSTICS",
+  "spec": "specs/features/WP03-continuous-diagnostics/spec.md",
+  "requirements": [
+    {
+      "id": "CONTINUOUSDIAGNOSTICS-001",
+      "tests": [
+        "tests/contracts/test_continuous_listening_diagnostics.py::test_safe_speech_failure_keeps_code_instead_of_generic_unavailable",
+        "tests/contracts/test_continuous_listening_diagnostics.py::test_continuous_timing_and_error_locator_are_correlated_without_content",
+        "tests/contracts/test_continuous_listening_diagnostics.py::test_broken_sink_and_arbitrary_exception_text_do_not_escape_or_change_failure",
+        "tests/contracts/test_continuous_listening_diagnostics.py::test_actual_websocket_terminal_keeps_safe_reason_and_logged_locator"
+      ]
+    },
+    {
+      "id": "CONTINUOUSDIAGNOSTICS-002",
+      "tests": [
+        "tests/contracts/test_continuous_listening_diagnostics.py::test_continuous_cancel_cause_is_distinct_and_end_milestone_is_once",
+        "tests/contracts/test_continuous_listening_diagnostics.py::test_stop_is_diagnosed_before_slow_provider_cleanup_finishes",
+        "tests/contracts/test_continuous_listening_diagnostics.py::test_declared_duration_limit_is_not_reported_as_a_user_click"
+      ]
+    }
+  ]
+}

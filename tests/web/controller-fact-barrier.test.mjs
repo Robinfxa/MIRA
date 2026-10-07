@@ -255,7 +255,8 @@ function pendingFactHarness({ timeoutMs = 100, rejectReceipt = false, microphone
       receipts.push(request);
       receiptStarted.resolve(request);
       if (rejectReceipt) throw new Error('synthetic receipt transport failure');
-      return request.presentation_seq === 1 ? receiptAck.promise : lateReceiptAck.promise;
+      await (request.presentation_seq===1 ? receiptAck.promise : lateReceiptAck.promise);
+      return state(request.activity_seq); // The public receipt port always returns SessionView.
     },
     async audioProgress() { return state(0); },
     async close() {},

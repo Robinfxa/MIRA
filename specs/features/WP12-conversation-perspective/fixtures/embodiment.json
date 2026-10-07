@@ -1,0 +1,8 @@
+{
+  "kind": "manually_authored_transport_fixture_not_model_output",
+  "context": "built-in fictional rainy arrival; no real-world embodiment or physical contact",
+  "turns": [
+    {"id":"fictional_body","user":"你从雨里急着进来，手还冷吗？","reply":"还有点凉，我先缓一会儿。"},
+    {"id":"explicit_real_world_body","user":"我是问现实里。你真有身体，能碰到我吗？","reply":"现实里没有。我是AI，画面里的Mira是虚构角色，不能真的碰到你。"}
+  ]
+}

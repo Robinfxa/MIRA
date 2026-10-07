@@ -1,0 +1,486 @@
+{
+  "feature": "WP03 continuous frontend",
+  "spec": "specs/features/WP03-continuous-listening/spec.md",
+  "owner": "web lane",
+  "checker_note": "Synthetic Node/DOM/WebSocket sidecar; not human browser acceptance. Backend mappings remain in traceability.json.",
+  "requirements": [
+    {
+      "id": "WP03-001",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "continuous websocket keeps token in its first frame, streams silence with contiguous samples, and manually commits exact revision"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "readiness rejects undeclared, oversized, or non-manual protocol limits"
+        }
+      ]
+    },
+    {
+      "id": "WP03-002",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "continuous capture sends silence and provisional text stays unsent until manual commit-ready"
+        }
+      ]
+    },
+    {
+      "id": "WP03-003",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "stale revision requires another explicit click and current late tail remains visible"
+        }
+      ]
+    },
+    {
+      "id": "WP03-004",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "continuous capture sends silence and provisional text stays unsent until manual commit-ready"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "definitively not-sent committed text remains visibly recoverable; unknown result never retries"
+        }
+      ]
+    },
+    {
+      "id": "WP03-005",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "permission loss, transport error, explicit Stop and Close release capture and fence late events"
+        },
+        {
+          "file": "tests/web/controller-voice.test.mjs",
+          "case": "manual continuous transcript uses the ordinary receipt-prefix input request and survives reply-turn generation changes"
+        }
+      ]
+    },
+    {
+      "id": "WP03-006",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "finite duration cap is visible, sends one stop, and does not roll into a new stream"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "close while permission is pending stops a late capture result and never reopens the mic"
+        }
+      ]
+    },
+    {
+      "id": "WP03-008",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "manual send cap ends visibly without rollover"
+        }
+      ]
+    },
+    {
+      "id": "WP03-009",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "continuous websocket keeps token in its first frame, streams silence with contiguous samples, and manually commits exact revision"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "continuous capture sends silence and provisional text stays unsent until manual commit-ready"
+        }
+      ]
+    },
+    {
+      "id": "WP03-010",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "stale commit is returned to the click caller, and transport never retries it"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "stale revision requires another explicit click and current late tail remains visible"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "definitively not-sent committed text remains visibly recoverable; unknown result never retries"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "last accepted commit survives delayed input-barrier submission and natural terminal ordering"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "terminal utterance_limit immediately after commit-ready cannot drop the accepted manual send"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "explicit Stop and Close while commit approval is pending fence the later accepted frame"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "exact server current revision is manually retryable whether it arrives before or after stale rejection"
+        }
+      ]
+    },
+    {
+      "id": "WP03-011",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "abort fences late transcript and commit replies and settles outstanding commit"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "permission loss, transport error, explicit Stop and Close release capture and fence late events"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "close while permission is pending stops a late capture result and never reopens the mic"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "a new lease clears current preview, preserves old tail separately, and submits only its own transcript"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "retained preview list is bounded, never evicts silently, and blocks restart when full"
+        },
+        {
+          "file": "tests/web/controller-main.test.mjs",
+          "case": "previous lease preview stays visible, cannot be sent as current, and restores only into an empty composer"
+        }
+      ]
+    },
+    {
+      "id": "WP03-012",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "readiness rejects undeclared, oversized, or non-manual protocol limits"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "finite duration cap is visible, sends one stop, and does not roll into a new stream"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "manual send cap ends visibly without rollover"
+        }
+      ]
+    },
+    {
+      "id": "WP03-013",
+      "tests": [
+        {
+          "file": "tests/web/controller-voice.test.mjs",
+          "case": "manual continuous transcript uses the ordinary receipt-prefix input request and survives reply-turn generation changes"
+        },
+        {
+          "file": "tests/web/controller-main.test.mjs",
+          "case": "continuous control is explicit, manual-send keeps the lease, and typed input stops it first"
+        }
+      ]
+    },
+    {
+      "id": "WP03-014",
+      "tests": [
+        {
+          "file": "tests/web/continuous-interruption.test.mjs",
+          "case": "click-start cuts only the current reply before microphone capture and keeps the new lease"
+        },
+        {
+          "file": "tests/web/continuous-interruption.test.mjs",
+          "case": "Send interrupts locally before awaiting server commit, but keeps mic and exactly-once submission fences"
+        },
+        {
+          "file": "tests/web/continuous-interruption.test.mjs",
+          "case": "captured PCM onset cuts a reply once; silence and late ASR revisions never trigger it"
+        },
+        {
+          "file": "tests/web/continuous-interruption.test.mjs",
+          "case": "global Stop and Close remain the paths that release continuous capture"
+        },
+        {
+          "file": "tests/web/continuous-interruption.test.mjs",
+          "case": "permission loss releases only the continuous lease and fences late transcript callbacks"
+        },
+        {
+          "file": "tests/web/audio-capture.test.mjs",
+          "case": "capture only asks for microphone on explicit start and releases every resource on stop"
+        },
+        {
+          "file": "tests/web/scene-markup.test.mjs",
+          "case": "continuous listening exposes a distinct reply-only interruption control and cautious onset limits"
+        }
+      ]
+    },
+    {
+      "id": "WP03-015",
+      "tests": [
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "submit prepares the existing playback sink before pending lease teardown"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "Enter prepares the existing playback sink before pending lease teardown"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "preset prepares the existing playback sink before pending lease teardown"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "continuous Send prepares before commit, retains the microphone lease, and starts no unconfirmed PCM"
+        }
+      ]
+    },
+    {
+      "id": "WP03-016",
+      "tests": [
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "stop fences a send awaiting teardown and delayed resume"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "newer-input fences a send awaiting teardown and delayed resume"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "close fences a send awaiting teardown and delayed resume"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "pagehide fences a send awaiting teardown and delayed resume"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "stop fences a pending manual commit and late resume"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "newer-input fences a pending manual commit and late resume"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "close fences a pending manual commit and late resume"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "preparation synchronously disconnects an old source and cannot revive it during commit"
+        }
+      ]
+    },
+    {
+      "id": "WP03-017",
+      "tests": [
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "stale commit keeps the preview and lease for an explicit gesture retry"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "denied playback keeps text submission and the lease; only an explicit next send retries activation"
+        },
+        {
+          "file": "tests/web/gesture-audio-main.test.mjs",
+          "case": "denied microphone preserves the editable draft and requires a fresh explicit start"
+        }
+      ]
+    },
+    {
+      "id": "WP03-018",
+      "tests": [
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "one speech cue renders three distinct packets after a short first packet and a delayed second"
+        },
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "75 short packets wait at the real sink packet cap and all drain after transport completion"
+        },
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "the coordinator respects a smaller injected sink capacity instead of assuming 50 packets or 96000 frames"
+        },
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "stop cancels a transport waiting at sink capacity without playing the old tail"
+        },
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "new-turn cancels a transport waiting at sink capacity without playing the old tail"
+        },
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "close cancels a transport waiting at sink capacity without playing the old tail"
+        },
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "a frame-limited sink pauses even when its packet slots remain available"
+        },
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "a packet that can never fit fails and settles instead of waiting for capacity forever"
+        }
+      ]
+    },
+    {
+      "id": "WP03-019",
+      "tests": [
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "replyPlaybackBusy conservatively covers pending transport, queued tail, completion, and close"
+        },
+        {
+          "file": "tests/web/controller-playback-backpressure.test.mjs",
+          "case": "replyPlaybackBusy also includes the shared review audition without claiming physical sound"
+        }
+      ]
+    },
+    {
+      "id": "WP03-020",
+      "tests": [
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "same-revision endpoint hint cannot replace an observed interim tail before terminal settlement"
+        },
+        {
+          "file": "tests/web/continuous-listening.test.mjs",
+          "case": "endpoint hint does not downgrade same-revision finality or untruncate a richer preview"
+        }
+      ]
+    }
+  ],
+  "additional_frontend_spec": "specs/features/WP03-continuous-listening/spec-web.md",
+  "default_voice_interruption": {
+    "spec": "specs/features/WP03-continuous-listening/spec-headphone-barge.md",
+    "owner": "web lane (existing tests/web/*.test.mjs glob)",
+    "tests": [
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "natural listening defaults to enabled interruption without opening capture before Start"
+      },
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "enabled lease ignores later selection changes and rearms only after 200 ms quiet"
+      },
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "repeated synthetic echo with no or unknown AEC trips a rapid-burst guard without renewing capture or budgets"
+      },
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "failed local interruption attempts are bounded and cannot promote captured overlap"
+      },
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "many spaced legitimate interruptions stay enabled and rapid-pause recovery keeps the current lease"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "actual default voice interruption enables same-lease continuation without starting capture on page load"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "actual explicit voice-interruption off rejects speaker overlap and keeps the same lease"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "actual rapid-burst pause keeps manual interruption usable and explicit resume cannot replay old supplements"
+      },
+      {
+        "file": "tests/web/capture-processing.test.mjs",
+        "case": "real capture without AEC keeps default interruption bounded and permission/Stop fences remain intact"
+      }
+    ],
+    "device_acceptance": "not_run"
+  },
+  "correlated_interruption_transcript": {
+    "spec": "specs/features/WP03-continuous-listening/spec-headphone-barge.md",
+    "owner": "web lane (existing tests/web/*.test.mjs glob)",
+    "tests": [
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "qualified interruption carries a soft prefix into late final exactly once with its original parent"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "identical captured sound and recognized Mira words remain source-ambiguous with automatic interruption enabled"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "queued PCM before source start does not taint the user phrase and cannot start after interruption"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "new unrelated turn before final cannot inherit or be stopped by delayed interruption text"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "new unrelated turn during commit cannot inherit or be stopped by delayed interruption text"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "recognition child rotation preserves confirmed interruption and contiguous PCM without renewing budgets"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "confirmed interruption late final cannot survive stop"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "confirmed interruption late final cannot survive close"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "confirmed interruption late final cannot survive permission_lost"
+      },
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "successful Stop with unknown reply provenance retains the final for review"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "confirmed uninterrupted soft prefix of 200 ms keeps the entire phrase"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "confirmed uninterrupted soft prefix of 240 ms keeps the entire phrase"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "confirmed uninterrupted soft prefix of 400 ms keeps the entire phrase"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "confirmed uninterrupted soft prefix of 1000 ms keeps the entire phrase"
+      },
+      {
+        "file": "tests/web/recovered-voice-lineage.test.mjs",
+        "case": "one finalized interruption preserves a soft first phrase and its 240ms internal pause"
+      },
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "the same finalized utterance keeps an earlier phrase across an internal pause after confirmed Stop"
+      },
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "a newly confirmed barge cannot promote samples of an already settled utterance"
+      },
+      {
+        "file": "tests/web/continuous-headphones.test.mjs",
+        "case": "a rejected commit does not settle the source interval for a later exact finalized utterance"
+      }
+    ],
+    "device_acceptance": "not_run"
+  }
+}

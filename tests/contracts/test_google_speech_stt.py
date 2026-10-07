@@ -6,6 +6,7 @@ from types import SimpleNamespace
 import pytest
 
 from mira.adapters.speech.errors import SpeechProviderError
+from mira.config.loader import ConfigurationError
 from mira.adapters.speech.google_stt_v2 import (
     GoogleSpeechV2Backend,
     GoogleSpeechV2GrpcTransport,
@@ -326,7 +327,12 @@ async def test_stt_suppressed_transport_cancellation_cannot_emit_late_transcript
 
 
 @pytest.mark.asyncio
-async def test_voice_factory_passes_explicit_tls_roots_into_sdk_transport(monkeypatch):
+@pytest.mark.parametrize(("stt_limit", "tts_limit"), [
+    (None, None), (2.5, 1200), (60, 24_000 * 180), (290, 24_000 * 180),
+    (60.0, None), (290.0, None),
+])
+async def test_voice_factory_passes_explicit_tls_roots_and_duration_limits(monkeypatch,
+                                                                          stt_limit, tts_limit):
     import google.cloud.speech_v2
     from google.cloud.speech_v2.services.speech import transports
     from mira.bootstrap.providers import create_google_voice
@@ -359,13 +365,89 @@ async def test_voice_factory_passes_explicit_tls_roots_into_sdk_transport(monkey
 
     monkeypatch.setattr(transports.grpc_asyncio, "SpeechGrpcAsyncIOTransport", FakeGrpcTransport)
     monkeypatch.setattr(google.cloud.speech_v2, "SpeechAsyncClient", FakeSpeechClient)
+    limits = {}
+    if stt_limit is not None:
+        limits["stt_max_stream_seconds"] = stt_limit
+        limits["tts_max_audio_samples"] = tts_limit
     voice = create_google_voice(
         SpeechSettings(project_id="mira-test", tts_voice="Kore"), credentials=object(),
         token_provider=token_provider, authorized=True, http_client=FakeHttpClient(),
-        stt_ssl_channel_credentials=tls_credential,
+        stt_ssl_channel_credentials=tls_credential, **limits,
     )
     assert observed["transport"]["host"] == "us-speech.googleapis.com"
     assert observed["transport"]["ssl_channel_credentials"] is tls_credential
     assert observed["client_transport"] is not None
+    assert voice.speech_recognition.options.max_stream_seconds == (stt_limit or 60.0)
+    assert voice.continuous_speech_recognition.options.max_stream_seconds == (stt_limit or 60.0)
+    assert voice.continuous_speech_recognition.endpoint_mode == "google_vad_offsets"
+    assert voice.speech_synthesis.options.max_audio_samples == (tts_limit or 24_000 * 180)
     await voice.close()
     assert observed["transport_closed"] is True
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("limits", [
+    {"stt_max_stream_seconds": 0},
+    {"stt_max_stream_seconds": 291},
+    {"stt_max_stream_seconds": float("nan")},
+    {"tts_max_audio_samples": 0},
+    {"tts_max_audio_samples": 24_000 * 180 + 1},
+    {"tts_max_audio_samples": True},
+])
+async def test_voice_factory_rejects_invalid_duration_bounds_before_sdk_clients(monkeypatch, limits):
+    import google.cloud.speech_v2
+    from google.cloud.speech_v2.services.speech import transports
+    import httpx
+    from mira.bootstrap.providers import create_google_voice
+    from mira.config.service_settings import SpeechSettings
+
+    constructions = []
+
+    def forbidden(*args, **kwargs):
+        constructions.append((args, kwargs))
+        raise AssertionError("Invalid option must fail before client construction")
+
+    monkeypatch.setattr(google.cloud.speech_v2, "SpeechAsyncClient", forbidden)
+    monkeypatch.setattr(transports.grpc_asyncio, "SpeechGrpcAsyncIOTransport", forbidden)
+    monkeypatch.setattr(httpx, "AsyncClient", forbidden)
+
+    async def token_provider():
+        raise AssertionError("Invalid option must not request a token")
+
+    with pytest.raises(ConfigurationError, match="duration/sample"):
+        create_google_voice(
+            SpeechSettings(project_id="mira-test", tts_voice="Kore"),
+            credentials=object(), token_provider=token_provider, authorized=True,
+            stt_ssl_channel_credentials=object(), **limits,
+        )
+    assert constructions == []
+
+
+@pytest.mark.asyncio
+async def test_voice_factory_rejects_invalid_typed_adapter_options_before_sdk_clients(monkeypatch):
+    import google.cloud.speech_v2
+    from google.cloud.speech_v2.services.speech import transports
+    import httpx
+    from mira.bootstrap.providers import create_google_voice
+    from mira.config.service_settings import SpeechSettings
+
+    constructions = []
+
+    def forbidden(*args, **kwargs):
+        constructions.append((args, kwargs))
+        raise AssertionError("Invalid typed options must fail before client construction")
+
+    monkeypatch.setattr(google.cloud.speech_v2, "SpeechAsyncClient", forbidden)
+    monkeypatch.setattr(transports.grpc_asyncio, "SpeechGrpcAsyncIOTransport", forbidden)
+    monkeypatch.setattr(httpx, "AsyncClient", forbidden)
+
+    async def token_provider():
+        raise AssertionError("Invalid options must not request a token")
+
+    with pytest.raises(ConfigurationError, match="adapter options"):
+        create_google_voice(
+            SpeechSettings(project_id="mira-test", tts_voice="unsupported-voice"),
+            credentials=object(), token_provider=token_provider, authorized=True,
+            stt_ssl_channel_credentials=object(),
+        )
+    assert constructions == []

@@ -1,0 +1,40 @@
+{
+  "feature": "START-PRESET-01",
+  "spec": "specs/features/START-PRESET-01/spec.md",
+  "requirements": [
+    {"id": "STARTPRESET01-001", "tests": [
+      "tests/contracts/test_start_mira_launcher.py::test_dry_run_is_exact_original_profile_without_mutation",
+      "tests/contracts/test_start_mira_launcher.py::test_dry_run_overrides_and_budget_passthrough_are_single_arguments",
+      "tests/contracts/test_start_mira_launcher.py::test_template_supported_voice_fields_and_chinese_style_round_trip",
+      "tests/contracts/test_start_mira_launcher.py::test_env_start_fields_are_used_without_rewriting_or_logging_secrets",
+      "tests/contracts/test_start_mira_launcher.py::test_explicit_cli_wins_over_env_including_enable_and_disable",
+      "tests/contracts/test_start_mira_launcher.py::test_env_disabling_story_removes_image_authorization_flags"
+    ]},
+    {"id": "STARTPRESET01-002", "tests": [
+      "tests/contracts/test_start_mira_launcher.py::test_no_tty_does_not_assume_live_or_write",
+      "tests/contracts/test_start_mira_launcher.py::test_first_run_cancel_does_not_write_or_start",
+      "tests/contracts/test_start_mira_launcher.py::test_saved_choice_is_bound_to_checkout_and_excluded_from_profile",
+      "tests/contracts/test_start_mira_launcher.py::test_live_choice_persists_once_without_touching_existing_environment",
+      "tests/contracts/test_start_mira_launcher.py::test_offline_preview_contains_no_live_flags_or_private_config",
+      "tests/contracts/test_start_mira_launcher.py::test_saved_offline_is_used_by_preview_and_check_without_env_reads",
+      "tests/contracts/test_start_mira_launcher.py::test_env_profile_does_not_bypass_noninteractive_first_choice"
+    ]},
+    {"id": "STARTPRESET01-003", "tests": [
+      "tests/contracts/test_start_mira_launcher.py::test_init_creates_private_template_without_overwriting_existing",
+      "tests/contracts/test_start_mira_launcher.py::test_missing_custom_env_is_never_created",
+      "tests/contracts/test_start_mira_launcher.py::test_private_metadata_rejects_unsafe_files_without_reading",
+      "tests/contracts/test_start_mira_launcher.py::test_metadata_good_credentials_are_not_read",
+      "tests/contracts/test_start_mira_launcher.py::test_adc_home_expansion_never_runs_shell",
+      "tests/contracts/test_start_mira_launcher.py::test_expansion_treats_command_substitution_as_literal"
+    ]},
+    {"id": "STARTPRESET01-004", "tests": [
+      "tests/contracts/test_start_mira_launcher.py::test_check_does_not_grant_consent_seed_env_or_start",
+      "tests/contracts/test_start_mira_launcher.py::test_missing_dependencies_have_setup_guidance_without_install",
+      "tests/contracts/test_start_mira_launcher.py::test_missing_login_and_adc_provide_precise_next_steps",
+      "tests/contracts/test_start_mira_launcher.py::test_passthrough_cannot_change_provider_or_authorizations",
+      "tests/contracts/test_start_mira_launcher.py::test_env_cannot_authorize_live_or_select_api_or_leak_bad_values",
+      "tests/contracts/test_start_mira_launcher.py::test_setup_only_runs_existing_project_bootstrap_and_exits",
+      "tests/contracts/test_start_mira_launcher.py::test_failed_config_check_never_replays_private_subprocess_output"
+    ]}
+  ]
+}

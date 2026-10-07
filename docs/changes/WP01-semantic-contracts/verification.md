@@ -81,3 +81,46 @@ bounded finite-decimal compatibility policy and independent regression cases des
 in [the correction addendum](confidence-contract-correction.md). A real 24-test
 RED/GREEN pair and 193-test targeted regression passed with no covered-source changes.
 This does not supply Chinese calibration or imply an authenticated post-fix parser run.
+
+## Reconstructed v2 referent applicability · 2026-10-03 22:20 UTC
+
+Reconstructed in the verified recovery tree from baseline
+`424b3bfbb4a9b21db9ffe15bf025cdbddfd10650`. The unpublished original bytes and its
+receipts were unavailable after reset. The earlier direct iteration had 3 failing
+assertions and 14 passing test instances against the in-progress reconstruction; those
+failures exposed missing v2 checks and were fixed. That output was not recorded as an
+immutable run and is not the lost historical RED. No prior hashes, RED, or receipts are
+being claimed for these files.
+
+- `recovery-v2-referent-006-final-fixture`: 17 passed; exit 0; source changes during
+  run = 0. This covers empty-set NO relevance with preserved uncertainty, missing-item
+  and display blockers, nonempty ambiguity, presented/unpresented identity, generated
+  text, prohibition/Stop controls, strict marker/probability validation, output review,
+  two distinct presented items in the ambiguity fixture, v1 helper compatibility, and
+  v2 factory selection.
+- `recovery-v2-referent-005-final-consumers`: 214 passed; exit 0. Covers existing JEV
+  input, decision-contract, development-policy/composition, and evaluator consumers.
+  One unrelated OBS-02 traceability manifest changed during the run; the pass count is
+  retained with that exact source-drift caveat for the director's integrated check.
+- `recovery-v2-referent-003-spec-links`: blocked, exit 1. The repository-wide collector
+  rejects a separate OBS-02 mapping to a `.mjs` test; its `.py`-only constraint is not
+  caused by the WP01SEM-007 mapping. The director owns the integrated spec check.
+
+Current reconstruction hashes (SHA-256):
+
+| File | Hash |
+| --- | --- |
+| `apps/api/src/mira/adapters/review/jev_input.py` | `ccf3d12e9068454516209610266e1bb200d9dd4c0198701f0bf4e3f9862973e5` |
+| `apps/api/src/mira/application/decision_contracts.py` | `b0c8128ba78daf47076dd248f5bb866951dc537a2aac9bbc1a9525bcb8f6eb97` |
+| `apps/api/src/mira/bootstrap/development_review.py` | `2bd99b897841f3c40aebafa9e1fb25a34df0d503e69422aafa05134b58b24133` |
+| `tests/contracts/test_jev_referent_relevance_v2.py` | `a326e3ea9d8f73e72c70471bc02e3bd3723f5323ab2ad3fd4fb482f78fa72f77` |
+| `specs/features/WP01-semantic-contracts/spec.md` | `da5080bb8f6e44c162f6f8b3e8cb9bd74bab46114588f04ff18be2724aff220d` |
+| `specs/features/WP01-semantic-contracts/traceability.json` | `770f0a4e9e14c8f1afe5ad96ddfc0efb44d84f93c88f9edfbbc3d9a10dfa17c1` |
+
+The original user-selected `.6` boundary is unchanged. Only a definite relevance NO
+(`<= .4`) plus display-request NO permits the exact unresolved referent marker; the
+input observation and response contract retain the raw probability and ambiguous/unknown
+identity evidence. Required or midband relevance, absent-item requests without a binding,
+and display of existing content without a presented target remain blocked. Synthetic
+output rejection checks evidence routing only and makes no claim about real-model
+semantic accuracy. No provider, UI, account, credential, or authorization action ran.

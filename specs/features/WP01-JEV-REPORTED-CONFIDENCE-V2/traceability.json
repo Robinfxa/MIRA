@@ -1,0 +1,28 @@
+{
+  "feature": "WP01-JEV-REPORTED-CONFIDENCE-V2",
+  "spec": "specs/features/WP01-JEV-REPORTED-CONFIDENCE-V2/spec.md",
+  "requirements": [
+    {
+      "id": "WP01JEVREPORTEDCONFIDENCEV2-001",
+      "tests": [
+        "tests/contracts/test_jev_reported_confidence_v2.py::test_legacy_and_reported_policy_admit_same_wire_differently",
+        "tests/contracts/test_jev_reported_confidence_v2.py::test_versioned_parser_keeps_probability_and_confidence_values_unchanged"
+      ]
+    },
+    {
+      "id": "WP01JEVREPORTEDCONFIDENCEV2-002",
+      "tests": [
+        "tests/contracts/test_jev_reported_confidence_v2.py::test_nonconfidence_structure_and_probability_gates_stay_hard",
+        "tests/contracts/test_jev_reported_confidence_v2.py::test_both_original_thresholds_are_still_required_and_reject_stays_reject",
+        "tests/contracts/test_jev_reported_confidence_v2.py::test_reported_confidence_policy_does_not_change_v3_explicit_ban"
+      ]
+    },
+    {
+      "id": "WP01JEVREPORTEDCONFIDENCEV2-003",
+      "tests": [
+        "tests/contracts/test_jev_reported_confidence_v2.py::test_input_parser_uses_reported_profile_without_changing_noul_direction",
+        "tests/contracts/test_jev_reported_confidence_v2.py::test_actual_development_asgi_allows_and_falls_back_with_safe_warning"
+      ]
+    }
+  ]
+}

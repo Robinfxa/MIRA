@@ -1,0 +1,18 @@
+# STORY-IMAGE-OPTIONS-01: Explicit optional image composition
+
+Owner: bootstrap/launcher integration. Unique test lane: providers contract glob; consumers: config, Actor, HTTP. Baseline: immutable mira-combined-next-20261006T0018Z capture manifest (1292 project files, no Git metadata). Resources: approved existing image-runtime Python environment, synthetic SecretStr and mocked ports only, no install, credential discovery, provider call or account setup. Runtime and adapters are separate owned slices; this spec does not claim their live acceptance.
+
+### STORYIMAGEOPTIONS01-001 Default disabled and independent
+Given ordinary text startup, a configured image model alone, or unused image arguments, when checking or creating a disabled image factory, then report disabled, allocate no image client and access no image credentials. Existing text route and Fast selection remain independent.
+
+### STORYIMAGEOPTIONS01-002 Explicit finite admission
+Given requested image capability, require story, an explicit supported route or the subscription default on subscription text, compatible image/review models and quality, separate image data and selected-route usage/spend consents, and finite independent attempt/bytes/time. Official API still requires positive planning reservations; subscription requires no dollar fields and reports them not applicable. Invalid/missing configuration is unavailable and reveals field names only. Configuration is never live verification and reservations are never provider-enforced dollar caps. Initial data scope is released fictional scene catalog only.
+
+### STORYIMAGEOPTIONS01-003 Shared process lifetime
+Given two sessions from one application factory, each has a distinct runtime and media state while one shared process gate reserves attempts, review allowances, output bytes and planning amounts before first dispatch. Failed or unknown attempts never refund reservations. No automatic retry. One whole generation/decode/review job can be in flight; competing jobs fail closed, and cancellation only releases that gate after the underlying coroutine settles.
+
+
+### STORYIMAGEOPTIONS01-004 Subscription first, zero fallback
+Given --story-images on subscription text, default generation to the internal Codex Images compatibility route using gpt-image-2/auto and review to an independent actual-pixel Codex Responses request using the selected text model (or explicit review option). Require separate image-data and subscription-usage consents. Check only declares configuration: do not instantiate or read credentials, allocate adapters, or call providers. Serve validates all consents before resources, then injects one opaque existing MIRA credential source into both image adapters and reuses it for subscription text. API text requires explicit image-route selection before subscription credentials are constructed. No selected subscription image path accesses API settings/key or falls back. Subscription entitlement and quota consumption remain unknown; per-process counts/bytes/deadlines are not dollar or plan caps. Keep internal zero cost units without presenting them as financial reservations. Public API retains its explicit positive reservations and 128–512 output token cap; subscription omits the unsupported remote token field and honestly discloses local output-byte/deadline bounds. No real account, provider acceptance, pixels, quota or device validation is claimed.
+
+Bounded in-process verification may inject separate image/review HTTP transports into the factory. Injection is explicit, preserves fixed adapter endpoints and all admission limits, creates no extra clients or calls, and has no CLI/environment discovery path. Default serve construction remains unchanged.

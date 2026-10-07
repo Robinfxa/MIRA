@@ -1,0 +1,17 @@
+# IMG-ADAPTER-01: optional story-image transport and canonical pixels
+
+Base: frozen mira-integration-20261005T2238Z; read-only port overlay from runtime owner's 2247 slice. Owner lane: providers through tests/contracts/test_*.py. Consumers: optional image runtime, explicit bootstrap composition, image resource store. Shared surfaces: no Actor/schema/bootstrap edits; dependency locks intentionally require integrated full checks. Resource bounds: one PNG 1024x1024, 8 MiB decoded ceiling, 12 MB JSON wire ceiling, 4 KiB specification, independent review 512 output tokens and 64 KiB response, finite overall request deadlines. These are resource limits, not a hard dollar billing cap.
+
+### IMGADAPTER01-001 One explicit generation request
+Given a bounded admitted fiction specification and an explicitly selected API key/model/quality, when generation executes, then only the official Images endpoint receives one non-streaming PNG request, with no private session, account lookup, references, retry, fallback, or trusted resource identity supplied by the provider. URLs, multiple outputs, refusals, malformed base64 and incompatible output are failures.
+
+### IMGADAPTER01-002 Bounded untrusted HTTP
+Given malformed, redirected, compressed, oversized, duplicated-key or failed HTTP, when either adapter receives it, then it fails with a fixed safe error without a second call or reflecting provider text. Cancellation closes the stream and propagates; the overall deadline includes body streaming and asynchronous cleanup. After each awaited boundary and before returning, check pending cancellation and the absolute deadline even if the transport swallowed CancelledError. A transport that never returns cannot be forcibly terminated by this adapter.
+
+### IMGADAPTER01-003 Actual independent pixel review
+Given canonical PNG bytes bound to the request/specification/policy, when independent review executes, then Responses receives those exact bytes with the bounded fiction specification and fixed required check meanings. It receives no whole conversation or memory. Only one complete structured message with exact bindings and every required check is accepted as an observation. Failure or uncertainty remains failure or uncertainty, not success.
+
+### IMGADAPTER01-004 Canonical static PNG
+Given untrusted bytes, when canonicalization executes, then a maintained decoder verifies and fully decodes exactly 1024x1024 static PNG, drops metadata, writes canonical RGB PNG, and preserves pixel values. Fully opaque alpha channels are normalized without compositing; non-opaque alpha fails. The review adapter revalidates canonical bytes before dispatch. A globally enabled Pillow truncation-tolerance setting fails closed without changing global flags. Animation, truncation, bad CRC, trailing bytes, wrong dimensions and byte/dimension bombs fail. IDAT must contain one complete zlib stream with its checksum, no compressed tail/second stream, and exactly the header-declared filtered raster byte count; decompression validates in bounded 64 KiB output pieces. Pillow remains the sole filter/pixel decoder. Fully opaque palette tRNS arrays must preserve all pixels. These software tests do not establish live image quality or browser presentation.
+
+Live generation/review remains disabled outside separately approved explicit composition. No provider calls, credentials discovery or installation is performed by this slice. Model prices are recommendations, not authorization. Repository art stays code-native.

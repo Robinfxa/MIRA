@@ -8,4 +8,6 @@ The manifest also references project-authored SVGs and generated offline speech 
 
 The Python locks pin versions but not wheel hashes, and `package-lock.json` does not record the TypeScript tarball integrity. Some installed packages use generic/legacy license metadata; the manifest keeps those descriptions as observed rather than normalizing them. See `evidence_gaps` and `source_tree_drift` in the manifest.
 
+The `manifest.json` and `ATTRIBUTION-INVENTORY.*` preserve the earlier 2026-10-03 installed scan, including its PyJWT 2.13.0 license path and payload hash. The current PyJWT 2.15.1 lock pin and PyPI wheel SHA-256 are recorded separately in [`pyjwt-2.15.1-provenance.md`](pyjwt-2.15.1-provenance.md); its exact versioned MIT notice is under `licenses/python/pyjwt/2.15.1/`.
+
 This is distribution evidence, not legal advice, legal clearance, or a choice of MIRA's project license. Determine the actual release contents and project license separately before distribution.

@@ -2,7 +2,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import Field
 
@@ -70,8 +70,13 @@ async def reviewed_audio_status(session_id: UUID, token: Token,
 
 @router.post("/recording", response_model=ReviewedAudioActionResponse)
 async def set_reviewed_audio_recording(session_id: UUID, body: ReviewedAudioRecordingRequest,
-                                      token: Token, container: ContainerDependency):
+                                      request: Request, token: Token, container: ContainerDependency):
     container.sessions.get(str(session_id), token)
+    if getattr(request.app.state, "device_sessions", None) is not None:
+        return _action(container, str(session_id), ok=False,
+            code="private_device_audio_recording_unavailable",
+            message="双设备模式不开放应用级原始音频录制；正常语音和脱敏诊断仍可用。",
+            status_code=409)
     result = container.reviewed_audio.set_recording(body.enabled, consent=body.consent)
     return _action(container, str(session_id), ok=result.ok, code=result.code,
                    message=result.message, status_code=200 if result.ok else 409)

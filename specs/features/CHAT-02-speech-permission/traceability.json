@@ -1,0 +1,8 @@
+{
+  "feature": "CHAT-02",
+  "spec": "specs/features/CHAT-02-speech-permission/spec.md",
+  "requirements": [
+    {"id": "CHAT02-001", "tests": ["tests/contracts/test_speech_permission_independence.py::test_unrelated_input_uncertainty_allows_only_speech_and_text"]},
+    {"id": "CHAT02-002", "tests": ["tests/contracts/test_speech_permission_independence.py::test_invalid_permission_evidence_never_allows_speech", "tests/contracts/test_speech_permission_independence.py::test_current_no_cannot_erase_retained_raw_directive", "tests/contracts/test_speech_permission_independence.py::test_exact_development_noul_speech_boundary_is_unchanged", "tests/contracts/test_speech_permission_independence.py::test_calibrated_speech_boundary_is_unchanged", "tests/contracts/test_speech_permission_independence.py::test_absent_voice_capability_does_not_become_a_speech_grant", "tests/contracts/test_speech_permission_independence.py::test_late_input_permission_cannot_revive_cancelled_speech"]}
+  ]
+}

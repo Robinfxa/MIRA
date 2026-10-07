@@ -1,0 +1,38 @@
+{
+  "feature": "WP12CP",
+  "spec": "specs/features/WP12-checkpoint-compat/spec.md",
+  "requirements": [
+    {
+      "id": "WP12CP-001",
+      "tests": [
+        "tests/contracts/test_story_canon_upgrade.py::test_preview_is_read_only_and_strict_default_load_stays_closed",
+        "tests/contracts/test_story_canon_upgrade.py::test_unknown_identity_or_corruption_never_changes_store",
+        "tests/contracts/test_story_canon_upgrade.py::test_history_identifiers_and_labels_remain_exact_bounded_strings",
+        "tests/contracts/test_story_canon_upgrade.py::test_pairing_reports_only_validated_known_upgrade_and_preserves_store",
+        "tests/contracts/test_story_canon_upgrade_schema5.py::test_explicit_canon_upgrade_does_not_expand_to_undocumented_or_unknown_schemas",
+        "tests/contracts/test_story_canon_upgrade_schema5.py::test_schema5_corruption_still_refuses_without_writing",
+        "tests/contracts/test_story_canon_upgrade_schema5.py::test_actual_pairing_routes_only_valid_schema5_to_explicit_upgrade"
+      ]
+    },
+    {
+      "id": "WP12CP-002",
+      "tests": [
+        "tests/contracts/test_story_canon_upgrade.py::test_commit_resume_resave_keeps_exact_episode_provenance_and_backup",
+        "tests/contracts/test_story_canon_upgrade.py::test_pending_grant_is_fenced_without_becoming_episode",
+        "tests/contracts/test_story_canon_upgrade.py::test_duplicate_old_receipt_and_new_receipt_keep_distinct_canon_provenance",
+        "tests/contracts/test_story_canon_upgrade.py::test_cli_requires_preview_token_and_never_echoes_private_values",
+        "tests/contracts/test_story_canon_upgrade.py::test_upgrade_transaction_failure_retains_original_row_and_no_partial_history",
+        "tests/contracts/test_story_canon_upgrade_schema5.py::test_documented_schema5_canon2_preview_commit_keeps_schema_until_new_save"
+      ]
+    },
+    {
+      "id": "WP12CP-003",
+      "tests": [
+        "tests/contracts/test_story_canon_upgrade.py::test_commit_retry_is_idempotent_and_stale_preview_rejects",
+        "tests/contracts/test_story_canon_upgrade.py::test_rollback_is_explicit_lossless_idempotent_and_refuses_later_progress",
+        "tests/contracts/test_story_canon_upgrade.py::test_rollback_refuses_new_progress_and_keeps_backup",
+        "tests/contracts/test_story_canon_upgrade_schema5.py::test_schema5_rollback_and_old_completed_upgrade_history_are_lossless"
+      ]
+    }
+  ]
+}

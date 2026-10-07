@@ -32,6 +32,17 @@ def main() -> int:
             print(json.dumps({"status": "blank_private_template_created", "secrets_created": False,
                               "live_ready": False, "next": "Fill local fields; then run check. Never paste credentials into chat."}))
             return 0
+        if args.env_file is not None and not path.is_file():
+            # An explicit choice must never fall through to the project .env.
+            # Keep this response stable and omit the selected path and parser details.
+            print(json.dumps({
+                "status": "blocked",
+                "reason": "explicit_env_file_missing",
+                "live_ready": False,
+                "next": ("Choose an existing private env file with --env-file, or omit --env-file "
+                         "to use the project-root .env. Run init to create the project-root template if needed."),
+            }))
+            return 2
         # No parent search; an explicitly missing file is an error, never ignored.
         env_file = path if (args.env_file is not None or path.exists()) else None
         settings = load_settings(root=ROOT, env_file=env_file)

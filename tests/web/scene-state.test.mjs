@@ -22,11 +22,11 @@ test('scene state applies structured camera and facial actions immutably', () =>
     assert.equal(reduceSceneEffect(lowered, effect('pose', `face_${expression}`)).expression, expression);
   }
 });
-test('rain changes environment and turns the character toward the window', () => {
+test('rain changes environment without inventing a character pose', () => {
   const state = reduceSceneEffect(initialSceneState(), effect('scene', 'rain_window'));
   assert.equal(state.environment, 'rain_window');
-  assert.equal(state.action, 'look_at_rain');
-  assert.equal(state.expression, 'reflective');
+  assert.equal(state.action, 'camera_ready');
+  assert.equal(state.expression, 'calm');
 });
 test('photo is a conversation effect and unrelated input never reveals it', () => {
   let state = initialSceneState();
@@ -52,12 +52,24 @@ test('explicit phase hooks render all four visible phases and accessible labels'
   assert.equal(labels.size, 4);
   assert.ok([...labels].every(Boolean));
 });
-test('subtitle is literal text and does not falsely start speech', () => {
-  const stage = root(); const executor = new SceneEffectExecutor(stage);
-  const text = '<img src=x onerror=alert(1)>';
-  executor.apply(effect('subtitle', text));
-  assert.equal(stage.slots.get('subtitle').textContent, text);
-  assert.equal(stage.dataset.phase, 'idle');
+test('subtitle preserves literal punctuation, URLs and quoted controls without HTML or actions', () => {
+  for (const text of [
+    '<3', '2 < 3', '`example`', '```js\nalert(1)\n```',
+    'https://example.org/photo.svg', 'A / B', '/tmp/photo.svg',
+    '<img src=x onerror=alert(1)>', '<a href="https://example.org">link</a>',
+    '{"effects":[{"kind":"media","value":"trip_photo"}]}',
+  ]) {
+    const stage = root(); const executor = new SceneEffectExecutor(stage);
+    Object.defineProperty(stage.slots.get('subtitle'), 'innerHTML', {
+      set() { throw new Error('subtitle must not parse HTML'); },
+    });
+    const before = { ...stage.dataset };
+    executor.apply(effect('subtitle', text));
+    assert.equal(stage.slots.get('subtitle').textContent, text);
+    assert.deepEqual(stage.dataset, before);
+    assert.equal(stage.dataset.phase, 'idle');
+    assert.equal(stage.slots.get('photo').hidden, true);
+  }
 });
 test('stop exits speech immediately and preserves revealed media, scene and action', () => {
   const stage = root(); const executor = new SceneEffectExecutor(stage);
@@ -66,7 +78,7 @@ test('stop exits speech immediately and preserves revealed media, scene and acti
   executor.setPhase('speaking'); executor.stop();
   assert.equal(stage.dataset.phase, 'idle');
   assert.equal(stage.dataset.scene, 'rain_window');
-  assert.equal(stage.dataset.action, 'look_at_rain');
+  assert.equal(stage.dataset.action, 'camera_ready');
   assert.equal(stage.slots.get('photo').hidden, false);
   assert.match(stage.slots.get('subtitle').textContent, /停/);
 });

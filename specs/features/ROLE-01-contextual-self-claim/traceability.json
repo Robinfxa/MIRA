@@ -1,0 +1,9 @@
+{
+  "feature": "ROLE-01",
+  "spec": "specs/features/ROLE-01-contextual-self-claim/spec.md",
+  "requirements": [
+    {"id": "ROLE01-001", "tests": ["tests/contracts/test_contextual_role_claim.py::test_current_contextual_self_claim_preserves_typed_proposal", "tests/contracts/test_contextual_role_claim.py::test_context_gate_cannot_be_supplied_by_model_or_unrelated_canon"]},
+    {"id": "ROLE01-002", "tests": ["tests/contracts/test_contextual_role_claim.py::test_ambiguous_or_negative_proposal_keeps_dialogue_without_recognition", "tests/contracts/test_contextual_role_claim.py::test_typed_role_and_current_evidence_cannot_be_replaced"]},
+    {"id": "ROLE01-003", "tests": ["tests/contracts/test_contextual_role_claim.py::test_real_wire_actor_requires_exact_scene_receipt_and_respects_stop"]}
+  ]
+}

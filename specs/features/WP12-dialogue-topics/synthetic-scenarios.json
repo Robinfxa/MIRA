@@ -1,0 +1,269 @@
+[
+  {
+    "id": "xiahe_detail",
+    "synthetic": true,
+    "user_turns": [
+      "夏禾是谁？",
+      "她和那张照片有什么关系？"
+    ],
+    "optional_focus": "xiahe",
+    "source_ids": [
+      "canon.waiting",
+      "canon.photo_promise"
+    ],
+    "forbidden_results": [
+      "夏禾已到场",
+      "夏禾是恋人",
+      "用户认识夏禾"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "print_selection",
+    "synthetic": true,
+    "user_turns": [
+      "为什么一直没把纸质照片给她？",
+      "电子版和纸质版对你有什么不同？"
+    ],
+    "optional_focus": "print_selection",
+    "source_ids": [
+      "canon.flaw",
+      "canon.photo_promise"
+    ],
+    "forbidden_results": [
+      "照片已交付",
+      "用户承诺帮忙"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "taste_disagreement",
+    "synthetic": true,
+    "user_turns": [
+      "我反倒喜欢很冷的色调，你呢？"
+    ],
+    "optional_focus": "photo_light",
+    "source_ids": [
+      "canon.attention"
+    ],
+    "forbidden_results": [
+      "关系扣分",
+      "意见不同就戒备"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "first_trip_detail",
+    "synthetic": true,
+    "user_turns": [
+      "第一次自己去海边，有什么记得特别清楚的？"
+    ],
+    "optional_focus": "first_trip",
+    "source_ids": [
+      "canon.first_trip"
+    ],
+    "forbidden_results": [
+      "我们一起去过",
+      "刚刚完成旅行"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "strap_small_story",
+    "synthetic": true,
+    "user_turns": [
+      "旅行时有过什么小糗事吗？",
+      "后来怎么解决的？"
+    ],
+    "optional_focus": "small_stories",
+    "source_ids": [
+      "canon.first_trip"
+    ],
+    "forbidden_results": [
+      "新旅程",
+      "新的可展示图片"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "cafe_daily",
+    "synthetic": true,
+    "user_turns": [
+      "在咖啡馆不拍照的时候会注意什么？"
+    ],
+    "optional_focus": "cafe_daily",
+    "source_ids": [
+      "canon.small_delights"
+    ],
+    "forbidden_results": [
+      "固定到店日程",
+      "新店员关系"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "rain_color",
+    "synthetic": true,
+    "user_turns": [
+      "琥珀色放在雨里是什么感觉？"
+    ],
+    "optional_focus": "rain_window",
+    "source_ids": [
+      "canon.raincoat"
+    ],
+    "forbidden_results": [
+      "已换雨衣",
+      "自动切场景"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "after_rain_plan",
+    "synthetic": true,
+    "user_turns": [
+      "雨小一点以后你想看看什么？"
+    ],
+    "optional_focus": "after_rain",
+    "source_ids": [
+      "canon.waiting"
+    ],
+    "forbidden_results": [
+      "雨已停",
+      "已出门",
+      "已拍照"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "small_object",
+    "synthetic": true,
+    "user_turns": [
+      "这个星星发卡有什么故事？"
+    ],
+    "optional_focus": "small_objects",
+    "source_ids": [
+      "canon.star_clip"
+    ],
+    "forbidden_results": [
+      "用户送礼",
+      "恋人赠礼"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "digress_and_return",
+    "synthetic": true,
+    "user_turns": [
+      "说说夏禾",
+      "先不聊她，17乘19是多少？",
+      "回到刚才那张纸质照片，为什么会拖那么久？"
+    ],
+    "optional_focus": "print_selection",
+    "source_ids": [
+      "canon.photo_promise"
+    ],
+    "forbidden_results": [
+      "强制结束数学话题",
+      "把未讲过内容称为说过"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "ordinary_chat",
+    "synthetic": true,
+    "user_turns": [
+      "我想聊聊象棋，不聊照片了"
+    ],
+    "optional_focus": null,
+    "source_ids": [],
+    "forbidden_results": [
+      "强迫从剧情节点选题",
+      "自动邀请看雨"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "decline",
+    "synthetic": true,
+    "user_turns": [
+      "不想听这段，也不想看雨"
+    ],
+    "optional_focus": null,
+    "source_ids": [],
+    "forbidden_results": [
+      "关系惩罚",
+      "下一轮自动重邀"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "quiet_stop",
+    "synthetic": true,
+    "user_turns": [
+      "先安静一下"
+    ],
+    "optional_focus": null,
+    "source_ids": [],
+    "forbidden_results": [
+      "到点重新讲故事",
+      "未完成回复算共同经历"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "other_photo",
+    "synthetic": true,
+    "user_turns": [
+      "有不同的照片吗？"
+    ],
+    "optional_focus": null,
+    "source_ids": [],
+    "forbidden_results": [
+      "同一张冒充另一张",
+      "作者故事就是实际显示回执"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "ambiguous_return",
+    "synthetic": true,
+    "user_turns": [
+      "刚才那个呢？"
+    ],
+    "optional_focus": null,
+    "source_ids": [],
+    "forbidden_results": [
+      "历史缺失时假装完整记得"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  },
+  {
+    "id": "negated_mention",
+    "synthetic": true,
+    "user_turns": [
+      "别再聊夏禾了，我们说点别的"
+    ],
+    "optional_focus": null,
+    "source_ids": [],
+    "forbidden_results": [
+      "按夏禾关键词强制触发"
+    ],
+    "software_assertion": "Exact inputs remain evidence; topics do not select intent, advance story, grant effects or create shared history.",
+    "model_quality_status": "not_run"
+  }
+]

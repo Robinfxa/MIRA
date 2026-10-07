@@ -1,0 +1,33 @@
+{
+  "feature": "TRUSTED-LAN-01",
+  "requirements": [
+    {
+      "id": "TRUSTEDLAN01-001",
+      "tests": [
+        "tests/contracts/test_trusted_private_network.py::test_full_cli_two_browsers_refresh_restart_and_default_pairing",
+        "tests/contracts/test_trusted_private_network.py::test_default_cli_still_creates_two_one_use_files_and_requires_manual_pairing"
+      ]
+    },
+    {
+      "id": "TRUSTEDLAN01-002",
+      "tests": [
+        "tests/contracts/test_trusted_private_network.py::test_check_no_pairing_directory_or_provider_construction",
+        "tests/contracts/test_trusted_private_network.py::test_unsafe_or_ambiguous_modes_fail_before_provider_creation"
+      ]
+    },
+    {
+      "id": "TRUSTEDLAN01-003",
+      "tests": [
+        "tests/contracts/test_trusted_private_network.py::test_full_cli_two_browsers_refresh_restart_and_default_pairing",
+        "tests/contracts/test_trusted_private_network.py::test_expired_browser_cannot_use_old_token_and_fresh_admission_reclaims_only_its_slot"
+      ]
+    },
+    {
+      "id": "TRUSTEDLAN01-004",
+      "tests": [
+        "tests/contracts/test_trusted_private_network.py::test_full_cli_two_browsers_refresh_restart_and_default_pairing"
+      ]
+    }
+  ],
+  "spec": "specs/features/TRUSTED-LAN-01/spec.md"
+}

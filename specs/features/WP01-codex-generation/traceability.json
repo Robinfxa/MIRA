@@ -58,7 +58,8 @@
         "tests/contracts/test_codex_generation_process.py::test_sigterm_ignoring_child_is_killed_and_reaped",
         "tests/contracts/test_codex_generation_process.py::test_cancellation_during_spawn_reaps_created_child",
         "tests/contracts/test_codex_generation_hardening.py::test_synthetic_actual_process_runs_full_adapter_path",
-        "tests/contracts/test_codex_generation_process.py::test_cancellation_during_close_still_kills_and_reaps_child"
+        "tests/contracts/test_codex_generation_process.py::test_cancellation_during_close_still_kills_and_reaps_child",
+        "tests/contracts/test_codex_generation_process.py::test_queue_failure_close_awaits_paused_pipe_shutdown"
       ]
     },
     {

@@ -1,0 +1,49 @@
+...............F........................................................ [ 36%]
+........................................................................ [ 73%]
+...................................................                      [100%]
+=================================== FAILURES ===================================
+______ test_only_real_dialogue_reaches_tts_archive_and_next_turn_context _______
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-122/test_only_real_dialogue_reache0')
+
+    @pytest.mark.asyncio
+    async def test_only_real_dialogue_reaches_tts_archive_and_next_turn_context(tmp_path):
+        from mira.application.actor_conversation import SessionConversationBinding
+        from mira.application.ports.media import AudioPacket
+        from tests.contracts.test_actor_conversation_archive import archive
+        c,epoch=recognized();spoken='我记得我们一起挑试印。';control='INTERNAL_BRIEF_NEVER_SPOKEN'
+        turn=ToolTurn(story_call('x.story',cue=control));turn.candidate=dialogue(spoken,voice=True)
+        next_turn=ToolTurn(dialogue('继续聊吧。'));tools=Tools(turn,next_turn)
+        a=native(turn,c=c,tools=tools);a._state=replace(a._state,output_epoch=epoch)
+        store=await archive(tmp_path/'synthetic.sqlite')
+        binding=SessionConversationBinding(store,authorize_transcript_persistence=True,close_archive_on_actor_close=True)
+        a._conversation_binding=binding
+        class Speech:
+            def __init__(self):self.texts=[]
+            async def synthesize(self,text,stream_id):
+                self.texts.append(text)
+                yield AudioPacket(stream_id,0,24000,b'\x00\x00'*24)
+        speech=Speech();a._speech_synthesis=speech
+        try:
+            await a.submit(request_id='voice',activity_seq=2,cutoff=0,text='接着说')
+            state=await finish(a)
+            cue=next(e for e in state.active_grants if e.kind is EffectKind.SUBTITLE)
+            audio=next(e for e in state.active_grants if e.kind is EffectKind.SPEECH)
+            await a.receipt(receipt(cue,1))
+            operation=await a.open_speech(effect_id=audio.id,digest=audio.digest,
+                output_epoch=audio.output_epoch,activity_seq=audio.activity_seq)
+            assert [p async for p in operation.values()]
+            assert speech.texts==[spoken]
+            await binding.flush()
+            saved=await store.load_session('s')
+>           assert control not in repr(saved) and spoken in repr(saved)
+E           AssertionError: assert ('INTERNAL_BR...NEVER_SPOKEN' not in 'Conversatio...e_records=0)'
+E             
+E             'INTERNAL_BRIEF_NEVER_SPOKEN' is contained here:
+E               _records=0) and '我记得我们一起挑试印。' in 'ConversationSnapshot(snapshot_revision=4, inactive_records=0)')
+E            +  where 'ConversationSnapshot(snapshot_revision=4, inactive_records=0)' = repr(ConversationSnapshot(snapshot_revision=4, inactive_records=0))
+
+tests/contracts/test_native_story_dialogue_boundary.py:220: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_only_real_dialogue_reaches_tts_archive_and_next_turn_context
+1 failed, 194 passed in 10.36s

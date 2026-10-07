@@ -1,0 +1,24 @@
+{
+  "feature": "VOICE-DEFAULT-UNLIMITED",
+  "spec": "specs/features/VOICE-DEFAULT-UNLIMITED/spec.md",
+  "requirements": [
+    {
+      "id": "VOICEDEFAULTUNLIMITED-001",
+      "tests": [
+        "tests/contracts/test_voice_default_unlimited.py::test_direct_defaults_are_none_for_all_subscription_models_and_voice_counts",
+        "tests/contracts/test_voice_default_unlimited.py::test_shared_unlimited_budget_counts_three_hundred_concurrent_attempts_truthfully",
+        "tests/contracts/test_voice_default_unlimited.py::test_explicit_finite_voice_options_survive_compatibility_unlimited_flag",
+        "tests/contracts/test_voice_default_unlimited.py::test_wire_keeps_large_accounting_count_with_null_remaining"
+      ]
+    },
+    {
+      "id": "VOICEDEFAULTUNLIMITED-002",
+      "tests": [
+        "tests/unit/test_local_unlimited_interaction.py::test_unlimited_shared_stt_rolls_many_streams_without_truncating_one_utterance",
+        "tests/unit/test_local_unlimited_interaction.py::test_two_clients_share_attempts_cancel_and_failure_never_refund_or_retry",
+        "tests/unit/test_local_unlimited_interaction.py::test_rollover_mid_utterance_commits_both_final_pieces_exactly_once",
+        "tests/unit/test_continuous_listening.py::test_uncooperative_provider_tail_cannot_publish_after_cancellation"
+      ]
+    }
+  ]
+}

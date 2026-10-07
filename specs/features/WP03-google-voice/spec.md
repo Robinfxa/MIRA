@@ -57,3 +57,23 @@ Composition wiring, enabled APIs, preview terms, IAM, quota, approved bounded sp
 ADC/token refresh, actual model entitlement, Chinese intelligibility, acoustic latency, microphone
 capture, browser playback, device Stop tail and 3–5-minute end-to-end session remain separate
 checks. Offline green is not `live_ready`.
+
+### Diagnostic-only TTS timing
+
+Given a future approved-final diagnostic TTS run, when observable stream and private artifact-write
+boundaries are reached, then the report uses monotonic elapsed milliseconds for dispatch, HTTP
+headers, first and last valid PCM, stream terminal, and artifact-write completion. Invalid PCM does
+not start the first-valid-PCM clock. `total_samples` is the sum across valid PCM packets; a full
+drain completion does not label that value `first_packet_samples`. Stream terminal and artifact-write
+outcome remain separate. Cancellation after PCM is reported as cancellation, not a normal full
+drain. Missing headers, PCM, save, authentication, browser scheduling, or physical-playback
+observations remain null or `unobserved`; no value is inferred from adjacent events. The existing
+approved-final receipt is preserved unchanged.
+
+Offline verification uses fake clocks and fake streams only. Coverage includes non-audio before
+audio, multiple PCM packets, invalid initial PCM, timeout before and after PCM, cancellation, a
+completed empty stream, successful timing through artifact save, and a failed artifact write. These
+tests do not make a provider request or establish a new real-world timing measurement. The earlier
+approved-final receipt reported 14.7693 seconds from dispatch to headers and 16.0560 seconds from
+dispatch to `tts_completed` after artifact writing; it has no separate first-valid-PCM or
+artifact-write timestamp.

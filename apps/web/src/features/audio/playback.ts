@@ -85,6 +85,7 @@ export class CancelSafePlayback {
     this.current = state;
     this.timer = (this.options.setInterval ?? globalThis.setInterval)(() => this.reconcileAuthorization(), 20);
     return Object.freeze({
+      canAccept: (frames: number) => this.canAccept(state, frames),
       push: (pcm16: Int16Array) => this.push(state, pcm16),
       finish: () => {
         if (!this.permitted(state) || state.sealed) return false;
@@ -101,13 +102,25 @@ export class CancelSafePlayback {
   private copyOrigin(origin: AudioOrigin): AudioOrigin {
     return Object.freeze({id: origin.id, digest: origin.digest, activity_seq: origin.activity_seq, output_epoch: origin.output_epoch});
   }
+  private hasCapacity(state: StreamState, frames: number): boolean {
+    return state.bufferedFrames + frames <= this.maxBufferedFrames
+      && state.queue.length + (state.source ? 1 : 0) < this.maxQueuedChunks;
+  }
+  private canAccept(state: StreamState, frames: number): boolean {
+    if (!this.permitted(state) || state.sealed) return false;
+    if (!Number.isSafeInteger(frames) || frames < 1
+      || frames > this.maxChunkFrames || frames > this.maxBufferedFrames) {
+      this.fail(state, 'invalid-pcm', 'Audio packet cannot fit the supported playback buffer.');
+      return false;
+    }
+    return this.hasCapacity(state, frames);
+  }
   private push(state: StreamState, pcm16: Int16Array): boolean {
     if (!this.permitted(state) || state.sealed) return false;
     if (!(pcm16 instanceof Int16Array) || pcm16.length === 0) {
       this.fail(state, 'invalid-pcm', 'Audio requires nonempty signed PCM16 mono at 24 kHz.'); return false;
     }
-    if (pcm16.length > this.maxChunkFrames || state.bufferedFrames + pcm16.length > this.maxBufferedFrames
-      || state.queue.length + (state.source ? 1 : 0) >= this.maxQueuedChunks) {
+    if (pcm16.length > this.maxChunkFrames || !this.hasCapacity(state, pcm16.length)) {
       this.fail(state, 'queue-overflow', 'Audio buffer limit exceeded; this response was stopped.'); return false;
     }
     state.queue.push(pcm16.slice());

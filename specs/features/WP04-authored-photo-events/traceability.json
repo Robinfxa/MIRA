@@ -1,0 +1,81 @@
+{
+  "feature": "APE",
+  "spec": "specs/features/WP04-authored-photo-events/spec.md",
+  "requirements": [
+    {
+      "id": "APE-001",
+      "tests": [
+        "tests/contracts/test_authored_photo_events.py::test_parser_accepts_exact_camera_and_authored_photo_with_chat",
+        "tests/contracts/test_authored_photo_events.py::test_parser_rejects_every_other_media_value",
+        "tests/contracts/test_authored_photo_events.py::test_generator_sees_available_events_and_explicit_fiction_provenance_without_story"
+      ]
+    },
+    {
+      "id": "APE-002",
+      "tests": [
+        "tests/contracts/test_authored_photo_events.py::test_optional_mixed_review_never_blocks_chat",
+        "tests/contracts/test_authored_photo_events.py::test_missing_readiness_holds_optional_actions_and_preserves_chat"
+      ]
+    },
+    {
+      "id": "APE-003",
+      "tests": [
+        "tests/contracts/test_authored_photo_events.py::test_valid_receipts_only_and_same_target_does_not_issue_repeated_action"
+      ]
+    },
+    {
+      "id": "APE-004",
+      "tests": [
+        "tests/contracts/test_authored_photo_events.py::test_cancelled_raise_does_not_suppress_return_to_old_ready_endpoint"
+      ]
+    },
+    {
+      "id": "APE-005",
+      "tests": [
+        "tests/contracts/test_authored_photo_events.py::test_photo_readiness_checks_fixed_bytes_and_never_camera_static_label",
+        "tests/contracts/test_authored_photo_events.py::test_camera_label_without_motion_sources_and_renderer_is_never_ready",
+        "tests/contracts/test_authored_photo_events.py::test_changed_source_bytes_cannot_claim_renderable_geometry"
+      ]
+    },
+    {
+      "id": "APE-006",
+      "tests": [
+        "tests/contracts/test_authored_photo_events.py::test_camera_sequence_deduplicates_only_unchanged_projected_targets",
+        "tests/contracts/test_authored_photo_events.py::test_uncertain_sequence_keeps_first_recovery_then_tracks_every_retained_target",
+        "tests/contracts/test_authored_photo_events.py::test_photo_duplicates_stay_idempotent_across_camera_sequence_and_receipts",
+        "tests/contracts/test_authored_photo_events.py::test_uncompleted_photo_can_retry_after_stop_and_only_duplicate_in_same_sequence_is_held"
+      ]
+    },
+    {
+      "id": "APE-007",
+      "tests": [
+        "tests/contracts/test_authored_photo_events.py::test_first_explicit_authored_photo_request_resolves_available_not_presented",
+        "tests/contracts/test_authored_photo_events.py::test_authored_identity_cannot_bypass_current_bound_readiness",
+        "tests/contracts/test_authored_photo_events.py::test_authored_first_display_semantics_are_versioned_without_inventing_exposure"
+      ]
+    },
+    {
+      "id": "APE-008",
+      "tests": [
+        "tests/contracts/test_photo_visibility.py::test_asgi_dismissal_does_not_cancel_microphone_or_listening_lease"
+      ]
+    },
+    {
+      "id": "APE-009",
+      "tests": [
+        "tests/contracts/test_photo_visibility.py::test_close_preserves_history_and_new_review_sees_hidden_before_reshow",
+        "tests/contracts/test_photo_visibility.py::test_asgi_show_close_reshow_authentication_revision_and_speech_grants",
+        "tests/contracts/test_photo_visibility.py::test_photo_close_during_recall_refreshes_current_facts_before_model_dispatch"
+      ]
+    },
+    {
+      "id": "APE-010",
+      "tests": [
+        "tests/contracts/test_photo_visibility.py::test_pending_photo_close_rejects_late_receipt_and_stop_preserves_dismissal",
+        "tests/contracts/test_photo_visibility.py::test_dismissal_during_event_review_holds_stale_grant_but_keeps_text",
+        "tests/contracts/test_photo_visibility.py::test_rehearsal_exposure_does_not_claim_closed_photo_is_still_here",
+        "tests/contracts/test_photo_visibility.py::test_dismissal_during_generation_drops_same_turn_photo_but_finishes_chat"
+      ]
+    }
+  ]
+}

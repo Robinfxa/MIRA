@@ -1,0 +1,51 @@
+{
+  "feature": "M06AR",
+  "spec": "specs/features/M06-actor-recall/spec.md",
+  "requirements": [
+    {
+      "id": "M06AR-001",
+      "tests": [
+        "tests/contracts/test_actor_memory_recall.py::test_default_actor_performs_no_memory_io_and_preserves_legacy_context"
+      ]
+    },
+    {
+      "id": "M06AR-002",
+      "tests": [
+        "tests/contracts/test_actor_memory_recall.py::test_binding_preserves_full_request_and_bounds_separate_query",
+        "tests/contracts/test_actor_memory_recall.py::test_invalid_or_oversize_required_memory_fails_closed_without_dropping_boundaries",
+        "tests/contracts/test_actor_memory_recall.py::test_binding_rejects_forged_source_authority_and_provenance_before_generation"
+      ]
+    },
+    {
+      "id": "M06AR-003",
+      "tests": [
+        "tests/contracts/test_actor_memory_recall.py::test_same_packet_reaches_generation_and_every_semantic_snapshot"
+      ]
+    },
+    {
+      "id": "M06AR-004",
+      "tests": [
+        "tests/contracts/test_actor_memory_recall.py::test_late_read_after_stop_is_discarded_even_if_reader_suppresses_cancel",
+        "tests/contracts/test_actor_memory_recall.py::test_late_read_after_new_input_cannot_replace_newer_packet",
+        "tests/contracts/test_actor_memory_recall.py::test_close_during_pending_read_discards_late_packet_and_closes_owned_reader",
+        "tests/contracts/test_actor_memory_recall.py::test_actor_closes_only_an_owned_reader"
+      ]
+    },
+    {
+      "id": "M06AR-005",
+      "tests": [
+        "tests/contracts/test_actor_memory_recall.py::test_revision_change_during_output_review_blocks_new_grant",
+        "tests/contracts/test_actor_memory_recall.py::test_revision_change_during_generation_blocks_review_and_grant",
+        "tests/contracts/test_actor_memory_recall.py::test_revision_change_during_input_review_blocks_output_review_and_grant"
+      ]
+    },
+    {
+      "id": "M06AR-006",
+      "tests": [
+        "tests/contracts/test_jev_input.py::test_memory_snapshot_is_bound_locally_but_omitted_from_input_jevs_semantic_state",
+        "tests/contracts/test_actor_memory_recall.py::test_generation_capture_excludes_stored_memory_text",
+        "tests/contracts/test_actor_memory_recall.py::test_memory_reader_failure_uses_stable_nonrevealing_error"
+      ]
+    }
+  ]
+}

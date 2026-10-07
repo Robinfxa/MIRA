@@ -1,0 +1,39 @@
+{
+  "author_max_bytes": 11889,
+  "wire": [
+    [
+      {
+        "instructions": 11322,
+        "payloads": [
+          55809
+        ],
+        "http_body": 73327
+      },
+      {
+        "instructions": 11491,
+        "payloads": [
+          55809,
+          55779
+        ],
+        "http_body": 128779
+      }
+    ],
+    [
+      {
+        "instructions": 11322,
+        "payloads": [
+          55809
+        ],
+        "http_body": 73327
+      },
+      {
+        "instructions": 11491,
+        "payloads": [
+          55809,
+          55779
+        ],
+        "http_body": 128779
+      }
+    ]
+  ]
+}

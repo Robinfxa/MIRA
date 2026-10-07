@@ -1,0 +1,86 @@
+{
+  "feature": "WP01-DR",
+  "spec": "specs/features/WP01-direct-codex-responses/spec.md",
+  "requirements": [
+    {
+      "id": "WP01DR-001",
+      "tests": [
+        "tests/contracts/test_direct_codex_responses.py::test_default_off_fails_before_credentials_or_http",
+        "tests/contracts/test_direct_codex_responses.py::test_model_and_route_are_explicit_and_fixed",
+        "tests/contracts/test_direct_codex_responses.py::test_bounded_model_identifier_allows_common_api_model_ids"
+      ]
+    },
+    {
+      "id": "WP01DR-002",
+      "tests": [
+        "tests/contracts/test_direct_codex_responses.py::test_subscription_headers_and_secret_are_route_bound",
+        "tests/contracts/test_direct_codex_responses.py::test_api_route_omits_subscription_metadata",
+        "tests/contracts/test_direct_codex_responses.py::test_401_does_not_switch_routes"
+      ]
+    },
+    {
+      "id": "WP01DR-003",
+      "tests": [
+        "tests/contracts/test_direct_codex_responses.py::test_request_uses_responses_messages_without_tools_or_schema_format"
+      ]
+    },
+    {
+      "id": "WP01DR-004",
+      "tests": [
+        "tests/contracts/test_direct_codex_responses.py::test_fragmented_multiline_sse_yields_after_completed_item_and_terminal",
+        "tests/contracts/test_direct_codex_responses.py::test_null_completed_output_uses_item_done",
+        "tests/contracts/test_direct_codex_responses.py::test_done_sentinel_after_completed_is_accepted",
+        "tests/contracts/test_direct_codex_responses.py::test_done_sentinel_cannot_replace_completed_event",
+        "tests/contracts/test_direct_codex_responses.py::test_event_after_done_sentinel_invalidates_success",
+        "tests/contracts/test_direct_codex_responses.py::test_delta_fallback_requires_terminal_success",
+        "tests/contracts/test_direct_codex_responses.py::test_nonnull_terminal_snapshot_must_match_single_streamed_message",
+        "tests/contracts/test_direct_codex_responses.py::test_failure_incomplete_early_eof_and_tools_never_yield",
+        "tests/contracts/test_direct_codex_responses.py::test_limits_and_provenance_are_bounded_and_local",
+        "tests/contracts/test_direct_codex_responses.py::test_valid_event_stream_media_type_parameters_are_accepted",
+        "tests/contracts/test_direct_codex_responses.py::test_invalid_or_prefix_event_stream_media_type_is_rejected"
+      ]
+    },
+    {
+      "id": "WP01DR-005",
+      "tests": [
+        "tests/contracts/test_direct_codex_responses.py::test_status_errors_are_safe_and_never_include_body_or_switch_route",
+        "tests/contracts/test_direct_codex_responses.py::test_timeout_and_late_cancel_never_yield"
+      ]
+    },
+    {
+      "id": "WP01DR-006",
+      "tests": [
+        "tests/contracts/test_direct_generation_diagnostics.py::test_compressed_sse_is_decoded_once_before_strict_parsing",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_decoded_sse_budget_survives_high_compression",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_bad_compressed_stream_never_yields",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_compressed_stream_cancel_and_timeout_close_without_candidates"
+      ]
+    },
+    {
+      "id": "WP01DR-007",
+      "tests": [
+        "tests/contracts/test_direct_generation_diagnostics.py::test_http_status_and_fixed_phase_reach_actor_and_export",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_invalid_effects_report_safe_validation_reason_and_terminal_events",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_provider_error_codes_are_fixed_allowlist_only",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_diagnostic_contract_rejects_arbitrary_strings_counts_and_extra_export_keys"
+      ]
+    },
+    {
+      "id": "WP01DR-008",
+      "tests": [
+        "tests/contracts/test_direct_generation_diagnostics.py::test_strict_json_failure_classes_are_fixed_and_content_free",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_strict_json_valid_acceptance_is_unchanged",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_json_failure_classes_reach_export_without_content_or_retry",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_json_failure_classes_are_closed_and_old_records_still_validate",
+        "tests/contracts/test_direct_generation_diagnostics.py::test_unknown_json_value_error_does_not_export_exception_text"
+      ]
+    },
+    {
+      "id": "WP01DR-009",
+      "tests": [
+        "tests/contracts/test_direct_generation_validation_recovery.py::test_completed_invalid_candidate_then_new_turn_recovers_independent_text_and_voice",
+        "tests/contracts/test_direct_generation_validation_recovery.py::test_candidate_validation_boundary_does_not_relabel_network_or_sse"
+      ]
+    }
+  ]
+}

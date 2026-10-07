@@ -1,0 +1,798 @@
+FFFFFFFF.                                                                [100%]
+=================================== FAILURES ===================================
+_ test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[x.story-\u544a\u8bc9\u590f\u79be\uff0c\u7535\u5b50\u7167\u7247\u53d1\u8fc7\uff0c\u7eb8\u8d28\u7167\u7247\u8fd8\u6ca1\u4ea4\u4ed8\u3002-\u6211\u4e00\u76f4\u60f3\u628a\u7eb8\u8d28\u7167\u7247\u4ea4\u7ed9\u4f60\u3002] _
+
+fut = <coroutine object Event.wait at 0x7f6896900c80>, timeout = 0.25
+
+    async def wait_for(fut, timeout):
+        """Wait for the single Future or coroutine to complete, with timeout.
+    
+        Coroutine will be wrapped in Task.
+    
+        Returns result of the Future or coroutine.  When a timeout occurs,
+        it cancels the task and raises TimeoutError.  To avoid the task
+        cancellation, wrap it in shield().
+    
+        If the wait is cancelled, the task is also cancelled.
+    
+        If the task suppresses the cancellation and returns a value instead,
+        that value is returned.
+    
+        This function is a coroutine.
+        """
+        # The special case for timeout <= 0 is for the following case:
+        #
+        # async def test_waitfor():
+        #     func_started = False
+        #
+        #     async def func():
+        #         nonlocal func_started
+        #         func_started = True
+        #
+        #     try:
+        #         await asyncio.wait_for(func(), 0)
+        #     except asyncio.TimeoutError:
+        #         assert not func_started
+        #     else:
+        #         assert False
+        #
+        # asyncio.run(test_waitfor())
+    
+    
+        if timeout is not None and timeout <= 0:
+            fut = ensure_future(fut)
+    
+            if fut.done():
+                return fut.result()
+    
+            await _cancel_and_wait(fut)
+            try:
+                return fut.result()
+            except exceptions.CancelledError as exc:
+                raise TimeoutError from exc
+    
+        async with timeouts.timeout(timeout):
+>           return await fut
+                   ^^^^^^^^^
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.locks.Event object at 0x7f6896bc5010 [unset]>
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+>           await fut
+E           asyncio.exceptions.CancelledError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/locks.py:212: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+transition = 'x.story', brief = '告诉夏禾，电子照片发过，纸质照片还没交付。'
+spoken = '我一直想把纸质照片交给你。'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('transition,brief,spoken', [
+        ('x.story', '告诉夏禾，电子照片发过，纸质照片还没交付。', '我一直想把纸质照片交给你。'),
+        ('x.story', 'Internal planning data: preserve the first shared memory.', '我记得我们一起挑试印的那次。'),
+        ('x.promise', '回应夏禾问照片是否要给她；不要暗示已经完成交付。', '我今晚带来了，想把它送给你。'),
+        ('x.ask_role', 'Ask for confirmation of the fictional role.', '你是夏禾吗？'),
+        ('t.offer', 'Invite the user to the rain window.', '要一起看看窗外的雨吗？'),
+    ])
+    async def test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt(transition, brief, spoken):
+        c, epoch = recognized(promise=transition == 'x.promise') if transition in ('x.story', 'x.promise') else (character(), 0)
+        user = '你继续说吧'
+        call = story_call(transition, cue=brief, offer='rain-current' if transition == 't.offer' else '',
+            target='rain_window' if transition == 't.offer' else 'none',
+            act='ask_role_confirmation' if transition == 'x.ask_role' else 'none',
+            text=user if transition == 'x.ask_role' else '')
+        turn = ToolTurn(call, continue_gate=True)
+        turn.candidate = dialogue(spoken)
+        a = native(turn, c=c, wait=2)
+        a._state = replace(a._state, output_epoch=epoch)
+        try:
+            await a.submit(request_id='dialogue', activity_seq=epoch + 1, cutoff=0, text=user)
+>           await asyncio.wait_for(turn.continued.wait(), .25)
+
+tests/contracts/test_native_story_dialogue_boundary.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:519: in wait_for
+    async with timeouts.timeout(timeout):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Timeout [expired]>
+exc_type = <class 'asyncio.exceptions.CancelledError'>
+exc_val = CancelledError(), exc_tb = <traceback object at 0x7f6896c123c0>
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() <= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+>               raise TimeoutError from exc_val
+E               TimeoutError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/timeouts.py:115: TimeoutError
+_ test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[x.story-Internal planning data: preserve the first shared memory.-\u6211\u8bb0\u5f97\u6211\u4eec\u4e00\u8d77\u6311\u8bd5\u5370\u7684\u90a3\u6b21\u3002] _
+
+fut = <coroutine object Event.wait at 0x7f68967492a0>, timeout = 0.25
+
+    async def wait_for(fut, timeout):
+        """Wait for the single Future or coroutine to complete, with timeout.
+    
+        Coroutine will be wrapped in Task.
+    
+        Returns result of the Future or coroutine.  When a timeout occurs,
+        it cancels the task and raises TimeoutError.  To avoid the task
+        cancellation, wrap it in shield().
+    
+        If the wait is cancelled, the task is also cancelled.
+    
+        If the task suppresses the cancellation and returns a value instead,
+        that value is returned.
+    
+        This function is a coroutine.
+        """
+        # The special case for timeout <= 0 is for the following case:
+        #
+        # async def test_waitfor():
+        #     func_started = False
+        #
+        #     async def func():
+        #         nonlocal func_started
+        #         func_started = True
+        #
+        #     try:
+        #         await asyncio.wait_for(func(), 0)
+        #     except asyncio.TimeoutError:
+        #         assert not func_started
+        #     else:
+        #         assert False
+        #
+        # asyncio.run(test_waitfor())
+    
+    
+        if timeout is not None and timeout <= 0:
+            fut = ensure_future(fut)
+    
+            if fut.done():
+                return fut.result()
+    
+            await _cancel_and_wait(fut)
+            try:
+                return fut.result()
+            except exceptions.CancelledError as exc:
+                raise TimeoutError from exc
+    
+        async with timeouts.timeout(timeout):
+>           return await fut
+                   ^^^^^^^^^
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.locks.Event object at 0x7f6896bc25a0 [unset]>
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+>           await fut
+E           asyncio.exceptions.CancelledError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/locks.py:212: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+transition = 'x.story'
+brief = 'Internal planning data: preserve the first shared memory.'
+spoken = '我记得我们一起挑试印的那次。'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('transition,brief,spoken', [
+        ('x.story', '告诉夏禾，电子照片发过，纸质照片还没交付。', '我一直想把纸质照片交给你。'),
+        ('x.story', 'Internal planning data: preserve the first shared memory.', '我记得我们一起挑试印的那次。'),
+        ('x.promise', '回应夏禾问照片是否要给她；不要暗示已经完成交付。', '我今晚带来了，想把它送给你。'),
+        ('x.ask_role', 'Ask for confirmation of the fictional role.', '你是夏禾吗？'),
+        ('t.offer', 'Invite the user to the rain window.', '要一起看看窗外的雨吗？'),
+    ])
+    async def test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt(transition, brief, spoken):
+        c, epoch = recognized(promise=transition == 'x.promise') if transition in ('x.story', 'x.promise') else (character(), 0)
+        user = '你继续说吧'
+        call = story_call(transition, cue=brief, offer='rain-current' if transition == 't.offer' else '',
+            target='rain_window' if transition == 't.offer' else 'none',
+            act='ask_role_confirmation' if transition == 'x.ask_role' else 'none',
+            text=user if transition == 'x.ask_role' else '')
+        turn = ToolTurn(call, continue_gate=True)
+        turn.candidate = dialogue(spoken)
+        a = native(turn, c=c, wait=2)
+        a._state = replace(a._state, output_epoch=epoch)
+        try:
+            await a.submit(request_id='dialogue', activity_seq=epoch + 1, cutoff=0, text=user)
+>           await asyncio.wait_for(turn.continued.wait(), .25)
+
+tests/contracts/test_native_story_dialogue_boundary.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:519: in wait_for
+    async with timeouts.timeout(timeout):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Timeout [expired]>
+exc_type = <class 'asyncio.exceptions.CancelledError'>
+exc_val = CancelledError(), exc_tb = <traceback object at 0x7f68968e5bc0>
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() <= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+>               raise TimeoutError from exc_val
+E               TimeoutError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/timeouts.py:115: TimeoutError
+_ test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[x.promise-\u56de\u5e94\u590f\u79be\u95ee\u7167\u7247\u662f\u5426\u8981\u7ed9\u5979\uff1b\u4e0d\u8981\u6697\u793a\u5df2\u7ecf\u5b8c\u6210\u4ea4\u4ed8\u3002-\u6211\u4eca\u665a\u5e26\u6765\u4e86\uff0c\u60f3\u628a\u5b83\u9001\u7ed9\u4f60\u3002] _
+
+fut = <coroutine object Event.wait at 0x7f6896901fc0>, timeout = 0.25
+
+    async def wait_for(fut, timeout):
+        """Wait for the single Future or coroutine to complete, with timeout.
+    
+        Coroutine will be wrapped in Task.
+    
+        Returns result of the Future or coroutine.  When a timeout occurs,
+        it cancels the task and raises TimeoutError.  To avoid the task
+        cancellation, wrap it in shield().
+    
+        If the wait is cancelled, the task is also cancelled.
+    
+        If the task suppresses the cancellation and returns a value instead,
+        that value is returned.
+    
+        This function is a coroutine.
+        """
+        # The special case for timeout <= 0 is for the following case:
+        #
+        # async def test_waitfor():
+        #     func_started = False
+        #
+        #     async def func():
+        #         nonlocal func_started
+        #         func_started = True
+        #
+        #     try:
+        #         await asyncio.wait_for(func(), 0)
+        #     except asyncio.TimeoutError:
+        #         assert not func_started
+        #     else:
+        #         assert False
+        #
+        # asyncio.run(test_waitfor())
+    
+    
+        if timeout is not None and timeout <= 0:
+            fut = ensure_future(fut)
+    
+            if fut.done():
+                return fut.result()
+    
+            await _cancel_and_wait(fut)
+            try:
+                return fut.result()
+            except exceptions.CancelledError as exc:
+                raise TimeoutError from exc
+    
+        async with timeouts.timeout(timeout):
+>           return await fut
+                   ^^^^^^^^^
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.locks.Event object at 0x7f6896bc6300 [unset]>
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+>           await fut
+E           asyncio.exceptions.CancelledError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/locks.py:212: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+transition = 'x.promise', brief = '回应夏禾问照片是否要给她；不要暗示已经完成交付。'
+spoken = '我今晚带来了，想把它送给你。'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('transition,brief,spoken', [
+        ('x.story', '告诉夏禾，电子照片发过，纸质照片还没交付。', '我一直想把纸质照片交给你。'),
+        ('x.story', 'Internal planning data: preserve the first shared memory.', '我记得我们一起挑试印的那次。'),
+        ('x.promise', '回应夏禾问照片是否要给她；不要暗示已经完成交付。', '我今晚带来了，想把它送给你。'),
+        ('x.ask_role', 'Ask for confirmation of the fictional role.', '你是夏禾吗？'),
+        ('t.offer', 'Invite the user to the rain window.', '要一起看看窗外的雨吗？'),
+    ])
+    async def test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt(transition, brief, spoken):
+        c, epoch = recognized(promise=transition == 'x.promise') if transition in ('x.story', 'x.promise') else (character(), 0)
+        user = '你继续说吧'
+        call = story_call(transition, cue=brief, offer='rain-current' if transition == 't.offer' else '',
+            target='rain_window' if transition == 't.offer' else 'none',
+            act='ask_role_confirmation' if transition == 'x.ask_role' else 'none',
+            text=user if transition == 'x.ask_role' else '')
+        turn = ToolTurn(call, continue_gate=True)
+        turn.candidate = dialogue(spoken)
+        a = native(turn, c=c, wait=2)
+        a._state = replace(a._state, output_epoch=epoch)
+        try:
+            await a.submit(request_id='dialogue', activity_seq=epoch + 1, cutoff=0, text=user)
+>           await asyncio.wait_for(turn.continued.wait(), .25)
+
+tests/contracts/test_native_story_dialogue_boundary.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:519: in wait_for
+    async with timeouts.timeout(timeout):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Timeout [expired]>
+exc_type = <class 'asyncio.exceptions.CancelledError'>
+exc_val = CancelledError(), exc_tb = <traceback object at 0x7f6896c16300>
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() <= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+>               raise TimeoutError from exc_val
+E               TimeoutError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/timeouts.py:115: TimeoutError
+_ test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[x.ask_role-Ask for confirmation of the fictional role.-\u4f60\u662f\u590f\u79be\u5417\uff1f] _
+
+fut = <coroutine object Event.wait at 0x7f689674adc0>, timeout = 0.25
+
+    async def wait_for(fut, timeout):
+        """Wait for the single Future or coroutine to complete, with timeout.
+    
+        Coroutine will be wrapped in Task.
+    
+        Returns result of the Future or coroutine.  When a timeout occurs,
+        it cancels the task and raises TimeoutError.  To avoid the task
+        cancellation, wrap it in shield().
+    
+        If the wait is cancelled, the task is also cancelled.
+    
+        If the task suppresses the cancellation and returns a value instead,
+        that value is returned.
+    
+        This function is a coroutine.
+        """
+        # The special case for timeout <= 0 is for the following case:
+        #
+        # async def test_waitfor():
+        #     func_started = False
+        #
+        #     async def func():
+        #         nonlocal func_started
+        #         func_started = True
+        #
+        #     try:
+        #         await asyncio.wait_for(func(), 0)
+        #     except asyncio.TimeoutError:
+        #         assert not func_started
+        #     else:
+        #         assert False
+        #
+        # asyncio.run(test_waitfor())
+    
+    
+        if timeout is not None and timeout <= 0:
+            fut = ensure_future(fut)
+    
+            if fut.done():
+                return fut.result()
+    
+            await _cancel_and_wait(fut)
+            try:
+                return fut.result()
+            except exceptions.CancelledError as exc:
+                raise TimeoutError from exc
+    
+        async with timeouts.timeout(timeout):
+>           return await fut
+                   ^^^^^^^^^
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.locks.Event object at 0x7f6896bc8980 [unset]>
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+>           await fut
+E           asyncio.exceptions.CancelledError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/locks.py:212: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+transition = 'x.ask_role', brief = 'Ask for confirmation of the fictional role.'
+spoken = '你是夏禾吗？'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('transition,brief,spoken', [
+        ('x.story', '告诉夏禾，电子照片发过，纸质照片还没交付。', '我一直想把纸质照片交给你。'),
+        ('x.story', 'Internal planning data: preserve the first shared memory.', '我记得我们一起挑试印的那次。'),
+        ('x.promise', '回应夏禾问照片是否要给她；不要暗示已经完成交付。', '我今晚带来了，想把它送给你。'),
+        ('x.ask_role', 'Ask for confirmation of the fictional role.', '你是夏禾吗？'),
+        ('t.offer', 'Invite the user to the rain window.', '要一起看看窗外的雨吗？'),
+    ])
+    async def test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt(transition, brief, spoken):
+        c, epoch = recognized(promise=transition == 'x.promise') if transition in ('x.story', 'x.promise') else (character(), 0)
+        user = '你继续说吧'
+        call = story_call(transition, cue=brief, offer='rain-current' if transition == 't.offer' else '',
+            target='rain_window' if transition == 't.offer' else 'none',
+            act='ask_role_confirmation' if transition == 'x.ask_role' else 'none',
+            text=user if transition == 'x.ask_role' else '')
+        turn = ToolTurn(call, continue_gate=True)
+        turn.candidate = dialogue(spoken)
+        a = native(turn, c=c, wait=2)
+        a._state = replace(a._state, output_epoch=epoch)
+        try:
+            await a.submit(request_id='dialogue', activity_seq=epoch + 1, cutoff=0, text=user)
+>           await asyncio.wait_for(turn.continued.wait(), .25)
+
+tests/contracts/test_native_story_dialogue_boundary.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:519: in wait_for
+    async with timeouts.timeout(timeout):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Timeout [expired]>
+exc_type = <class 'asyncio.exceptions.CancelledError'>
+exc_val = CancelledError(), exc_tb = <traceback object at 0x7f68968ce7c0>
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() <= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+>               raise TimeoutError from exc_val
+E               TimeoutError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/timeouts.py:115: TimeoutError
+_ test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[t.offer-Invite the user to the rain window.-\u8981\u4e00\u8d77\u770b\u770b\u7a97\u5916\u7684\u96e8\u5417\uff1f] _
+
+fut = <coroutine object Event.wait at 0x7f68968b84a0>, timeout = 0.25
+
+    async def wait_for(fut, timeout):
+        """Wait for the single Future or coroutine to complete, with timeout.
+    
+        Coroutine will be wrapped in Task.
+    
+        Returns result of the Future or coroutine.  When a timeout occurs,
+        it cancels the task and raises TimeoutError.  To avoid the task
+        cancellation, wrap it in shield().
+    
+        If the wait is cancelled, the task is also cancelled.
+    
+        If the task suppresses the cancellation and returns a value instead,
+        that value is returned.
+    
+        This function is a coroutine.
+        """
+        # The special case for timeout <= 0 is for the following case:
+        #
+        # async def test_waitfor():
+        #     func_started = False
+        #
+        #     async def func():
+        #         nonlocal func_started
+        #         func_started = True
+        #
+        #     try:
+        #         await asyncio.wait_for(func(), 0)
+        #     except asyncio.TimeoutError:
+        #         assert not func_started
+        #     else:
+        #         assert False
+        #
+        # asyncio.run(test_waitfor())
+    
+    
+        if timeout is not None and timeout <= 0:
+            fut = ensure_future(fut)
+    
+            if fut.done():
+                return fut.result()
+    
+            await _cancel_and_wait(fut)
+            try:
+                return fut.result()
+            except exceptions.CancelledError as exc:
+                raise TimeoutError from exc
+    
+        async with timeouts.timeout(timeout):
+>           return await fut
+                   ^^^^^^^^^
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <asyncio.locks.Event object at 0x7f6896bc0830 [unset]>
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+>           await fut
+E           asyncio.exceptions.CancelledError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/locks.py:212: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+transition = 't.offer', brief = 'Invite the user to the rain window.'
+spoken = '要一起看看窗外的雨吗？'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('transition,brief,spoken', [
+        ('x.story', '告诉夏禾，电子照片发过，纸质照片还没交付。', '我一直想把纸质照片交给你。'),
+        ('x.story', 'Internal planning data: preserve the first shared memory.', '我记得我们一起挑试印的那次。'),
+        ('x.promise', '回应夏禾问照片是否要给她；不要暗示已经完成交付。', '我今晚带来了，想把它送给你。'),
+        ('x.ask_role', 'Ask for confirmation of the fictional role.', '你是夏禾吗？'),
+        ('t.offer', 'Invite the user to the rain window.', '要一起看看窗外的雨吗？'),
+    ])
+    async def test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt(transition, brief, spoken):
+        c, epoch = recognized(promise=transition == 'x.promise') if transition in ('x.story', 'x.promise') else (character(), 0)
+        user = '你继续说吧'
+        call = story_call(transition, cue=brief, offer='rain-current' if transition == 't.offer' else '',
+            target='rain_window' if transition == 't.offer' else 'none',
+            act='ask_role_confirmation' if transition == 'x.ask_role' else 'none',
+            text=user if transition == 'x.ask_role' else '')
+        turn = ToolTurn(call, continue_gate=True)
+        turn.candidate = dialogue(spoken)
+        a = native(turn, c=c, wait=2)
+        a._state = replace(a._state, output_epoch=epoch)
+        try:
+            await a.submit(request_id='dialogue', activity_seq=epoch + 1, cutoff=0, text=user)
+>           await asyncio.wait_for(turn.continued.wait(), .25)
+
+tests/contracts/test_native_story_dialogue_boundary.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/tasks.py:519: in wait_for
+    async with timeouts.timeout(timeout):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Timeout [expired]>
+exc_type = <class 'asyncio.exceptions.CancelledError'>
+exc_val = CancelledError(), exc_tb = <traceback object at 0x7f6896de3d80>
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() <= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+>               raise TimeoutError from exc_val
+E               TimeoutError
+
+/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/asyncio/timeouts.py:115: TimeoutError
+__ test_cancelled_dialogue_binding_cannot_revive_story_or_control_text[stop] ___
+
+fence = 'stop'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('fence', ['stop', 'new_input', 'close'])
+    async def test_cancelled_dialogue_binding_cannot_revive_story_or_control_text(fence):
+        c, epoch = recognized()
+        turn = ToolTurn(story_call('x.story', cue='INTERNAL_CONTROL_SENTINEL'),
+            continue_gate=True, ignore_cancel=True)
+        turn.candidate = dialogue('我记得我们一起挑试印。')
+        replacement = ToolTurn(dialogue('我们聊聊咖啡吧。'))
+        a = native(turn, c=c, tools=Tools(turn, replacement), wait=.01)
+        a._state = replace(a._state, output_epoch=epoch)
+        try:
+            await a.submit(request_id='first', activity_seq=2, cutoff=0, text='接着说')
+            await asyncio.wait_for(turn.continued.wait(), .5)
+            if fence == 'stop':
+                await a.stop(activity_seq=3, cutoff=0)
+            elif fence == 'new_input':
+                await a.submit(request_id='second', activity_seq=3, cutoff=0, text='聊聊咖啡')
+            else:
+                await a.close()
+            turn.release.set()
+            state = await finish(a)
+>           assert all(e.value != 'INTERNAL_CONTROL_SENTINEL' for e in state.issued_effects)
+E           assert False
+E            +  where False = all(<generator object test_cancelled_dialogue_binding_cannot_revive_story_or_control_text.<locals>.<genexpr> at 0x7f6896def6b0>)
+
+tests/contracts/test_native_story_dialogue_boundary.py:105: AssertionError
+_ test_cancelled_dialogue_binding_cannot_revive_story_or_control_text[new_input] _
+
+fence = 'new_input'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('fence', ['stop', 'new_input', 'close'])
+    async def test_cancelled_dialogue_binding_cannot_revive_story_or_control_text(fence):
+        c, epoch = recognized()
+        turn = ToolTurn(story_call('x.story', cue='INTERNAL_CONTROL_SENTINEL'),
+            continue_gate=True, ignore_cancel=True)
+        turn.candidate = dialogue('我记得我们一起挑试印。')
+        replacement = ToolTurn(dialogue('我们聊聊咖啡吧。'))
+        a = native(turn, c=c, tools=Tools(turn, replacement), wait=.01)
+        a._state = replace(a._state, output_epoch=epoch)
+        try:
+            await a.submit(request_id='first', activity_seq=2, cutoff=0, text='接着说')
+            await asyncio.wait_for(turn.continued.wait(), .5)
+            if fence == 'stop':
+                await a.stop(activity_seq=3, cutoff=0)
+            elif fence == 'new_input':
+                await a.submit(request_id='second', activity_seq=3, cutoff=0, text='聊聊咖啡')
+            else:
+                await a.close()
+            turn.release.set()
+            state = await finish(a)
+>           assert all(e.value != 'INTERNAL_CONTROL_SENTINEL' for e in state.issued_effects)
+E           assert False
+E            +  where False = all(<generator object test_cancelled_dialogue_binding_cannot_revive_story_or_control_text.<locals>.<genexpr> at 0x7f6896b82e90>)
+
+tests/contracts/test_native_story_dialogue_boundary.py:105: AssertionError
+__ test_cancelled_dialogue_binding_cannot_revive_story_or_control_text[close] __
+
+fence = 'close'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('fence', ['stop', 'new_input', 'close'])
+    async def test_cancelled_dialogue_binding_cannot_revive_story_or_control_text(fence):
+        c, epoch = recognized()
+        turn = ToolTurn(story_call('x.story', cue='INTERNAL_CONTROL_SENTINEL'),
+            continue_gate=True, ignore_cancel=True)
+        turn.candidate = dialogue('我记得我们一起挑试印。')
+        replacement = ToolTurn(dialogue('我们聊聊咖啡吧。'))
+        a = native(turn, c=c, tools=Tools(turn, replacement), wait=.01)
+        a._state = replace(a._state, output_epoch=epoch)
+        try:
+            await a.submit(request_id='first', activity_seq=2, cutoff=0, text='接着说')
+            await asyncio.wait_for(turn.continued.wait(), .5)
+            if fence == 'stop':
+                await a.stop(activity_seq=3, cutoff=0)
+            elif fence == 'new_input':
+                await a.submit(request_id='second', activity_seq=3, cutoff=0, text='聊聊咖啡')
+            else:
+                await a.close()
+            turn.release.set()
+            state = await finish(a)
+>           assert all(e.value != 'INTERNAL_CONTROL_SENTINEL' for e in state.issued_effects)
+E           assert False
+E            +  where False = all(<generator object test_cancelled_dialogue_binding_cannot_revive_story_or_control_text.<locals>.<genexpr> at 0x7f689672f920>)
+
+tests/contracts/test_native_story_dialogue_boundary.py:105: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[x.story-\u544a\u8bc9\u590f\u79be\uff0c\u7535\u5b50\u7167\u7247\u53d1\u8fc7\uff0c\u7eb8\u8d28\u7167\u7247\u8fd8\u6ca1\u4ea4\u4ed8\u3002-\u6211\u4e00\u76f4\u60f3\u628a\u7eb8\u8d28\u7167\u7247\u4ea4\u7ed9\u4f60\u3002]
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[x.story-Internal planning data: preserve the first shared memory.-\u6211\u8bb0\u5f97\u6211\u4eec\u4e00\u8d77\u6311\u8bd5\u5370\u7684\u90a3\u6b21\u3002]
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[x.promise-\u56de\u5e94\u590f\u79be\u95ee\u7167\u7247\u662f\u5426\u8981\u7ed9\u5979\uff1b\u4e0d\u8981\u6697\u793a\u5df2\u7ecf\u5b8c\u6210\u4ea4\u4ed8\u3002-\u6211\u4eca\u665a\u5e26\u6765\u4e86\uff0c\u60f3\u628a\u5b83\u9001\u7ed9\u4f60\u3002]
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[x.ask_role-Ask for confirmation of the fictional role.-\u4f60\u662f\u590f\u79be\u5417\uff1f]
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_control_brief_never_granted_and_dialogue_does_not_wait_for_its_own_receipt[t.offer-Invite the user to the rain window.-\u8981\u4e00\u8d77\u770b\u770b\u7a97\u5916\u7684\u96e8\u5417\uff1f]
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_cancelled_dialogue_binding_cannot_revive_story_or_control_text[stop]
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_cancelled_dialogue_binding_cannot_revive_story_or_control_text[new_input]
+FAILED tests/contracts/test_native_story_dialogue_boundary.py::test_cancelled_dialogue_binding_cannot_revive_story_or_control_text[close]
+8 failed, 1 passed in 3.08s

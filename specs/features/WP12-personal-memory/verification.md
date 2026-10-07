@@ -1,0 +1,25 @@
+# Verification and limits
+
+Evidence root: mira-personal-memory-evidence-20261006T0311Z, outside source.
+
+- Base: bd4d8aecba2f0f07fea9484a8fb3a872f15de852; 1,318 frozen files plus the exact six continuity overlay files verified by SHA-256.
+- red-001: 13 intended missing-behavior failures plus one test setup error (wrong CodexLimits keyword); not used as the clean RED.
+- red-002: corrected same new contract suite, 13 missing-behavior failures / 1 existing equality check passed. No import/collection failure.
+- green-001: implementation syntax/collection failure, not a green result.
+- green-002 and green-003: intermediate instruction-budget/retained-policy assertion failures, preserved without overwrite.
+- green-004: 103 cases passed across personal-memory, dialogue continuity, first-person story/voice, conversation perspective and text-tone contracts. Maximum combined instructions: 11,924 UTF-8 bytes, inherited cap remains 12,000.
+- New real synthetic SQLite test writes a synthetic statement to a temporary store, closes it, opens the existing reader, and proves the returned source reaches the memory view without becoming Mira's authored preference. It does not open real user memory.
+- boundary-001: 55 additional inherited wire-budget, input-exclusion, Actor recall and embodiment cases passed.
+- red-003: 2 explicit unavailable-status/leftover-packet projection counterexamples failed; green-005: all 16 personal-memory cases passed after making unavailable status dominate the derived view.
+- affected-001: failed providers, 7 regressions: fourth PROBE turn exceeded its existing 32 KiB output budget, plus six exact APPLICATION photo-wire snapshots. The specs lane also failed because requirement headings used ## instead of the checker-required ###; the other nine lanes passed. Source was stable. This was not evidence of a production device failure: CLI APPLICATION uses its existing 64 KiB output setting.
+- budget-002: partial compaction still failed the original PROBE behavior; budget-003: 16 personal cases and the original four-turn PROBE passed, leaving only six exact size snapshots. Final self metadata is 195 bytes for default six traits, using IDs and closed recall states rather than repeated explanation.
+- budget-004: all 53 personal/probe/transport-limit cases passed. Original four PROBE output sizes are now 26,401 / 29,018 / 31,033 / 32,748 bytes under the unchanged 32,768 limit. The 64 KiB APPLICATION photo path is 35,108 bytes, +157 net bytes; its exact snapshot was updated with assertions on the new metadata. Maximum combined instructions are now 11,955 bytes. No limit was raised.
+- affected-002: all 10 execution lanes passed, including 3,152 provider cases; specs alone failed on the same heading-format mismatch. Corrected only the four requirement heading levels before final collection and source freeze. No production code changed after budget-004.
+- affected-003: all 11 selected lanes passed, source unchanged. Independent audit then exposed a synthetic contradictory state: self view said unavailable while a leftover packet still reached the old canonical serializer. Normal Actor failure paths already set packet=None; no real-user leak is established.
+- Independent source tests were preserved unchanged in test_personal_memory_unavailable_wire.py and test_memory_recall_absence_boundary.py. The parent explicitly authorized two narrow canonical guards. unavailable-red-001: 6 failures/12 controls passed across original generation counterexamples and actual direct/JEV request transports. unavailable-green-001: 86 focused cases passed after guards; independent-green-001: four additional JEV/shared-view and two-turn Actor success→OSError cases passed.
+- The actual direct adapters (both routes) and actual JEV response-contract requests now omit stale markers for unavailable recall, retain empty/attached/absent distinctions, and preserve normal response generation. Temporary transports and synthetic sources only. No budget change, persistence change or extra live request.
+- Required final command (jobs=1 coordinated with concurrent main release): python tools/check.py --affected --base bd4d8aecba2f0f07fea9484a8fb3a872f15de852 --jobs 1 --output-dir <evidence>/affected-004. contracts.py causes conservative expansion to all 11 offline lanes. Consult the adjacent external handoff and receipt for actual final status/counts; package/smoke/release remain unrun in this slice.
+
+Offline serialization/assertion and synthetic ASGI checks establish source plumbing and guards. No real Luna/JEV response quality, live provider call, microphone, Mac, remote publication or user-visible deployment is established. Memory writes, scope, pairing, consent and automatic recording defaults are unchanged.
+
+Topic integration is intentionally external: if the separate dialogue_topics module is integrated, add its optional_topics return to first_person_dialogue only after both frozen slices are assembled and rerun the actual combined request budgets. Do not merge its 7 KB view into stable_traits or claim this slice tested it.

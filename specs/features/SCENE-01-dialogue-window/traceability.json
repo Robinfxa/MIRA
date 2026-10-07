@@ -1,0 +1,29 @@
+{
+  "feature": "SCENE-01",
+  "spec": "specs/features/SCENE-01-dialogue-window/spec.md",
+  "requirements": [
+    {
+      "id": "SCENE01-001",
+      "tests": [
+        "tests/contracts/test_dialogue_scene_transition.py::test_one_yes_grants_window_without_wardrobe_or_second_turn_and_receipt_drives_shared_context",
+        "tests/contracts/test_dialogue_scene_transition.py::test_acceptance_cannot_cross_presented_offer_goal",
+        "tests/contracts/test_dialogue_scene_transition.py::test_real_jev_wire_and_conversation_first_actor_share_exact_offer_and_preserve_chat"
+      ]
+    },
+    {
+      "id": "SCENE01-002",
+      "tests": [
+        "tests/contracts/test_dialogue_scene_transition.py::test_pending_scene_cancellation_keeps_actual_state_and_has_no_false_episode",
+        "tests/contracts/test_dialogue_scene_transition.py::test_offer_goal_checkpoint_roundtrip_and_schema4_read_does_not_infer_scene_consent",
+        "tests/contracts/test_dialogue_scene_transition.py::test_late_pre_stop_scene_receipt_records_actual_history_without_reviving_graph",
+        "tests/contracts/test_dialogue_scene_transition.py::test_checkpoint_stores_only_cue_digest_and_reentry_cancels_unanswered_scene_consent"
+      ]
+    },
+    {
+      "id": "SCENE01-003",
+      "tests": [
+        "tests/contracts/test_dialogue_scene_transition.py::test_scene_readiness_requires_both_real_plates_and_the_authored_composition"
+      ]
+    }
+  ]
+}

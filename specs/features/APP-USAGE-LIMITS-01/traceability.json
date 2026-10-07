@@ -1,0 +1,46 @@
+{
+  "feature": "APP-USAGE-LIMITS",
+  "spec": "specs/features/APP-USAGE-LIMITS-01/spec.md",
+  "requirements": [
+    {
+      "id": "APPUSAGELIMITS-001",
+      "tests": [
+        "tests/contracts/test_development_usage_profiles.py::test_usage_declaration_is_typed_immutable_and_preserves_unknown_current_counts",
+        "tests/contracts/test_development_usage_profiles.py::test_probe_and_shared_declaration_reject_invalid_limits",
+        "tests/contracts/test_development_voice_composition.py::test_application_voice_profile_accepts_bounded_continuous_stream_limits_only",
+        "tests/contracts/test_development_app_entry.py::test_usage_profiles_keep_probe_ceiling_and_allow_only_explicit_finite_application_bounds",
+        "tests/contracts/test_google_speech_stt.py::test_voice_factory_passes_explicit_tls_roots_and_duration_limits"
+      ]
+    },
+    {
+      "id": "APPUSAGELIMITS-002",
+      "tests": [
+        "tests/contracts/test_runtime_admission_preparation.py::test_application_profile_ceiling_validation_precedes_metadata_io",
+        "tests/contracts/test_runtime_admission_preparation.py::test_explicit_content_ack_writes_reader_compatible_public_declaration",
+        "tests/contracts/test_live_dev_launcher.py::test_check_reports_only_private_config_declarations_and_never_calls_providers",
+        "tests/contracts/test_live_voice_launcher.py::test_application_voice_profile_requires_matching_explicit_admission_and_keeps_user_selected_limits",
+        "tests/contracts/test_development_usage_profiles.py::test_preparation_limit_validation_is_idempotent_before_metadata",
+        "tests/contracts/test_live_voice_launcher.py::test_voice_count_parse_error_reports_application_ceiling_without_widening_profile"
+      ]
+    },
+    {
+      "id": "APPUSAGELIMITS-003",
+      "tests": [
+        "tests/contracts/test_development_usage_profiles.py::test_usage_snapshot_rejects_counts_or_active_stream_duration_over_declared_bound",
+        "tests/contracts/test_development_app_entry.py::test_usage_profiles_keep_probe_ceiling_and_allow_only_explicit_finite_application_bounds",
+        "tests/contracts/test_live_voice_launcher.py::test_admitted_serve_uses_existing_factory_and_voice_required_lifespan"
+      ]
+    },
+    {
+      "id": "APPUSAGELIMITS-004",
+      "tests": [
+        "tests/contracts/test_development_voice_composition.py::test_factory_is_opt_in_delayed_exact_and_single_use",
+        "tests/contracts/test_development_voice_composition.py::test_first_valid_pcm_is_forwarded_without_lookahead",
+        "tests/contracts/test_development_voice_composition.py::test_stt_empty_input_does_not_reserve_and_cancelled_attempt_is_not_refunded",
+        "tests/contracts/test_codex_generation.py::test_budget_reserved_before_concurrent_requests_and_no_retry",
+        "tests/contracts/test_jev_input.py::test_timeout_consumes_budget_and_sanitizes_exception_text",
+        "tests/contracts/test_jev_review.py::test_actual_deadline_cancels_transport_and_consumes_attempt"
+      ]
+    }
+  ]
+}

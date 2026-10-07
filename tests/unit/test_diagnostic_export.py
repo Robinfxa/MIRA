@@ -15,6 +15,63 @@ from mira.application.diagnostic_events import (
 )
 
 
+def _reported_choice_event():
+    from mira.adapters.review.jev_support.diagnostics import summarize_response_validation
+    from mira.application.choice_wire_policy import CHOICE_WIRE_POLICY_REPORTED_V2
+    from mira.application.diagnostic_events import DiagnosticCode
+    from mira.adapters.diagnostics.privacy import encode_event
+
+    questions = {"synthetic:o1": {"type": "choice", "criteria": {
+        "allow": "allow", "reject": "reject", "unknown": "unknown"}}}
+    body = json.dumps({"model": "jev-1.13.0", "answers": {"synthetic:o1": {
+        "type": "choice", "choice": "allow", "confidence": 0.9,
+        "probabilities": {"allow": 0.75, "reject": 0.15, "unknown": 0.1}}}}).encode()
+    summary = summarize_response_validation(body, questions, None,
+        maximum_response_bytes=65536,
+        choice_wire_policy_version=CHOICE_WIRE_POLICY_REPORTED_V2)
+    return encode_event(DiagnosticEvent(DiagnosticStage.OUTPUT_REVIEW,
+        DiagnosticOutcome.FAILED, code=DiagnosticCode.UNKNOWN,
+        response_validation=summary), 1791175054.5)
+
+
+def test_reported_choice_warning_survives_current_export_schema():
+    from mira.adapters.diagnostics.privacy import validate_event_record
+
+    record = _reported_choice_event()
+    answer = record["response_validation"]["answer_facts"][0]
+    assert answer["confidence_mismatch_warning"] is True
+    assert "noul_probability" not in answer
+    assert validate_event_record(json.loads(json.dumps(record))) == record
+
+
+@pytest.mark.parametrize("field,value", [
+    ("raw_private_text", "synthetic-never-export"), ("noul_probability", 0.1),
+])
+def test_reported_choice_export_rejects_extra_or_wrong_kind_fields(field, value):
+    from mira.adapters.diagnostics.privacy import validate_event_record
+
+    record = _reported_choice_event()
+    record["response_validation"]["answer_facts"][0][field] = value
+    with pytest.raises(ValueError):
+        validate_event_record(record)
+
+
+def test_existing_reported_choice_log_reexports_without_new_provider_call(tmp_path):
+    root = tmp_path / "diagnostics"
+    (root / "events").mkdir(parents=True)
+    log = root / "events" / "events-synthetic.jsonl"
+    record = _reported_choice_event()
+    log.write_text(json.dumps(record) + "\n")
+    original = log.read_bytes()
+    destination = tmp_path / "recovered-metadata.zip"
+    result = export_diagnostics(root, destination)
+    assert result["event_count"] == 1 and result["skipped_records"] == 0
+    assert result["raw_count"] == 0 and result["raw_included"] is False
+    assert log.read_bytes() == original
+    with zipfile.ZipFile(destination) as bundle:
+        assert json.loads(bundle.read("events.jsonl")) == record
+
+
 def populate(root):
     sink = LocalDiagnostics(DiagnosticOptions(root), worker=False)
     sink.emit(DiagnosticEvent(DiagnosticStage.HTTP, DiagnosticOutcome.SUCCEEDED))

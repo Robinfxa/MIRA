@@ -32,27 +32,48 @@ targets = ["tests/unit/test_service_configuration.py", "tests/unit/test_api_envi
 [[lanes]]
 name = "config"
 kind = "pytest"
-targets = ["tests/unit/test_configuration.py"]
+targets = ["tests/unit/test_configuration.py", "tests/unit/test_memory_recall_configuration.py", "tests/unit/test_local_memory_scope_configuration.py"]
 
 [[lanes]]
 name = "actor"
 kind = "pytest"
-targets = ["tests/unit/test_actor.py", "tests/integration/test_replay_actor.py", "tests/unit/test_history_pending.py"]
+targets = ["tests/unit/test_actor.py", "tests/integration/test_replay_actor.py", "tests/unit/test_history_pending.py", "tests/unit/test_interrupted_intent.py"]
 
 [[lanes]]
 name = "providers"
 kind = "pytest"
-targets = ["tests/contracts/test_*.py"]
+# This aggregate now spans 181 test files and more than 3,500 local cases.
+# The 0708 release reached 96% at the old 120s limit, before failure summaries.
+# Keep reporting bounded at 180s; product/request and per-test deadlines are unchanged.
+timeout = 180
+# STORY-REPLY-01 runtime fence tests use the same unique providers glob.
+# NATIVE-FOLLOWTHROUGH-01 tests have this unique providers glob owner.
+# STORY-FAST-02 recovered handover tests use the unique providers glob.
+# WP13 test_xiahe_chapter, its actor bridge and wire tests have this unique providers owner.
+# SCENE-01 dialogue/receipt contracts are uniquely owned by this glob.
+# FAST-01 test_direct_service_tier.py is uniquely owned by the providers glob below.
+# IMG-01: story_images and story_image_lifecycle_{audit,controls} contracts are uniquely
+# owned by the providers glob below. The independent lifecycle audit is copied unchanged.
+# WP12CP checkpoint migration contracts are uniquely owned by the providers glob.
+# IMG-BG-01 R2 background job contracts use this same unique providers glob.
+# IMG-SIZE-01 bounded output dimension contracts use this same unique providers glob.
+# IMG-DIAG-02 image operation diagnostic contracts use this same unique providers glob.
+# PHOTO-02 fixed-photo feedback contracts are uniquely owned by this contract glob.
+# TRUSTED-LAN-01 test_trusted_private_network.py uses the unique providers glob.
+# DELIVERY-01 private-device contract tests use the existing unique providers glob below.
+# VOICE-02 response preference contracts are uniquely owned by this contract glob.
+# START-PRESET-01 first-use launcher contracts use this same unique owner.
+targets = ["tests/contracts/test_*.py", "tests/unit/test_scoped_memory.py", "tests/unit/test_async_memory_reader.py", "tests/unit/test_memory_management.py", "tests/unit/test_memory_management_worker.py", "tests/unit/test_memory_management_page_budget.py"]
 
 [[lanes]]
 name = "http"
 kind = "pytest"
-targets = ["tests/integration/test_http.py", "tests/integration/test_replay_http.py", "tests/integration/test_audio_progress.py", "tests/integration/test_voice_http.py", "tests/integration/test_rehearsal_http.py", "tests/integration/test_reviewed_audio_http.py", "tests/integration/test_history_pending_http.py"]
+targets = ["tests/integration/test_http.py", "tests/integration/test_replay_http.py", "tests/integration/test_audio_progress.py", "tests/integration/test_voice_http.py", "tests/integration/test_rehearsal_http.py", "tests/integration/test_reviewed_audio_http.py", "tests/integration/test_history_pending_http.py", "tests/integration/test_microphone_live_socket.py", "tests/integration/test_memory_recall_http.py", "tests/integration/test_memory_management_http.py", "tests/integration/test_memory_management_actor.py", "tests/integration/test_local_memory_console_http.py", "tests/integration/test_http_actual_body_limit.py", "tests/integration/test_interrupted_intent_http.py"]
 
 [[lanes]]
 name = "tooling"
 kind = "pytest"
-targets = ["tests/architecture/test_spec_traceability.py", "tests/unit/test_quality_*.py", "tests/unit/test_diagnostic_export.py", "tests/unit/test_dev_startup.py", "tests/unit/test_package_distribution.py", "tests/unit/test_jev_evaluator.py"]
+targets = ["tests/architecture/test_spec_traceability.py", "tests/unit/test_quality_*.py", "tests/unit/test_diagnostic_export.py", "tests/unit/test_dev_startup.py", "tests/unit/test_package_distribution.py", "tests/unit/test_jev_evaluator.py", "tests/unit/test_memory_cli.py", "tests/unit/test_codex_setup_diagnose.py", "tests/integration/test_memory_cli_workflow.py"]
 
 [[lanes]]
 name = "specs"
@@ -62,13 +83,15 @@ command = ["{python}", "tools/check_specs.py"]
 [[lanes]]
 name = "web"
 kind = "command"
+# PHOTO-02 compiled fixed-photo feedback and renderer tests are uniquely owned here.
+# VOICE-02 compiled response-preference controller tests are uniquely owned here.
 targets = ["tests/web/*.test.mjs"]
 command = ["{python}", "tools/check_web.py", "--output-dir", "{artifact}/build"]
 
 [[lanes]]
 name = "package"
 kind = "command"
-command = ["{python}", "tools/verify_package.py"]
+command = ["{python}", "tools/verify_package.py", "--output-dir", "{artifact}/wheel-artifacts"]
 serial = true
 default = false
 
@@ -84,6 +107,22 @@ paths = ["apps/api/src/mira/config/**", "config/**", ".env.example", ".env.devel
 lanes = ["env", "config", "providers", "actor", "http"]
 
 [[rules]]
+paths = ["apps/api/src/mira/adapters/auth/**", "tools/provider_login.py", "tests/contracts/test_codex_subscription_auth.py"]
+lanes = ["providers", "specs"]
+
+[[rules]]
+paths = ["apps/api/src/mira/config/memory_scope.py", "apps/api/src/mira/config/local_memory.py"]
+lanes = ["config", "tooling", "http"]
+
+[[rules]]
+paths = ["apps/api/src/mira/bootstrap/local_memory_management.py", "tools/local_memory.py"]
+lanes = ["tooling", "http"]
+
+[[rules]]
+paths = ["apps/api/src/mira/entrypoints/http/local_memory_app.py"]
+lanes = ["http"]
+
+[[rules]]
 paths = ["apps/api/src/mira/adapters/**"]
 lanes = ["providers", "config", "actor", "http"]
 
@@ -96,7 +135,7 @@ paths = ["apps/api/src/mira/entrypoints/**", "apps/api/src/mira/__main__.py"]
 lanes = ["http"]
 
 [[rules]]
-paths = ["apps/web/**", "tests/web/**", "tools/check_web.py"]
+paths = ["apps/web/**", "tests/web/**", "tools/check_web.py", "tools/build_web.mjs"]
 lanes = ["web"]
 
 [[rules]]
@@ -144,9 +183,84 @@ paths = ["tools/jev_smoke.py", "tools/jev_evaluate.py", "tools/jev_evaluation_su
 lanes = ["env", "providers", "tooling"]
 
 [[rules]]
+paths = ["tools/prepare_runtime_admission.py", "tools/codex_native_discovery.py", "tools/live_dev.py", "tools/live_voice.py", "tools/operator_pairing_file.py"]
+lanes = ["tooling", "providers", "http", "web"]
+
+[[rules]]
 paths = ["scripts/dev", "tools/dev.py", "tools/bootstrap.py", "setup.py"]
 lanes = ["tooling", "package", "smoke"]
 
 [[rules]]
+paths = ["scripts/start", "tools/start_mira.py"]
+lanes = ["providers", "tooling", "specs"]
+
+[[rules]]
 paths = ["tools/google_voice_smoke.py"]
 lanes = ["env", "providers"]
+
+[[rules]]
+paths = ["tests/contracts/test_jev_user_development_policy_v2.py"]
+lanes = ["providers"]
+
+[[rules]]
+paths = ["tests/contracts/test_codex_native_discovery.py"]
+lanes = ["providers"]
+
+[[rules]]
+paths = ["tools/memory.py"]
+lanes = ["tooling", "providers", "actor"]
+
+[[rules]]
+paths = ["tools/codex_setup_diagnose.py"]
+lanes = ["tooling"]
+
+[[lanes]]
+name = "continuous"
+kind = "pytest"
+targets = ["tests/unit/test_local_unlimited_interaction.py", "tests/unit/test_continuous_listening.py", "tests/integration/test_continuous_listening_http.py"]
+
+[[rules]]
+paths = ["apps/api/src/mira/application/continuous_listening.py", "apps/api/src/mira/application/ports/continuous_speech.py", "apps/api/src/mira/entrypoints/http/continuous_listening_routes.py", "tests/unit/test_continuous_listening.py", "tests/integration/test_continuous_listening_http.py", "specs/features/WP03-continuous-listening/**"]
+lanes = ["continuous", "http", "specs"]
+
+[[rules]]
+paths = ["apps/api/src/mira/adapters/speech/google_stt_continuous_v2.py", "tests/contracts/test_google_stt_continuous.py", "apps/api/src/mira/bootstrap/providers.py"]
+lanes = ["providers", "continuous", "http"]
+
+[[rules]]
+paths = ["apps/api/src/mira/entrypoints/http/schemas.py", "apps/api/src/mira/entrypoints/http/routes.py", "apps/api/src/mira/entrypoints/http/media_routes.py", "apps/api/src/mira/entrypoints/http/app.py", "apps/api/src/mira/bootstrap/container.py", "apps/web/src/shared/generated/contracts.ts", "packages/contracts/openapi.json"]
+lanes = ["continuous", "providers", "http", "web", "tooling", "specs"]
+
+[[rules]]
+paths = ["apps/api/src/mira/bootstrap/direct_provider_app.py", "apps/api/src/mira/adapters/generation/direct_codex_responses.py", "tools/live_provider.py", "tools/private_device_access.py", "tests/contracts/test_direct_provider_app.py", "tests/contracts/test_live_provider_launcher.py", "tests/contracts/test_direct_codex_responses.py"]
+lanes = ["providers", "http", "continuous", "specs"]
+
+[[rules]]
+paths = ["tools/check_subscription_image.py"]
+lanes = ["providers", "specs"]
+
+# New tests/contracts/test_subscription_image_check.py already has exactly one owner
+# via the existing providers tests/contracts/test_*.py target.
+
+[[rules]]
+paths = ["tools/story_checkpoint.py"]
+lanes = ["providers", "config", "http", "tooling", "specs"]
+
+[[rules]]
+paths = ["tests/unit/test_local_unlimited_interaction.py", "specs/features/DELIVERY-local-unlimited/**"]
+lanes = ["continuous", "actor", "domain", "specs"]
+
+# VOICE-DEFAULT-UNLIMITED contracts use the providers glob; browser tests use web.
+[[rules]]
+paths = ["specs/features/VOICE-DEFAULT-UNLIMITED/**", "tests/contracts/test_voice_default_unlimited.py"]
+lanes = ["providers", "continuous", "http", "web", "specs"]
+
+# Trusted LAN identity admission feeds existing session, socket and browser gates.
+[[rules]]
+paths = ["apps/api/src/mira/entrypoints/http/trusted_device_access.py", "apps/api/src/mira/entrypoints/http/trusted_device_routes.py", "apps/web/src/features/session/trusted-device-access.ts"]
+lanes = ["providers", "http", "web", "specs"]
+
+# DEFAULT-LAN-01 and discovery tests use the unique providers contract glob.
+[[rules]]
+paths = ["tools/lan_discovery.py", "apps/api/src/mira/entrypoints/http/private_origin.py", "apps/api/src/mira/application/sessions.py", "apps/api/src/mira/entrypoints/http/device_sessions.py"]
+lanes = ["providers", "http", "actor", "config", "web", "continuous", "specs"]

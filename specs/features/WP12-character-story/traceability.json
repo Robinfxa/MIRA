@@ -1,0 +1,63 @@
+{
+  "feature": "WP12",
+  "spec": "specs/features/WP12-character-story/spec.md",
+  "requirements": [
+    {
+      "id": "WP12-001",
+      "tests": [
+        "tests/contracts/test_direct_story_http.py::test_direct_responses_and_actual_jev_parser_drive_receipt_bound_rain_story",
+        "tests/contracts/test_story_context_composition.py::test_absent_story_projection_preserves_legacy_wire_exactly",
+        "tests/contracts/test_story_context_composition.py::test_shared_author_projection_reaches_generation_and_snapshot_without_scope_leak",
+        "tests/contracts/test_story_context_composition.py::test_tampered_story_projection_cannot_be_sent_or_admitted"
+      ]
+    },
+    {
+      "id": "WP12-002",
+      "tests": [
+        "tests/contracts/test_jev_character_observations.py::test_story_unknown_does_not_turn_allowed_ordinary_text_into_rejection",
+        "tests/contracts/test_jev_character_observations.py::test_character_noul_threshold_uses_original_value",
+        "tests/contracts/test_jev_character_observations.py::test_strong_refusal_is_separate_evidence_and_never_willingness",
+        "tests/contracts/test_jev_character_observations.py::test_weak_affect_reject_holds_affect_without_rejecting_chat",
+        "tests/contracts/test_jev_character_observations.py::test_hard_content_reject_still_rejects_with_positive_story_answers",
+        "tests/contracts/test_jev_character_observations.py::test_malformed_character_answer_is_contract_error_not_soft_semantic_unknown",
+        "tests/contracts/test_character_candidate_payload.py::test_no_proposal_keeps_exact_legacy_candidate_wire",
+        "tests/contracts/test_character_candidate_payload.py::test_exact_story_and_affect_suggestions_remain_separate_data",
+        "tests/contracts/test_character_candidate_payload.py::test_unknown_authority_fields_or_unbound_offer_are_rejected",
+        "tests/contracts/test_character_candidate_payload.py::test_suggestions_are_rejected_when_story_mode_is_not_admitted"
+      ]
+    },
+    {
+      "id": "WP12-003",
+      "tests": [
+        "tests/contracts/test_actor_story_loop.py::test_offer_visible_then_barge_stop_then_yes_changes_outfit_only_after_receipt",
+        "tests/contracts/test_actor_story_loop.py::test_explicit_no_closes_visible_offer_without_relationship_penalty",
+        "tests/contracts/test_actor_story_loop.py::test_unready_assets_and_missing_semantic_evidence_never_grant_outfit"
+      ]
+    },
+    {
+      "id": "WP12-004",
+      "tests": [
+        "tests/contracts/test_story_persistence_composition.py::test_pairing_precedes_private_story_open_and_revoke_closes_runtime",
+        "tests/contracts/test_story_persistence_composition.py::test_real_receipts_persist_fiction_and_reopen_with_no_pending_grant",
+        "tests/contracts/test_story_persistence_composition.py::test_unpresented_offer_is_not_promoted_on_reentry",
+        "tests/contracts/test_story_persistence_composition.py::test_checkpoint_wait_never_holds_actor_stop_lock",
+        "tests/contracts/test_story_persistence_composition.py::test_story_check_is_inert_and_discloses_persistence",
+        "tests/contracts/test_async_story_checkpoint.py::test_open_and_missing_load_are_explicit_and_read_only",
+        "tests/contracts/test_async_story_checkpoint.py::test_save_load_duplicate_and_equal_revision_conflict",
+        "tests/contracts/test_async_story_checkpoint.py::test_wrong_scope_and_story_are_rejected_before_io",
+        "tests/contracts/test_async_story_checkpoint.py::test_episode_archive_is_append_only_bounded_context_and_idempotent",
+        "tests/contracts/test_async_story_checkpoint.py::test_episode_same_id_different_payload_is_rejected",
+        "tests/contracts/test_async_story_checkpoint.py::test_reentry_preserves_acknowledged_state_and_fences_unacknowledged_pending",
+        "tests/contracts/test_async_story_checkpoint.py::test_blocked_write_keeps_event_loop_responsive_then_times_out_unknown_and_busy",
+        "tests/contracts/test_async_story_checkpoint.py::test_close_is_bounded_and_cannot_resurrect_after_active_write",
+        "tests/contracts/test_async_story_checkpoint.py::test_canceled_started_write_remains_busy_until_real_completion"
+      ]
+    },
+    {
+      "id": "WP12-005",
+      "tests": [
+        "tests/contracts/test_story_persistence_composition.py::test_story_check_is_inert_and_discloses_persistence"
+      ]
+    }
+  ]
+}

@@ -29,3 +29,15 @@ docs/verification/fnd-03/development.bundle
 # Local credential material must never enter archives or history.
 .secrets/
 *.credentials.json
+
+# Linked local dependency directories are runtime inputs, never source artifacts.
+/.venv
+/node_modules
+
+# Private local memory database and SQLite sidecars
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-*
+*.sqlite3-*
+*.db-*

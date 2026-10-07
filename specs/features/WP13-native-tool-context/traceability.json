@@ -1,0 +1,58 @@
+{
+  "feature": "WP13NATIVE",
+  "spec": "specs/features/WP13-native-tool-context/spec.md",
+  "requirements": [
+    {
+      "id": "WP13NATIVE-001",
+      "tests": [
+        "tests/contracts/test_native_chapter_wire.py::test_dormant_and_held_continuation_expose_current_chapter_without_unlocking_it",
+        "tests/contracts/test_native_chapter_wire.py::test_native_projection_respects_prompt_limit_and_legacy_projection_stays_dormant",
+        "tests/contracts/test_native_chapter_wire.py::test_entire_real_wire_chapter_reuses_early_photo_and_hands_over_after_acceptance"
+      ]
+    },
+    {
+      "id": "WP13NATIVE-002",
+      "tests": [
+        "tests/contracts/test_native_chapter_wire.py::test_confirmation_hold_has_actionable_closed_reason_and_keeps_dialogue",
+        "tests/contracts/test_native_chapter_wire.py::test_unrecognized_exception_text_is_not_sent_in_native_tool_result"
+      ]
+    },
+    {
+      "id": "WP13NATIVE-003",
+      "tests": [
+        "tests/contracts/test_native_chapter_wire.py::test_real_wire_mixed_script_claim_and_next_turn_keep_role_with_receipts",
+        "tests/contracts/test_native_chapter_wire.py::test_real_wire_typed_question_allows_next_exact_confirmation",
+        "tests/contracts/test_native_chapter_wire.py::test_denial_exits_role_and_offtopic_chat_does_not_reenter",
+        "tests/contracts/test_native_chapter_wire.py::test_stop_before_recognition_receipt_cannot_unlock_role_or_continue",
+        "tests/contracts/test_native_chapter_wire.py::test_current_chapter_canon_stays_authored_when_user_claims_shared_lighthouse_trip",
+        "tests/contracts/test_native_chapter_wire.py::test_visible_fixed_photo_does_not_bypass_gift_prerequisites"
+      ]
+    },
+    {
+      "id": "WP13NATIVE-004",
+      "tests": [
+        "tests/contracts/test_native_tool_diagnostics.py::test_actual_held_and_shown_tools_export_closed_facts_without_input_or_arguments",
+        "tests/contracts/test_native_tool_diagnostics.py::test_cancelled_native_operation_never_borrows_new_epoch_chapter",
+        "tests/contracts/test_native_tool_diagnostics.py::test_missing_receipt_is_pending_not_shown_and_broken_sink_does_not_block_body",
+        "tests/contracts/test_native_tool_diagnostics.py::test_native_diagnostic_export_rejects_unknown_fields_and_nonfinite_values",
+        "tests/contracts/test_native_tool_diagnostics.py::test_exact_nine_tool_names_roundtrip_without_adding_arbitrary_metadata",
+        "tests/contracts/test_native_tool_diagnostics.py::test_actual_photo_result_is_media_receipt_without_gift_transition"
+      ]
+    },
+    {
+      "id": "WP13NATIVE-005",
+      "tests": [
+        "tests/contracts/test_native_outfit_failure_contract.py::test_actual_outfit_sequence_uses_semantic_native_calls_and_exact_receipts",
+        "tests/contracts/test_native_outfit_failure_contract.py::test_clothing_words_without_model_function_call_do_not_force_an_action",
+        "tests/contracts/test_native_outfit_failure_contract.py::test_image_result_serialization_preserves_known_or_unknown_reason_without_inventing_cause",
+        "tests/contracts/test_native_outfit_failure_contract.py::test_real_native_image_execution_failure_keeps_body_and_actual_generation_reason"
+      ]
+    },
+    {
+      "id": "WP13NATIVE-006",
+      "tests": [
+        "tests/contracts/test_native_outfit_failure_contract.py::test_pending_current_image_is_not_overridden_by_zero_future_capacity_or_absent_continuation_tools"
+      ]
+    }
+  ]
+}

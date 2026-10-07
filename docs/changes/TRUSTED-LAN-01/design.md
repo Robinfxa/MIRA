@@ -1,0 +1,9 @@
+# Trusted private network without pairing
+
+This optional CLI mode admits two opaque, process-local browser identities without asking for a code. It never reports operator pairing as completed. The default private-device mode still creates two distinct code files. The existing DeviceSessions ownership, per-browser replacement, socket guards, shared provider runtime and usage counters remain the consumers of those identities.
+
+Admission is an explicit same-origin POST before the frontend creates a session. A live cookie is reused without extending its server expiry; absent, stale or expired cookies get a new identity if a slot is available. Each expires after eight hours or process shutdown. Explicit close retires only this identity and its session; refreshing preserves the browser identity and replaces its temporary conversation. Maximum active identities remains two. Clearing cookies loses a slot until expiry or service restart; the page states this recovery constraint. The trusted network can consume all available slots and enabled service quota; the option is not authentication.
+
+Only exact RFC1918 or ULA bind addresses and the existing exact origin policy are accepted. Public/wildcard bind, persistence modes and private HTTP voice are rejected. Host/Origin checks run before admission. GET authentication still requires explicit Origin or positive same-origin fetch/referrer metadata. WebSocket ownership remains unchanged. TLS trust and phone microphone are not proven by these local tests.
+
+No public DTO changes: bootstrap/revoke return 204 and use the existing HttpOnly, SameSite=strict, /api/v1 scoped cookie. No user/provider credential or durable file is created. Native tool routing, generation/STT/TTS/image budgets and their existing consent declarations are unchanged.

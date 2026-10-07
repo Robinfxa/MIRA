@@ -1,0 +1,18 @@
+{
+  "feature": "WP01-CURRENT-ENTRY-POLICY",
+  "spec": "specs/features/WP01-CURRENT-ENTRY-POLICY/spec.md",
+  "requirements": [
+    {
+      "id": "WP01CURRENTENTRYPOLICY-001",
+      "tests": [
+        "tests/contracts/test_development_policy_defaults.py::test_default_product_policy_handles_weak_reject_as_uncertainty"
+      ]
+    },
+    {
+      "id": "WP01CURRENTENTRYPOLICY-002",
+      "tests": [
+        "tests/contracts/test_development_policy_defaults.py::test_text_cli_explicitly_selects_current_v2"
+      ]
+    }
+  ]
+}

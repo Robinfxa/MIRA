@@ -1,0 +1,21 @@
+{
+  "schema": "mira.story-runtime-test-fixture.v1",
+  "source_story_package": "mira-story-memory-next-20261004",
+  "files": [
+    {
+      "path": "story-graph.json",
+      "bytes": 16834,
+      "sha256": "c36445d77239511c78b94eb154374b5a787de67efad254b115bb0bfa71b51ae7"
+    },
+    {
+      "path": "story-graph.traces.json",
+      "bytes": 11984,
+      "sha256": "9462b83b7a32366107d45bb43e22da7285993cbfa5fccc97863f0e9b1952fd20"
+    },
+    {
+      "path": "mira.story-seed.v1.json",
+      "bytes": 89332,
+      "sha256": "c828fe066cc9a96675640fc7bc26acfec684f03a87a7299afb77aa5e7179d3d4"
+    }
+  ]
+}

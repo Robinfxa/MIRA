@@ -1,0 +1,23 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_actual_audio_interruption_keeps_qualified_image_under_fresh_current_grant _
+
+    def test_actual_audio_interruption_keeps_qualified_image_under_fresh_current_grant():
+        app,images,vision,_,_=app_for(generation=Generation([candidate(speech=True)]),voice=True)
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            old=next(e for e in state['active_grants'] if e['kind']=='media')
+            speech=next(e for e in state['active_grants'] if e['kind']=='speech')
+            body={k:speech[k] for k in ('digest','output_epoch','activity_seq')}
+            body.update(effect_id=speech['id'],presentation_seq=1,sample_rate_hz=16000,rendered_samples=0,status='interrupted')
+            response=client.post(path+'/audio-progress',headers=headers,json=body)
+            assert response.status_code==200
+            state=response.json();assert state['story_image']['state']=='qualified'
+>           current=next(e for e in state['active_grants'] if e['kind']=='media')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           StopIteration
+
+tests/contracts/test_background_story_images.py:289: StopIteration
+=========================== short test summary info ============================
+FAILED tests/contracts/test_background_story_images.py::test_actual_audio_interruption_keeps_qualified_image_under_fresh_current_grant
+1 failed in 0.83s

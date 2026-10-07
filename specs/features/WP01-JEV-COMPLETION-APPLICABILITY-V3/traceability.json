@@ -1,0 +1,33 @@
+{
+  "feature": "JEVCOMPAPPV3",
+  "spec": "specs/features/WP01-JEV-COMPLETION-APPLICABILITY-V3/spec.md",
+  "requirements": [
+    {
+      "id": "JEVCOMPAPPV3-001",
+      "tests": [
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_sends_one_noul_in_existing_bound_batch_and_binds_the_revision"
+      ]
+    },
+    {
+      "id": "JEVCOMPAPPV3-002",
+      "tests": [
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_only_clear_no_ignores_weak_or_strong_o3_for_nonclaim",
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_yes_and_unknown_keep_original_o3_result",
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_no_probability_boundary_is_inclusive_at_0_4",
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_supported_claim_with_matching_presented_evidence_stays_allowable",
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_control_only_proposals_are_not_completion_evidence_or_claims",
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_applicability_no_does_not_bypass_explicit_ban_question",
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_applicability_no_cannot_convert_another_unknown_to_allow"
+      ]
+    },
+    {
+      "id": "JEVCOMPAPPV3-003",
+      "tests": [
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_malformed_answers_fail_technically_even_when_applicability_is_no",
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_bad_applicability_is_logged_as_bounded_safe_product_diagnostic",
+        "tests/contracts/test_jev_completion_applicability_v3.py::test_v3_real_asgi_nonclaim_allow_and_uncertain_fallback_paths",
+        "tests/contracts/test_development_policy_defaults.py::test_default_product_policy_handles_weak_reject_as_uncertainty"
+      ]
+    }
+  ]
+}

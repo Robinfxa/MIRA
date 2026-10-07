@@ -12,7 +12,10 @@ from setuptools.command.build_py import build_py
 class CheckedBuildPy(build_py):
     def run(self):
         web = Path("apps/web")
-        required = [web / "dist/app/main.js", web / "index.html", Path("config/defaults.toml")]
+        required = [web / "dist/app/main.js", web / "dist/licenses/THIRD_PARTY_NOTICES.txt",
+                    web / "index.html", web / "local-memory.html",
+                    web / "dist/local-memory/main.js", web / "public/local-memory.css",
+                    Path("config/defaults.toml")]
         required.extend(web / "dist" / path.relative_to(web / "src").with_suffix(".js")
                         for path in (web / "src").rglob("*.ts")
                         if not path.name.endswith(".d.ts"))

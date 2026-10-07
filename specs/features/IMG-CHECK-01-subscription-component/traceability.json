@@ -1,0 +1,36 @@
+{
+  "feature": "IMG-CHECK-01",
+  "spec": "specs/features/IMG-CHECK-01-subscription-component/spec.md",
+  "requirements": [
+    {
+      "id": "IMGCHECK01-001",
+      "tests": [
+        "tests/contracts/test_subscription_image_check.py::test_default_check_never_constructs_auth_or_transport",
+        "tests/contracts/test_subscription_image_check.py::test_no_consent_or_bad_arguments_make_zero_calls",
+        "tests/contracts/test_subscription_image_check.py::test_cli_exit_codes_and_default_do_not_depend_on_credentials"
+      ]
+    },
+    {
+      "id": "IMGCHECK01-002",
+      "tests": [
+        "tests/contracts/test_subscription_image_check.py::test_success_is_exactly_one_fixed_image_and_one_actual_png_review",
+        "tests/contracts/test_subscription_image_check.py::test_malformed_image_is_never_reviewed",
+        "tests/contracts/test_subscription_image_check.py::test_unknown_or_failed_pixel_review_is_not_success"
+      ]
+    },
+    {
+      "id": "IMGCHECK01-003",
+      "tests": [
+        "tests/contracts/test_subscription_image_check.py::test_auth_failure_has_no_http_or_review",
+        "tests/contracts/test_subscription_image_check.py::test_generation_http_failure_stops_before_review",
+        "tests/contracts/test_subscription_image_check.py::test_transport_exceptions_are_closed_safe_and_never_retry",
+        "tests/contracts/test_subscription_image_check.py::test_png_failure_reports_a_closed_specific_detail",
+        "tests/contracts/test_subscription_image_check.py::test_http_200_image_parser_details_are_specific_and_safe",
+        "tests/contracts/test_subscription_image_check.py::test_http_200_review_parser_details_are_specific_and_safe",
+        "tests/contracts/test_subscription_image_check.py::test_exception_prefix_is_not_a_detail_allowlist",
+        "tests/contracts/test_subscription_image_check.py::test_cancellation_has_no_extra_requests",
+        "tests/contracts/test_subscription_image_check.py::test_total_timeout_has_no_retry_or_review"
+      ]
+    }
+  ]
+}

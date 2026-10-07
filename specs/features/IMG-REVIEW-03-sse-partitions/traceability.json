@@ -1,0 +1,25 @@
+{
+  "feature": "IMG-REVIEW-03",
+  "spec": "specs/features/IMG-REVIEW-03-sse-partitions/spec.md",
+  "requirements": [
+    {
+      "id": "IMGREVIEW03-001",
+      "tests": ["tests/contracts/test_subscription_vision_review.py::test_small_strict_review_is_invariant_to_valid_delta_partition"]
+    },
+    {
+      "id": "IMGREVIEW03-002",
+      "tests": [
+        "tests/contracts/test_subscription_vision_review.py::test_review_event_budget_remains_bounded_and_has_exact_error",
+        "tests/contracts/test_subscription_vision_review.py::test_review_event_limit_does_not_replace_other_closed_errors",
+        "tests/contracts/test_subscription_image_check.py::test_http_200_review_parser_details_are_specific_and_safe"
+      ]
+    },
+    {
+      "id": "IMGREVIEW03-003",
+      "tests": [
+        "tests/contracts/test_subscription_vision_review.py::test_fragmented_review_preserves_strict_schema_and_request_binding",
+        "tests/contracts/test_subscription_vision_review.py::test_fragmented_review_still_rejects_unknown_metadata"
+      ]
+    }
+  ]
+}

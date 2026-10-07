@@ -1,0 +1,37 @@
+{
+  "feature": "WP12PERSONAL",
+  "spec": "specs/features/WP12-personal-memory/spec.md",
+  "requirements": [
+    {
+      "id": "WP12PERSONAL-001",
+      "tests": [
+        "tests/contracts/test_personal_memory_projection.py::test_enduring_traits_are_references_to_selected_canon_only"
+      ]
+    },
+    {
+      "id": "WP12PERSONAL-002",
+      "tests": [
+        "tests/contracts/test_personal_memory_projection.py::test_recall_states_distinguish_absent_failure_empty_and_bounded_results",
+        "tests/contracts/test_personal_memory_projection.py::test_real_synthetic_store_reopen_recall_does_not_turn_user_preference_into_mira_trait",
+        "tests/contracts/test_personal_memory_projection.py::test_unavailable_status_never_advertises_a_leftover_packet_as_current_recall",
+        "tests/contracts/test_personal_memory_unavailable_wire.py::test_unavailable_omits_leftover_record_from_generation_wire",
+        "tests/contracts/test_memory_recall_absence_boundary.py::test_success_then_operational_failure_clears_previous_packet_and_chat_continues"
+      ]
+    },
+    {
+      "id": "WP12PERSONAL-003",
+      "tests": [
+        "tests/contracts/test_personal_memory_projection.py::test_projection_is_identical_for_generation_and_review_and_scope_free",
+        "tests/contracts/test_personal_memory_projection.py::test_bounded_dialogue_keeps_self_references_and_exact_sources",
+        "tests/contracts/test_memory_availability_wires.py::test_direct_and_snapshot_jev_preserve_only_available_memory",
+        "tests/contracts/test_memory_recall_absence_boundary.py::test_unavailable_omits_leftover_record_from_jev_shared_wire"
+      ]
+    },
+    {
+      "id": "WP12PERSONAL-004",
+      "tests": [
+        "tests/contracts/test_personal_memory_projection.py::test_personal_voice_contract_is_present_and_bounded"
+      ]
+    }
+  ]
+}

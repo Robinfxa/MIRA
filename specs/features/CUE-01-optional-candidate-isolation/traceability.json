@@ -1,0 +1,10 @@
+{
+  "feature": "CUE-01",
+  "spec": "specs/features/CUE-01-optional-candidate-isolation/spec.md",
+  "requirements": [
+    {"id": "CUE01-001", "tests": ["tests/contracts/test_optional_candidate_isolation.py::test_bad_optional_preserves_exact_dialogue_and_holds_all_controls"]},
+    {"id": "CUE01-002", "tests": ["tests/contracts/test_optional_candidate_isolation.py::test_structural_body_and_tool_bypasses_still_reject", "tests/contracts/test_optional_candidate_isolation.py::test_no_recovery_from_broken_json_or_wrong_outer_shape", "tests/contracts/test_optional_candidate_isolation.py::test_unknown_parser_exception_is_never_salvaged"]},
+    {"id": "CUE01-003", "tests": ["tests/contracts/test_optional_candidate_isolation.py::test_optional_diagnostic_is_closed_and_export_rejects_unknown_reason", "tests/contracts/test_optional_candidate_isolation.py::test_character_error_code_is_not_collapsed_and_valid_role_stays_typed"]},
+    {"id": "CUE01-004", "tests": ["tests/contracts/test_optional_candidate_isolation.py::test_real_wire_actor_two_turns_keep_dialogue_without_false_role_or_controls"]}
+  ]
+}

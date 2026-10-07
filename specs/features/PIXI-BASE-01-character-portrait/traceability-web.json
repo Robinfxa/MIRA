@@ -1,0 +1,36 @@
+{
+  "feature": "PIXIBASE",
+  "spec": "specs/features/PIXI-BASE-01-character-portrait/spec.md",
+  "requirements": [
+    {
+      "id": "PIXIBASE-001",
+      "tests": [
+        "tests/web/pixi-character.test.mjs::manifest validates shipped frames and preserves shared bottom-centre anchors",
+        "tests/web/pixi-character.test.mjs::every declared frame is local, hash-pinned RGBA PNG below the texture limits"
+      ]
+    },
+    {
+      "id": "PIXIBASE-002",
+      "tests": [
+        "tests/web/pixi-character.test.mjs::manifest rejects nonlocal, malformed, mismatched, and undeclared frame entries",
+        "tests/web/pixi-character.test.mjs::only exact action and expression pairs select a full-frame variant"
+      ]
+    },
+    {
+      "id": "PIXIBASE-003",
+      "tests": [
+        "tests/web/pixi-character.test.mjs::renderer readiness applies only the latest executor state",
+        "tests/web/pixi-character.test.mjs::prepare stages the exact next frame but does not render it before apply"
+      ]
+    },
+    {
+      "id": "PIXIBASE-004",
+      "tests": [
+        "tests/web/pixi-character.test.mjs::renderer failures leave the static SVG path usable",
+        "tests/web/pixi-character.test.mjs::Pixi runtime initializes transparent, capped, non-looping canvas",
+        "tests/web/pixi-character.test.mjs::WebGL context loss tears down Pixi and restores SVG",
+        "tests/web/pixi-character.test.mjs::close aborts pending renderer setup and safely disposes late completion once"
+      ]
+    }
+  ]
+}

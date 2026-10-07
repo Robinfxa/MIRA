@@ -1,0 +1,555 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFF...                                           [100%]
+=================================== FAILURES ===================================
+_____ test_same_job_operation_facts_survive_a_new_reply_epoch[generating] ______
+
+phase = 'generating'
+
+    @pytest.mark.parametrize("phase", ["generating", "reviewing", "qualified", "presented", "failed", "held"])
+    def test_same_job_operation_facts_survive_a_new_reply_epoch(phase):
+        value, images, reviews = runtime(png())
+        value._begin_operation_diagnostic("job-a", output_epoch=1, activity_seq=1)
+        value.update_phase("job-a", phase)
+        value.operation_diagnostic = SafeImageOperationDiagnostic(
+            operation_stage="pixel_review", failure_reason="image_http_transport",
+            failure_exception="value_error", png_width=1024, png_height=1024,
+            png_dimensions="bounded", png_mode="rgb", png_bit_depth="8", png_alpha="opaque")
+        value.provider_observation = "review_error"
+        observed = current(value)
+        assert observed["output_epoch"] == 2 and observed["job_origin_epoch"] == 1
+        assert observed["job_state"] == phase
+>       assert observed["operation_stage"] == "pixel_review"
+E       AssertionError: assert 'unobserved' == 'pixel_review'
+E         
+E         - pixel_review
+E         + unobserved
+
+tests/contracts/test_background_image_diagnostic_identity.py:29: AssertionError
+______ test_same_job_operation_facts_survive_a_new_reply_epoch[reviewing] ______
+
+phase = 'reviewing'
+
+    @pytest.mark.parametrize("phase", ["generating", "reviewing", "qualified", "presented", "failed", "held"])
+    def test_same_job_operation_facts_survive_a_new_reply_epoch(phase):
+        value, images, reviews = runtime(png())
+        value._begin_operation_diagnostic("job-a", output_epoch=1, activity_seq=1)
+        value.update_phase("job-a", phase)
+        value.operation_diagnostic = SafeImageOperationDiagnostic(
+            operation_stage="pixel_review", failure_reason="image_http_transport",
+            failure_exception="value_error", png_width=1024, png_height=1024,
+            png_dimensions="bounded", png_mode="rgb", png_bit_depth="8", png_alpha="opaque")
+        value.provider_observation = "review_error"
+        observed = current(value)
+        assert observed["output_epoch"] == 2 and observed["job_origin_epoch"] == 1
+        assert observed["job_state"] == phase
+>       assert observed["operation_stage"] == "pixel_review"
+E       AssertionError: assert 'unobserved' == 'pixel_review'
+E         
+E         - pixel_review
+E         + unobserved
+
+tests/contracts/test_background_image_diagnostic_identity.py:29: AssertionError
+______ test_same_job_operation_facts_survive_a_new_reply_epoch[qualified] ______
+
+phase = 'qualified'
+
+    @pytest.mark.parametrize("phase", ["generating", "reviewing", "qualified", "presented", "failed", "held"])
+    def test_same_job_operation_facts_survive_a_new_reply_epoch(phase):
+        value, images, reviews = runtime(png())
+        value._begin_operation_diagnostic("job-a", output_epoch=1, activity_seq=1)
+        value.update_phase("job-a", phase)
+        value.operation_diagnostic = SafeImageOperationDiagnostic(
+            operation_stage="pixel_review", failure_reason="image_http_transport",
+            failure_exception="value_error", png_width=1024, png_height=1024,
+            png_dimensions="bounded", png_mode="rgb", png_bit_depth="8", png_alpha="opaque")
+        value.provider_observation = "review_error"
+        observed = current(value)
+        assert observed["output_epoch"] == 2 and observed["job_origin_epoch"] == 1
+        assert observed["job_state"] == phase
+>       assert observed["operation_stage"] == "pixel_review"
+E       AssertionError: assert 'unobserved' == 'pixel_review'
+E         
+E         - pixel_review
+E         + unobserved
+
+tests/contracts/test_background_image_diagnostic_identity.py:29: AssertionError
+______ test_same_job_operation_facts_survive_a_new_reply_epoch[presented] ______
+
+phase = 'presented'
+
+    @pytest.mark.parametrize("phase", ["generating", "reviewing", "qualified", "presented", "failed", "held"])
+    def test_same_job_operation_facts_survive_a_new_reply_epoch(phase):
+        value, images, reviews = runtime(png())
+        value._begin_operation_diagnostic("job-a", output_epoch=1, activity_seq=1)
+        value.update_phase("job-a", phase)
+        value.operation_diagnostic = SafeImageOperationDiagnostic(
+            operation_stage="pixel_review", failure_reason="image_http_transport",
+            failure_exception="value_error", png_width=1024, png_height=1024,
+            png_dimensions="bounded", png_mode="rgb", png_bit_depth="8", png_alpha="opaque")
+        value.provider_observation = "review_error"
+        observed = current(value)
+        assert observed["output_epoch"] == 2 and observed["job_origin_epoch"] == 1
+        assert observed["job_state"] == phase
+>       assert observed["operation_stage"] == "pixel_review"
+E       AssertionError: assert 'unobserved' == 'pixel_review'
+E         
+E         - pixel_review
+E         + unobserved
+
+tests/contracts/test_background_image_diagnostic_identity.py:29: AssertionError
+_______ test_same_job_operation_facts_survive_a_new_reply_epoch[failed] ________
+
+phase = 'failed'
+
+    @pytest.mark.parametrize("phase", ["generating", "reviewing", "qualified", "presented", "failed", "held"])
+    def test_same_job_operation_facts_survive_a_new_reply_epoch(phase):
+        value, images, reviews = runtime(png())
+        value._begin_operation_diagnostic("job-a", output_epoch=1, activity_seq=1)
+        value.update_phase("job-a", phase)
+        value.operation_diagnostic = SafeImageOperationDiagnostic(
+            operation_stage="pixel_review", failure_reason="image_http_transport",
+            failure_exception="value_error", png_width=1024, png_height=1024,
+            png_dimensions="bounded", png_mode="rgb", png_bit_depth="8", png_alpha="opaque")
+        value.provider_observation = "review_error"
+        observed = current(value)
+        assert observed["output_epoch"] == 2 and observed["job_origin_epoch"] == 1
+        assert observed["job_state"] == phase
+>       assert observed["operation_stage"] == "pixel_review"
+E       AssertionError: assert 'unobserved' == 'pixel_review'
+E         
+E         - pixel_review
+E         + unobserved
+
+tests/contracts/test_background_image_diagnostic_identity.py:29: AssertionError
+________ test_same_job_operation_facts_survive_a_new_reply_epoch[held] _________
+
+phase = 'held'
+
+    @pytest.mark.parametrize("phase", ["generating", "reviewing", "qualified", "presented", "failed", "held"])
+    def test_same_job_operation_facts_survive_a_new_reply_epoch(phase):
+        value, images, reviews = runtime(png())
+        value._begin_operation_diagnostic("job-a", output_epoch=1, activity_seq=1)
+        value.update_phase("job-a", phase)
+        value.operation_diagnostic = SafeImageOperationDiagnostic(
+            operation_stage="pixel_review", failure_reason="image_http_transport",
+            failure_exception="value_error", png_width=1024, png_height=1024,
+            png_dimensions="bounded", png_mode="rgb", png_bit_depth="8", png_alpha="opaque")
+        value.provider_observation = "review_error"
+        observed = current(value)
+        assert observed["output_epoch"] == 2 and observed["job_origin_epoch"] == 1
+        assert observed["job_state"] == phase
+>       assert observed["operation_stage"] == "pixel_review"
+E       AssertionError: assert 'unobserved' == 'pixel_review'
+E         
+E         - pixel_review
+E         + unobserved
+
+tests/contracts/test_background_image_diagnostic_identity.py:29: AssertionError
+__ test_new_job_resets_observation_and_old_duplicate_writes_cannot_pollute_it __
+
+    def test_new_job_resets_observation_and_old_duplicate_writes_cannot_pollute_it():
+        value, images, reviews = runtime(png())
+        value._begin_operation_diagnostic("job-a", output_epoch=1, activity_seq=1)
+        value._operation_diagnostic("job-a", stage="pixel_review", data=png(),
+            provider="review_error", alpha="opaque")
+        value.record_operation_failure(ValueError("image_http_transport"), request_id="job-a")
+        value._begin_operation_diagnostic("job-b", output_epoch=2, activity_seq=2)
+        value.update_phase("job-b", "generating")
+        before = current(value, 3)
+>       assert before["operation_stage"] == "admission"
+E       AssertionError: assert 'unobserved' == 'admission'
+E         
+E         - admission
+E         + unobserved
+
+tests/contracts/test_background_image_diagnostic_identity.py:45: AssertionError
+___ test_same_failed_job_duplicate_callbacks_never_erase_its_terminal_cause ____
+
+    def test_same_failed_job_duplicate_callbacks_never_erase_its_terminal_cause():
+        value, _, _ = runtime(png())
+        value._begin_operation_diagnostic("job-a", output_epoch=1, activity_seq=1)
+        value.update_phase("job-a", "failed")
+        value._operation_diagnostic("job-a", stage="pixel_review")
+        value.record_operation_failure(ValueError("image_http_transport"), request_id="job-a")
+        before = current(value)
+        for _ in range(2):
+            value._operation_diagnostic("job-a", stage="qualified", provider="review_returned")
+            value.record_operation_failure(TimeoutError(), request_id="job-a")
+        assert current(value) == before
+>       assert before["failure_reason"] == "image_http_transport"
+E       AssertionError: assert 'none' == 'image_http_transport'
+E         
+E         - image_http_transport
+E         + none
+
+tests/contracts/test_background_image_diagnostic_identity.py:69: AssertionError
+______ test_real_actor_preserves_review_metadata_across_input_and_failure ______
+
+    @pytest.mark.asyncio
+    async def test_real_actor_preserves_review_metadata_across_input_and_failure():
+        from tests.contracts.test_luna_tool_actor import ToolTurn, text_candidate, wait_state
+        from tests.contracts.test_development_review_composition import finish
+    
+        value, images, _ = runtime(png())
+        value.admission = replace(value.admission, timeout_seconds=4, authorized_custom_brief=True)
+        arrived, release = asyncio.Event(), asyncio.Event()
+        class Review:
+            calls = 0
+            async def review(self, artifact, request):
+                self.calls += 1
+                arrived.set()
+                await release.wait()
+                raise ValueError("image_http_transport")
+        review = Review()
+        value.vision_backend = review
+        text_turns = [ToolTurn(), ToolTurn()]
+        for turn in text_turns: turn.call = text_candidate()
+        actor = native_actor(value, [image_turn("image"), *text_turns])
+        try:
+            await actor.submit(request_id="turn1", activity_seq=1, cutoff=0, text="An empty fictional lake.")
+            await asyncio.wait_for(arrived.wait(), 1)
+            await actor.submit(request_id="turn2", activity_seq=2, cutoff=0, text="A separate ordinary topic.")
+            await finish(actor)
+            reviewing = current(value)
+            assert reviewing["job_state"] == "reviewing"
+>           assert reviewing["operation_stage"] == "pixel_review"
+E           AssertionError: assert 'unobserved' == 'pixel_review'
+E             
+E             - pixel_review
+E             + unobserved
+
+tests/contracts/test_background_image_diagnostic_identity.py:99: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_artifact_binding] _
+
+code = 'subscription_review_artifact_binding'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...ifact_binding'
+E         
+E         - subscription_review_artifact_binding
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_checks] _
+
+code = 'subscription_review_checks'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription_review_checks'
+E         
+E         - subscription_review_checks
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_content_length] _
+
+code = 'subscription_review_content_length'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...ontent_length'
+E         
+E         - subscription_review_content_length
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_content_type] _
+
+code = 'subscription_review_content_type'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription..._content_type'
+E         
+E         - subscription_review_content_type
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_encoding] _
+
+code = 'subscription_review_encoding'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription_review_encoding'
+E         
+E         - subscription_review_encoding
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_event] _
+
+code = 'subscription_review_event'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription_review_event'
+E         
+E         - subscription_review_event
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_event_limit] _
+
+code = 'subscription_review_event_limit'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...w_event_limit'
+E         
+E         - subscription_review_event_limit
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_http_status] _
+
+code = 'subscription_review_http_status'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...w_http_status'
+E         
+E         - subscription_review_http_status
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_incomplete] _
+
+code = 'subscription_review_incomplete'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...ew_incomplete'
+E         
+E         - subscription_review_incomplete
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_item] _
+
+code = 'subscription_review_item'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription_review_item'
+E         
+E         - subscription_review_item
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_not_canonical] _
+
+code = 'subscription_review_not_canonical'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...not_canonical'
+E         
+E         - subscription_review_not_canonical
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_observation_binding] _
+
+code = 'subscription_review_observation_binding'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...ation_binding'
+E         
+E         - subscription_review_observation_binding
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_request_limit] _
+
+code = 'subscription_review_request_limit'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...request_limit'
+E         
+E         - subscription_review_request_limit
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_response] _
+
+code = 'subscription_review_response'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription_review_response'
+E         
+E         - subscription_review_response
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_terminal] _
+
+code = 'subscription_review_terminal'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription_review_terminal'
+E         
+E         - subscription_review_terminal
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_timeout] _
+
+code = 'subscription_review_timeout'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription_review_timeout'
+E         
+E         - subscription_review_timeout
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_transport] _
+
+code = 'subscription_review_transport'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...iew_transport'
+E         
+E         - subscription_review_transport
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_wire_limit] _
+
+code = 'subscription_review_wire_limit'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...ew_wire_limit'
+E         
+E         - subscription_review_wire_limit
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:138: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_same_job_operation_facts_survive_a_new_reply_epoch[generating]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_same_job_operation_facts_survive_a_new_reply_epoch[reviewing]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_same_job_operation_facts_survive_a_new_reply_epoch[qualified]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_same_job_operation_facts_survive_a_new_reply_epoch[presented]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_same_job_operation_facts_survive_a_new_reply_epoch[failed]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_same_job_operation_facts_survive_a_new_reply_epoch[held]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_new_job_resets_observation_and_old_duplicate_writes_cannot_pollute_it
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_same_failed_job_duplicate_callbacks_never_erase_its_terminal_cause
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_real_actor_preserves_review_metadata_across_input_and_failure
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_artifact_binding]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_checks]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_content_length]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_content_type]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_encoding]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_event]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_event_limit]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_http_status]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_incomplete]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_item]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_not_canonical]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_observation_binding]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_request_limit]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_response]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_terminal]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_timeout]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_transport]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_wire_limit]
+27 failed, 3 passed in 0.52s

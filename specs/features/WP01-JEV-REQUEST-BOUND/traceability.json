@@ -1,0 +1,27 @@
+{
+  "feature": "WP01-JEV-REQUEST-BOUND",
+  "spec": "specs/features/WP01-JEV-REQUEST-BOUND/spec.md",
+  "requirements": [
+    {
+      "id": "WP01JEVREQUESTBOUND-001",
+      "tests": [
+        "tests/contracts/test_jev_review_request_bound.py::test_output_backend_enforces_exact_utf8_serialized_byte_limit",
+        "tests/contracts/test_jev_review_request_bound.py::test_http_transport_uses_utf8_bytes_for_exact_limit_and_overlimit_fail_closed",
+        "tests/contracts/test_jev_review_request_bound.py::test_four_round_actual_asgi_keeps_full_context_contract_and_independent_budgets"
+      ]
+    },
+    {
+      "id": "WP01JEVREQUESTBOUND-002",
+      "tests": [
+        "tests/contracts/test_jev_transport_request_limits.py::test_transport_enforces_its_exact_configured_utf8_limit",
+        "tests/contracts/test_jev_transport_request_limits.py::test_legacy_transport_default_remains_32_kib",
+        "tests/contracts/test_jev_transport_request_limits.py::test_transport_rejects_invalid_or_above_global_limit_before_io",
+        "tests/contracts/test_jev_transport_request_limits.py::test_transport_rejects_nonbytes_without_dispatch",
+        "tests/contracts/test_jev_transport_request_limits.py::test_factory_binds_separate_input_output_transports_without_mutating_original",
+        "tests/contracts/test_jev_transport_request_limits.py::test_factory_keeps_injected_non_http_transport_and_existing_default_limits",
+        "tests/contracts/test_jev_transport_request_limits.py::test_factory_does_not_replace_custom_http_subclass_interface",
+        "tests/contracts/test_jev_transport_request_limits.py::test_five_turn_story_photo_uses_real_http_bound_and_preserves_fail_closed_controls"
+      ]
+    }
+  ]
+}

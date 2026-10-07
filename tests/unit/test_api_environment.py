@@ -34,8 +34,72 @@ def test_offline_inspection_does_not_call_network_or_claim_live(monkeypatch):
     report = inspect_services(settings(), executable_available=False)
     assert report["live_ready"] is False
     assert report["inference_verified"] == "not_run"
-    assert report["capabilities"]["text"]["adapter"] == "not_implemented"
+    assert report["capabilities"]["text"]["adapter"] == "implemented_in_explicit_development_entry"
+    assert report["capabilities"]["text"]["fields_complete"] is False
+    assert report["capabilities"]["text"]["account_access"] == "not_run"
+    assert report["capabilities"]["text"]["default_provider_factory_composed"] is False
     assert not report["core_fields_complete"]
+
+
+def test_selected_route_reports_implemented_development_entries_without_claiming_readiness():
+    s = ready_services(
+        routes={"text": "codex_native", "image": "codex_native", "vision": "codex_native"},
+        codex={"text_model": "chosen-codex"},
+        jev={"api_key": "synthetic-jev-secret", "model": "jev-fixed"},
+        speech={"project_id": "mira-example", "quota_project_id": "mira-example",
+                "tts_voice": "Kore"},
+    )
+    report = inspect_services(s, executable_available=True)
+    rows = report["capabilities"]
+    for capability, entrypoint in (("text", "tools/live_dev.py"),
+                                   ("review", "tools/live_dev.py"),
+                                   ("asr", "tools/live_voice.py"),
+                                   ("tts", "tools/live_voice.py")):
+        assert rows[capability]["adapter"] == "implemented_in_explicit_development_entry"
+        assert rows[capability]["adapter_entrypoint"] == entrypoint
+        assert rows[capability]["default_provider_factory_composed"] is False
+    assert rows["image"]["adapter"] == "not_implemented"
+    assert rows["vision"]["adapter"] == "not_implemented"
+    assert report["live_ready"] is False
+    assert report["inference_verified"] == "not_run"
+    assert all(rows[name]["account_access"] == "not_run" for name in ("text", "review", "asr", "tts"))
+    assert "synthetic-jev-secret" not in json.dumps(report)
+
+
+@pytest.mark.parametrize("route", ["gateway", "openai_api"])
+def test_generic_text_route_remains_unimplemented_even_with_complete_fields(route):
+    group = "gateway" if route == "gateway" else "openai"
+    s = ready_services(routes={"text": route}, **{
+        group: {"api_key": "synthetic-route-secret", "text_model": "model-ready",
+               **({"access_confirmed": True} if group == "gateway" else {})},
+    })
+    row = inspect_services(s)["capabilities"]["text"]
+    assert row["fields_complete"]
+    assert row["adapter"] == "not_implemented"
+    assert row["adapter_entrypoint"] is None
+    assert row["default_provider_factory_composed"] is False
+
+
+def test_explicit_env_file_missing_has_safe_specific_guidance_and_never_falls_back(tmp_path, monkeypatch, capsys):
+    from tools import api_env
+    root_env = tmp_path / ".env"
+    root_env.write_text("MIRA_HTTP__PORT=8765\n")
+    missing = tmp_path / "private-not-here.env"
+    monkeypatch.setattr(api_env, "ROOT", tmp_path)
+    monkeypatch.setattr(api_env, "load_settings",
+                        lambda **kwargs: pytest.fail("explicit missing file must block before project .env fallback"))
+    monkeypatch.setattr("sys.argv", ["api_env", "check", "--env-file", str(missing)])
+
+    assert api_env.main() == 2
+    output = capsys.readouterr()
+    report = json.loads(output.out)
+    assert report["status"] == "blocked"
+    assert report["reason"] == "explicit_env_file_missing"
+    assert report["live_ready"] is False
+    assert "existing private" in report["next"]
+    assert "init" in report["next"]
+    assert str(missing) not in output.out + output.err
+    assert "Traceback" not in output.err
 
 
 def test_fields_and_credential_presence_are_not_authentication():

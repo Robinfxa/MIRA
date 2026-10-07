@@ -1,0 +1,26 @@
+{
+  "feature": "WP01-JEV-O3-QUESTION-V2",
+  "spec": "specs/features/WP01-JEV-O3-QUESTION-V2/spec.md",
+  "requirements": [
+    {
+      "id": "WP01JEVO3QUESTIONV2-001",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_v2_question_version_and_bound_payload_preserve_full_state_and_digests"
+      ]
+    },
+    {
+      "id": "WP01JEVO3QUESTIONV2-002",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_v2_question_version_and_bound_payload_preserve_full_state_and_digests",
+        "tests/contracts/test_semantic_composition.py::test_output_typed_contract_can_select_question_set_v2_without_losing_evidence"
+      ]
+    },
+    {
+      "id": "WP01JEVO3QUESTIONV2-003",
+      "tests": [
+        "tests/contracts/test_jev_review.py::test_v2_o3_strong_reject_survives_policy_v2",
+        "tests/contracts/test_jev_review.py::test_v2_explicit_ban_still_rejects_when_o3_allows"
+      ]
+    }
+  ]
+}

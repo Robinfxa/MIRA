@@ -114,3 +114,26 @@ def test_sample_bounds_fail_closed(samples, status):
     state, speech, _ = issued()
     with pytest.raises(DomainError, match="bounds"):
         record_audio_progress(state, progress(speech, samples=samples, status=status))
+
+@pytest.mark.parametrize('samples', [0, 240])
+@pytest.mark.parametrize('status', [AudioStatus.FAILED, AudioStatus.INTERRUPTED])
+def test_speech_failure_keeps_only_issued_independent_text(samples, status):
+    state, speech, visual = issued()
+    caption = replace(visual, cue_id='ordinary-text')
+    dependent = replace(visual, id='dependent', cue_id='voice', cue_speech_id=speech.id)
+    speech = replace(speech, cue_id='voice', cue_speech_id=speech.id)
+    state = replace(state, active_grants=(speech, caption, dependent),
+                    issued_effects=(speech, caption, dependent))
+    changed = record_audio_progress(state, progress(speech, samples=samples, status=status),
+                                    diagnostic_id='diagnostic')
+    assert changed.active_grants == (caption,)
+    assert changed.output_epoch == state.output_epoch and changed.request_id == state.request_id
+    assert changed.permit_revision > state.permit_revision and changed.sealed
+    assert changed.phase == 'ready' and changed.last_error == 'audio_' + status.value
+    assert changed.presented_effects == ()
+    assert changed.last_error_diagnostic_id == 'diagnostic'
+    completed = record_receipt(changed, visual_receipt(caption, 2))
+    assert completed.phase == 'idle' and completed.presented_effects == (caption,)
+    assert accept_range(changed, output_epoch=1, effects=(replace(dependent, id='late'),)) is changed
+    stopped = stop(changed, activity_seq=2, cutoff=1)
+    assert stopped.active_grants == ()

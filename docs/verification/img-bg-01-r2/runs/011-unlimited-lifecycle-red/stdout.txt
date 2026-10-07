@@ -1,0 +1,45 @@
+.F.F                                                                     [100%]
+=================================== FAILURES ===================================
+____ test_review_survives_three_turns_and_uses_current_exact_receipt[None] _____
+
+session_turn_limit = None
+
+    @pytest.mark.parametrize("session_turn_limit", [8, None])
+    def test_review_survives_three_turns_and_uses_current_exact_receipt(session_turn_limit):
+        vision=Vision(blocked=True,ignore=False)
+        app,images,_,generation,_=app_for(vision=vision,timeout=4,session_turn_limit=session_turn_limit)
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);settled(client,path,headers)
+            try:
+                assert vision.arrived.wait(1);origin=images.calls[0]
+                generation.rows=[candidate(image=False)]
+                for n in (2,3,4):
+                    submit(client,path,headers,activity=n);state=settled(client,path,headers)
+                    assert state['story_image']['state']=='reviewing'
+                    assert generation.contexts[-1].story_images[0].state=='reviewing'
+                vision.release.set();state=image_done(client,path,headers)
+>               image=next(e for e in state['active_grants'] if e['kind']=='media')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               StopIteration
+
+tests/contracts/test_background_story_images.py:34: StopIteration
+_ test_qualified_rollover_revokes_old_grant_without_more_image_or_review[None] _
+
+session_turn_limit = None
+
+    @pytest.mark.parametrize("session_turn_limit", [8, None])
+    def test_qualified_rollover_revokes_old_grant_without_more_image_or_review(session_turn_limit):
+        app,images,vision,generation,_=app_for(session_turn_limit=session_turn_limit)
+        with TestClient(app) as client:
+            path,headers=session(client);submit(client,path,headers);state=image_done(client,path,headers)
+            old=next(e for e in state['active_grants'] if e['kind']=='media');resource,body=body_for(old)
+            generation.rows=[candidate(image=False)];submit(client,path,headers,activity=2);state=settled(client,path,headers)
+>           new=next(e for e in state['active_grants'] if e['kind']=='media')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           StopIteration
+
+tests/contracts/test_background_story_images.py:53: StopIteration
+=========================== short test summary info ============================
+FAILED tests/contracts/test_background_story_images.py::test_review_survives_three_turns_and_uses_current_exact_receipt[None]
+FAILED tests/contracts/test_background_story_images.py::test_qualified_rollover_revokes_old_grant_without_more_image_or_review[None]
+2 failed, 2 passed in 1.10s

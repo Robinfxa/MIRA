@@ -1,0 +1,78 @@
+FFFF..                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job[\u753b\u9762\u91cc\u52a0\u4e00\u4e2a\u865a\u6784\u884c\u4eba-chatgpt_subscription] _
+
+route = <ResponsesRoute.CHATGPT_SUBSCRIPTION: 'chatgpt_subscription'>
+subject = '画面里加一个虚构行人'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route',list(ResponsesRoute))
+    @pytest.mark.parametrize('subject',['画面里加一个虚构行人','换成一只橘猫蹲在门口'])
+    async def test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job(route,subject):
+        s=WireSession(route=route);images=image_runtime(s)
+        try:
+            result,state=await s.turn(subject,'这次能找的是空景。换成雨里的街道可以吗？')
+            body=json.loads(s.requests[0].content)
+            tool=next(t for t in body['tools'] if t['name']=='generate_story_image')
+>           assert 'no people or animals, including fictional ones' in tool['description']
+E           AssertionError: assert 'no people or animals, including fictional ones' in 'Request one explicitly authorized fictional scenery/object image. A current request for another photo in a photo-shar...d brief validation and independent pixel qualification remain required. Report only returned generation/display facts.'
+
+tests/contracts/test_native_image_scope_contract.py:19: AssertionError
+_ test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job[\u753b\u9762\u91cc\u52a0\u4e00\u4e2a\u865a\u6784\u884c\u4eba-openai_api] _
+
+route = <ResponsesRoute.OPENAI_API: 'openai_api'>, subject = '画面里加一个虚构行人'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route',list(ResponsesRoute))
+    @pytest.mark.parametrize('subject',['画面里加一个虚构行人','换成一只橘猫蹲在门口'])
+    async def test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job(route,subject):
+        s=WireSession(route=route);images=image_runtime(s)
+        try:
+            result,state=await s.turn(subject,'这次能找的是空景。换成雨里的街道可以吗？')
+            body=json.loads(s.requests[0].content)
+            tool=next(t for t in body['tools'] if t['name']=='generate_story_image')
+>           assert 'no people or animals, including fictional ones' in tool['description']
+E           AssertionError: assert 'no people or animals, including fictional ones' in 'Request one explicitly authorized fictional scenery/object image. A current request for another photo in a photo-shar...d brief validation and independent pixel qualification remain required. Report only returned generation/display facts.'
+
+tests/contracts/test_native_image_scope_contract.py:19: AssertionError
+_ test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job[\u6362\u6210\u4e00\u53ea\u6a58\u732b\u8e72\u5728\u95e8\u53e3-chatgpt_subscription] _
+
+route = <ResponsesRoute.CHATGPT_SUBSCRIPTION: 'chatgpt_subscription'>
+subject = '换成一只橘猫蹲在门口'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route',list(ResponsesRoute))
+    @pytest.mark.parametrize('subject',['画面里加一个虚构行人','换成一只橘猫蹲在门口'])
+    async def test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job(route,subject):
+        s=WireSession(route=route);images=image_runtime(s)
+        try:
+            result,state=await s.turn(subject,'这次能找的是空景。换成雨里的街道可以吗？')
+            body=json.loads(s.requests[0].content)
+            tool=next(t for t in body['tools'] if t['name']=='generate_story_image')
+>           assert 'no people or animals, including fictional ones' in tool['description']
+E           AssertionError: assert 'no people or animals, including fictional ones' in 'Request one explicitly authorized fictional scenery/object image. A current request for another photo in a photo-shar...d brief validation and independent pixel qualification remain required. Report only returned generation/display facts.'
+
+tests/contracts/test_native_image_scope_contract.py:19: AssertionError
+_ test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job[\u6362\u6210\u4e00\u53ea\u6a58\u732b\u8e72\u5728\u95e8\u53e3-openai_api] _
+
+route = <ResponsesRoute.OPENAI_API: 'openai_api'>, subject = '换成一只橘猫蹲在门口'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('route',list(ResponsesRoute))
+    @pytest.mark.parametrize('subject',['画面里加一个虚构行人','换成一只橘猫蹲在门口'])
+    async def test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job(route,subject):
+        s=WireSession(route=route);images=image_runtime(s)
+        try:
+            result,state=await s.turn(subject,'这次能找的是空景。换成雨里的街道可以吗？')
+            body=json.loads(s.requests[0].content)
+            tool=next(t for t in body['tools'] if t['name']=='generate_story_image')
+>           assert 'no people or animals, including fictional ones' in tool['description']
+E           AssertionError: assert 'no people or animals, including fictional ones' in 'Request one explicitly authorized fictional scenery/object image. A current request for another photo in a photo-shar...d brief validation and independent pixel qualification remain required. Report only returned generation/display facts.'
+
+tests/contracts/test_native_image_scope_contract.py:19: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_image_scope_contract.py::test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job[\u753b\u9762\u91cc\u52a0\u4e00\u4e2a\u865a\u6784\u884c\u4eba-chatgpt_subscription]
+FAILED tests/contracts/test_native_image_scope_contract.py::test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job[\u753b\u9762\u91cc\u52a0\u4e00\u4e2a\u865a\u6784\u884c\u4eba-openai_api]
+FAILED tests/contracts/test_native_image_scope_contract.py::test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job[\u6362\u6210\u4e00\u53ea\u6a58\u732b\u8e72\u5728\u95e8\u53e3-chatgpt_subscription]
+FAILED tests/contracts/test_native_image_scope_contract.py::test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job[\u6362\u6210\u4e00\u53ea\u6a58\u732b\u8e72\u5728\u95e8\u53e3-openai_api]
+4 failed, 2 passed in 0.65s

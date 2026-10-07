@@ -1,0 +1,426 @@
+{
+  "schema": "mira.story-graph-traces.v1",
+  "graph_ref": "story-graph.json",
+  "status": "authored_acceptance_examples_not_executed_runtime_tests",
+  "traces": [
+    {
+      "id": "TRACE-YES",
+      "title": "愿意且ready后换雨衣，回执后才形成候选",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "await_rain_choice",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": "fixture.offer.1",
+        "offer_presented": true,
+        "epoch": 7,
+        "episode_candidates": []
+      },
+      "steps": [
+        {
+          "event": "reliable_user_input",
+          "text": "好啊，披上雨衣，一起看会儿雨。",
+          "source_event_id": "fixture.input.yes"
+        },
+        {
+          "event": "jev_choice",
+          "choice": "YES",
+          "offer_id": "fixture.offer.1"
+        },
+        {
+          "event": "capability_snapshot",
+          "raincoat_asset_ready": true,
+          "asset_revision": "fixture.asset.v1"
+        },
+        {
+          "event": "llm_proposal",
+          "transition_id": "t.yes",
+          "expected": "candidate_only"
+        },
+        {
+          "event": "admit_current_effect",
+          "expected_node": "raincoat_pending",
+          "expected_outfit": "black_jacket",
+          "expected_episode_candidate_count": 0
+        },
+        {
+          "event": "trusted_wardrobe_receipt",
+          "effect_id": "fixture.effect.1",
+          "epoch": 7,
+          "outfit": "amber_raincoat",
+          "expected_node": "rain_view",
+          "expected_episode_candidate": "episode.wardrobe_change"
+        }
+      ],
+      "expected_final": {
+        "node": "rain_view",
+        "outfit": "amber_raincoat",
+        "qualified_episode_candidates": 1,
+        "durable_memory_writes": 0,
+        "user_really_moved": false
+      }
+    },
+    {
+      "id": "TRACE-NO",
+      "title": "拒绝则留室内且不扣关系",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "await_rain_choice",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": "fixture.offer.1",
+        "offer_presented": true,
+        "epoch": 7,
+        "episode_candidates": []
+      },
+      "steps": [
+        {
+          "event": "reliable_user_input",
+          "text": "不想换，就在这里聊吧。"
+        },
+        {
+          "event": "jev_choice",
+          "choice": "NO",
+          "offer_id": "fixture.offer.1"
+        },
+        {
+          "event": "apply_transition",
+          "transition_id": "t.no",
+          "expected_effects": []
+        }
+      ],
+      "expected_final": {
+        "node": "cafe_chat",
+        "outfit": "black_jacket",
+        "intent": "declined",
+        "qualified_episode_candidates": 0,
+        "relationship_delta": 0,
+        "forced_guarded": false,
+        "durable_memory_writes": 0
+      }
+    },
+    {
+      "id": "TRACE-UNKNOWN",
+      "title": "模糊回应不推进",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "await_rain_choice",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": "fixture.offer.1",
+        "offer_presented": true,
+        "epoch": 7,
+        "episode_candidates": []
+      },
+      "steps": [
+        {
+          "event": "reliable_user_input",
+          "text": "刚才那杯咖啡闻起来挺香。"
+        },
+        {
+          "event": "jev_choice",
+          "choice": "UNKNOWN",
+          "offer_id": "fixture.offer.1"
+        },
+        {
+          "event": "llm_proposal",
+          "transition_id": "t.chat",
+          "expected_effects": [],
+          "reply_goal": "接咖啡话题；不反复催邀请"
+        }
+      ],
+      "expected_final": {
+        "node": "await_rain_choice",
+        "outfit": "black_jacket",
+        "qualified_episode_candidates": 0,
+        "durable_memory_writes": 0
+      }
+    },
+    {
+      "id": "TRACE-ASSET-UNAVAILABLE",
+      "title": "愿意但未ready不换衣不虚报",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "await_rain_choice",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": "fixture.offer.1",
+        "offer_presented": true,
+        "epoch": 7,
+        "episode_candidates": []
+      },
+      "steps": [
+        {
+          "event": "reliable_user_input",
+          "text": "好，换上雨衣吧。"
+        },
+        {
+          "event": "jev_choice",
+          "choice": "YES",
+          "offer_id": "fixture.offer.1"
+        },
+        {
+          "event": "capability_snapshot",
+          "raincoat_asset_ready": false
+        },
+        {
+          "event": "apply_transition",
+          "transition_id": "t.unavailable",
+          "expected_effects": []
+        }
+      ],
+      "expected_final": {
+        "node": "cafe_chat",
+        "outfit": "black_jacket",
+        "intent": "closed_capability_unavailable",
+        "qualified_episode_candidates": 0,
+        "durable_memory_writes": 0
+      }
+    },
+    {
+      "id": "TRACE-STOP-BEFORE-RECEIPT",
+      "title": "尚未呈现就停止，旧回调不复活",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "raincoat_pending",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": "fixture.offer.1",
+        "offer_presented": true,
+        "epoch": 7,
+        "episode_candidates": []
+      },
+      "steps": [
+        {
+          "event": "stop",
+          "new_epoch": 8,
+          "expected_node": "cafe_chat",
+          "expected_outfit": "black_jacket"
+        },
+        {
+          "event": "old_asset_loaded_callback",
+          "epoch": 7,
+          "expected": "discard_no_execute"
+        },
+        {
+          "event": "unverified_old_completion_claim",
+          "epoch": 7,
+          "expected": "reject_no_episode"
+        }
+      ],
+      "expected_final": {
+        "node": "cafe_chat",
+        "outfit": "black_jacket",
+        "intent": "suspended",
+        "qualified_episode_candidates": 0,
+        "durable_memory_writes": 0
+      }
+    },
+    {
+      "id": "TRACE-STOP-AFTER-RECEIPT",
+      "title": "呈现后停止保留已成立服装",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "raincoat_pending",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": "fixture.offer.1",
+        "offer_presented": true,
+        "epoch": 7,
+        "episode_candidates": []
+      },
+      "steps": [
+        {
+          "event": "trusted_wardrobe_receipt",
+          "effect_id": "fixture.effect.1",
+          "epoch": 7,
+          "outfit": "amber_raincoat",
+          "expected_node": "rain_view"
+        },
+        {
+          "event": "stop",
+          "new_epoch": 8,
+          "expected": "cancel_future_window_cue_keep_presented_outfit"
+        }
+      ],
+      "expected_final": {
+        "node": "rain_view",
+        "outfit": "amber_raincoat",
+        "qualified_episode_candidates": 1,
+        "rain_window_episode_candidates": 0,
+        "durable_memory_writes": 0
+      }
+    },
+    {
+      "id": "TRACE-DUPLICATE-RECEIPT",
+      "title": "重复回执只产生一个经历候选",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "raincoat_pending",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": "fixture.offer.1",
+        "offer_presented": true,
+        "epoch": 7,
+        "episode_candidates": []
+      },
+      "steps": [
+        {
+          "event": "trusted_wardrobe_receipt",
+          "effect_id": "fixture.effect.1",
+          "epoch": 7,
+          "outfit": "amber_raincoat"
+        },
+        {
+          "event": "trusted_wardrobe_receipt",
+          "effect_id": "fixture.effect.1",
+          "epoch": 7,
+          "outfit": "amber_raincoat",
+          "expected": "idempotent_no_new_candidate"
+        }
+      ],
+      "expected_final": {
+        "node": "rain_view",
+        "outfit": "amber_raincoat",
+        "qualified_episode_candidates": 1,
+        "durable_memory_writes": 0
+      }
+    },
+    {
+      "id": "TRACE-CHAT-AFFECT",
+      "title": "纯闲聊达到开心阈值，剧情不动",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "cafe_chat",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": null,
+        "offer_presented": false,
+        "epoch": 7,
+        "episode_candidates": [],
+        "emotion": "normal"
+      },
+      "steps": [
+        {
+          "event": "reliable_user_input",
+          "text": "我更喜欢玻璃里那层暖色，像另一间小店。",
+          "input_id": "fixture.chat.1"
+        },
+        {
+          "event": "affect_signal",
+          "signal": "pleasant_shared_attention",
+          "evidence": [
+            "fixture.chat.1"
+          ],
+          "expected_emotion": "normal"
+        },
+        {
+          "event": "reliable_user_input",
+          "text": "那你选片时，落选的第十一张会不会抗议？",
+          "input_id": "fixture.chat.2"
+        },
+        {
+          "event": "affect_signal",
+          "signal": "comfortable_humor",
+          "evidence": [
+            "fixture.chat.2"
+          ],
+          "expected_emotion": "happy"
+        }
+      ],
+      "expected_final": {
+        "node": "cafe_chat",
+        "outfit": "black_jacket",
+        "emotion": "happy",
+        "story_progress_delta": 0,
+        "qualified_episode_candidates": 0,
+        "durable_memory_writes": 0
+      }
+    },
+    {
+      "id": "TRACE-SINGLE-COMPLIMENT",
+      "title": "单句称赞不自动娇羞",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "cafe_chat",
+        "node_revision": 1,
+        "outfit": "black_jacket",
+        "pending_offer_id": null,
+        "offer_presented": false,
+        "epoch": 7,
+        "episode_candidates": [],
+        "emotion": "normal"
+      },
+      "steps": [
+        {
+          "event": "reliable_user_input",
+          "text": "你的发卡很好看。",
+          "input_id": "fixture.compliment.1"
+        },
+        {
+          "event": "affect_signal",
+          "signal": "personal_attention",
+          "evidence": [
+            "fixture.compliment.1"
+          ],
+          "expected_emotion": "normal"
+        }
+      ],
+      "expected_final": {
+        "node": "cafe_chat",
+        "emotion": "normal",
+        "forced_shy": false,
+        "qualified_episode_candidates": 0,
+        "durable_memory_writes": 0
+      }
+    },
+    {
+      "id": "TRACE-NEW-INPUT-PENDING",
+      "title": "换衣待回执时改聊天，挂起旧效果",
+      "synthetic": true,
+      "record_as_user_history": false,
+      "initial_state": {
+        "node": "raincoat_pending",
+        "outfit": "black_jacket",
+        "epoch": 7,
+        "pending_offer_id": "fixture.offer.1"
+      },
+      "steps": [
+        {
+          "event": "reliable_new_input",
+          "text": "先不换了，你平时怎么挑照片？",
+          "new_epoch": 8
+        },
+        {
+          "event": "apply_transition",
+          "transition_id": "t.new_input_suspend",
+          "expected_node": "cafe_chat"
+        },
+        {
+          "event": "chat",
+          "expected": "answer_current_topic_no_wardrobe_effect"
+        },
+        {
+          "event": "old_asset_loaded_callback",
+          "epoch": 7,
+          "expected": "discard_no_execute"
+        }
+      ],
+      "expected_final": {
+        "node": "cafe_chat",
+        "outfit": "black_jacket",
+        "qualified_episode_candidates": 0,
+        "durable_memory_writes": 0
+      }
+    }
+  ]
+}

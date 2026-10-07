@@ -1,13 +1,18 @@
 import type { PublicConfig } from '../../shared/config.js';
 import { safeHttpError } from '../diagnostics/status.js';
-import type { AudioProgressRequest, CreateSessionResponse, EffectView, InputRequest, ReceiptRequest,
+import type { AudioProgressRequest, CreateSessionResponse, EffectView, ReceiptRequest, PhotoDismissRequest,
   ReviewedAudioActionResponse, ReviewedAudioConfirmRequest, ReviewedAudioRecordingRequest,
-  ReviewedAudioReviewResponse, ReviewedAudioStatusResponse, SessionView, StopRequest } from '../../shared/generated/contracts.js';
+  ReviewedAudioReviewResponse, ReviewedAudioStatusResponse, SessionView, StopRequest, ResponsePreferenceRequest,
+  StoryImageResourceRequest, FixedPhotoProgressRequest, StoryImageCompletionRequest } from '../../shared/generated/contracts.js';
 import { parseCreated, parseSession } from '../../shared/protocol.js';
+import { generatedPhotoIdentity } from '../../shared/photo-value.js';
+import { awaitImageOperation, readGeneratedImageResponse } from '../presentation/generated-image-resource.js';
 import { parseReviewedAudioStatus, type ReviewedAudioPreview } from '../diagnostics/reviewed-audio.js';
 import { BrowserAudioTransport } from './audio-transport.js';
+import { MiraTransportError, classifyTransportFailure, isAbortFailure } from './transport-errors.js';
 import type { AudioTransportPrimitives } from './audio-transport.js';
-import type { MicrophoneOrigin, MicrophoneStream, SessionTransport, VoiceCapabilities } from './ports.js';
+import type { ContinuousListeningObservers, ContinuousListeningStream, MicrophoneObservers, MicrophoneOrigin,
+  MicrophoneStream, SessionInputRequest, SessionTransport, VoiceCapabilities } from './ports.js';
 
 /** Safe HTTP error metadata. The response body message is never reflected to the UI. */
 export class MiraHttpError extends Error {
@@ -23,25 +28,31 @@ export class MiraApiClient implements SessionTransport {
   private readonly pending = new Set<AbortController>();
   private readonly audio: BrowserAudioTransport;
   private readonly fetcher: typeof fetch;
+  private readonly clock: () => number;
   constructor(private readonly config: PublicConfig, primitives: AudioTransportPrimitives = {}) {
-    this.fetcher = primitives.fetch ?? globalThis.fetch;
+    // Native browser fetch requires its global receiver, not this client instance.
+    // Keep explicitly injected transports unchanged for tests and embedding callers.
+    this.fetcher = primitives.fetch ?? ((...args) => globalThis.fetch(...args));
+    this.clock = primitives.now ?? (() => performance.now());
     this.audio = new BrowserAudioTransport(config, () => {
       if (this.closed || !this.sessionId || !this.token) throw new Error('Session not connected');
       return {sessionId: this.sessionId, token: this.token};
     }, primitives);
   }
   private async request<T>(path: string, method: string, body: unknown,
-      parse: (raw: unknown) => T, signal?: AbortSignal): Promise<T> {
+      parse: (raw: unknown) => T, signal?: AbortSignal, onAbortedParsed?: (value: T) => void): Promise<T> {
     if (this.closed) throw new Error('Session closed');
     const abort = new AbortController();
     this.pending.add(abort);
-    const timeout = setTimeout(() => abort.abort(), 5000);
+    const timeoutError = new MiraTransportError('request_timeout', 5000);
+    const timeout = setTimeout(() => abort.abort(timeoutError), 5000);
     const combined = signal ? AbortSignal.any([signal, abort.signal]) : abort.signal;
     try {
       const response = await this.fetcher(this.config.apiBase + path, {
         method, headers: {'Content-Type': 'application/json', ...(this.token ? {'X-Mira-Session-Token': this.token} : {})},
         body: body === undefined ? null : JSON.stringify(body), signal: combined, cache: 'no-store', redirect: 'error',
       });
+      if (combined.aborted && !onAbortedParsed) throw combined.reason;
       if (!response.ok) {
         let code: string | null = null;
         if (response.status === 409) {
@@ -50,19 +61,37 @@ export class MiraApiClient implements SessionTransport {
             if (raw && typeof raw === 'object' && !Array.isArray(raw)
               && (raw as Record<string, unknown>)['code'] === 'history_pending') code = 'history_pending';
           } catch { /* Non-JSON and arbitrary conflicts keep their generic safe message. */ }
+        } else if (response.status === 429) {
+          const raw = await readBoundedJson(response, 4096);
+          if (raw && typeof raw === 'object' && !Array.isArray(raw)
+            && (raw as Record<string, unknown>)['code'] === 'session_capacity') code = 'session_capacity';
         }
-        throw new MiraHttpError(response.status, code, safeHttpError(response.status, response.headers.get('x-request-id')));
+        throw new MiraHttpError(response.status, code,
+          safeHttpError(response.status, response.headers.get('x-request-id'), code));
       }
       let raw: unknown;
-      try { raw = await response.json(); } catch { throw new Error('Invalid session response. Local output stays blocked.'); }
-      return parse(raw);
+      try { raw = await response.json(); }
+      catch (error) {
+        if (combined.aborted || isAbortFailure(error)) throw error;
+        throw new Error('Invalid session response. Local output stays blocked.');
+      }
+      const parsed = parse(raw);
+      if (combined.aborted) {
+        // A fetch implementation may ignore abort. Clean up a late create, but never install it.
+        onAbortedParsed?.(parsed);
+        throw combined.reason;
+      }
+      return parsed;
+    } catch (error) {
+      throw classifyTransportFailure(error, combined, timeoutError, this.closed);
     } finally { clearTimeout(timeout); this.pending.delete(abort); }
   }
   async create(clientInstanceId: string, signal?: AbortSignal): Promise<CreateSessionResponse> {
     if (this.creating || this.sessionId) throw new Error('Session already connected or connecting');
     this.creating = true;
     try {
-      const created = await this.request('/sessions', 'POST', {client_instance_id: clientInstanceId}, parseCreated, signal);
+      const created = await this.request('/sessions', 'POST', {client_instance_id: clientInstanceId}, parseCreated, signal,
+        value => { void this.remove(value.session.session_id, value.session_token).catch(() => {}); });
       if (this.closed || signal?.aborted) {
         // Even an uncooperative late create cannot leak a connected browser session.
         void this.remove(created.session.session_id, created.session_token).catch(() => {});
@@ -89,8 +118,43 @@ export class MiraApiClient implements SessionTransport {
     }, signal);
   }
   snapshot(signal?: AbortSignal): Promise<SessionView> { return this.request(this.path(), 'GET', undefined, parseSession, signal); }
-  input(body: InputRequest, signal?: AbortSignal): Promise<SessionView> { return this.request(this.path('/inputs'), 'POST', body, parseSession, signal); }
+  input(body: SessionInputRequest, signal?: AbortSignal): Promise<SessionView> { return this.request(this.path('/inputs'), 'POST', body, parseSession, signal); }
   stop(body: StopRequest, signal?: AbortSignal): Promise<SessionView> { return this.request(this.path('/stop'), 'POST', body, parseSession, signal); }
+  completeStoryImage(body: StoryImageCompletionRequest,signal?: AbortSignal): Promise<SessionView> {
+    return this.request(this.path('/story-image-completions'),'POST',body,parseSession,signal);
+  }
+  responsePreference(body: ResponsePreferenceRequest, signal?: AbortSignal): Promise<SessionView> {
+    return this.request(this.path('/response-preference'), 'POST', body, parseSession, signal);
+  }
+  dismissPhoto(body: PhotoDismissRequest): Promise<SessionView> {
+    return this.request(this.path('/photo-dismissals'), 'POST', body, parseSession);
+  }
+  fixedPhotoProgress(body: FixedPhotoProgressRequest): Promise<SessionView> {
+    return this.request(this.path('/fixed-photo-progress'), 'POST', body, parseSession);
+  }
+  async generatedImage(effect: EffectView, signal: AbortSignal): Promise<Uint8Array> {
+    const identity = effect.kind === 'media' ? generatedPhotoIdentity(effect.value) : null;
+    // URL parsing strips TAB/LF/CR; reject controls before attaching the session capability.
+    if (!identity || !/^\/(?!\/)[^\\?#\u0000-\u001f\u007f]*$/.test(this.config.apiBase) || !/^[a-f0-9]{64}$/.test(effect.digest)
+      || !Number.isSafeInteger(effect.output_epoch) || effect.output_epoch < 1
+      || !Number.isSafeInteger(effect.activity_seq) || effect.activity_seq < 1) throw new Error('Generated illustration unavailable');
+    const path = this.path(`/story-images/${identity.resourceId}`);
+    const abort = new AbortController();
+    this.pending.add(abort);
+    const timer = setTimeout(() => abort.abort(), 5000);
+    const combined = AbortSignal.any([signal, abort.signal]);
+    try {
+      if (combined.aborted) throw new Error('Generated illustration cancelled');
+      const body: StoryImageResourceRequest = {effect_id: effect.id, digest: effect.digest, output_epoch: effect.output_epoch,
+        activity_seq: effect.activity_seq, content_digest: identity.contentDigest};
+      const response = await awaitImageOperation(this.fetcher(this.config.apiBase + path, {
+        method: 'POST', headers: {'Content-Type': 'application/json', 'X-Mira-Session-Token': this.token!},
+        body: JSON.stringify(body),
+        signal: combined, cache: 'no-store', redirect: 'error', credentials: 'same-origin',
+      }), combined, late => { void late.body?.cancel().catch(() => {}); });
+      return await readGeneratedImageResponse(response, combined);
+    } finally { clearTimeout(timer); this.pending.delete(abort); }
+  }
   receipt(body: ReceiptRequest): Promise<SessionView> { return this.request(this.path('/receipts'), 'POST', body, parseSession); }
   audioProgress(body: AudioProgressRequest): Promise<SessionView> { return this.request(this.path('/audio-progress'), 'POST', body, parseSession); }
   reviewedAudioStatus(signal?: AbortSignal): Promise<ReviewedAudioStatusResponse> {
@@ -114,13 +178,15 @@ export class MiraApiClient implements SessionTransport {
     if (this.closed) throw new Error('Session closed');
     const abort = new AbortController();
     this.pending.add(abort);
-    const timeout = setTimeout(() => abort.abort(), 5000);
+    const timeoutError = new MiraTransportError('request_timeout', 5000);
+    const timeout = setTimeout(() => abort.abort(timeoutError), 5000);
     const combined = signal ? AbortSignal.any([signal, abort.signal]) : abort.signal;
     try {
       const response = await this.fetcher(this.config.apiBase + requestPath, {
         method: 'GET', headers: this.token ? {'X-Mira-Session-Token': this.token} : {},
         signal: combined, cache: 'no-store', redirect: 'error',
       });
+      if (combined.aborted) { void response.body?.cancel().catch(() => {}); throw combined.reason; }
       if (!response.ok) throw new Error(safeHttpError(response.status, response.headers.get('x-request-id')));
       const sampleRateHz = Number(response.headers.get('x-mira-sample-rate-hz'));
       const kind = response.headers.get('x-mira-recording-kind');
@@ -144,6 +210,7 @@ export class MiraApiClient implements SessionTransport {
       try {
         while (true) {
           const item = await reader.read();
+          if (combined.aborted) { await reader.cancel(); throw combined.reason; }
           if (item.done) break;
           if (!item.value || total + item.value.byteLength > 512 * 1024) {
             await reader.cancel(); throw new Error('Reviewed audio preview exceeded its bound');
@@ -164,9 +231,12 @@ export class MiraApiClient implements SessionTransport {
       let digestBytes: ArrayBuffer;
       try { digestBytes = await globalThis.crypto.subtle.digest('SHA-256', bytes); }
       catch { bytes.fill(0); throw new Error('Reviewed audio digest verification is unavailable'); }
+      if (combined.aborted) { bytes.fill(0); throw combined.reason; }
       const actualDigest = Array.from(new Uint8Array(digestBytes), value => value.toString(16).padStart(2, '0')).join('');
       if (actualDigest !== review.digest) { bytes.fill(0); throw new Error('Reviewed audio preview digest mismatch'); }
       return Object.freeze({pcm16le: bytes, sampleRateHz: review.sample_rate_hz, kind: review.kind, digest: review.digest});
+    } catch (error) {
+      throw classifyTransportFailure(error, combined, timeoutError, this.closed);
     } finally { clearTimeout(timeout); this.pending.delete(abort); }
   }
   confirmReviewedAudio(review: ReviewedAudioReviewResponse, body: ReviewedAudioConfirmRequest,
@@ -180,7 +250,14 @@ export class MiraApiClient implements SessionTransport {
   speech(effect: EffectView, signal: AbortSignal, onPcm: (pcm: Int16Array) => void | Promise<void>): Promise<void> {
     return this.audio.speech(effect, signal, onPcm);
   }
-  microphone(origin: MicrophoneOrigin, signal: AbortSignal): MicrophoneStream { return this.audio.microphone(origin, signal); }
+  microphone(origin: MicrophoneOrigin, signal: AbortSignal, observers?: MicrophoneObservers): MicrophoneStream {
+    return this.audio.microphone(origin, signal, observers);
+  }
+  continuousListening(leaseId: string, signal: AbortSignal, observers: ContinuousListeningObservers,
+      mode: 'manual' | 'natural' = 'manual'): ContinuousListeningStream {
+    return this.audio.continuousListening(leaseId, signal, observers, mode);
+  }
+  monotonicNow(): number { return this.clock(); }
   private async remove(sessionId: string, token: string): Promise<void> {
     const response = await this.fetcher(`${this.config.apiBase}/sessions/${encodeURIComponent(sessionId)}`, {
       method: 'DELETE', headers: {'X-Mira-Session-Token': token}, keepalive: true,
@@ -199,6 +276,46 @@ export class MiraApiClient implements SessionTransport {
     this.token = null;
     if (id && token) await this.remove(id, token);
   }
+}
+
+/** Parse only small error envelopes. Error bodies are untrusted and never shown to users. */
+async function readBoundedJson(response: Response, maxBytes: number): Promise<unknown | null> {
+  const contentType = response.headers.get('content-type')?.split(';', 1)[0]?.trim().toLowerCase();
+  if (contentType !== 'application/json') {
+    void response.body?.cancel().catch(() => {});
+    return null;
+  }
+  const contentLength = response.headers.get('content-length');
+  if (contentLength !== null && (!/^\d+$/.test(contentLength) || Number(contentLength) > maxBytes)) {
+    void response.body?.cancel().catch(() => {});
+    return null;
+  }
+  const reader = response.body?.getReader();
+  if (!reader) return null;
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  try {
+    while (true) {
+      const item = await reader.read();
+      if (item.done) break;
+      if (!item.value || total + item.value.byteLength > maxBytes) {
+        await reader.cancel();
+        return null;
+      }
+      chunks.push(item.value);
+      total += item.value.byteLength;
+    }
+  } catch (error) {
+    if (isAbortFailure(error)) throw error;
+    return null;
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  try { return JSON.parse(new TextDecoder('utf-8', {fatal: true}).decode(bytes)) as unknown; }
+  catch { return null; }
 }
 
 function isUuid(value: string): boolean {

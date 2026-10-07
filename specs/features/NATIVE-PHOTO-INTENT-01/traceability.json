@@ -1,0 +1,33 @@
+{
+  "feature": "NATIVEPHOTOINTENT01",
+  "spec": "specs/features/NATIVE-PHOTO-INTENT-01/spec.md",
+  "requirements": [
+    {
+      "id": "NATIVEPHOTOINTENT01-001",
+      "tests": [
+        "tests/contracts/test_native_photo_request_intent.py::test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates"
+      ]
+    },
+    {
+      "id": "NATIVEPHOTOINTENT01-002",
+      "tests": [
+        "tests/contracts/test_native_photo_request_intent.py::test_photo_words_without_native_call_do_not_start_or_invent_an_image",
+        "tests/contracts/test_native_photo_request_intent.py::test_natural_request_with_disabled_images_keeps_tool_absent",
+        "tests/contracts/test_native_outfit_failure_contract.py::test_pending_current_image_is_not_overridden_by_zero_future_capacity_or_absent_continuation_tools"
+      ]
+    },
+    {
+      "id": "NATIVEPHOTOINTENT01-003",
+      "tests": [
+        "tests/contracts/test_native_photo_request_intent.py::test_actual_wire_natural_photo_request_uses_existing_enabled_tool_and_gates"
+      ]
+    },
+    {
+      "id": "NATIVEPHOTOINTENT01-004",
+      "tests": [
+        "tests/contracts/test_native_image_scope_contract.py::test_enabled_native_image_tool_discloses_actual_subject_scope_before_any_job",
+        "tests/contracts/test_native_photo_handover_flow.py::test_all_shared_canon_recent_dialogue_and_large_recall_fit_real_tool_continuation_wire"
+      ]
+    }
+  ]
+}

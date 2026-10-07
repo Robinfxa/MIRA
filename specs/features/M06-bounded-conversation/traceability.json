@@ -1,0 +1,37 @@
+{
+  "feature": "M06BC",
+  "spec": "specs/features/M06-bounded-conversation/spec.md",
+  "requirements": [
+    {
+      "id": "M06BC-001",
+      "tests": [
+        "tests/contracts/test_bounded_conversation_context.py::test_real_actor_100_turns_bounded_without_losing_local_ledger"
+      ]
+    },
+    {
+      "id": "M06BC-002",
+      "tests": [
+        "tests/contracts/test_bounded_conversation_context.py::test_projection_keeps_exact_linked_identity_and_actual_current_state"
+      ]
+    },
+    {
+      "id": "M06BC-003",
+      "tests": [
+        "tests/contracts/test_bounded_conversation_context.py::test_real_jev_wires_fit_without_dropping_permission_inputs"
+      ]
+    },
+    {
+      "id": "M06BC-004",
+      "tests": [
+        "tests/contracts/test_bounded_conversation_context.py::test_optional_operational_absence_degrades_but_authority_failures_do_not"
+      ]
+    },
+    {
+      "id": "M06BC-005",
+      "tests": [
+        "tests/contracts/test_recent_referent_retention.py::test_recent_presented_reply_group_survives_older_input_pressure",
+        "tests/contracts/test_recent_referent_retention.py::test_oversized_recent_reply_stays_optional_and_does_not_block_current_input"
+      ]
+    }
+  ]
+}

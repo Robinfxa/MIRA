@@ -69,3 +69,50 @@ inventory复核发现`*_test.py`命名缺口，012新增负例确实失败，修
 相关块先检查；最终一次full为240 Python＋20 Node、TS和28条规格链接通过。再只跑package/smoke尾检，源码摘要相同。所有外部HTTP为合成transport，本机loopback smoke单独执行。空模板check退出2且live_ready=false。汇总脚本曾误用source_digest及None计数字段，修正汇总读取后核验原报告；没有改原测试结果。
 
 已添加typed服务配置、空模板创建、只读字段检查和显式目录GET；实际账户/ADC/JEV/语音/推理/生图未验证。打开可选OpenAI安全key设置UI，未接触key本身。未改用户Mac/GitHub，不重新计时。当前应转入产品音频与真实适配器任务。
+
+## 2026-10-05 12:49 UTC — WP03 continuous terminal preview recovery
+
+Four directed failures proved that production Google SDK finals could be erased
+before an ASGI writer emitted them, and a repeated offset-identical final could
+erase a newer interim suffix. The two-file repair preserves the latest validated
+preview before provider EOF/error and treats exact duplicate finals as no-ops.
+An additional tied Stop/EOF RED exposed cancellation ordering; Stop/disconnect
+now win that tie. All 65 focused continuous/Google/diagnostic/buffer cases pass.
+No new provider/auth/device access or automatic commit is involved. Details and
+remaining merged acceptance: `docs/changes/WP03-continuous-listening/terminal-retention.md`.
+
+## 2026-10-05 13:11 UTC — WP03 natural endpoint candidate
+
+The new explicit natural mode emits token/revision-bound eligibility only when
+final audio coverage reaches the latest VAD END with no outstanding interim or
+incomplete SDK batch. It retains manual fallback for unproved boundaries and
+keeps late corrections attached to the original utterance. Actual five-case
+natural RED and three-case SDK RED now pass; focused regression is89/89. One
+production-SDK/local-ASGI scenario accepts two natural turns and preserves a late
+correction without a third turn. Frontend and merged acceptance remain separate.
+See `docs/changes/WP03-continuous-listening/natural-endpoint.md`.
+
+
+## 2026-10-05 19:26 UTC / Literal conversational text
+
+The isolated next-stage copy of the exact 18:58 capture corrects the shared parser
+that rejected ordinary punctuation, URLs and code/markup examples inside literal
+subtitle/speech values. The same 63 directed cases changed from 44 failed/19 passed
+to 63 passed after the narrow parser/prompt edit; both source snapshots were stable.
+Strict structured effects, C0/DEL, sizes, speech pairing, authority and Stop remain.
+[Scope, tasks, evidence and handoff](../changes/CHAT-01-plain-text/verification.md)
+bind this work to external logs and the final affected receipt. No real provider,
+credential, browser or device validation is claimed.
+
+
+## 2026-10-05 FAST-01 requested subscription tier
+
+Isolated from frozen mira-integration-20261005T2238Z. Exact subscription gpt-6-luna default requests priority; explicit Standard follows first-party omission. Requested and optional returned tier are separate closed diagnostics. No live call or credential read. Directed records: initial RED 39 failed/2 passed; first GREEN attempt exposed an eager-HTTPX test-fixture issue; corrected final 49-test baseline RED 46 failed/3 passed, same-file GREEN 49 passed; related regression 128 passed. See docs/changes/FAST-01/verification.md.
+
+FAST-01 follow-on: returned Fast alias/top-level SSE errors had actual RED 2 failed/49 passed then GREEN 51 passed. First affected run exposed 21 old exact-request shape expectations; their fixture expectation now requires the new priority field. Raw receipts remain external development evidence, not promised public-source artifacts.
+
+FAST-01 final handoff: tier+recovery directed check 75 passed. Corrected affected aggregate: ten lanes passed, providers 2551 passed/1 unrelated existing story-close thread assertion failed. Source unchanged during both aggregate runs. Combined final release belongs to the integration owner; no live or complete-green claim.
+
+## 2026-10-06 NATIVE-FOLLOWTHROUGH-01 isolated repair
+
+From frozen355609fe, add exact typed refusal reconsideration with retained invitation history and fresh handover receipt, including the observed intervening global Stop. Clarify held-camera return facts. Actual RED/GREEN logs and boundaries: docs/changes/NATIVE-FOLLOWTHROUGH-01/verification.md. Natural photo-sharing request instruction delta is separately committed and documented under NATIVE-PHOTO-INTENT-01. Original native run remains immutable; synthetic regression does not establish the new model's choices.

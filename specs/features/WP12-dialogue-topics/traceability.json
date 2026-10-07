@@ -1,0 +1,58 @@
+{
+  "feature": "WP12TOPICS",
+  "spec": "specs/features/WP12-dialogue-topics/spec.md",
+  "requirements": [
+    {
+      "id": "WP12TOPICS-001",
+      "tests": [
+        "tests/contracts/test_dialogue_topics.py::test_new_author_details_are_selected_versioned_fiction_and_plans_stay_future"
+      ]
+    },
+    {
+      "id": "WP12TOPICS-002",
+      "tests": [
+        "tests/contracts/test_dialogue_topics.py::test_topic_graph_is_connected_bounded_and_all_facts_resolve_to_current_canon",
+        "tests/contracts/test_dialogue_topics.py::test_unselected_author_canon_has_no_topic_or_dangling_edge_and_invalid_view_fails",
+        "tests/contracts/test_dialogue_topics.py::test_turn_consumer_can_request_at_most_two_optional_topics",
+        "tests/contracts/test_dialogue_topics.py::test_topic_selector_rejects_unknown_duplicate_or_unbounded_ids"
+      ]
+    },
+    {
+      "id": "WP12TOPICS-003",
+      "tests": [
+        "tests/contracts/test_dialogue_topics.py::test_topic_view_never_mutates_state_releases_history_or_requires_plot_progress",
+        "tests/contracts/test_dialogue_topics.py::test_synthetic_digression_return_decline_and_stop_keep_chat_and_receipts_separate"
+      ]
+    },
+    {
+      "id": "WP12TOPICS-004",
+      "tests": [
+        "tests/contracts/test_dialogue_topics.py::test_optional_topics_do_not_add_parser_controls",
+        "tests/contracts/test_dialogue_topics.py::test_projection_contains_no_generated_history_or_user_quote_authority",
+        "tests/contracts/test_dialogue_topics.py::test_proposed_hook_generation_and_jev_share_exact_topic_sources_with_character_application_budget"
+      ]
+    },
+    {
+      "id": "WP12TOPICS-005",
+      "tests": [
+        "tests/contracts/test_dialogue_topics.py::test_topic_graph_is_connected_bounded_and_all_facts_resolve_to_current_canon",
+        "tests/contracts/test_dialogue_topics.py::test_synthetic_scenario_keeps_current_request_and_optional_sources_in_proposed_hook",
+        "tests/contracts/test_dialogue_topics.py::test_proposed_hook_keeps_actual_character_application_review_with_twenty_turns"
+      ]
+    },
+    {
+      "id": "WP12TOPICS-006",
+      "tests": [
+        "tests/contracts/test_persona_topic_runtime.py::test_installed_shared_hook_ranks_optional_resources_without_topic_authority",
+        "tests/contracts/test_persona_topic_runtime.py::test_stop_and_noncontiguous_activity_never_invent_reply_turn_association",
+        "tests/contracts/test_persona_topic_runtime.py::test_optional_guidance_yields_budget_before_any_reliable_fact",
+        "tests/contracts/test_persona_topic_runtime.py::test_repeated_canon_metadata_compacts_losslessly_without_changing_a_mismatch",
+        "tests/contracts/test_persona_topic_runtime.py::test_actual_actor_direct_request_and_jev_share_topics_and_self_at_five_ten_twenty_turns",
+        "tests/contracts/test_persona_topic_runtime.py::test_direct_media_continuation_keeps_shared_context_and_media_contract",
+        "tests/contracts/test_persona_topic_runtime.py::test_relevant_topics_and_controls_keep_original_probe_budget",
+        "tests/contracts/test_persona_topic_runtime.py::test_stop_and_nonconsecutive_activity_never_bind_older_reply_to_previous_input",
+        "tests/contracts/test_persona_topic_runtime.py::test_new_subject_does_not_inherit_topic_from_generic_question_words"
+      ]
+    }
+  ]
+}

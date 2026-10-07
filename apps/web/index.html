@@ -7,15 +7,42 @@
   <meta name="theme-color" content="#101d20">
   <meta name="description" content="雨夜的窗边，与 26 岁的旅行摄影师 MIRA 聊一会儿。原创角色实时互动场景。">
   <title>MIRA · 雨落之后</title>
+  <link rel="license" type="text/plain" href="/assets/licenses/THIRD_PARTY_NOTICES.txt">
   <link rel="stylesheet" href="/assets/app.css">
+  <link rel="stylesheet" href="/assets/scene-view.css">
+  <link rel="stylesheet" href="/assets/chapter-presentation.css">
 </head>
 <body>
 <main class="app-shell">
   <header class="app-header">
     <a class="brand" href="/" aria-label="MIRA 首页">mira<span class="brand-star" aria-hidden="true">✳</span></a>
     <span class="header-caption">不必急着，让故事继续。</span>
+    <a class="settings-link" href="#settings">设置与隐私</a>
     <span class="mode-badge" data-mode-label><span class="connection-dot" aria-hidden="true"></span>正在连接</span>
   </header>
+
+  <section class="operator-pairing" data-operator-pairing-panel hidden aria-labelledby="operator-pairing-title">
+    <h2 id="operator-pairing-title">连接本机记忆模式</h2>
+    <p>每次启动都请亲自打开本机私有配对文件，读取一次性代码并在下方密码框输入。不要把代码放进网址、聊天或其他应用。</p>
+    <p class="operator-pairing-safety">此配对只确认本机操作员；它不能防止同一操作系统账户下的恶意软件读取页面或控制浏览器。</p>
+    <form data-operator-pairing-form>
+      <label for="operator-pairing-code">一次性配对代码</label>
+      <input id="operator-pairing-code" data-operator-pairing-code type="password" maxlength="512"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        aria-describedby="operator-pairing-code-help">
+      <span id="operator-pairing-code-help" class="sr-only">请只从本机私有配对文件手动输入，不要复制到网址、聊天或其他应用。</span>
+      <button type="submit" data-operator-pairing-submit disabled>确认并配对</button>
+    </form>
+    <p data-operator-pairing-status role="status" aria-live="polite" aria-atomic="true">正在确认本机配对状态…</p>
+    <button type="button" data-operator-pairing-cancel hidden>取消本次配对并停止回应</button>
+  </section>
+
+  <section class="operator-pairing" data-trusted-device-panel hidden aria-labelledby="trusted-device-title">
+    <h2 id="trusted-device-title">可信局域网免配对</h2>
+    <p>同一网络里任何能访问此地址的人，都可能使用已启用的聊天、语音和生图额度。仅在你信任的私人网络使用；为保护本机资源，同时最多接入 16 个浏览器。</p>
+    <p data-trusted-device-status role="status" aria-live="polite">正在建立此浏览器的临时会话…</p>
+    <button type="button" data-trusted-device-close>结束此设备会话并停止回应</button>
+  </section>
 
   <aside class="rehearsal-banner" data-rehearsal-banner hidden role="note">
     <strong>OFFLINE · 固定互动排练</strong>
@@ -24,9 +51,12 @@
   <p class="recording-notice" data-recording-notice role="status" aria-live="polite" data-recording-state="unknown">开发录制状态尚未确认，请勿输入秘密。</p>
   <p class="reviewed-audio-notice" data-review-audio-notice role="status" aria-live="polite" hidden></p>
 
-  <section class="stage" data-stage data-scene="cafe" data-phase="idle" data-expression="calm" data-action="camera_ready" aria-label="MIRA 的雨夜咖啡馆">
+  <div class="experience-grid">
+  <section class="stage" data-stage data-scene="cafe" data-background-version="classic" data-phase="idle" data-expression="calm" data-action="camera_ready" aria-label="MIRA 的雨夜咖啡馆">
     <div class="stage-visual">
       <div class="scene-environment" aria-hidden="true"></div>
+      <img data-scene-source="classic" src="/assets/scene/cafe-night.svg" hidden alt="">
+      <img data-scene-source="painterly-v3" src="/assets/scene/cafe-painterly-lighting-v3-table-free.png" hidden alt="">
       <div class="scene-warmth" aria-hidden="true"></div>
       <div class="rain-layer rain-near" aria-hidden="true"></div>
       <div class="rain-layer rain-far" aria-hidden="true"></div>
@@ -37,6 +67,7 @@
       <div class="scene-topline"><span><i aria-hidden="true"></i><span data-scene-label>雨夜 · 窗边咖啡馆</span></span><span class="chapter">CHAPTER 01</span></div>
       <div class="scene-copy"><p class="eyebrow">AFTER THE RAIN</p><h1>雨落之后<span>，</span></h1><p class="scene-intro">最后一盏灯还亮着。<br>也许，一段故事正要开始。</p><div class="scene-coordinate"><span class="coordinate-line"></span>一张留给你的座位</div></div>
 
+      <p class="code-native-review-notice" role="note">代码绘制审阅草稿 · 外观未经认可 · 口型仅示意</p>
       <div class="character-anchor" aria-hidden="true">
         <!-- Original adult character, hand-authored SVG. MIRA is 26. Layered for real CSS animation. -->
         <svg class="mira-character" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 720" fill="none" role="presentation">
@@ -103,8 +134,10 @@
       </div>
 
       <figure class="photo" data-photo hidden>
-        <img src="/assets/scene/trip-memory.svg" width="600" height="460" alt="MIRA 的原创旅行插画：雨后的海岸，山岬上的灯塔亮着暖灯。">
-        <figcaption><span>有些光，值得等。</span><small>TRAVEL NOTE 07 · 原创插画</small></figcaption>
+        <button type="button" class="photo-close" data-photo-close aria-label="关闭旅行插画">收起图片</button>
+        <img data-authored-photo src="/assets/scene/trip-memory.svg" width="600" height="460" alt="MIRA 的原创旅行插画：雨后的海岸，山岬上的灯塔亮着暖灯。">
+        <span data-generated-photo hidden></span>
+        <figcaption><span data-photo-description>有些光，值得等。</span><small data-photo-label>TRAVEL NOTE 07 · 原创插画</small></figcaption>
       </figure>
       <div class="character-caption"><span class="character-name">MIRA</span><span>26 岁 · 旅行摄影师</span><small data-pose>手中拿着相机</small></div>
       <p class="sr-only" data-character-description>MIRA，26 岁的旅行摄影师。神情平静，手中拿着相机。</p>
@@ -113,14 +146,145 @@
 
     <div class="dialogue-panel">
       <div class="speaker"><span class="speaker-mark" aria-hidden="true">M</span><div><strong>MIRA</strong><span class="phase-indicator"><i aria-hidden="true"></i><span data-phase-label>陪你听雨</span></span></div><div class="voice-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div></div>
-      <p class="subtitle" data-subtitle aria-live="polite" aria-atomic="true">窗外还在下雨。和 MIRA 打个招呼吧。</p>
+      <p class="subtitle" data-subtitle tabindex="0" aria-label="MIRA 最近一句回复" aria-live="off" aria-atomic="true">窗外还在下雨。和 MIRA 打个招呼吧。</p>
+      <div data-fixed-photo-status hidden role="status"><span data-fixed-photo-message></span> <button type="button" data-fixed-photo-dismiss hidden>取消／收起插画</button></div>
+      <div data-story-image-status hidden role="status"><span data-story-image-message></span> <button type="button" data-story-image-dismiss hidden>取消／收起生成图</button></div>
     </div>
   </section>
+
+  <section data-archive-panel hidden class="memory-management-panel" aria-label="本机会话记录与历史召回">
+    <h2>本机会话记录</h2>
+    <p>本次启动已单独同意记录已接受的文字/转写和实际软件呈现回执。默认功能关闭；这里不保存原始麦克风音频。</p>
+    <p data-archive-status role="status">配对后检查本机状态。</p><p data-archive-recipients></p>
+    <label>选择一段历史会话 <select data-archive-sessions></select></label>
+    <button type="button" data-archive-refresh>刷新保存状态与会话</button><button type="button" data-archive-next-sessions>更多会话</button>
+    <button type="button" data-archive-view>查看所选来源</button><button type="button" data-archive-next>下一页来源</button>
+    <label><input type="checkbox" data-archive-recall-consent>单独同意把所选会话的有界摘录发送给上述生成服务与 JEV</label>
+    <label data-archive-google-label><input type="checkbox" data-archive-google-consent>单独同意获准生成的历史相关语音发送给本页明确披露的语音接收方</label>
+    <button type="button" data-archive-start>确认本次选择并开始聊天</button>
+    <button type="button" data-archive-revoke>撤销本次后续记录与召回（保留原有记录）</button>
+    <p>更正与抑制只影响未来档案召回；不能擦除当前聊天已接受的输入、已发给服务商的内容或已播放的声音。旧版本仍保留，可用旧文再次更正；抑制可恢复。</p>
+    <ol data-archive-entries></ol><pre data-archive-preview></pre>
+    <label>更正后的输入 <textarea data-archive-draft maxlength="4096"></textarea></label>
+    <label><input type="checkbox" data-archive-confirmed>确认上方选定的一项本机修改</label>
+    <button type="button" data-archive-commit>提交这项修改</button><button type="button" data-archive-cancel>取消草稿</button>
+    <button type="button" data-archive-reconcile hidden>核对本次操作</button>
+  </section>
+
+  <fieldset class="conversation-controls">
+    <legend class="sr-only">与 MIRA 交谈</legend>
+    <div class="conversation-heading"><div><p class="eyebrow">STAY A LITTLE</p><h2>和 MIRA 聊一会儿</h2></div><span class="conversation-scope">当前页面</span></div>
+    <div class="connection-notice"><p data-connection-status role="status" aria-live="polite">正在连接。可以先写草稿，连接后才能发送。</p><button data-connect-retry type="button" disabled>重试连接</button></div>
+    <div class="reply-status"><p data-turn-status role="status" aria-live="polite">连接后，就可以开始聊天。</p><button data-stop type="button" class="stop-button"><span class="stop-icon" aria-hidden="true"></span>停止全部</button></div>
+    <div class="voice-controls"><button data-response-mute type="button" disabled aria-pressed="false" aria-describedby="response-voice-status">静音回应</button><span id="response-voice-status" data-response-voice-status role="status" aria-live="polite">可单独关闭回应声音。</span></div>
+    <div class="conversation-history">
+      <p class="conversation-empty" data-conversation-empty>窗外还在下雨。<br><span>从一句「你好」开始，也很好。</span></p>
+      <ol class="conversation-log" data-conversation-log role="log" aria-label="当前页面的对话" aria-live="polite" aria-relevant="additions text" tabindex="0"></ol>
+      <p class="conversation-history-note" data-conversation-history-note>对话只保留在当前页面，刷新后清空。</p>
+    </div>
+    <div class="voice-controls"><button data-continuous-listening type="button" class="continuous-button" disabled hidden aria-pressed="false" aria-describedby="continuous-status">点击开始连续聆听</button><button class="ptt-button" data-ptt type="button" disabled aria-describedby="voice-hint"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1M12 18v3m-3 0h6"/></svg><span>按住说话（备用）</span><span class="ptt-key" aria-hidden="true">HOLD</span></button></div>
+    <section class="continuous-panel" data-continuous-panel hidden aria-label="连续聆听转写">
+      <label>播放方式
+        <select data-continuous-barge-mode autocomplete="off" aria-describedby="continuous-barge-help">
+          <option value="guarded">保守模式（重叠语音手动确认）</option>
+          <option value="headphones" selected>语音插话开启（建议耳机）</option>
+        </select>
+      </label>
+      <p id="continuous-barge-help" class="continuous-note">默认说完后自动发送，回复播放期间也可继续说话；持续声音活动会尝试提前打断回应。建议使用耳机，扬声器回声仍可能误触发；需要逐段核对重叠语音时可选保守模式。切换方式请先停止聆听，再重新开始。Google 识别会持续产生用量，直到你停止或服务不可用。</p>
+      <p class="continuous-status" id="continuous-status" data-continuous-status role="status" aria-live="polite" aria-atomic="true"></p>
+      <p class="continuous-preview" data-continuous-preview role="status" aria-live="polite" aria-atomic="true" hidden></p>
+      <button type="button" data-continuous-interrupt hidden>打断回应，继续听我说</button>
+      <button type="button" data-continuous-send disabled>手动发送当前稳定文字（备用）</button>
+      <details class="continuous-help"><summary>聆听方式与隐私说明</summary><p class="continuous-note">点开始后，麦克风会持续聆听，包括安静时段。说完后会自动发送；识别尚未完成时显示临时转写。自动分句可能根据停顿判断，后续更正会保留供核对，不会悄悄重发。系统没有声学回声检测，噪声或扬声器回声可能影响结果。MIRA 回应时，两种模式都可点“打断回应，继续听我说”，麦克风会保持开启。默认开启语音插话，持续的新声音活动可以尝试打断，但不能证明声音来源或耳机已连接；关闭后会暂缓重叠文字供核对。两秒内连续三次自动插话会暂停自动打断，可点击恢复；这不能消除较慢的回声循环。较早或无法确认的重叠内容仍须核对。手动发送是备用方式。每条聆听和识别尝试都有明确上限，达到后不会自动续开；设备行为与物理延迟未经实机验收。</p><p data-capture-processing class="continuous-note">浏览器尚未报告回声处理状态。</p></details>
+      <ol class="continuous-sent-text" data-continuous-sent-text aria-label="已确认发送的语音文字"></ol>
+    </section>
+    <p class="microphone-preview" data-microphone-preview role="status" aria-live="polite" aria-atomic="true" hidden></p>
+    <p class="error" data-error role="alert"></p>
+    <aside class="system-notice" data-system-notice role="status" aria-live="polite" aria-atomic="true" hidden>
+      <strong>系统提示</strong>
+      <p data-system-notice-body></p>
+    </aside>
+    <p data-recovered-input-notice role="status" aria-live="polite" hidden>
+      <span data-recovered-input-label></span>
+      <button type="button" data-recovered-new-topic>改为新话题</button>
+    </p>
+    <form class="composer">
+      <label class="sr-only" for="message">给 MIRA 的文字消息</label>
+      <textarea id="message" name="message" rows="2" maxlength="2000" placeholder="说点什么，让故事继续…" autocomplete="off" enterkeyhint="send" aria-describedby="composer-help"></textarea>
+      <button class="send-button" data-send-message disabled type="submit" aria-label="发送文字"><span>发送</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 17 10-10M7 7h10v10"/></svg></button>
+    </form>
+    <p id="composer-help" class="composer-help">Enter 发送 · Shift + Enter 换行</p>
+    <p id="voice-hint" class="voice-hint" data-voice-hint>语音连接后可按住说话，松开发送。现在可以先用文字。</p>
+    <p class="continuous-recording-limit" data-continuous-recording-limit role="note" hidden>连续聆听期间，开发原始录音和原音试听已停用。这条实时麦克风流没有接入原始音频审核或持久保存。</p>
+    <details class="conversation-extras">
+      <summary>灵感与离线演示</summary>
+    <section class="rehearsal-guide" data-code-mock-controls hidden aria-label="代码角色离线固定演示">
+      <h2>看看衣服、表情和头饰</h2>
+      <p>离线固定示范，不调用模型。动作经过本地会话许可与呈现回执；当前造型仍在审阅。</p>
+      <div class="rehearsal-commands">
+        <button data-command="演示：黑夹克" type="button">黑夹克</button>
+        <button data-command="演示：奶油内搭" type="button">脱下夹克 · 保留内搭</button>
+        <button data-command="演示：琥珀雨衣" type="button">琥珀雨衣</button>
+        <button data-command="演示：平常" type="button">平常</button>
+        <button data-command="演示：戒备" type="button">戒备</button>
+        <button data-command="演示：开心" type="button">开心</button>
+        <button data-command="演示：娇羞" type="button">娇羞</button>
+        <button data-command="演示：相机头饰" type="button">相机头饰</button>
+        <button data-command="演示：银星发卡" type="button">银色星星发卡</button>
+      </div>
+    </section>
+    <section class="rehearsal-guide" data-rehearsal-controls hidden aria-label="离线排练指引">
+      <h2>一起走完这段雨夜</h2>
+      <div class="rehearsal-commands">
+        <button data-command="你好" type="button">你好</button>
+        <button data-command="讲讲旅途" type="button">讲讲旅途</button>
+        <button data-command="照片里有什么" type="button">照片里有什么</button>
+        <button data-command="暖灯" type="button">暖灯</button>
+        <button data-command="/fail" type="button">测试一次失败</button>
+      </div>
+      <button class="ptt-button" data-rehearsal-input type="button" disabled aria-pressed="false" aria-describedby="rehearsal-hint">按住演练输入 · 不录音</button>
+      <p class="voice-hint" id="rehearsal-hint" data-rehearsal-hint>合成输入演练：按住观察 listening；松开发送固定口令「照片里有什么」。不打开麦克风。</p>
+      <details class="rehearsal-instructions">
+        <summary>查看完整体验步骤（约 3–5 分钟）</summary>
+        <div class="rehearsal-instructions-content">
+          <p>按自己的节奏体验：听完短句、观察动作，再试着打断。这里的每句回应都是固定剧本。</p>
+          <ol>
+            <li>点「你好」，再试下方「先放下相机吧」，观察好奇和微笑。</li>
+            <li>点「给我看看你的旅行」，等原创海岸插画和字幕出现。</li>
+            <li>点「讲讲旅途」。说到一半按「停止回应」：声音与字幕停下，插画保留。</li>
+            <li>按住上方「演练输入」，观察 listening；松开只提交「照片里有什么」。也可直接点同名口令。</li>
+            <li>试「一起听会儿雨」「暖灯」；测试一次失败，再点「你好」恢复。也可输入目录外文字验证明确提示。</li>
+          </ol>
+        </div>
+      </details>
+    </section>
+    <div class="presets" aria-label="可以从这里聊起"><span class="prompt-label">试着说</span><button data-command="不要拍我" type="button">先放下相机吧 <span aria-hidden="true">↗</span></button><button data-command="看照片" type="button">给我看看你的旅行 <span aria-hidden="true">↗</span></button><button data-command="听雨" type="button">一起听会儿雨 <span aria-hidden="true">↗</span></button></div>
+    <details class="microphone-timing" data-microphone-timing-panel hidden>
+      <summary>本次语音计时观察</summary>
+      <output data-microphone-timing></output>
+      <p>仅本页单调时钟的相对毫秒与修订数；dispatch 表示开始建立浏览器语音连接，不是服务端发出 Google 请求。不可与服务端时钟相减，不会保存转写。</p>
+    </details>
+    </details>
+  </fieldset>
+  </div>
+
+  <details class="settings-panel" id="settings">
+    <summary>设置与隐私 <span>背景 · 录制同意 · 本机记忆 · 连接信息</span></summary>
+    <div class="settings-content">
+  <div class="background-preview" role="group" aria-label="场景背景预览">
+    <label for="background-choice">背景预览</label>
+    <select id="background-choice" data-background-choice aria-describedby="background-choice-help">
+      <option value="classic" selected>原版 SVG（默认）</option>
+      <option value="painterly-v3">绘制背景 V3（预览）</option>
+    </select>
+    <span id="background-choice-help">只切换环境背景；场景动作与人物状态保持独立。</span>
+  </div>
 
   <details class="reviewed-audio-panel" data-review-audio-panel>
     <summary>开发录制与原始音频审核</summary>
     <div class="reviewed-audio-content">
       <p class="reviewed-audio-status" data-review-audio-status role="status" aria-live="polite">正在确认当前会话的开发录制状态…</p>
+      <p class="reviewed-audio-privacy" data-continuous-review-block hidden>连续聆听已开启：这条麦克风流没有接入原始音频审核或持久保存，因此本面板的开发录制、试听和提交已暂停。</p>
       <p class="reviewed-audio-scope" data-review-audio-scope></p>
       <p class="reviewed-audio-privacy">此开关只在开发配置开放时可用。开启后，已认证的本地 MIRA 应用会话可暂存有界、短时的原始音频。音频不会自动识别或抹除口述秘密；必须由操作员听实际原音并审核精确缓冲。ASR 转写不是隐私审核。保存仅进入本机私有诊断队列，原始导出仍需单独同意。</p>
       <p class="reviewed-audio-eligibility" data-review-audio-eligibility hidden></p>
@@ -149,46 +313,55 @@
     </div>
   </details>
 
-  <fieldset class="conversation-controls" disabled>
-    <legend class="sr-only">与 MIRA 交谈</legend>
-    <div class="voice-controls"><button data-stop type="button" class="stop-button"><span class="stop-icon" aria-hidden="true"></span>停止回应</button><button class="ptt-button" data-ptt type="button" disabled aria-describedby="voice-hint"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1M12 18v3m-3 0h6"/></svg><span>按住说话</span><span class="ptt-key" aria-hidden="true">HOLD</span></button></div>
-    <section class="rehearsal-guide" data-rehearsal-controls hidden aria-label="离线排练指引">
-      <h2>一起走完这段雨夜</h2>
-      <div class="rehearsal-commands">
-        <button data-command="你好" type="button">你好</button>
-        <button data-command="讲讲旅途" type="button">讲讲旅途</button>
-        <button data-command="照片里有什么" type="button">照片里有什么</button>
-        <button data-command="暖灯" type="button">暖灯</button>
-        <button data-command="/fail" type="button">测试一次失败</button>
+  <details class="memory-management-panel" data-memory-management-panel hidden aria-labelledby="memory-management-title">
+    <summary id="memory-management-title">本机记忆 · 手动管理</summary>
+    <div class="memory-management-content">
+      <p class="memory-management-disclosure">这项同意只适用于本页的本机写入。它不会开启记忆召回或授权内容传输。若本机操作方另行启用召回，选中的记忆证据可能发送给 Codex 生成与 TypeSafe/JEV 输出审核。</p>
+      <p class="memory-management-retention">忘记是可恢复的隐藏记录：原文仍留在本机追加历史中，并可明确恢复；这不是安全删除，也无法撤回此前已经传出的内容。</p>
+      <label class="memory-management-consent"><input type="checkbox" data-memory-management-local-consent> 我明确同意在本机当前记忆范围中创建、更正、软忘记或恢复我亲自输入的陈述。此勾选不授权记忆内容发送给模型。</label>
+
+      <div class="memory-management-actions">
+        <button type="button" data-memory-management-refresh>读取或刷新当前页</button>
+        <button type="button" data-memory-management-previous disabled>上一页</button>
+        <button type="button" data-memory-management-next disabled>下一页</button>
       </div>
-      <button class="ptt-button" data-rehearsal-input type="button" disabled aria-pressed="false" aria-describedby="rehearsal-hint">按住演练输入 · 不录音</button>
-      <p class="voice-hint" id="rehearsal-hint" data-rehearsal-hint>合成输入演练：按住观察 listening；松开发送固定口令「照片里有什么」。不打开麦克风。</p>
-      <details class="rehearsal-instructions">
-        <summary>查看完整体验步骤（约 3–5 分钟）</summary>
-        <div class="rehearsal-instructions-content">
-          <p>按自己的节奏体验：听完短句、观察动作，再试着打断。这里的每句回应都是固定剧本。</p>
-          <ol>
-            <li>点「你好」，再试下方「先放下相机吧」，观察好奇和微笑。</li>
-            <li>点「给我看看你的旅行」，等原创海岸插画和字幕出现。</li>
-            <li>点「讲讲旅途」。说到一半按「停止回应」：声音与字幕停下，插画保留。</li>
-            <li>按住上方「演练输入」，观察 listening；松开只提交「照片里有什么」。也可直接点同名口令。</li>
-            <li>试「一起听会儿雨」「暖灯」；测试一次失败，再点「你好」恢复。也可输入目录外文字验证明确提示。</li>
-          </ol>
+      <p class="memory-management-status" data-memory-management-status role="status" aria-live="polite" aria-atomic="true">展开此面板后，才会读取有界的本机记忆页。</p>
+      <ol class="memory-management-entries" data-memory-management-entries aria-label="当前页的本机记忆"></ol>
+
+      <form class="memory-management-form" data-memory-management-record-form>
+        <h3 data-memory-management-editor-title>添加一条陈述</h3>
+        <label for="memory-management-kind">记录类别</label>
+        <select id="memory-management-kind" data-memory-management-kind>
+          <option value="episodic">普通记忆（按需召回）</option>
+          <option value="boundary">明确界限（每轮保留）</option>
+        </select>
+        <label for="memory-management-text">由你亲自输入的记忆内容</label>
+        <textarea id="memory-management-text" data-memory-management-text rows="3" maxlength="8192" autocomplete="off" spellcheck="true" aria-describedby="memory-management-text-limit"></textarea>
+        <small id="memory-management-text-limit">本页上限为 4,096 个 Unicode 字符和 16 KiB UTF-8；本机存储配置仍可设更严格的限额。</small>
+        <div class="memory-management-actions">
+          <button type="submit" data-memory-management-propose>准备保存</button>
+          <button type="button" data-memory-management-cancel-edit hidden>取消更正</button>
         </div>
-      </details>
-    </section>
-    <div class="presets" aria-label="可以从这里聊起"><span class="prompt-label">试着说</span><button data-command="不要拍我" type="button">先放下相机吧 <span aria-hidden="true">↗</span></button><button data-command="看照片" type="button">给我看看你的旅行 <span aria-hidden="true">↗</span></button><button data-command="听雨" type="button">一起听会儿雨 <span aria-hidden="true">↗</span></button></div>
-    <form class="composer">
-      <label class="sr-only" for="message">给 MIRA 的文字消息</label>
-      <input id="message" name="message" maxlength="2000" placeholder="说点什么，让故事继续…" autocomplete="off" enterkeyhint="send">
-      <button class="send-button" type="submit" aria-label="发送文字"><span>发送</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m7 17 10-10M7 7h10v10"/></svg></button>
-    </form>
-    <p id="voice-hint" class="voice-hint" data-voice-hint>语音连接后可按住说话，松开发送。现在可以先用文字。</p>
-  </fieldset>
-  <p class="error" data-error role="alert"></p>
+      </form>
+
+      <section class="memory-management-confirmation" data-memory-management-confirmation hidden aria-labelledby="memory-management-confirmation-title">
+        <h3 id="memory-management-confirmation-title">请核对本次本机操作</h3>
+        <p data-memory-management-preview></p>
+        <label class="memory-management-consent"><input type="checkbox" data-memory-management-confirmed> 我已核对上面的操作与准确文字，并确认只在本机当前作用域执行这一次。</label>
+        <div class="memory-management-actions">
+          <button type="button" data-memory-management-commit disabled>确认这一次操作</button>
+          <button type="button" data-memory-management-cancel>取消本次确认</button>
+        </div>
+      </section>
+      <button type="button" class="memory-management-reconcile" data-memory-management-reconcile hidden>重发同一请求核对（若尚未提交会执行原操作）</button>
+    </div>
+  </details>
+  <details class="technical-details"><summary>连接与演示信息 <span aria-hidden="true">＋</span></summary><div class="technical-content"><div><h2>会话连接</h2><p class="technical-state" data-status>connecting</p><pre data-diagnostic>等待会话</pre></div><div><h2>体验说明</h2><p data-mode-description>当前服务模式将在连接后显示。角色与旅行插画为本地原创素材；它们不代表实时生图。语音能力以实际连接状态为准。</p><p>本机记忆管理默认关闭；只有本机操作方显式启用本地写入并完成配对时，页面才会显示管理面板。此处保存是本机操作；若之后单独启用召回，选中的记忆可能发送给 Codex 生成与 TypeSafe/JEV 输出审核。</p><p>停止会保留已经看到的画面。刷新页面会新建会话。</p><div class="technical-actions"><button data-command="/fail" type="button">测试一次失败</button><button data-close type="button">结束本次会话</button><a href="/docs" target="_blank" rel="noreferrer">接口说明 ↗</a></div></div></div></details>
+    </div>
+  </details>
 
   <footer class="app-footer"><span>一个雨夜，一场偶遇。</span><span>原创角色 · 动画互动</span></footer>
-  <details class="technical-details"><summary>连接与演示信息 <span aria-hidden="true">＋</span></summary><div class="technical-content"><div><h2>会话连接</h2><p class="technical-state" data-status>connecting</p><pre data-diagnostic>等待会话</pre></div><div><h2>体验说明</h2><p data-mode-description>当前服务模式将在连接后显示。角色和旅行插画为原创矢量素材；它们不代表实时生图。语音能力以实际连接状态为准。</p><p>停止会保留已经看到的画面。刷新页面会新建会话。</p><div class="technical-actions"><button data-command="/fail" type="button">测试一次失败</button><button data-close type="button">结束本次会话</button><a href="/docs" target="_blank" rel="noreferrer">接口说明 ↗</a></div></div></div></details>
+
 </main>
 <script type="module" src="/dist/app/main.js"></script>
 </body>

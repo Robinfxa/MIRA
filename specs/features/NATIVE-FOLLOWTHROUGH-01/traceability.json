@@ -1,0 +1,54 @@
+{
+  "feature": "NATIVEFOLLOW01",
+  "spec": "specs/features/NATIVE-FOLLOWTHROUGH-01/spec.md",
+  "requirements": [
+    {
+      "id": "NATIVEFOLLOW01-001",
+      "tests": [
+        "tests/contracts/test_native_followthrough.py::test_receipted_decline_then_present_reconsideration_hands_over_in_one_tool_turn",
+        "tests/contracts/test_native_followthrough.py::test_reconsideration_waits_for_new_handover_receipt_and_never_reuses_preview",
+        "tests/contracts/test_native_followthrough_boundaries.py::test_declined_identity_and_new_typed_act_reach_production_selection_request"
+      ]
+    },
+    {
+      "id": "NATIVEFOLLOW01-002",
+      "tests": [
+        "tests/contracts/test_native_followthrough.py::test_declined_reference_is_exposed_only_as_receipted_reconsideration_not_active_offer",
+        "tests/contracts/test_native_followthrough.py::test_reconsideration_rejects_missing_exact_authority",
+        "tests/contracts/test_native_followthrough.py::test_nonaccepting_dialogue_does_not_infer_acceptance_from_words",
+        "tests/contracts/test_native_followthrough.py::test_fences_or_replaced_offer_revoke_declined_reference",
+        "tests/contracts/test_native_followthrough_boundaries.py::test_reply_interruption_keeps_declined_offer_but_checkpoint_reentry_drops_authority",
+        "tests/contracts/test_native_followthrough_boundaries.py::test_domain_reconsideration_requires_exact_current_authority",
+        "tests/contracts/test_native_followthrough_boundaries.py::test_never_presented_offer_and_unrecognized_role_cannot_reconsider",
+        "tests/contracts/test_native_followthrough_boundaries.py::test_handover_reconsideration_is_finite_and_late_receipt_cannot_revive_it"
+      ]
+    },
+    {
+      "id": "NATIVEFOLLOW01-003",
+      "tests": [
+        "tests/contracts/test_native_followthrough.py::test_return_camera_wire_and_result_truthfully_keep_camera_held"
+      ]
+    },
+    {
+      "id": "NATIVEFOLLOW01-004",
+      "tests": [
+        "tests/contracts/test_native_followthrough.py::test_receipted_decline_then_present_reconsideration_hands_over_in_one_tool_turn"
+      ]
+    },
+    {
+      "id": "NATIVEFOLLOW01-005",
+      "tests": [
+        "tests/contracts/test_native_reconsideration_after_stop.py::test_observed_decline_global_stop_then_explicit_reconsideration_is_one_new_handover",
+        "tests/contracts/test_native_reconsideration_after_stop.py::test_cancelled_reconsideration_keeps_history_but_requires_new_input_and_new_handover_receipt",
+        "tests/contracts/test_native_reconsideration_after_stop.py::test_stop_never_automatically_reauthorizes_a_historical_declined_offer"
+      ]
+    },
+    {
+      "id": "NATIVEFOLLOW01-006",
+      "tests": [
+        "tests/contracts/test_native_reconsideration_checkpoint.py::test_checkpoint_omits_transient_reference_without_changing_live_authority",
+        "tests/contracts/test_xiahe_chapter_actor.py::test_old_four_node_checkpoint_reads_explicitly_without_disk_mutation"
+      ]
+    }
+  ]
+}

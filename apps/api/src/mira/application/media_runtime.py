@@ -21,6 +21,11 @@ MediaValue = TypeVar("MediaValue", AudioPacket, TranscriptRevision)
 MAX_PCM_BYTES = 12000
 MAX_OUTPUT_SAMPLES = 24000 * 300
 MAX_INPUT_SECONDS = 60
+# PTT capture normally sends 20ms packets. A count of eight allows only 160ms
+# for an STT request to start consuming, so ordinary SDK startup can overflow it.
+# Bound pending PCM by two seconds (64,000 bytes), independently of a packet cap.
+MAX_INPUT_BUFFER_SAMPLES = 16000 * 2
+MAX_INPUT_BUFFER_PACKETS = 200
 _SAFE_CODES = frozenset({"invalid_input", "input_limit", "output_limit", "invalid_response",
                         "response_limit", "invalid_audio", "unsupported_audio", "empty_audio",
                         "incomplete_stream", "blocked", "unauthenticated", "permission_denied",
@@ -58,6 +63,8 @@ class MediaOperation(Generic[MediaValue]):
         self._diagnostics = DiagnosticSpan(diagnostics,
             DiagnosticStage.TTS if effect is not None else DiagnosticStage.STT, diagnostic_context)
         self._cancel_reason = CancellationReason.UNKNOWN
+        self._first_stt_revision = False
+        self._first_stt_final_revision = False
         self._discard_input = discard_input
         self._consumers: tuple[asyncio.Task, ...] = ()
         self.task = asyncio.create_task(self._run(source))
@@ -99,6 +106,13 @@ class MediaOperation(Generic[MediaValue]):
                 async for value in stream:
                     if self.cancelled.is_set() or asyncio.current_task().cancelling():
                         raise asyncio.CancelledError
+                    if isinstance(value, TranscriptRevision) and self._diagnostics.stage == DiagnosticStage.STT:
+                        if not self._first_stt_revision:
+                            self._first_stt_revision = True
+                            self._diagnostics.observe(DiagnosticStage.STT_FIRST_REVISION)
+                        if value.is_final and not self._first_stt_final_revision:
+                            self._first_stt_final_revision = True
+                            self._diagnostics.observe(DiagnosticStage.STT_FIRST_FINAL_REVISION)
                     await self._queue.put(value)
         except asyncio.CancelledError:
             self.cancelled.set()
@@ -110,6 +124,11 @@ class MediaOperation(Generic[MediaValue]):
                     await close_iterator(stream)
                 except Exception as error:
                     self._error = self._error or media_error(error)
+            if self._diagnostics.stage == DiagnosticStage.STT:
+                terminal = (DiagnosticOutcome.CANCELLED if self.cancelled.is_set()
+                    else DiagnosticOutcome.FAILED if self._error is not None
+                    else DiagnosticOutcome.SUCCEEDED)
+                self._diagnostics.observe(DiagnosticStage.STT_STREAM_END, terminal)
             if self.cancelled.is_set():
                 self._diagnostics.finish(DiagnosticOutcome.CANCELLED, code=DiagnosticCode.CANCELLED,
                                          reason=self._cancel_reason)
@@ -178,7 +197,8 @@ class MicrophoneBuffer:
     """Ephemeral PCM queue. Finish drains; cancel discards. Neither creates a turn."""
     def __init__(self, stream_id: str):
         self.stream_id = stream_id
-        self._queue: asyncio.Queue[AudioPacket | None] = asyncio.Queue(maxsize=8)
+        self._queue: asyncio.Queue[AudioPacket | None] = asyncio.Queue(maxsize=MAX_INPUT_BUFFER_PACKETS)
+        self._queued_samples = 0
         self._samples = 0
         self._sequence = 0
         self._started = asyncio.get_running_loop().time()
@@ -200,10 +220,14 @@ class MicrophoneBuffer:
             raise DomainError("input_limit", "Microphone duration budget reached.")
         if samples > 16000 * (elapsed + 1) or sequence > 100 + elapsed * 100:
             raise DomainError("input_limit", "Microphone input exceeds its pacing budget.")
+        packet_samples = len(pcm) // 2
+        if self._queued_samples + packet_samples > MAX_INPUT_BUFFER_SAMPLES:
+            raise DomainError("input_limit", "Microphone input buffer is full.")
         try:
             self._queue.put_nowait(AudioPacket(self.stream_id, first_sample, 16000, pcm))
         except asyncio.QueueFull:
             raise DomainError("input_limit", "Microphone input buffer is full.") from None
+        self._queued_samples += packet_samples
         self._samples, self._sequence = samples, sequence
 
     async def finish(self) -> None:
@@ -220,9 +244,11 @@ class MicrophoneBuffer:
             packet = await self._queue.get()
             if packet is None:
                 return
+            self._queued_samples -= len(packet.pcm) // 2
             yield packet
 
     def clear(self) -> None:
         self._finished = True
         while not self._queue.empty():
             self._queue.get_nowait()
+        self._queued_samples = 0

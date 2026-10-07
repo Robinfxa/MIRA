@@ -1,0 +1,132 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_checkpoint_omits_transient_reference_without_changing_live_authority[dormant] _
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-11/test_checkpoint_omits_transien0')
+kind = 'dormant'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('kind',['dormant','declined'])
+    async def test_checkpoint_omits_transient_reference_without_changing_live_authority(tmp_path,kind):
+        s=Flow()
+        try:
+            original=await declined(s) if kind=='declined' else None
+            saved=s.c.runtime.snapshot();definition=s.c.runtime.definition
+            private=tmp_path/'private';private.mkdir(mode=0o700)
+            path=private/'synthetic.sqlite3'
+            store=StoryCheckpointStore(path,enabled=True,explicitly_authorized=True,
+                authorized_scope_id=saved.story.scope_id)
+            store.save(saved.story,saved.affect)
+            with sqlite3.connect(path) as db:
+                version,raw=db.execute('select schema_version,story_json from story_checkpoint').fetchone()
+            assert version==6
+>           assert 'declined_gift_offer' not in json.loads(raw)['chapter']
+E           AssertionError: assert 'declined_gift_offer' not in {'active_gift_offer_id': None, 'compatibility': 'fresh_chapter_v1', 'declined_gift_offer': None, 'gift_offer_effect_digest': None, ...}
+
+tests/contracts/test_native_reconsideration_checkpoint.py:28: AssertionError
+_ test_checkpoint_omits_transient_reference_without_changing_live_authority[declined] _
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-11/test_checkpoint_omits_transien1')
+kind = 'declined'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('kind',['dormant','declined'])
+    async def test_checkpoint_omits_transient_reference_without_changing_live_authority(tmp_path,kind):
+        s=Flow()
+        try:
+            original=await declined(s) if kind=='declined' else None
+            saved=s.c.runtime.snapshot();definition=s.c.runtime.definition
+            private=tmp_path/'private';private.mkdir(mode=0o700)
+            path=private/'synthetic.sqlite3'
+            store=StoryCheckpointStore(path,enabled=True,explicitly_authorized=True,
+                authorized_scope_id=saved.story.scope_id)
+            store.save(saved.story,saved.affect)
+            with sqlite3.connect(path) as db:
+                version,raw=db.execute('select schema_version,story_json from story_checkpoint').fetchone()
+            assert version==6
+>           assert 'declined_gift_offer' not in json.loads(raw)['chapter']
+E           AssertionError: assert 'declined_gift_offer' not in {'active_gift_offer_id': None, 'compatibility': 'fresh_chapter_v1', 'declined_gift_offer': {'effect_digest': '5190325f...fer_id': 'gift', 'receipt_id': 'visual.8ad14b4a-ffe2-4503-b493-24cdf8e49340.2'}, 'gift_offer_effect_digest': None, ...}
+
+tests/contracts/test_native_reconsideration_checkpoint.py:28: AssertionError
+__ test_exact_original_2012_reader_accepts_current_checkpoint_bytes[dormant] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-11/test_exact_original_2012_reade0')
+kind = 'dormant'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('kind',['dormant','declined'])
+    async def test_exact_original_2012_reader_accepts_current_checkpoint_bytes(tmp_path,kind):
+        import sys
+        s=Flow()
+        try:
+            if kind=='declined':await declined(s)
+            saved=s.c.runtime.snapshot()
+            private=tmp_path/'private';private.mkdir(mode=0o700)
+            path=private/'synthetic.sqlite3'
+            store=StoryCheckpointStore(path,enabled=True,explicitly_authorized=True,authorized_scope_id=saved.story.scope_id)
+            store.save(saved.story,saved.affect)
+            before=path.read_bytes()
+            env=dict(os.environ,PYTHONPATH=str(OLD/'apps/api/src'),PYTHONDONTWRITEBYTECODE='1')
+            r=subprocess.run([sys.executable,'-c',READER,str(path),saved.story.scope_id,saved.story.story_id],
+                cwd=OLD,env=env,capture_output=True,text=True,timeout=10)
+>           assert r.returncode==0,r.stderr
+E           AssertionError: Traceback (most recent call last):
+E               File "<string>", line 8, in <module>
+E               File "/workspace/shared/mira-final-integration-20261006T1926Z/apps/api/src/mira/adapters/memory/story.py", line 244, in load
+E                 story = _story_from_dict(_migrate_story_payload(row))
+E                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               File "/workspace/shared/mira-final-integration-20261006T1926Z/apps/api/src/mira/adapters/memory/story.py", line 418, in _story_from_dict
+E                 chapter=chapter_from_dict(d["chapter"]),
+E                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               File "/workspace/shared/mira-final-integration-20261006T1926Z/apps/api/src/mira/domain/xiahe_chapter.py", line 403, in chapter_from_dict
+E                 raise ValueError('unsupported chapter checkpoint schema')
+E             ValueError: unsupported chapter checkpoint schema
+E             
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/workspace/shared/mira-runtime-recovery-20261006T1912Z/.venv/bin/python', '-c', "\nimport json...n    raise ValueError(\'unsupported chapter checkpoint schema\')\nValueError: unsupported chapter checkpoint schema\n').returncode
+
+../mira-natural-followthrough-fix-evidence-20261006T2111Z/checkpoint-compatibility/test_original_2012_reader.py:39: AssertionError
+__ test_exact_original_2012_reader_accepts_current_checkpoint_bytes[declined] __
+
+tmp_path = PosixPath('/tmp/pytest-of-agent/pytest-11/test_exact_original_2012_reade1')
+kind = 'declined'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('kind',['dormant','declined'])
+    async def test_exact_original_2012_reader_accepts_current_checkpoint_bytes(tmp_path,kind):
+        import sys
+        s=Flow()
+        try:
+            if kind=='declined':await declined(s)
+            saved=s.c.runtime.snapshot()
+            private=tmp_path/'private';private.mkdir(mode=0o700)
+            path=private/'synthetic.sqlite3'
+            store=StoryCheckpointStore(path,enabled=True,explicitly_authorized=True,authorized_scope_id=saved.story.scope_id)
+            store.save(saved.story,saved.affect)
+            before=path.read_bytes()
+            env=dict(os.environ,PYTHONPATH=str(OLD/'apps/api/src'),PYTHONDONTWRITEBYTECODE='1')
+            r=subprocess.run([sys.executable,'-c',READER,str(path),saved.story.scope_id,saved.story.story_id],
+                cwd=OLD,env=env,capture_output=True,text=True,timeout=10)
+>           assert r.returncode==0,r.stderr
+E           AssertionError: Traceback (most recent call last):
+E               File "<string>", line 8, in <module>
+E               File "/workspace/shared/mira-final-integration-20261006T1926Z/apps/api/src/mira/adapters/memory/story.py", line 244, in load
+E                 story = _story_from_dict(_migrate_story_payload(row))
+E                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               File "/workspace/shared/mira-final-integration-20261006T1926Z/apps/api/src/mira/adapters/memory/story.py", line 418, in _story_from_dict
+E                 chapter=chapter_from_dict(d["chapter"]),
+E                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               File "/workspace/shared/mira-final-integration-20261006T1926Z/apps/api/src/mira/domain/xiahe_chapter.py", line 403, in chapter_from_dict
+E                 raise ValueError('unsupported chapter checkpoint schema')
+E             ValueError: unsupported chapter checkpoint schema
+E             
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/workspace/shared/mira-runtime-recovery-20261006T1912Z/.venv/bin/python', '-c', "\nimport json...n    raise ValueError(\'unsupported chapter checkpoint schema\')\nValueError: unsupported chapter checkpoint schema\n').returncode
+
+../mira-natural-followthrough-fix-evidence-20261006T2111Z/checkpoint-compatibility/test_original_2012_reader.py:39: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_native_reconsideration_checkpoint.py::test_checkpoint_omits_transient_reference_without_changing_live_authority[dormant]
+FAILED tests/contracts/test_native_reconsideration_checkpoint.py::test_checkpoint_omits_transient_reference_without_changing_live_authority[declined]
+FAILED ::test_exact_original_2012_reader_accepts_current_checkpoint_bytes[dormant]
+FAILED ::test_exact_original_2012_reader_accepts_current_checkpoint_bytes[declined]
+4 failed in 0.60s

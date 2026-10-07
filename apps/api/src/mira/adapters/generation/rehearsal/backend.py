@@ -71,9 +71,11 @@ def load_clips() -> Mapping[str, RehearsalClip]:
 
 def fixture_for(context: GenerationContext) -> str:
     if context.user_text in {"照片里有什么", "讲讲旅途"}:
-        visible = any(effect.kind == EffectKind.MEDIA and effect.value == "trip_photo"
+        exposed = any(effect.kind == EffectKind.MEDIA and effect.value == "trip_photo"
                       for effect in context.presented_effects)
-        return ("detail" if context.user_text == "照片里有什么" else "story") if visible else "absent"
+        if exposed and not context.photo_visible:
+            return "closed"
+        return ("detail" if context.user_text == "照片里有什么" else "story") if exposed and context.photo_visible else "absent"
     return COMMANDS.get(context.user_text, "help")
 
 
@@ -94,6 +96,8 @@ def authored_ranges(clips: Mapping[str, RehearsalClip]) -> Mapping[str, Candidat
         *visuals[name],
     ), "rehearsal:" + name) for name, clip in clips.items()}
     rows["help"] = CandidateRange((EffectProposal(EffectKind.SUBTITLE, HELP),), "rehearsal:help")
+    rows["closed"] = CandidateRange((EffectProposal(EffectKind.SUBTITLE,
+        "旅行插画已收起。我们之前展示过那幅海岸与灯塔；选择「看照片」可以再次打开。"),), "rehearsal:closed")
     return MappingProxyType(rows)
 
 

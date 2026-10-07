@@ -1,0 +1,59 @@
+{
+  "scope": "preserved historical offline evidence, not rerun by documentation task",
+  "records": [
+    {
+      "name": "image_review_patch",
+      "original_summary_sha256": "061a9c8be99b83fa000e816898187309cfe6e695189dd33d8cd9abb7efbe6d5a",
+      "status": "passed",
+      "selected_lanes": [
+        "architecture",
+        "config",
+        "actor",
+        "providers",
+        "http",
+        "tooling",
+        "specs",
+        "continuous"
+      ],
+      "not_run": [
+        "domain",
+        "env",
+        "web",
+        "package",
+        "smoke"
+      ],
+      "changed_during_run": [],
+      "source_before_digest": "d51f831fe111868e943e5bae848f2ef793c5c93a5e791a854633dff3af31a7dd",
+      "source_after_digest": "d51f831fe111868e943e5bae848f2ef793c5c93a5e791a854633dff3af31a7dd",
+      "started_at": "2026-10-06T20:44:34.407982+00:00",
+      "ended_at": "2026-10-06T20:47:10.909249+00:00"
+    },
+    {
+      "name": "natural_followthrough_patch",
+      "original_summary_sha256": "9018efa50a2335d7482f53d749e150c4e3294687614e21381bc94bf0112a9493",
+      "status": "passed",
+      "selected_lanes": [
+        "architecture",
+        "domain",
+        "env",
+        "config",
+        "actor",
+        "providers",
+        "http",
+        "tooling",
+        "specs",
+        "web",
+        "continuous"
+      ],
+      "not_run": [
+        "package",
+        "smoke"
+      ],
+      "changed_during_run": [],
+      "source_before_digest": "90d44efe648cfd78bef811238f75fb4ff045993ed8c53d3bb6a18e4eb183c376",
+      "source_after_digest": "90d44efe648cfd78bef811238f75fb4ff045993ed8c53d3bb6a18e4eb183c376",
+      "started_at": "2026-10-06T21:34:57.472846+00:00",
+      "ended_at": "2026-10-06T21:37:47.773595+00:00"
+    }
+  ]
+}

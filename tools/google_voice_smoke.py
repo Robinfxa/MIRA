@@ -113,6 +113,160 @@ def _sanitize_provider_message(value: str) -> str:
 MAX_ERROR_BODY_BYTES = 8192
 
 
+class TtsLatencyTrace:
+    """Record privacy-bounded monotonic boundaries for one diagnostic TTS stream."""
+
+    def __init__(self, clock_ns: Callable[[], int] | None = None):
+        self._clock_ns = clock_ns or time.monotonic_ns
+        self._origin_ns = self._read_clock()
+        self._last_ns = self._origin_ns
+        self._events_ns: dict[str, int] = {}
+        self._http_status: int | None = None
+        self._non_audio_events = 0
+        self._valid_packets = 0
+        self._valid_bytes = 0
+        self._total_samples = 0
+        self._invalid_packets = 0
+        self._stream_outcome: str | None = None
+        self._file_save_outcome: str | None = None
+
+    def _read_clock(self) -> int:
+        value = self._clock_ns()
+        if type(value) is not int:
+            raise TypeError("clock must return integer nanoseconds")
+        if hasattr(self, "_last_ns") and value < self._last_ns:
+            raise ValueError("monotonic clock moved backwards")
+        self._last_ns = value
+        return value
+
+    def _mark_once(self, name: str) -> None:
+        if name in self._events_ns:
+            raise ValueError("phase already observed")
+        self._events_ns[name] = self._read_clock()
+
+    def _require_dispatch(self) -> None:
+        if "dispatch_started" not in self._events_ns:
+            raise ValueError("dispatch was not observed")
+
+    def _require_stream_open(self) -> None:
+        self._require_dispatch()
+        if self._stream_outcome is not None:
+            raise ValueError("stream already terminal")
+
+    def dispatch_started(self) -> None:
+        self._mark_once("dispatch_started")
+
+    def http_headers_received(self, status_code: int) -> None:
+        self._require_stream_open()
+        if type(status_code) is not int or not 100 <= status_code <= 599:
+            raise ValueError("invalid HTTP status code")
+        if "http_headers_received" in self._events_ns:
+            raise ValueError("headers phase already observed")
+        self._http_status = status_code
+        self._mark_once("http_headers_received")
+
+    def non_audio_event_received(self) -> None:
+        """Count a non-audio event without retaining its content."""
+        self._require_stream_open()
+        self._non_audio_events += 1
+
+    def invalid_pcm_packet_received(self) -> None:
+        self._require_stream_open()
+        self._invalid_packets += 1
+
+    def pcm_packet_yielded(self, pcm: bytes, sample_rate_hz: int) -> bool:
+        """Observe only valid nonempty 24-kHz S16LE bytes at the adapter yield."""
+        self._require_stream_open()
+        if (type(pcm) is not bytes or not pcm or len(pcm) % 2
+                or type(sample_rate_hz) is not int or sample_rate_hz != 24000):
+            self._invalid_packets += 1
+            return False
+        now = self._read_clock()
+        self._events_ns.setdefault("first_valid_pcm_yielded", now)
+        self._events_ns["last_valid_pcm_yielded"] = now
+        self._valid_packets += 1
+        self._valid_bytes += len(pcm)
+        self._total_samples += len(pcm) // 2
+        return True
+
+    def stream_terminal(self, outcome: str) -> None:
+        self._require_dispatch()
+        if self._stream_outcome is not None:
+            raise ValueError("stream already terminal")
+        if outcome not in {"completed", "error", "cancelled"}:
+            raise ValueError("invalid terminal outcome")
+        self._stream_outcome = outcome
+        self._mark_once("stream_terminal")
+
+    def stream_closed(self) -> None:
+        self._require_dispatch()
+        if "stream_closed" in self._events_ns:
+            raise ValueError("stream close already observed")
+        self._mark_once("stream_closed")
+        if self._stream_outcome is None:
+            self._stream_outcome = "early_close"
+
+    def file_save_completed(self, succeeded: bool) -> None:
+        if type(succeeded) is not bool:
+            raise ValueError("save result must be boolean")
+        if self._stream_outcome != "completed":
+            raise ValueError("file save only follows a completed stream")
+        if self._file_save_outcome is not None:
+            raise ValueError("file save already observed")
+        self._file_save_outcome = "saved" if succeeded else "failed"
+        self._mark_once("file_save_completed")
+
+    def _elapsed_ms(self, name: str) -> float | None:
+        value = self._events_ns.get(name)
+        return None if value is None else round((value - self._origin_ns) / 1_000_000, 3)
+
+    def _between_ms(self, start: str, end: str) -> float | None:
+        left, right = self._events_ns.get(start), self._events_ns.get(end)
+        return None if left is None or right is None else round((right - left) / 1_000_000, 3)
+
+    def to_dict(self) -> dict[str, Any]:
+        event_names = (
+            "dispatch_started", "http_headers_received", "first_valid_pcm_yielded",
+            "last_valid_pcm_yielded", "stream_terminal", "stream_closed", "file_save_completed",
+        )
+        return {
+            "schema": "mira.tts.latency.v1",
+            "clock": "monotonic_elapsed_ms",
+            "events_ms": {name: self._elapsed_ms(name) for name in event_names},
+            "durations_ms": {
+                "dispatch_to_headers": self._between_ms("dispatch_started", "http_headers_received"),
+                "dispatch_to_first_valid_pcm": self._between_ms("dispatch_started", "first_valid_pcm_yielded"),
+                "headers_to_first_valid_pcm": self._between_ms("http_headers_received", "first_valid_pcm_yielded"),
+                "dispatch_to_last_pcm": self._between_ms("dispatch_started", "last_valid_pcm_yielded"),
+                "dispatch_to_stream_terminal": self._between_ms("dispatch_started", "stream_terminal"),
+                "dispatch_to_file_save": self._between_ms("dispatch_started", "file_save_completed"),
+                "last_pcm_to_file_save": self._between_ms("last_valid_pcm_yielded", "file_save_completed"),
+            },
+            "http_status": self._http_status,
+            "stream_outcome": self._stream_outcome or "not_observed",
+            "cancelled_after_first_valid_pcm": (
+                self._valid_packets > 0 if self._stream_outcome == "cancelled" else None
+            ),
+            "file_save_outcome": self._file_save_outcome or "not_observed",
+            "counts": {
+                "non_audio_events": self._non_audio_events,
+                "valid_pcm_packets": self._valid_packets,
+                "valid_pcm_bytes": self._valid_bytes,
+                "total_samples": self._total_samples,
+                "invalid_pcm_packets": self._invalid_packets,
+            },
+            "authentication": "unobserved",
+            "browser_scheduling": "unobserved",
+            "physical_playback": "unobserved",
+        }
+
+
+def _persist_tts_latency(reporter: "DurableReporter", trace: TtsLatencyTrace | None) -> None:
+    if trace is not None:
+        reporter.record["tts_timing"] = trace.to_dict()
+        reporter._flush()
+
+
 class SmokeBlocked(RuntimeError):
     """A local preflight or one-shot execution stop; safe to report."""
 
@@ -135,7 +289,8 @@ class DurableReporter:
              field_names: list[str] | None = None, diagnostic: str | None = None,
              body_bytes_read: int | None = None, body_truncated: bool | None = None,
              body_capture_status: str | None = None,
-             audio_diagnostic: dict[str, Any] | None = None) -> None:
+             audio_diagnostic: dict[str, Any] | None = None,
+             total_samples: int | None = None) -> None:
         allowed_phases = {
             "preflight_verified", "tts_reserved", "tts_dispatch_started",
             "tts_http_status_received", "tts_first_packet_received", "tts_cancel_started",
@@ -178,6 +333,8 @@ class DurableReporter:
                 raise SmokeBlocked("invalid_report_audio_diagnostic") from None
         if first_packet_samples is not None and (type(first_packet_samples) is not int or first_packet_samples < 0):
             raise SmokeBlocked("invalid_report_sample_count")
+        if total_samples is not None and (type(total_samples) is not int or total_samples < 0):
+            raise SmokeBlocked("invalid_report_total_sample_count")
         if duration_seconds is not None and (not isinstance(duration_seconds, (int, float)) or duration_seconds < 0):
             raise SmokeBlocked("invalid_report_duration")
         if reserved_usd is not None:
@@ -196,7 +353,7 @@ class DurableReporter:
                            ("field_names", safe_fields if field_names is not None else None),
                            ("diagnostic", diagnostic), ("body_bytes_read", body_bytes_read),
                            ("body_truncated", body_truncated), ("body_capture_status", body_capture_status),
-                           ("audio_diagnostic", audio_diagnostic)):
+                           ("audio_diagnostic", audio_diagnostic), ("total_samples", total_samples)):
             if value is not None:
                 event[key] = value
         self.record["events"].append(event)
@@ -1631,9 +1788,13 @@ async def run_final_approved_tts_only(readiness_path: Path, enable_receipt_path:
     reservation: Reservation | None = None
     stream = None
     resources = None
+    latency_trace: TtsLatencyTrace | None = None
 
     def status_received(status: int) -> None:
+        first_status = not statuses
         statuses.append(status)
+        if first_status and latency_trace is not None:
+            latency_trace.http_headers_received(status)
         if reservation is not None:
             ledger.set_phase(reservation, "http_status_received", http_status=status)
         reporter.emit("tts_http_status_received", call=TTS_FINAL_APPROVED_KIND,
@@ -1661,6 +1822,8 @@ async def run_final_approved_tts_only(readiness_path: Path, enable_receipt_path:
 
         from mira.application.ports.media import AudioPacket
         stream_id = "google-smoke-final-approved"
+        latency_trace = TtsLatencyTrace()
+        latency_trace.dispatch_started()
         stream = tts.synthesize(SYNTHETIC_TEXT, stream_id)
         packets = []
         terminal_error: Exception | None = None
@@ -1670,13 +1833,19 @@ async def run_final_approved_tts_only(readiness_path: Path, enable_receipt_path:
                         or packet.sample_rate_hz != STT_SAMPLE_RATE_HZ
                         or not isinstance(packet.pcm, bytes) or not packet.pcm
                         or len(packet.pcm) % 2):
+                    latency_trace.invalid_pcm_packet_received()
+                    raise SmokeBlocked("invalid_tts_audio_packet")
+                if not latency_trace.pcm_packet_yielded(packet.pcm, packet.sample_rate_hz):
                     raise SmokeBlocked("invalid_tts_audio_packet")
                 packets.append(packet)
+            latency_trace.stream_terminal("completed")
         except asyncio.CancelledError:
+            latency_trace.stream_terminal("cancelled")
             ledger.set_phase(reservation, "interrupted_unknown")
             reporter.emit("bundle_interrupted_unknown", call=TTS_FINAL_APPROVED_KIND, state="unknown")
             raise
         except Exception as error:
+            latency_trace.stream_terminal("error")
             terminal_error = error
 
         status = statuses[-1] if statuses else None
@@ -1686,13 +1855,19 @@ async def run_final_approved_tts_only(readiness_path: Path, enable_receipt_path:
         if tts_ok:
             pcm = b"".join(packet.pcm for packet in packets)
             pcm_digest = hashlib.sha256(pcm).hexdigest()
-            _write_pcm_private(audio_path, pcm)
+            try:
+                _write_pcm_private(audio_path, pcm)
+            except Exception:
+                latency_trace.file_save_completed(False)
+                _persist_tts_latency(reporter, latency_trace)
+                raise
+            latency_trace.file_save_completed(True)
             duration = sample_count / STT_SAMPLE_RATE_HZ
             ledger.finish(reservation, "completed", status_class="2xx", http_status=200,
                           sample_count=sample_count, duration_seconds=duration,
                           terminal_phase="tts_completed")
             reporter.emit("tts_completed", call=TTS_FINAL_APPROVED_KIND, state="completed",
-                          http_status=200, first_packet_samples=sample_count,
+                          http_status=200, total_samples=sample_count,
                           duration_seconds=duration, reserved_usd=format(TTS_FULL_RESERVE_USD, "f"))
             reporter.record.update({
                 "audio_artifact_name": audio_path.name, "audio_bytes": len(pcm),
@@ -1727,6 +1902,7 @@ async def run_final_approved_tts_only(readiness_path: Path, enable_receipt_path:
             reporter.record["state"] = "failed_unknown_usage"
 
         reporter.record["finalized_at_epoch"] = time.time()
+        _persist_tts_latency(reporter, latency_trace)
         reporter._flush()
         reporter.emit("bundle_finalized", state=reporter.record["state"])
         return reporter.record
@@ -1736,6 +1912,9 @@ async def run_final_approved_tts_only(readiness_path: Path, enable_receipt_path:
                 await stream.aclose()
             except Exception:
                 pass
+            if latency_trace is not None:
+                latency_trace.stream_closed()
+        _persist_tts_latency(reporter, latency_trace)
         await _close_resources(resources)
         if resources is not None:
             reporter.emit("resources_closed", state=reporter.record.get("state", "unknown"))

@@ -1,0 +1,22 @@
+{
+  "feature": "WP12ORDINARY",
+  "spec": "specs/features/WP12-ordinary-scene/spec.md",
+  "requirements": [
+    {"id":"WP12ORDINARY-001","tests":[
+      "tests/contracts/test_character_ordinary_scene.py::test_fixed_scene_frame_contract_preserves_honesty_and_instruction_budget",
+      "tests/contracts/test_character_ordinary_scene.py::test_authored_scene_reality_sequence_crosses_actual_asgi_without_jev_text_gate"
+    ]},
+    {"id":"WP12ORDINARY-002","tests":[
+      "tests/contracts/test_character_ordinary_scene.py::test_short_acceptance_resolves_presented_outfit_suggestion_and_requires_exact_receipt",
+      "tests/contracts/test_character_clothing_dialogue.py::test_six_authored_exchanges_preserve_request_readiness_and_receipt_evidence"
+    ]},
+    {"id":"WP12ORDINARY-003","tests":[
+      "tests/contracts/test_character_ordinary_scene.py::test_actual_tool_request_keeps_the_same_semantic_frame_contract",
+      "tests/contracts/test_character_ordinary_scene.py::test_native_speaker_receives_same_frame_with_no_extra_request",
+      "tests/contracts/test_xiahe_chapter_actor.py::test_stop_late_receipt_is_history_only_correction_preserves_provenance"
+    ]},
+    {"id":"WP12ORDINARY-004","tests":[
+      "tests/contracts/test_character_ordinary_scene.py::test_editorial_pairs_are_not_mistaken_for_a_semantic_oracle"
+    ]}
+  ]
+}

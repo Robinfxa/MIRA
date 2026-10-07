@@ -1,13 +1,16 @@
 """Synthetic transport only; these tests do not evaluate Chinese language quality."""
 import asyncio
 import json
-from dataclasses import asdict, replace
+from dataclasses import replace
 
 import pytest
 
 from mira.adapters.review.jev import JevHttpResponse
 from mira.adapters.review.jev_input import JevInputDecisionBackend, _parse
-from mira.application.decision_contracts import InputDecisionStatus, SemanticValue, evidence_digest
+from mira.application.decision_contracts import (
+    InputDecisionStatus, SemanticValue, decision_snapshot_data, evidence_digest,
+)
+from mira.application.memory_context import ContextLine, ContextPacket
 from tests.contracts.test_decision_contracts import snapshot
 
 MODEL = "jev-1.13.0"
@@ -40,6 +43,20 @@ class SyntheticTransport:
 def backend(transport, **kwargs):
     return JevInputDecisionBackend(transport=transport, model=MODEL,
         **({"calibration_ref": "synthetic-test-only", "request_limit": 1} | kwargs))
+
+
+def memory_packet(request_text, revision):
+    return ContextPacket(
+        request_text=request_text, caller_boundaries=(), caller_corrections=(),
+        persistent_boundaries=(), persistent_corrections=(),
+        past_candidates=(ContextLine(
+            text="input-memory-secret-sentinel: prior facts only", source="user_statement",
+            role="past_candidate", precedence="optional_past_memory",
+            trust="untrusted_quoted_evidence", evidence_id="memory-1",
+            source_event_id="input-1", source_version=1,
+        ),), snapshot_revision=revision, recall_status="completed", timeout_ms=200,
+        max_packet_bytes=32_768,
+    )
 
 
 @pytest.mark.asyncio
@@ -148,10 +165,37 @@ async def test_exact_raw_snapshot_and_independent_primitive_questions():
     assert result.referent.referent_id == "photo-1"
     assert result.input_tokens == 100
     request = transport.calls[0]
-    assert request["state"] == json.loads(json.dumps(asdict(snap)))
+    assert request["state"] == json.loads(json.dumps(decision_snapshot_data(snap)))
     assert sorted(q["type"] for q in request["questions"].values()) == ["choice", "noul", "noul", "noul"]
     assert all(result.request_digest in key for key in request["questions"])
     assert not hasattr(result.predicates[0], "confidence")
+
+
+@pytest.mark.asyncio
+async def test_memory_snapshot_is_bound_locally_but_omitted_from_input_jevs_semantic_state():
+    original = snapshot()
+    first_packet = memory_packet(original.context.user_text, 7)
+    second_packet = memory_packet(original.context.user_text, 8)
+    first = replace(original, context=replace(original.context, memory_packet=first_packet))
+    second = replace(original, context=replace(original.context, memory_packet=second_packet))
+    assert evidence_digest(first) != evidence_digest(second)
+
+    first_transport, second_transport = SyntheticTransport(), SyntheticTransport()
+    first_result = await backend(first_transport).observe(first)
+    second_result = await backend(second_transport).observe(second)
+    first_request, second_request = first_transport.calls[0], second_transport.calls[0]
+    first_json = json.dumps(first_request, ensure_ascii=False)
+    second_json = json.dumps(second_request, ensure_ascii=False)
+    assert "input-memory-secret-sentinel" not in first_json
+    assert "input-memory-secret-sentinel" not in second_json
+    assert "memory_evidence" not in first_request["state"]["context"]
+    assert "memory_evidence" not in second_request["state"]["context"]
+    assert first_request["state"] == second_request["state"]
+    assert first_result.snapshot_digest == evidence_digest(first)
+    assert second_result.snapshot_digest == evidence_digest(second)
+    assert first_result.request_digest != second_result.request_digest
+    assert first_result.request_digest not in (None, "")
+    assert second_result.request_digest not in (None, "")
 
 
 @pytest.mark.asyncio

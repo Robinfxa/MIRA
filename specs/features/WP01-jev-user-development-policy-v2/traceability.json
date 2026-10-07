@@ -1,0 +1,40 @@
+{
+  "feature": "JEVDEV06V2",
+  "spec": "specs/features/WP01-jev-user-development-policy-v2/spec.md",
+  "requirements": [
+    {
+      "id": "JEVDEV06V2-001",
+      "tests": [
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_exact_v2_policy_is_recognized_without_reinterpreting_v1"
+      ]
+    },
+    {
+      "id": "JEVDEV06V2-002",
+      "tests": [
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_allow_probability_boundaries_stay_unknown_when_confidence_is_low",
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_allow_confidence_boundary_is_inclusive",
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_reject_needs_both_selected_probability_and_confidence",
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_unknown_label_never_becomes_allow",
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_malformed_numbers_fail_closed",
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_weak_reject_uses_system_clarification_fallback_without_grant"
+      ]
+    },
+    {
+      "id": "JEVDEV06V2-003",
+      "tests": [
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_input_thresholds_and_deterministic_restrictions_remain_fail_closed",
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_input_contract_uses_selected_thresholds_and_local_stop_still_preempts",
+        "tests/contracts/test_jev_user_development_policy_v2.py::test_v2_capture_prohibition_does_not_authorize_media_or_other_deterministic_bypasses"
+      ]
+    },
+    {
+      "id": "JEVDEV06V2-004",
+      "tests": [
+        "tests/contracts/test_jev_user_development_policy.py::test_development_reject_label_survives_low_confidence",
+        "tests/contracts/test_jev_user_development_policy.py::test_policy_is_typed_versioned_and_rejects_threshold_forgery",
+        "tests/contracts/test_jev_user_development_policy.py::test_selected_policy_does_not_call_provider_after_local_stop",
+        "tests/contracts/test_jev_user_development_policy.py::test_selected_policy_does_not_override_speech_or_photography_prohibitions"
+      ]
+    }
+  ]
+}

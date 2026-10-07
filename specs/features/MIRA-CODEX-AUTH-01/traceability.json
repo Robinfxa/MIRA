@@ -1,0 +1,14 @@
+{
+  "feature": "MIRA-CODEX-AUTH-01",
+  "spec": "specs/features/MIRA-CODEX-AUTH-01/spec.md",
+  "requirements": [
+    {"id": "MIRACODEXAUTH01-001", "tests": ["tests/contracts/test_codex_subscription_auth.py::test_invalid_store_permissions_and_recoverable_local_signout"]},
+    {"id": "MIRACODEXAUTH01-002", "tests": ["tests/contracts/test_codex_subscription_auth.py::test_device_login_uses_fixed_endpoints_and_saves_only_validated_session"]},
+    {"id": "MIRACODEXAUTH01-003", "tests": ["tests/contracts/test_codex_subscription_auth.py::test_device_login_honors_pending_and_slow_down_without_logging_or_retry", "tests/contracts/test_codex_subscription_auth.py::test_denied_expired_and_unknown_poll_errors_fail_closed", "tests/contracts/test_codex_subscription_auth.py::test_device_flow_timeout_and_cancel_leave_no_session_or_device_code"]},
+    {"id": "MIRACODEXAUTH01-004", "tests": ["tests/contracts/test_codex_subscription_auth.py::test_expired_refresh_rotates_tokens_and_persists_before_return"]},
+    {"id": "MIRACODEXAUTH01-005", "tests": ["tests/contracts/test_codex_subscription_auth.py::test_concurrent_expired_calls_share_single_cross_process_refresh", "tests/contracts/test_codex_subscription_auth.py::test_signout_waits_for_inflight_refresh_and_cannot_be_resurrected"]},
+    {"id": "MIRACODEXAUTH01-006", "tests": ["tests/contracts/test_codex_subscription_auth.py::test_bad_refresh_does_not_start_another_grant_or_false_auth_state", "tests/contracts/test_codex_subscription_auth.py::test_invalid_store_permissions_and_recoverable_local_signout", "tests/contracts/test_codex_subscription_auth.py::test_store_refuses_checkout_paths_before_creating_anything", "tests/contracts/test_codex_subscription_auth.py::test_cli_store_override_is_read_only_and_error_codes_are_allowlisted"]},
+    {"id": "MIRACODEXAUTH01-007", "tests": ["tests/contracts/test_codex_subscription_auth.py::test_invalid_store_permissions_and_recoverable_local_signout"]},
+    {"id": "MIRACODEXAUTH01-008", "tests": ["tests/contracts/test_codex_subscription_auth.py::test_login_rejects_redirect_without_following_or_sending_any_secret_elsewhere"]}
+  ]
+}

@@ -209,3 +209,85 @@ def test_supported_managed_policy_environment_is_preserved_verbatim(tmp_path):
               'CODEX_NETWORK_PROXY_ACTIVE': '1', 'CODEX_SANDBOX_NETWORK_DISABLED': '1'}
     runtime = CodexRuntime(tmp_path / 'codex', tmp_path / 'home', tmp_path / 'run', policy)
     assert dict(runtime.environment) == policy
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('shutdown', ['terminate', 'already_exited', 'cancel'])
+async def test_queue_failure_close_awaits_paused_pipe_shutdown(tmp_path, monkeypatch, shutdown):
+    """A real flood reproduces the pipe state that can outlive process.wait()."""
+    import os
+    import signal
+
+    limits = replace(CodexLimits(), queue_capacity=1, shutdown_seconds=0.1)
+    ignore_term = ('signal.signal(signal.SIGTERM, signal.SIG_IGN); '
+                   if shutdown == 'cancel' else '')
+    source = ('import signal,sys; ' + ignore_term
+              + 'sys.stdout.write("{}\\n"*1000000); sys.stdout.flush()')
+    transport = await spawn(tmp_path, source, limits)
+    process = transport._process
+    paused = asyncio.Event()
+    stdout = process.stdout
+    real_pause = stdout._transport.pause_reading
+
+    def observe_pause():
+        real_pause()
+        paused.set()
+
+    monkeypatch.setattr(stdout._transport, 'pause_reading', observe_pause)
+    if stdout._paused:
+        paused.set()
+    try:
+        await asyncio.wait_for(transport._reader, 2)
+        assert transport._failure == 'codex_queue_limit'
+        # Event barrier establishes real OS-pipe backpressure without timing sleeps.
+        await asyncio.wait_for(paused.wait(), 2)
+        assert stdout._paused
+        pipes = [process._transport.get_pipe_transport(fd).get_extra_info('pipe')
+                 for fd in (0, 1, 2)]
+        if shutdown == 'already_exited':
+            exited = asyncio.Event()
+            original_exited = process._protocol.process_exited
+
+            def observe_exit():
+                original_exited()
+                exited.set()
+
+            monkeypatch.setattr(process._protocol, 'process_exited', observe_exit)
+            os.killpg(process.pid, signal.SIGTERM)
+            await asyncio.wait_for(exited.wait(), 1)
+            assert process.returncode == -signal.SIGTERM
+        if shutdown == 'cancel':
+            terminated = asyncio.Event()
+            original_killpg = os.killpg
+
+            def observe_terminate(pid, sig):
+                original_killpg(pid, sig)
+                if pid == process.pid and sig == signal.SIGTERM:
+                    terminated.set()
+
+            monkeypatch.setattr(os, 'killpg', observe_terminate)
+            closing = asyncio.create_task(transport.close())
+            await asyncio.wait_for(terminated.wait(), 1)
+            closing.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await closing
+        else:
+            await asyncio.wait_for(transport.close(), 1)
+        assert process.returncode == (-signal.SIGKILL if shutdown == 'cancel'
+                                      else -signal.SIGTERM)
+        assert all(pipe.closed for pipe in pipes), {
+            'shutdown': shutdown, 'returncode': process.returncode,
+            'stdout_paused': stdout._paused, 'stdout_buffered': len(stdout._buffer),
+            'pipe_closed': [pipe.closed for pipe in pipes],
+        }
+        assert process._transport.is_closing()
+        assert transport._reader.done() and transport._stderr.done()
+    finally:
+        # Keep a failing RED from leaking its synthetic child/pipes into another test.
+        if process.returncode is None:
+            process.kill()
+        for task in (transport._reader, transport._stderr):
+            task.cancel()
+        await asyncio.gather(transport._reader, transport._stderr, return_exceptions=True)
+        await asyncio.wait_for(process.communicate(), 2)
+        await process.wait()

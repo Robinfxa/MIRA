@@ -1,0 +1,29 @@
+{
+  "feature": "WP03CONFIG",
+  "spec": "specs/features/WP03-natural-config/spec.md",
+  "requirements": [
+    {
+      "id": "WP03CONFIG-001",
+      "tests": [
+        "tests/contracts/test_natural_listening_configuration.py::test_check_exposes_effective_endpoint_limits_without_resources",
+        "tests/contracts/test_natural_listening_configuration.py::test_invalid_endpoint_limit_fails_before_private_file_access",
+        "tests/contracts/test_natural_listening_configuration.py::test_endpoint_timing_stays_finite_while_stream_count_defaults_unlimited"
+      ]
+    },
+    {
+      "id": "WP03CONFIG-002",
+      "tests": [
+        "tests/contracts/test_natural_listening_configuration.py::test_direct_application_passes_endpoint_policy_without_expanding_shared_budget"
+      ]
+    },
+    {
+      "id": "WP03CONFIG-003",
+      "tests": [
+        "tests/contracts/test_natural_listening_configuration.py::test_silence_budget_rejects_non_integer_or_outside_bound",
+        "tests/contracts/test_natural_listening_configuration.py::test_silence_boundary_values_do_not_change_stream_budget",
+        "tests/contracts/test_natural_listening_configuration.py::test_check_exposes_effective_endpoint_limits_without_resources",
+        "tests/contracts/test_natural_listening_configuration.py::test_direct_application_passes_endpoint_policy_without_expanding_shared_budget"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "feature": "CODEX-NATIVE-DISCOVERY",
+  "spec": "specs/features/CODEX-native-discovery/spec.md",
+  "requirements": [
+    {"id": "CODEXNATIVEDISCOVERY-001", "tests": [
+      "tests/contracts/test_codex_native_discovery.py::test_nested_and_hoisted_wrapper_candidates_resolve_only_host_binary",
+      "tests/contracts/test_codex_native_discovery.py::test_recognized_wrapper_symlink_resolves_without_running_javascript",
+      "tests/contracts/test_codex_native_discovery.py::test_symlink_cycles_escapes_and_unexpected_wrapper_layout_fail_closed",
+      "tests/contracts/test_codex_native_discovery.py::test_wrong_platform_and_multiple_host_candidates_fail_closed"
+    ]},
+    {"id": "CODEXNATIVEDISCOVERY-002", "tests": [
+      "tests/contracts/test_codex_native_discovery.py::test_regular_native_is_digest_and_execute_bit_checked",
+      "tests/contracts/test_codex_native_discovery.py::test_hash_mismatch_and_unsafe_source_or_root_fail_closed",
+      "tests/contracts/test_codex_native_discovery.py::test_prepare_error_distinguishes_found_native_blocked_by_permissions",
+      "tests/contracts/test_codex_native_discovery.py::test_path_lookup_uses_only_the_selected_official_wrapper"
+    ]},
+    {"id": "CODEXNATIVEDISCOVERY-003", "tests": [
+      "tests/contracts/test_codex_native_discovery.py::test_prepare_lookup_does_not_read_auth_or_start_wrapper",
+      "tests/contracts/test_runtime_admission_preparation.py::test_no_args_is_unarmed_and_performs_zero_setup_io"
+    ]}
+  ]
+}

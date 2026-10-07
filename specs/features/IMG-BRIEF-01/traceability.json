@@ -1,0 +1,42 @@
+{
+  "feature": "IMG-BRIEF-01",
+  "spec": "specs/features/IMG-BRIEF-01/spec.md",
+  "requirements": [
+    {
+      "id": "IMGBRIEF01-001",
+      "tests": [
+        "tests/contracts/test_fiction_image_briefs.py::test_distinct_non_catalog_fictional_briefs_compile_variable_specifications",
+        "tests/contracts/test_fiction_image_briefs.py::test_unicode_brief_bounds_are_characters_with_bounded_provider_bytes",
+        "tests/contracts/test_fiction_image_briefs.py::test_invalid_or_external_reference_briefs_fail_with_closed_shape_error",
+        "tests/contracts/test_fiction_image_briefs.py::test_tool_brief_cannot_supply_extra_authority_or_source_fields",
+        "tests/contracts/test_fiction_image_briefs.py::test_brief_framing_and_lighting_remain_closed",
+        "tests/contracts/test_fiction_image_briefs.py::test_compiler_rejects_known_credential_shapes_with_value_free_error",
+        "tests/contracts/test_fiction_image_briefs.py::test_ordinary_key_and_token_objects_are_not_credential_classifications"
+      ]
+    },
+    {
+      "id": "IMGBRIEF01-002",
+      "tests": [
+        "tests/contracts/test_fiction_image_briefs.py::test_custom_admission_is_separate_default_off_and_does_not_expand_old_catalog",
+        "tests/contracts/test_fiction_image_briefs.py::test_scope_is_identifier_only_and_dependency_tracks_release_and_canon_versions",
+        "tests/contracts/test_fiction_image_briefs.py::test_invalid_scope_is_rejected_without_interpolating_source_text",
+        "tests/contracts/test_fiction_image_briefs.py::test_old_runtime_rejects_custom_intent_before_budget_or_backend_use"
+      ]
+    },
+    {
+      "id": "IMGBRIEF01-003",
+      "tests": [
+        "tests/contracts/test_fiction_image_briefs.py::test_custom_runtime_reuses_canonical_pixel_qualification_and_unchanged_limits",
+        "tests/contracts/test_fiction_image_briefs.py::test_custom_runtime_cannot_qualify_failed_or_mismatched_pixels"
+      ]
+    },
+    {
+      "id": "IMGBRIEF01-004",
+      "tests": [
+        "tests/contracts/test_fiction_image_briefs.py::test_compiler_quotes_model_brief_as_data_under_invariant_fiction_constraints",
+        "tests/contracts/test_fiction_image_briefs.py::test_review_instructions_apply_same_bounds_to_both_routes",
+        "tests/contracts/test_fiction_image_briefs.py::test_tool_only_intent_is_reviewable_without_fabricating_a_subtitle"
+      ]
+    }
+  ]
+}

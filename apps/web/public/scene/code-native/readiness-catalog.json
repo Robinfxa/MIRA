@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "renderer": "code-native-review",
+  "visualAcceptance": "pending",
+  "likenessApproved": false,
+  "canvas": {
+    "width": 288,
+    "height": 408,
+    "scaling": "nearest-neighbor"
+  },
+  "sources": {
+    "face": {
+      "version": "limited-head-shoulder-yaw-20261006T0310Z-review",
+      "path": "apps/web/src/features/presentation/code-native-vendor/character.js",
+      "sha256": "46f5588578dae646d2df9c1db8f80c2afe64279410a23cf3b9320b235a3b2028"
+    },
+    "body": {
+      "version": "connected-breath-lip-performance-v2-20261005T2338Z-review",
+      "path": "apps/web/src/features/presentation/code-native-vendor/body.js",
+      "sha256": "b284f65e9b21e5e4905c10b1d72fe8592e2c373843603ac3645538ace9263da1"
+    },
+    "expression": {
+      "version": "theatrical-expression-v3-20261006T0003Z-review",
+      "path": "apps/web/src/features/presentation/code-native-vendor/expression.js",
+      "sha256": "6cb7f4816b0eed35107887ea454c1e26e40352b338c91e4e985402518b27d33c"
+    },
+    "hair": {
+      "version": "limited-head-shoulder-yaw-20261006T0310Z-review",
+      "path": "apps/web/src/features/presentation/code-native-vendor/hair.js",
+      "sha256": "daf9524bd986206c604d3aa301f6c4ff4c03d07c204d540bc676c51933e74ea8"
+    },
+    "motion": {
+      "version": "connected-breath-lip-performance-v2-20261005T2338Z-review",
+      "path": "apps/web/src/features/presentation/code-native-vendor/camera-motion.js",
+      "sha256": "4147f738e574d1ed00a59b7c7b71b7b8ca9f2b5ba0f4e68bdebe5f2fee8b3c3d"
+    }
+  },
+  "assets": {
+    "mira.outfit.black_jacket": {
+      "status": "review_only",
+      "reason": "Editable semantic geometry; likeness not approved"
+    },
+    "mira.outfit.cream_inner_only": {
+      "status": "review_only",
+      "reason": "Editable semantic geometry; likeness not approved"
+    },
+    "mira.outfit.amber_raincoat": {
+      "status": "review_only",
+      "reason": "Editable semantic geometry; likeness not approved"
+    },
+    "mira.emotion.normal": {
+      "status": "review_only",
+      "reason": "Editable semantic geometry; likeness not approved"
+    },
+    "mira.emotion.guarded": {
+      "status": "review_only",
+      "reason": "Editable semantic local geometry; likeness not approved; only current mild head angle supported"
+    },
+    "mira.emotion.happy": {
+      "status": "review_only",
+      "reason": "Editable semantic local geometry; likeness not approved; only current mild head angle supported"
+    },
+    "mira.emotion.shy": {
+      "status": "review_only",
+      "reason": "Editable semantic local geometry; likeness not approved; only current mild head angle supported"
+    },
+    "mira.accessory.camera_clip": {
+      "status": "review_only",
+      "reason": "Editable semantic geometry; likeness not approved"
+    },
+    "mira.accessory.star_clip": {
+      "status": "review_only",
+      "reason": "Editable semantic local geometry; likeness not approved; only current mild head angle supported"
+    },
+    "mira.pose.camera_ready": {
+      "status": "review_only",
+      "reason": "Editable semantic geometry; likeness not approved"
+    },
+    "mira.pose.camera_lowered": {
+      "status": "unavailable",
+      "reason": "No implemented semantic geometry"
+    },
+    "mira.pose.look_at_rain": {
+      "status": "unavailable",
+      "reason": "No implemented semantic geometry"
+    },
+    "mira.face.calm": {
+      "status": "review_only",
+      "reason": "Editable semantic geometry; likeness not approved"
+    },
+    "mira.face.warm": {
+      "status": "unavailable",
+      "reason": "No implemented semantic geometry"
+    },
+    "mira.face.curious": {
+      "status": "unavailable",
+      "reason": "No implemented semantic geometry"
+    },
+    "mira.face.reflective": {
+      "status": "unavailable",
+      "reason": "No implemented semantic geometry"
+    },
+    "mira.phase.idle": {
+      "status": "review_only",
+      "reason": "Procedural local part motion; speaking is not audio-synchronized"
+    },
+    "mira.phase.listening": {
+      "status": "review_only",
+      "reason": "Procedural local part motion; speaking is not audio-synchronized"
+    },
+    "mira.phase.thinking": {
+      "status": "review_only",
+      "reason": "Procedural local part motion; speaking is not audio-synchronized"
+    },
+    "mira.phase.speaking": {
+      "status": "review_only",
+      "reason": "Procedural local part motion; speaking is not audio-synchronized"
+    },
+    "mira.pose.camera_raise": {
+      "status": "review_only",
+      "reason": "Bounded authored chest-level camera lift; software motion only, no photography or visual approval"
+    }
+  },
+  "rendererSource": {
+    "path": "apps/web/src/features/presentation/code-native-character-renderer.ts",
+    "sha256": "b4fe1e1bd88a548785be987710616971a4968f4d987eb10cdaa6c9fa6970a0b8"
+  },
+  "capabilities": {
+    "cameraMotion": true,
+    "localPerformance": true,
+    "audioDrivenMouth": false,
+    "emotionMotion": true
+  }
+}

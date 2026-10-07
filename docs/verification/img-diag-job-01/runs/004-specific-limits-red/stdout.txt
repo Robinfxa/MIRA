@@ -1,0 +1,58 @@
+.......FFF...........                                                    [100%]
+=================================== FAILURES ===================================
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_output_limit] _
+
+code = 'subscription_review_output_limit'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription..._output_limit'
+E         
+E         - subscription_review_output_limit
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:140: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_decoded_limit] _
+
+code = 'subscription_review_decoded_limit'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...decoded_limit'
+E         
+E         - subscription_review_decoded_limit
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:140: AssertionError
+_ test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_line_limit] _
+
+code = 'subscription_review_line_limit'
+
+    @pytest.mark.parametrize("code", REVIEW_CODES)
+    def test_known_subscription_review_codes_remain_closed_payload_free_metadata(code):
+        from mira.application.image_operation_diagnostics import failure_observation
+        from mira.adapters.media._openai_http import ImageProviderError
+        observed = failure_observation(SafeImageOperationDiagnostic(operation_stage="pixel_review"),
+            ImageProviderError(code))
+>       assert observed.failure_reason == code
+E       AssertionError: assert 'unknown' == 'subscription...ew_line_limit'
+E         
+E         - subscription_review_line_limit
+E         + unknown
+
+tests/contracts/test_background_image_diagnostic_identity.py:140: AssertionError
+=========================== short test summary info ============================
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_output_limit]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_decoded_limit]
+FAILED tests/contracts/test_background_image_diagnostic_identity.py::test_known_subscription_review_codes_remain_closed_payload_free_metadata[subscription_review_line_limit]
+3 failed, 18 passed, 12 deselected in 0.17s

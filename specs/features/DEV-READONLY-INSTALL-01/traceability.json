@@ -1,0 +1,21 @@
+{
+  "feature": "DEV-READONLY-INSTALL-01",
+  "spec": "specs/features/DEV-READONLY-INSTALL-01/spec.md",
+  "requirements": [
+    {
+      "id": "DEVREADONLYINSTALL01-001",
+      "tests": [
+        "tests/contracts/test_codex_readonly_installation.py::test_readonly_approval_is_immutable_and_bound_to_valid_path_uid_and_mode",
+        "tests/contracts/test_codex_readonly_installation.py::test_exact_managed_readonly_install_passes_offline_validation",
+        "tests/contracts/test_codex_readonly_installation.py::test_readonly_install_rejects_each_metadata_drift",
+        "tests/contracts/test_codex_readonly_installation.py::test_readonly_install_rejects_symlink_in_executable_path"
+      ]
+    },
+    {
+      "id": "DEVREADONLYINSTALL01-002",
+      "tests": [
+        "tests/contracts/test_codex_readonly_installation.py::test_optional_exception_does_not_change_default_or_public_preflight_admission"
+      ]
+    }
+  ]
+}

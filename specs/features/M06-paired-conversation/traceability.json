@@ -1,0 +1,46 @@
+{
+  "feature": "M06PC",
+  "spec": "specs/features/M06-paired-conversation/spec.md",
+  "requirements": [
+    {
+      "id": "M06PC-001",
+      "tests": [
+        "tests/contracts/test_paired_conversation_entry.py::test_direct_cli_accepts_separate_conversation_recording_choice",
+        "tests/contracts/test_paired_conversation_entry.py::test_conversation_check_creates_no_database_or_pairing_material",
+        "tests/contracts/test_paired_conversation_entry.py::test_legacy_manual_or_story_flags_do_not_enable_transcript_recording",
+        "tests/contracts/test_paired_conversation_lifecycle.py::test_pairing_precedes_any_database_open_and_default_capture_is_actual"
+      ]
+    },
+    {
+      "id": "M06PC-002",
+      "tests": [
+        "tests/contracts/test_paired_conversation_lifecycle.py::test_paired_selection_recall_requires_new_consent_and_restart_uses_exact_session",
+        "tests/contracts/test_paired_conversation_lifecycle.py::test_configuration_rejects_database_aliases_and_google_recall_without_separate_consent"
+      ]
+    },
+    {
+      "id": "M06PC-003",
+      "tests": [
+        "tests/contracts/test_paired_conversation_lifecycle.py::test_revision_bound_correction_forget_restore_replay_and_session_scope_checks",
+        "tests/contracts/test_paired_conversation_lifecycle.py::test_operational_archive_failure_is_visible_and_ordinary_chat_still_runs"
+      ]
+    },
+    {
+      "id": "M06PC-004",
+      "tests": [
+        "tests/contracts/test_paired_conversation_lifecycle.py::test_operator_factory_opens_no_database_until_called_and_fixed_scope_catalog_excludes_other_user",
+        "tests/contracts/test_paired_conversation_lifecycle.py::test_catalog_and_source_pages_are_bounded_and_old_cursors_reject_changes",
+        "tests/contracts/test_paired_conversation_lifecycle.py::test_database_and_scope_paths_cannot_escape_operator_configuration",
+        "tests/contracts/test_conversation_pairing_races.py::test_revoke_during_final_revision_read_prevents_any_new_grant",
+        "tests/contracts/test_conversation_pairing_races.py::test_ui_selection_cannot_change_after_actor_creation_during_await",
+        "tests/contracts/test_conversation_pairing_races.py::test_uncooperative_capture_completion_cannot_replace_revoked_status",
+        "tests/contracts/test_conversation_pairing_races.py::test_source_mutation_suppresses_derived_reply_across_reentry_sessions",
+        "tests/contracts/test_conversation_pairing_races.py::test_exact_one_row_budget_is_not_exceeded_by_final_loss_flag",
+        "tests/contracts/test_conversation_pairing_races.py::test_transitive_reentry_preserves_inputs_raw_receipts_and_new_corrected_source",
+        "tests/contracts/test_conversation_pairing_races.py::test_late_old_epoch_receipt_keeps_original_source_version_even_after_source_correction",
+        "tests/contracts/test_conversation_pairing_races.py::test_capture_waits_for_own_inflight_revision_read_without_losing_accepted_input",
+        "tests/contracts/test_conversation_pairing_races.py::test_ordinary_binding_close_flushes_accepted_capture_without_marking_it_revoked"
+      ]
+    }
+  ]
+}

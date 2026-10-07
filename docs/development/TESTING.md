@@ -49,6 +49,8 @@ ENV-01追加：`env`块只做离线配置、合成HTTP transport和私密文件�
 
 feature spec改变同时运行其 `traceability.json` 对应行为测试块，不仅检查链接。语义审核和行为测试不能被“规格文件存在”代偿。
 
+WP03连续聆听增加一个唯一owner的`continuous` lane，覆盖`tests/unit/test_continuous_listening.py`和合成ASGI WebSocket用例`tests/integration/test_continuous_listening_http.py`。Google SDK/adapter fake tests仍由`providers` lane收集。改动命中连续lease服务、wire或其规格时，`--affected`会选择continuous及相关HTTP/provider/spec lanes。Full当前11个并行离线lane；release额外串行package/smoke，共13个lane。真实浏览器、麦克风、Google/costly provider仍不属于这些离线lane。
+
 ## 3. 并行不互相污染
 
 一个调度器最多同时启动`--jobs`个块（默认3、上限8）；块内不再开启pytest-xdist。测试自身的子进程与Node内部执行需要计入团队机器预算。没有依赖新增或分布式测试平台。

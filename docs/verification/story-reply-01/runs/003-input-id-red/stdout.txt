@@ -1,0 +1,10 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_role_question_is_bound_to_one_actual_input_id_not_just_epoch _______
+tests/contracts/test_story_reply_fence.py:103: in test_role_question_is_bound_to_one_actual_input_id_not_just_epoch
+    with pytest.raises(DomainError): confirmation(c,q,3)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'mira.domain.errors.DomainError'>
+=========================== short test summary info ============================
+FAILED tests/contracts/test_story_reply_fence.py::test_role_question_is_bound_to_one_actual_input_id_not_just_epoch
+1 failed in 0.26s

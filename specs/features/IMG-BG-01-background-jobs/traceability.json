@@ -1,0 +1,36 @@
+{
+  "feature": "IMG-BG-01",
+  "spec": "specs/features/IMG-BG-01-background-jobs/spec.md",
+  "requirements": [
+    {
+      "id": "IMGBG01-001",
+      "tests": [
+        "tests/contracts/test_background_story_images.py::test_review_survives_three_turns_and_uses_current_exact_receipt"
+      ]
+    },
+    {
+      "id": "IMGBG01-002",
+      "tests": [
+        "tests/contracts/test_background_story_images.py::test_qualified_rollover_revokes_old_grant_without_more_image_or_review"
+      ]
+    },
+    {
+      "id": "IMGBG01-003",
+      "tests": [
+        "tests/contracts/test_background_story_images.py::test_fixed_display_close_keeps_pending_job_and_future_generated_display"
+      ]
+    },
+    {
+      "id": "IMGBG01-004",
+      "tests": [
+        "tests/contracts/test_background_story_images.py::test_completion_requires_display_is_one_shot_and_receipt_distinct"
+      ]
+    },
+    {
+      "id": "IMGBG01-005",
+      "tests": [
+        "tests/contracts/test_background_story_images.py::test_native_cancel_tool_uses_exact_job_and_no_image_retry"
+      ]
+    }
+  ]
+}

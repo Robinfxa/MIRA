@@ -1,0 +1,411 @@
+{
+  "deterministic_second_build": "independent85filesmatched",
+  "input_hashes": {
+    "apps/web/index.html": "9698e0be39e2ea31e40a3dd974b6fbdb053f9f455ed98aa46122fdebdc4db321",
+    "apps/web/public/licenses/THIRD_PARTY_NOTICES.txt": "a3bcc6ae4f83428d6b9567f76b5b8ce85e8474ea056edb15651961dbd9a1800b",
+    "apps/web/public/licenses/earcut-3.2.4-ISC.txt": "0b348fff56384b43dbb37593906904e56d0f9deb51eae590d4dc6d427fbf1808",
+    "apps/web/public/licenses/eventemitter3-5.0.4-MIT.txt": "3aecc12b1cb28832b5f65ab64291de96568c3f236a74d646281b4491f7bcadbf",
+    "apps/web/public/licenses/gifuct-js-2.1.2-MIT.txt": "8633cda68d7b47e98e3e563a2833e63792edeecdb24cab02bfb15f25c1b37072",
+    "apps/web/public/licenses/ismobilejs-1.1.1-MIT.txt": "57c43c929cbc20653cb0e62620a413a8bc456888c1874ebc25d08e0122cd953e",
+    "apps/web/public/licenses/js-binary-schema-parser-2.0.3-MIT.txt": "8633cda68d7b47e98e3e563a2833e63792edeecdb24cab02bfb15f25c1b37072",
+    "apps/web/public/licenses/parse-svg-path-0.2.0-MIT.txt": "2d5ffdfe09268750ba687a149db8392038772e7f156db3a98b615a7de0cab76e",
+    "apps/web/public/licenses/pixi-colord-2.9.6-MIT.txt": "f03b00a8e1018d41ae694aeb591aafd84ee0f95ba69aae1a89ef1b92a6e93b7b",
+    "apps/web/public/licenses/pixi.js-8.19.0-MIT.txt": "5ce7447bc57f7349ffc48338782fbcabe613696e00712b20d66bc58e780f9473",
+    "apps/web/public/licenses/tiny-lru-11.4.7-BSD-3-Clause.txt": "8106f20bacca3558946439afb5e4854333f0a9944eee1c60488aa7ac7fc8f52b",
+    "apps/web/public/licenses/xmldom-0.8.15-MIT.txt": "4da724fc305d81606b245b324d4d2586916b9d248b23d82183df753ace0fdf71",
+    "apps/web/src/app/main.ts": "c28e2a1b5cf9051ed84e48db2533f7d508e493573a2911659d13c86ca1526c2e",
+    "apps/web/src/features/audio/capture.ts": "24b40a205072980b659962106ee6e09602ae06669ecdea35e0b8e04b1cc16c7e",
+    "apps/web/src/features/audio/index.ts": "c4d1336973fa42a7ca9213830a3f236c4fb475a22adbf3f6552e2c8b6479b31a",
+    "apps/web/src/features/audio/local-barge-in.ts": "dafd57257136f117b75602382db198d58bac191caf52580fc54dff9dd6044bbe",
+    "apps/web/src/features/audio/pcm.ts": "4158b5f291a06bed53a1bd626ea9ab3d36883c06050cabb343eaeffa655215c5",
+    "apps/web/src/features/audio/playback.ts": "05b29fda8f20c8f8596852101b0ffe3085ae6f0ddbb0ff222e0d3ca028e948c8",
+    "apps/web/src/features/audio/types.ts": "2f2ef0d64bf690d5c148ab2c3ee163abc8ff8708bc39ca0bdb6bd1aac7d6a345",
+    "apps/web/src/features/diagnostics/reviewed-audio.ts": "03897df05a64c04abf2c35dbfa374d51c1c1e1d82206353bf14df34fc764d663",
+    "apps/web/src/features/diagnostics/status.ts": "d2eae6bec45b65b1fe385c927f9176fbca51ca0cd43659a4e72c90b2b38fd604",
+    "apps/web/src/features/presentation/chapter-presentation.ts": "2f4ecea34aa0aec307ca1e48d978dbce225e08c26783487a9bb7ff143bb94808",
+    "apps/web/src/features/presentation/character-renderer-port.ts": "177aa6e89d9fafc073a0eb88a5de0ca9bea3880e1aa8eb0a4250844bc064bcce",
+    "apps/web/src/features/presentation/code-native-character-renderer.ts": "b4fe1e1bd88a548785be987710616971a4968f4d987eb10cdaa6c9fa6970a0b8",
+    "apps/web/src/features/presentation/code-native-vendor/README.txt": "5917b8e8053637d362b994b0ee865b42d61c5aaf981cdcc7ac4cdc0ac1e48079",
+    "apps/web/src/features/presentation/code-native-vendor/body.js": "b284f65e9b21e5e4905c10b1d72fe8592e2c373843603ac3645538ace9263da1",
+    "apps/web/src/features/presentation/code-native-vendor/camera-motion.js": "4147f738e574d1ed00a59b7c7b71b7b8ca9f2b5ba0f4e68bdebe5f2fee8b3c3d",
+    "apps/web/src/features/presentation/code-native-vendor/character.js": "46f5588578dae646d2df9c1db8f80c2afe64279410a23cf3b9320b235a3b2028",
+    "apps/web/src/features/presentation/code-native-vendor/expression.js": "6cb7f4816b0eed35107887ea454c1e26e40352b338c91e4e985402518b27d33c",
+    "apps/web/src/features/presentation/code-native-vendor/hair.js": "daf9524bd986206c604d3aa301f6c4ff4c03d07c204d540bc676c51933e74ea8",
+    "apps/web/src/features/presentation/dom-executor.ts": "090c64c10358a069eacf428ed5af34b191d1d557d5263f37da3ad381abd3343a",
+    "apps/web/src/features/presentation/generated-image-resource.ts": "e6670e7667da3f07f92cae67f1de437ccfc1a475e229dc92e55c2b86edb5e6a2",
+    "apps/web/src/features/presentation/permit-gate.ts": "673f75658252c13ad3c5f44f0e4f0fa1b1148221739eb8abe55390e20e9500d6",
+    "apps/web/src/features/presentation/pixi-character-contract.ts": "39abab2280cef2cb378f37a1ff9f34394d116418dabb41c23721536a35ff4694",
+    "apps/web/src/features/presentation/pixi-character-renderer.ts": "b887187175af126685a86b81e8f5334b9b4b0f3e90b340d0b84d5d2bcdba5cf5",
+    "apps/web/src/features/presentation/pixi-runtime.ts": "92eac3636f81c7683cc499e441c690b1d66ec71d2d9bb26bce4ddfaf21eb95d8",
+    "apps/web/src/features/presentation/ports.ts": "4ce3216d2ff0dccc9a5305552f5e8517a4adde8184b1a797c16789f3f702f16d",
+    "apps/web/src/features/presentation/scene-executor.ts": "5db58662ef14131e2cbfc52e3cc3c27d01b5e278605ff126988d0995e4122d01",
+    "apps/web/src/features/presentation/scene-state.ts": "a7a77c9a46e62aec6e0ecbe3bb6eb3a237f2be61b9a99594ed5596abdb4c7c63",
+    "apps/web/src/features/session/api-client.ts": "ee6bc41e11bb2c9c1a9bb61612c26df289be1586ffc883ad2a4f65e5c674211a",
+    "apps/web/src/features/session/audio-transport.ts": "c04577e9c617d174115650f2d97539ebc12e246d4f5129fc3379d9b342593ba5",
+    "apps/web/src/features/session/continuous-listening.ts": "69a9f7f182c98959c0d018e0ece962be162b29c866a8aee2284203d0f81a0a94",
+    "apps/web/src/features/session/controller.ts": "69b839c2cb6b749140cf46c9ca9eb5d00e6553df09787f45fc3a2d08d66faa56",
+    "apps/web/src/features/session/conversation-archive.ts": "a08fa37c7cc6b03fd7386f3409bfc06dfd046d82dce36577747755d7606cea56",
+    "apps/web/src/features/session/memory-management.ts": "69d3b4b45ec882d59f3cb091b998dc88b82854b07dc8b3cc44fcd08446fec22a",
+    "apps/web/src/features/session/operator-pairing.ts": "b0edb7f53b1086fb9ed4933e340ee302d61267b5a7fbd8e9ea057a083717d5e8",
+    "apps/web/src/features/session/ports.ts": "dc86cf5e8db7b83d02656326f9df99955a626bb0dc8de265987d3b068653c62b",
+    "apps/web/src/features/session/transport-errors.ts": "0cde5332871bba6080a0a9474021862a8fe518bfc71bff13fcc082aedaed1e01",
+    "apps/web/src/features/session/trusted-device-access.ts": "be62342123d579c026a85e64154d9a7410ebc826a8de11d060c52b4720780a0f",
+    "apps/web/src/local-memory/main.ts": "87d39f3f1a1e78cb8afce2eb316259122011042553cf24a09f4ad42a80f045f3",
+    "apps/web/src/shared/client-id.ts": "6ac47680df2418f37444b8147af163f62f7410c773324d4da068c10c14ad1d65",
+    "apps/web/src/shared/config.ts": "ce37f04a393f1b215ba480c93deb39fd82459c2819ce9d7d569a756175f8b733",
+    "apps/web/src/shared/cue-contract.ts": "0502f164d029ad70776c97a229e9c88a386873be3320b381804fac28bc68fa5a",
+    "apps/web/src/shared/generated/contracts.ts": "7a029dd925e5cc487d88f1a291ff02376569f3966023838199a3c0587eed04fe",
+    "apps/web/src/shared/photo-value.ts": "d05e96b08ba41629519829c977452127cd292ffe0afd2d93a041e9835b6797f9",
+    "apps/web/src/shared/protocol.ts": "90fec7d7ce149415658914687a1c338e3dfc72a282b52f8bd6dfe7c535d3f8c1",
+    "apps/web/tsconfig.json": "0bd1b74ac643e0016d75be94b58528a4e85590ab7cafe4246bfa294af25dc0c1",
+    "package-lock.json": "c3267861524249e8895bef4a69bfc1a3f7e845eccf9d3078647a065a9607192d",
+    "package.json": "4b1bd373d04c1fc129a50d6e3dff8f49a89fc801b637a48871cccbf6fb789e70",
+    "tools/build_web.mjs": "94cc8555f0efac0c67e0f7092b2201af4757841970a1757115e305470ae1c5f2"
+  },
+  "network_or_provider_calls": false,
+  "output_files": 85,
+  "output_hashes": {
+    "apps/web/dist/.mira-web-build-output": {
+      "bytes": 25,
+      "sha256": "777b9056582517f30c3fb849494aef09f8239335686ffb7c398ceb5959f59fb9"
+    },
+    "apps/web/dist/app/chunks/BitmapFont-IZHYVIRA.js": {
+      "bytes": 284,
+      "sha256": "5c097cad4c3c633a23be33e46c21408254822d30cfb69a6d5bf30663964e195c"
+    },
+    "apps/web/dist/app/chunks/CanvasRenderer-IHMQHOLW.js": {
+      "bytes": 288,
+      "sha256": "31b937e7b37c7d9e6623670527161e3a6591f490d958ba1329ce45d5f89141e0"
+    },
+    "apps/web/dist/app/chunks/WebGLRenderer-5CWPCMDF.js": {
+      "bytes": 231,
+      "sha256": "ba986da3ef580dcdb62c961c1e8f0d0118f06cd1ea77049e49ef3bd3166f02d8"
+    },
+    "apps/web/dist/app/chunks/WebGPURenderer-WP7SBZZP.js": {
+      "bytes": 288,
+      "sha256": "f11bf803a9354a7ba6bc477dae275bc9fb66bbcd0276c433f5d767020d1d4b16"
+    },
+    "apps/web/dist/app/chunks/browserAll-JCIGA6FW.js": {
+      "bytes": 370,
+      "sha256": "80c650b44d22a30bd9c0d1cbd4bc3e7e0204b3ada71d57d59dcb2a8db2214c26"
+    },
+    "apps/web/dist/app/chunks/chunk-6IY52TQM.js": {
+      "bytes": 52195,
+      "sha256": "2b0399fa5d08ccf77f8dc51a9f41b27cdc22619e6584f65cefbe5afa5d41c945"
+    },
+    "apps/web/dist/app/chunks/chunk-6UECRDNW.js": {
+      "bytes": 39205,
+      "sha256": "3d41463772f1f03e0782b3b0ec86e33c5d16e01f1a1c84c6d0d2c0ccb42789df"
+    },
+    "apps/web/dist/app/chunks/chunk-6YCM6AFQ.js": {
+      "bytes": 26942,
+      "sha256": "66e7dfe8c76541f272b27156e7dff8d7d886c2fa0d04ecfdfbc8f97c867c24b8"
+    },
+    "apps/web/dist/app/chunks/chunk-6ZQQ67OV.js": {
+      "bytes": 54937,
+      "sha256": "979591a16833af1b1362a37fe9399d4c7385b2acd029278d956a918fcb0b3c67"
+    },
+    "apps/web/dist/app/chunks/chunk-7OANUMJT.js": {
+      "bytes": 768,
+      "sha256": "d1063da05426c6972bc77068ec1e19deb376d87c3e8fdce106600ccf57eb89a2"
+    },
+    "apps/web/dist/app/chunks/chunk-ADHOXHQS.js": {
+      "bytes": 33807,
+      "sha256": "58c01df9efda4b8f08ac93b6e89300a841a1ecfa5db1ccbb237fe19087ed5b45"
+    },
+    "apps/web/dist/app/chunks/chunk-ADHOXHQS.js.LEGAL.txt": {
+      "bytes": 203,
+      "sha256": "bf4901b5d2cbf787f3d5c3089f40c57286a32de751d1136c1f828e9958885e8d"
+    },
+    "apps/web/dist/app/chunks/chunk-AJVYQTH4.js": {
+      "bytes": 39621,
+      "sha256": "cc993db534b36edc188165c0213c0e824fee219d89299a05aa076dc17e2bc2da"
+    },
+    "apps/web/dist/app/chunks/chunk-DFCYDKD3.js": {
+      "bytes": 10630,
+      "sha256": "0cf420d155e8d1f26a36a8cdf8db6f5e3c6afd5f0f45ef9464e253eb2e6e75f0"
+    },
+    "apps/web/dist/app/chunks/chunk-DQUO7BGR.js": {
+      "bytes": 26769,
+      "sha256": "b2cd2b9624f113fd89485ec4d00d693405339b99c0bcf011c687db0133882c39"
+    },
+    "apps/web/dist/app/chunks/chunk-FLFMTFH2.js": {
+      "bytes": 38726,
+      "sha256": "09c1d973cec648c6dfb77b9dcff8aaf14834c80dc4d74594545796a968887402"
+    },
+    "apps/web/dist/app/chunks/chunk-GCIYRPID.js": {
+      "bytes": 340,
+      "sha256": "cf095398793449e21812edfb1b4ebbe853d5483fb2cb0e1e519c628f5bf57c59"
+    },
+    "apps/web/dist/app/chunks/chunk-HH5BRUCZ.js": {
+      "bytes": 577,
+      "sha256": "11247d28c5c2fb3d976002c2b55fecb6ba19fd88153e11d2c7af5832fd6ff331"
+    },
+    "apps/web/dist/app/chunks/chunk-JXFPWZ3P.js": {
+      "bytes": 68354,
+      "sha256": "a5faebe35b084aaadf694db6791b30b8e130e0fae0ad12d51b7d329a77c03422"
+    },
+    "apps/web/dist/app/chunks/chunk-KSETGIYG.js": {
+      "bytes": 42811,
+      "sha256": "658705f9bbb12040e1f63120bd0c2f60bb7dc39b10a60952abda048c7f6100c5"
+    },
+    "apps/web/dist/app/chunks/chunk-MBC5RUGR.js": {
+      "bytes": 6051,
+      "sha256": "8f639f20e3c1aabb6d8024205abc8b0ec3377669e6316f37af7369e6e2580edd"
+    },
+    "apps/web/dist/app/chunks/chunk-N3PGUEVT.js": {
+      "bytes": 115,
+      "sha256": "e52f1f77c5337643e63668112a75562aa0b1ed9ca755a986e994a33996317a62"
+    },
+    "apps/web/dist/app/chunks/chunk-P5J2Z4RJ.js": {
+      "bytes": 1104,
+      "sha256": "afbd4bc270bbb72d6bd0ec02a87b173b82516100b8380e12b5044dd028caac7b"
+    },
+    "apps/web/dist/app/chunks/chunk-UNUHWZSR.js": {
+      "bytes": 2210,
+      "sha256": "7064f0191ad23f8025a8fb4bbffaec4676eea615d51fac3e613b4d0533ae8cce"
+    },
+    "apps/web/dist/app/chunks/chunk-ZG7HOMBP.js": {
+      "bytes": 63152,
+      "sha256": "acfe5b86a1a40b65fe7a57648e3651fb1902f29d7a7edb8d287765ee26b0eacd"
+    },
+    "apps/web/dist/app/chunks/code-native-character-renderer-G2H7HJ75.js": {
+      "bytes": 162460,
+      "sha256": "34db1bec7ff2fa439dd34fe3d93470e12e0e92a6065ed3ba4555c79a1e89746e"
+    },
+    "apps/web/dist/app/chunks/pixi-character-renderer-5Q6NIFQT.js": {
+      "bytes": 8407,
+      "sha256": "a9ac3fdb498653729496f3a349b56ea6d420deca2c929488fa968ef79d6eeb93"
+    },
+    "apps/web/dist/app/chunks/pixi-runtime-UXCZ4FSS.js": {
+      "bytes": 5800,
+      "sha256": "72fc4c338759a9e28eb121db5f48a7003bd701ab7beac86e0efc87d7cfaa0019"
+    },
+    "apps/web/dist/app/chunks/webworkerAll-SBZIZZ2X.js": {
+      "bytes": 225,
+      "sha256": "33c11962816eede4611f8fc29b4a6026c2758836effa3cb1c271585bc671fdf0"
+    },
+    "apps/web/dist/app/main-source.js": {
+      "bytes": 58656,
+      "sha256": "93e432c020214fbd346d50c0cc65a74a65f4c9c9f2aeb5a7f54a58e7ee99182c"
+    },
+    "apps/web/dist/app/main.js": {
+      "bytes": 309429,
+      "sha256": "8474bdca4c86b4ebb5d67e801c271f9bba092f354f2d2af146a622bf1906c574"
+    },
+    "apps/web/dist/features/audio/capture.js": {
+      "bytes": 13873,
+      "sha256": "f0bdc307068253ea90b5cb65ef55aa2f3daad1988b2049af3a1f4a4de4d5016b"
+    },
+    "apps/web/dist/features/audio/index.js": {
+      "bytes": 162,
+      "sha256": "ff8333f0b329a145f11db5b2ef3b093e709ee9748e5b9773fd121dedeea5ed0d"
+    },
+    "apps/web/dist/features/audio/local-barge-in.js": {
+      "bytes": 3648,
+      "sha256": "2e46b732e35ba24f12caa9a198f02b5c4e8796f57cd906f34cdd9289596eed12"
+    },
+    "apps/web/dist/features/audio/pcm.js": {
+      "bytes": 1705,
+      "sha256": "518b9bc304b94dd763e33f3e5f0f8dbe074d7a2ecd3a6bb92a23bae2a75433ea"
+    },
+    "apps/web/dist/features/audio/playback.js": {
+      "bytes": 13542,
+      "sha256": "3b1342b2d5dd121d98d7cc8d351f6dc28235ff30cf09a6001e38362c81aeea65"
+    },
+    "apps/web/dist/features/audio/types.js": {
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    "apps/web/dist/features/diagnostics/reviewed-audio.js": {
+      "bytes": 27583,
+      "sha256": "f0c6fc4edffb475d2385bdd8cb68c75464256948b2c75ca72d8b7dda7ba0385e"
+    },
+    "apps/web/dist/features/diagnostics/status.js": {
+      "bytes": 7712,
+      "sha256": "1b35b320fe15e32ef39581e57a4d3c2b97b6ce8791b7e2270f16d3d42c78c0f2"
+    },
+    "apps/web/dist/features/presentation/chapter-presentation.js": {
+      "bytes": 18126,
+      "sha256": "645b6b4e21fbbbc1b0e388248d103bb31acdbad94aba555dc785281042d27e92"
+    },
+    "apps/web/dist/features/presentation/character-renderer-port.js": {
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    "apps/web/dist/features/presentation/code-native-character-renderer.js": {
+      "bytes": 28206,
+      "sha256": "3fb785f7e3fd73769046bc54ac3eb0ad569f9b9301ce8f96e37df3b2f3036ab7"
+    },
+    "apps/web/dist/features/presentation/code-native-vendor/body.js": {
+      "bytes": 90586,
+      "sha256": "a833b1c8750fcc4141332a5741640792a7bbe6d77e27d77174f441a75f21a5a0"
+    },
+    "apps/web/dist/features/presentation/code-native-vendor/camera-motion.js": {
+      "bytes": 4315,
+      "sha256": "28ce0d3e095eb5be8f2399bcf7e2bd75674147a75d5bda74540a400670382ab0"
+    },
+    "apps/web/dist/features/presentation/code-native-vendor/character.js": {
+      "bytes": 63017,
+      "sha256": "6e386fe85155b159d7e6d298c121f78157be2fc4ac193f2d1e4f4351befaf31f"
+    },
+    "apps/web/dist/features/presentation/code-native-vendor/expression.js": {
+      "bytes": 14597,
+      "sha256": "27bb92e9b00858caa11a7bedd86dbe3c6457359dd8c4ab068e0e0fe6039b01d5"
+    },
+    "apps/web/dist/features/presentation/code-native-vendor/hair.js": {
+      "bytes": 18139,
+      "sha256": "750726707fe4f5c3c4b06157d6adaa7d36eb8fe4e60b7fba62c0575345e86f67"
+    },
+    "apps/web/dist/features/presentation/dom-executor.js": {
+      "bytes": 1214,
+      "sha256": "72fa583d564684b254a28f9e2f67dea49787d3061cd3d352a95ac8437f7399f9"
+    },
+    "apps/web/dist/features/presentation/generated-image-resource.js": {
+      "bytes": 6864,
+      "sha256": "45296a49afad8265e598ac9afca33fa20e9c7de3fd22ba7570f9963222ef2958"
+    },
+    "apps/web/dist/features/presentation/permit-gate.js": {
+      "bytes": 10701,
+      "sha256": "d90bbd582c5052722d60501d38363abda5c8df1afb2d8de7ee009246be6fbfec"
+    },
+    "apps/web/dist/features/presentation/pixi-character-contract.js": {
+      "bytes": 4957,
+      "sha256": "645dccd130fa9f5efa5935fa8bc269762a1b9c40cacbf149c24cfb0187b1aa6f"
+    },
+    "apps/web/dist/features/presentation/pixi-character-renderer.js": {
+      "bytes": 11270,
+      "sha256": "8f507f64365791097d9bb11ef25b1ef868fd497cb9988bac0663cb3f2494d699"
+    },
+    "apps/web/dist/features/presentation/pixi-runtime.js": {
+      "bytes": 2026,
+      "sha256": "651114ccab3c530c3d28b8da6920e44e7be487eceddf3a5009df95b7c7150e3d"
+    },
+    "apps/web/dist/features/presentation/ports.js": {
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    "apps/web/dist/features/presentation/scene-executor.js": {
+      "bytes": 34393,
+      "sha256": "1db4302d6bf8e5aa420c61cfef4c050ef066b17d1a8511b0690768c43cbca221"
+    },
+    "apps/web/dist/features/presentation/scene-state.js": {
+      "bytes": 3479,
+      "sha256": "e32284f6b9896bdb760c10c0ac492d2c53b8f4ec0d2acecf38a9c79c2431027c"
+    },
+    "apps/web/dist/features/session/api-client.js": {
+      "bytes": 21634,
+      "sha256": "1fa8c409d47349b82ad1ad2d0281ad5923e2fd2f73c3eade1dd3d151d8b5721b"
+    },
+    "apps/web/dist/features/session/audio-transport.js": {
+      "bytes": 62829,
+      "sha256": "7defb122089287b14ad425f60ce6d7770707c32dbc5b99cb8efa81b3ee619624"
+    },
+    "apps/web/dist/features/session/continuous-listening.js": {
+      "bytes": 69451,
+      "sha256": "8c8a01e83989c1f0edf9f5bef22916e833188d5b0421e370ea4bd65faac0af5d"
+    },
+    "apps/web/dist/features/session/controller.js": {
+      "bytes": 85499,
+      "sha256": "7812c520d5af4b012aedf72c7bb09c9d9329f9a10069f9b8cb0196f8a283f79f"
+    },
+    "apps/web/dist/features/session/conversation-archive.js": {
+      "bytes": 18100,
+      "sha256": "c119102dcc87d404c09fd446169044c38c62a45d1e7006e8120a707eb56f65a8"
+    },
+    "apps/web/dist/features/session/memory-management.js": {
+      "bytes": 40951,
+      "sha256": "b244203ac3ea268f730a133137fca5adb379ebb8935eaa2fbd396fbd8fb1462e"
+    },
+    "apps/web/dist/features/session/operator-pairing.js": {
+      "bytes": 14966,
+      "sha256": "68e547665b506788396cdb835bf9baf7039cdb4acd7389f6fa1edb080c48d709"
+    },
+    "apps/web/dist/features/session/ports.js": {
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    "apps/web/dist/features/session/transport-errors.js": {
+      "bytes": 1610,
+      "sha256": "7efeb80710004f06105e8bf00de0e030555665e74c567b82f1c2ded2f68bf436"
+    },
+    "apps/web/dist/features/session/trusted-device-access.js": {
+      "bytes": 4341,
+      "sha256": "c91dc13589061cb7a0661dd0be852d50b76147eb945c25c25cbe11c4c0813d3c"
+    },
+    "apps/web/dist/licenses/THIRD_PARTY_NOTICES.txt": {
+      "bytes": 1349,
+      "sha256": "a3bcc6ae4f83428d6b9567f76b5b8ce85e8474ea056edb15651961dbd9a1800b"
+    },
+    "apps/web/dist/licenses/earcut-3.2.4-ISC.txt": {
+      "bytes": 738,
+      "sha256": "0b348fff56384b43dbb37593906904e56d0f9deb51eae590d4dc6d427fbf1808"
+    },
+    "apps/web/dist/licenses/eventemitter3-5.0.4-MIT.txt": {
+      "bytes": 1082,
+      "sha256": "3aecc12b1cb28832b5f65ab64291de96568c3f236a74d646281b4491f7bcadbf"
+    },
+    "apps/web/dist/licenses/gifuct-js-2.1.2-MIT.txt": {
+      "bytes": 1098,
+      "sha256": "8633cda68d7b47e98e3e563a2833e63792edeecdb24cab02bfb15f25c1b37072"
+    },
+    "apps/web/dist/licenses/ismobilejs-1.1.1-MIT.txt": {
+      "bytes": 1067,
+      "sha256": "57c43c929cbc20653cb0e62620a413a8bc456888c1874ebc25d08e0122cd953e"
+    },
+    "apps/web/dist/licenses/js-binary-schema-parser-2.0.3-MIT.txt": {
+      "bytes": 1098,
+      "sha256": "8633cda68d7b47e98e3e563a2833e63792edeecdb24cab02bfb15f25c1b37072"
+    },
+    "apps/web/dist/licenses/parse-svg-path-0.2.0-MIT.txt": {
+      "bytes": 1093,
+      "sha256": "2d5ffdfe09268750ba687a149db8392038772e7f156db3a98b615a7de0cab76e"
+    },
+    "apps/web/dist/licenses/pixi-colord-2.9.6-MIT.txt": {
+      "bytes": 1081,
+      "sha256": "f03b00a8e1018d41ae694aeb591aafd84ee0f95ba69aae1a89ef1b92a6e93b7b"
+    },
+    "apps/web/dist/licenses/pixi.js-8.19.0-MIT.txt": {
+      "bytes": 1092,
+      "sha256": "5ce7447bc57f7349ffc48338782fbcabe613696e00712b20d66bc58e780f9473"
+    },
+    "apps/web/dist/licenses/tiny-lru-11.4.7-BSD-3-Clause.txt": {
+      "bytes": 1480,
+      "sha256": "8106f20bacca3558946439afb5e4854333f0a9944eee1c60488aa7ac7fc8f52b"
+    },
+    "apps/web/dist/licenses/xmldom-0.8.15-MIT.txt": {
+      "bytes": 1298,
+      "sha256": "4da724fc305d81606b245b324d4d2586916b9d248b23d82183df753ace0fdf71"
+    },
+    "apps/web/dist/local-memory/main.js": {
+      "bytes": 33661,
+      "sha256": "e27d82f9928a639e627cb1d0c4ba305e78f0b8ac21415a2b000f36d95b68cd00"
+    },
+    "apps/web/dist/shared/client-id.js": {
+      "bytes": 579,
+      "sha256": "4e7c893aee90b5158754819f010cfb857e7339eb2123d41e8ad9848cc173220c"
+    },
+    "apps/web/dist/shared/config.js": {
+      "bytes": 110,
+      "sha256": "bf0f840d60c41ef8836a363cce5da29b4d8e72aed78cd7e75aa2dda00cb62fe7"
+    },
+    "apps/web/dist/shared/cue-contract.js": {
+      "bytes": 4201,
+      "sha256": "e678817bfb56aebc9c27e5d7a1ac6317c30c240792105b87768512fc79bd6fc0"
+    },
+    "apps/web/dist/shared/generated/contracts.js": {
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    "apps/web/dist/shared/photo-value.js": {
+      "bytes": 536,
+      "sha256": "5ea1828364e92a163649f842994367ab742b4bd10874e99be2dd51cc1ddf3340"
+    },
+    "apps/web/dist/shared/protocol.js": {
+      "bytes": 9481,
+      "sha256": "0023c8b8d4acb8516b2ca5e7f14f2c31e7a476305028c1d989cba508fdf4da04"
+    }
+  },
+  "real_browser_or_device_validation": false,
+  "scope": "actual precompiled frontend built from this source with locked dependencies"
+}

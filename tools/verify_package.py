@@ -5,6 +5,7 @@ an existing pip/setuptools/wheel environment; nothing is downloaded or installed
 into either interpreter. Only the finished wheel is installed into a temp target.
 """
 import argparse
+from contextlib import nullcontext
 import hashlib
 import json
 import shutil
@@ -15,8 +16,9 @@ import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+WEB_BUILD_OUTPUT_MARKER = '.mira-web-build-output'
 sys.path.insert(0, str(ROOT))
-from tools.dev import StartupError, child_environment, compiler_command
+from tools.dev import StartupError, child_environment, web_build_command
 
 
 def stage_source(destination: Path, *, root: Path = ROOT) -> None:
@@ -32,16 +34,33 @@ def stage_source(destination: Path, *, root: Path = ROOT) -> None:
         shutil.copy2(path, target)
     web = destination / "apps/web"
     web.mkdir(parents=True)
-    for name in ("index.html", "tsconfig.json"):
+    for name in ("index.html", "local-memory.html", "tsconfig.json"):
         shutil.copy2(root / "apps/web" / name, web / name)
     shutil.copytree(root / "apps/web/src", web / "src")
     shutil.copytree(root / "apps/web/public", web / "public")
+    source_dist = root / "apps/web/dist"
+
+    def ignore_root_build_marker(directory: str, names: list[str]) -> set[str]:
+        if Path(directory).resolve() == source_dist.resolve():
+            return {WEB_BUILD_OUTPUT_MARKER} & set(names)
+        return set()
+
+    shutil.copytree(source_dist, web / "dist", ignore=ignore_root_build_marker)
 
 
 def resource_manifest(source: Path) -> dict[str, str]:
     resources = [source / "apps/web/index.html"]
+    local_page = source / "apps/web/local-memory.html"
+    if local_page.is_file():
+        resources.append(local_page)
     for relative in ("config", "apps/web/public", "apps/web/dist"):
         resources.extend(path for path in (source / relative).rglob("*") if path.is_file())
+    # The code-native readiness contract binds the five authored source modules
+    # and its renderer. Installed applications need the same public evidence.
+    resources.extend((source / "apps/web/src/features/presentation/code-native-vendor").glob("*.js"))
+    renderer_source = source / "apps/web/src/features/presentation/code-native-character-renderer.ts"
+    if renderer_source.is_file():
+        resources.append(renderer_source)
     return {path.relative_to(source).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
             for path in sorted(resources)}
 
@@ -103,6 +122,9 @@ with TestClient(create_app(settings)) as client:
     assert health.status_code == 200 and health.json()['mode'] == 'mock'
     assert health.json()['live_llm'] is False and health.json()['live_audio'] is False
     for relative, digest in manifest.items():
+        if relative in {'apps/web/local-memory.html', 'apps/web/public/local-memory.css',
+                        'apps/web/dist/local-memory/main.js'}:
+            continue
         if relative == 'apps/web/index.html':
             url = '/'
         elif relative.startswith('apps/web/public/'):
@@ -124,6 +146,47 @@ with TestClient(create_app(settings)) as client:
     assert client.delete('/api/v1/sessions/' + session_id, headers=headers).status_code == 204
     for url in ('/.env', '/config/defaults.toml', '/pyproject.toml'):
         assert client.get(url).status_code == 404, url
+# The selected native renderer also works in a wheel, without borrowing checkout sources.
+from mira.bootstrap.character_assets import renderer_readiness
+from mira.domain.story import CapabilityState
+native = renderer_readiness('code-native-review', web_root=installed / 'apps/web')
+assert native.state_for('mira.pose.camera_raise') is CapabilityState.READY
+assert native.state_for('mira.media.trip_photo') is CapabilityState.READY
+with TestClient(create_app(settings, character_renderer='code-native-review',
+                           web_root=installed / 'apps/web')) as client:
+    assert client.get('/api/v1/health').status_code == 200
+    assert 'data-character-renderer="code-native-review"' in client.get('/').text
+    assert client.get('/src/features/presentation/code-native-character-renderer.ts').status_code == 404
+# The separate local console serves only its exact page resources and APIs.
+from mira.entrypoints.http.local_memory_app import create_local_memory_app
+from mira.entrypoints.http.operator_pairing import OperatorPairing
+async def unexpected_factory():
+    raise AssertionError('local store opened before a successful pairing')
+with TestClient(create_local_memory_app(
+        management_factory=unexpected_factory,
+        pairing=OperatorPairing('synthetic-package-pairing-code-0123456789',
+                                ('http://127.0.0.1:8761',)),
+        web_root=installed / 'apps/web')) as client:
+    headers = {'Host': '127.0.0.1:8761'}
+    health = client.get('/health', headers=headers)
+    assert health.status_code == 200
+    assert health.json() == {'status': 'ok', 'mode': 'local-memory-management',
+                              'provider_transmission': False}
+    for relative, url in (
+        ('apps/web/local-memory.html', '/'),
+        ('apps/web/public/local-memory.css', '/local-memory.css'),
+        ('apps/web/dist/local-memory/main.js', '/local-memory.js'),
+    ):
+        response = client.get(url, headers=headers)
+        assert response.status_code == 200, url
+        assert hashlib.sha256(response.content).hexdigest() == manifest[relative], url
+        served += 1
+    page = client.get('/', headers=headers).text
+    assert 'name="message"' not in page
+    assert 'data-local-only-notice' in page
+    assert '不会向外部服务传送记忆内容' in page
+    assert client.get('/api/v1/memory-management/status', headers=headers).status_code == 401
+    assert client.get('/api/v1/sessions', headers=headers).status_code == 404
 # Explicit rehearsal must carry its private package PCM, never borrow checkout files.
 from mira.adapters.generation.rehearsal.backend import load_clips
 clips = load_clips()
@@ -148,17 +211,21 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--build-python", default=sys.executable,
                         help="existing Python with pip/setuptools/wheel; runtime uses the calling Python")
+    parser.add_argument("--output-dir", type=Path,
+                        help="new directory preserving source, wheel and installed smoke evidence")
     args = parser.parse_args()
     try:
         check_builder(args.build_python)
-        compiler = compiler_command()
         env = child_environment()
-        with tempfile.TemporaryDirectory(prefix="mira-wheel-check-") as temporary:
+        subprocess.run(web_build_command(), cwd=ROOT, env=env, check=True, timeout=120)
+        if args.output_dir is not None:
+            args.output_dir.mkdir(parents=True, exist_ok=False)
+        evidence = (nullcontext(str(args.output_dir.resolve())) if args.output_dir is not None
+                    else tempfile.TemporaryDirectory(prefix="mira-wheel-check-"))
+        with evidence as temporary:
             root = Path(temporary)
             source, wheels, installed = root / "source", root / "wheels", root / "installed"
             stage_source(source)
-            subprocess.run([*compiler, "-p", str(source / "apps/web/tsconfig.json"),
-                            "--sourceMap", "false"], cwd=root, env=env, check=True, timeout=90)
             manifest = resource_manifest(source)
             manifest_path = root / "resources.json"
             manifest_path.write_text(json.dumps(manifest, sort_keys=True), encoding="utf-8")

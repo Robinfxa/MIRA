@@ -11,6 +11,7 @@ from enum import StrEnum
 
 class DecisionPolicyRef(StrEnum):
     USER_DEVELOPMENT_0_6_V1 = "user-development-0.6-v1"
+    USER_DEVELOPMENT_0_6_V2 = "user-development-0.6-v2"
 
 
 @dataclass(frozen=True, slots=True)
@@ -34,9 +35,21 @@ USER_DEVELOPMENT_0_6_V1 = DecisionThresholdPolicy(
     referent_confidence_min=0.6,
 )
 
+# V2 is intentionally a new version even though its numeric thresholds are the
+# same: the output adapter now applies them to REJECT as well as ALLOW.
+USER_DEVELOPMENT_0_6_V2 = DecisionThresholdPolicy(
+    reference=DecisionPolicyRef.USER_DEVELOPMENT_0_6_V2,
+    choice_probability_min=0.6,
+    confidence_min=0.6,
+    noul_yes_probability_min=0.6,
+    noul_no_probability_max=0.4,
+    referent_probability_min=0.6,
+    referent_confidence_min=0.6,
+)
+
 
 def is_supported_development_policy(value: object) -> bool:
-    """Reject arbitrary threshold bundles; this version is the sole opt-in policy."""
+    """Reject arbitrary bundles and accept only exact immutable policy versions."""
     return (type(value) is DecisionThresholdPolicy
             and type(value.reference) is DecisionPolicyRef
-            and value == USER_DEVELOPMENT_0_6_V1)
+            and value in (USER_DEVELOPMENT_0_6_V1, USER_DEVELOPMENT_0_6_V2))

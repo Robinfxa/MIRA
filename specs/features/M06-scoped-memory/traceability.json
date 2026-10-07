@@ -1,0 +1,62 @@
+{
+  "feature": "M06MEM",
+  "spec": "specs/features/M06-scoped-memory/spec.md",
+  "requirements": [
+    {
+      "id": "M06MEM-001",
+      "tests": [
+        "tests/unit/test_scoped_memory.py::test_constructor_does_no_io_then_explicit_open_creates_private_sqlite",
+        "tests/unit/test_scoped_memory.py::test_symlinked_database_and_parent_are_rejected"
+      ]
+    },
+    {
+      "id": "M06MEM-002",
+      "tests": [
+        "tests/unit/test_scoped_memory.py::test_store_requires_exact_scope_and_preserves_provenance_across_restart",
+        "tests/unit/test_scoped_memory.py::test_exact_source_event_retry_is_idempotent_and_payload_or_source_conflicts",
+        "tests/unit/test_scoped_memory.py::test_an_interpretation_cannot_supersede_and_hide_source_evidence"
+      ]
+    },
+    {
+      "id": "M06MEM-003",
+      "tests": [
+        "tests/unit/test_scoped_memory.py::test_recall_is_deterministic_lexical_and_enforces_count_character_budgets",
+        "tests/unit/test_scoped_memory.py::test_query_timeout_bounds_locked_read_wait",
+        "tests/unit/test_scoped_memory.py::test_scope_revision_is_monotonic_and_isolated_to_exact_scope"
+      ]
+    },
+    {
+      "id": "M06MEM-004",
+      "tests": [
+        "tests/unit/test_scoped_memory.py::test_supersession_returns_latest_head_and_never_resurrects_stale_ancestor",
+        "tests/unit/test_scoped_memory.py::test_an_interpretation_cannot_supersede_and_hide_source_evidence"
+      ]
+    },
+    {
+      "id": "M06MEM-005",
+      "tests": [
+        "tests/unit/test_scoped_memory.py::test_soft_forget_suppresses_transitive_dependents_and_undo_restores_with_audit",
+        "tests/unit/test_scoped_memory.py::test_overlapping_forgets_restore_only_the_referenced_tombstone",
+        "tests/unit/test_scoped_memory.py::test_supersession_returns_latest_head_and_never_resurrects_stale_ancestor"
+      ]
+    },
+    {
+      "id": "M06MEM-006",
+      "tests": [
+        "tests/unit/test_scoped_memory.py::test_storage_and_event_history_have_hard_bounds",
+        "tests/unit/test_scoped_memory.py::test_current_constraint_overflow_fails_closed_instead_of_truncating",
+        "tests/unit/test_scoped_memory.py::test_unknown_existing_database_is_rejected_without_schema_changes",
+        "tests/unit/test_scoped_memory.py::test_existing_unsafe_file_or_directory_is_rejected_without_chmod",
+        "tests/unit/test_scoped_memory.py::test_hardlinked_database_inode_is_rejected",
+        "tests/unit/test_scoped_memory.py::test_store_rejects_credential_envelopes_or_any_privacy_filter_change"
+      ]
+    },
+    {
+      "id": "M06MEM-007",
+      "tests": [
+        "tests/unit/test_scoped_memory.py::test_interpretation_is_not_returned_as_source_fact_by_default",
+        "tests/unit/test_scoped_memory.py::test_only_explicit_user_statement_boundary_enters_current_constraints"
+      ]
+    }
+  ]
+}

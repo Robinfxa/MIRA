@@ -1,0 +1,33 @@
+{
+  "feature": "PHOTO-02",
+  "spec": "specs/features/PHOTO-02-inworld-dialogue/spec.md",
+  "requirements": [
+    {
+      "id": "PHOTO02-001",
+      "tests": [
+        "tests/contracts/test_photo_dialogue_boundary.py::test_photo_dialogue_contract_keeps_fiction_reality_and_typed_proposal_separate",
+        "tests/contracts/test_photo_dialogue_boundary.py::test_author_fact_distinguishes_inworld_photo_from_asset_provenance",
+        "tests/contracts/test_photo_dialogue_boundary.py::test_photo_contract_is_fixed_readiness_bound_and_never_user_authored"
+      ]
+    },
+    {
+      "id": "PHOTO02-002",
+      "tests": [
+        "tests/contracts/test_photo_dialogue_boundary.py::test_natural_photo_promise_does_not_inject_a_media_control",
+        "tests/contracts/test_photo_dialogue_boundary.py::test_presented_photo_offer_and_yes_keep_typed_event_review_and_receipt_boundary"
+      ]
+    },
+    {
+      "id": "PHOTO02-003",
+      "tests": [
+        "tests/contracts/test_photo_dialogue_boundary.py::test_presented_photo_offer_and_yes_keep_typed_event_review_and_receipt_boundary"
+      ]
+    },
+    {
+      "id": "PHOTO02-004",
+      "tests": [
+        "tests/contracts/test_photo_dialogue_boundary.py::test_legacy_review_question_text_is_preserved_and_new_photo_rule_is_scoped"
+      ]
+    }
+  ]
+}

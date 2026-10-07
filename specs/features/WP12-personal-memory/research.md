@@ -1,0 +1,22 @@
+# MaiBot and community findings, checked 2026-10-06
+
+Official [Bot configuration](https://docs.mai-mai.org/manual/configuration/bot-config) separates personality, behavior style and reply style, discourages repeated identity exposition, and bounds recent chat context and recalled chat. MIRA already has stable author canon and dialogue sources; the useful gap is making their roles legible to the speaker rather than adding a claim of perfect memory.
+
+Official [A_Memorix configuration](https://docs.mai-mai.org/manual/configuration/amemorix-config), page updated 2026-10-05, distinguishes storage/writeback from recall/injection. Long-term memory and global sharing default off. Heuristic recall is optional and bounded; correction has a separate plan/confirmation path. MIRA keeps its stricter existing per-scope, separate-transmission permission gates. No MaiBot default or configuration is copied into MIRA.
+
+Official [release 1.3.0, 2026-09-26](https://github.com/Mai-with-u/MaiBot/releases/tag/1.3.0), commit [7a261101315207e0479705172c1a9290948f19fe](https://github.com/Mai-with-u/MaiBot/commit/7a261101315207e0479705172c1a9290948f19fe) as linked by the GitHub release page, reports memory lifecycle/import and image-memory management. This is a concrete inspected release, not a claim that it is the newest release. The GitHub commits/main page returned an older cached September 2 view, so it was not used to claim current HEAD. No repository was installed or executed.
+
+Firsthand community [PR #2007](https://github.com/Mai-with-u/MaiBot/pull/2007), merged [36871d96212c867d6baa9903d1c96799f6cd5b29](https://github.com/Mai-with-u/MaiBot/commit/36871d96212c867d6baa9903d1c96799f6cd5b29), documents a failed proactive reply because real source messages with usable message IDs were absent; its author describes restoring exact recent user messages and later hardening the identifier/duplicate guards. Useful lesson: a personality prompt cannot replace real referenceable evidence. MIRA retains exact accepted-input and presentation references; no autonomous public outreach is added.
+
+Community maintainer [Mai Forever Memories](https://github.com/A-Dawn/Mai_Forever_memories) documents daily/weekly summary layers, explicit “remember” triggers, a summary-only path, and an optional confirmed import path. Its defaults include automatic import and confirmation off, and its README targets the older LPMM integration. Adopt the conceptual distinction between remembering, retrieving and editing, not its automatic recording defaults or a claim of current MIRA compatibility.
+
+Community author [local.part.think](https://github.com/clfr41/local.part.think) provides separate remember/recall/forget/search/update actions and a persisted JSON store. Its own README warns that semantic matching may misidentify records. This supports keeping MIRA corrections source- and version-bound; it does not justify executing a model’s memory edit proposal.
+
+## Verified MIRA facts
+- --story supplies selected versioned fiction, not automatic user memory. --story-db, --story-scope, --authorize-story-persistence-and-recall and local pairing opt into character checkpoints.
+- --memory-db, --memory-scope-config, --memory-scope and --authorize-memory-to-selected-provider-and-jev opt into read-only manual-memory recall; local editing and Google derived speech have their own flags.
+- Conversation recording needs its own database/scope, --authorize-conversation-persistence and pairing. A particular --recall-conversation-session plus independent transmission consent is required for recall. Local management and Google speech are separately authorized.
+- No automatic extraction, permanent personality learning or default chat logging. This work does not open real memory files, alter any flag, or widen scope.
+
+## Decision and residual gap
+Add a small computed view of existing selected authored traits and actual attached recall status inside first_person_dialogue. Keep biography, current intentions, accepted dialogue and historical receipts distinct. Prefer relevant evidence and a natural first-person reaction; never turn style corpora or other people’s lives into “our” memories. The existing durable store/restart/correction/forget code remains the only persistence implementation. Automatic preference learning, semantic recall and real-model conversation quality remain future work requiring their own evidence and authorization.

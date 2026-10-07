@@ -114,6 +114,7 @@ export class ReviewedAudioPanel {
   private reviewAbort: AbortController | null = null;
   private expiresAt = 0;
   private auditionActive = false;
+  private continuousListeningBlocked = false;
   private heardFullClip = false;
   private readonly later: (fn: () => void, ms: number) => number;
   private readonly cancelLater: (id: number) => void;
@@ -148,6 +149,21 @@ export class ReviewedAudioPanel {
     this.elements.eligibilityNotice.hidden = value;
     this.elements.eligibilityNotice.textContent = value ? ''
       : '当前离线 / 排练模式不开放真实音频录制；默认麦克风仍关闭。';
+    this.render();
+  }
+
+  get recordingActive(): boolean { return this.statusValue?.recording_active === true; }
+
+  /** Continuous capture is not wired to the separate raw-audio review store. */
+  setContinuousListeningBlocked(value: boolean): void {
+    if (this.closed || this.continuousListeningBlocked === value) return;
+    this.continuousListeningBlocked = value;
+    if (value) {
+      this.invalidateReview(true);
+      if (this.auditionActive) this.audition.stopReviewedAudioAudition();
+      this.auditionActive = false;
+      this.heardFullClip = false;
+    }
     this.render();
   }
 
@@ -486,16 +502,16 @@ export class ReviewedAudioPanel {
       ? `开发录制已开启。${status?.scope_notice ?? '范围暂无法确认，请勿继续录音。'} 原始音频需要对精确缓冲试听和审核；不会自动发现或抹除口述秘密。`
       : '';
     this.elements.disable.hidden = !active;
-    this.elements.consent.disabled = this.busy || active || !this.statusFresh || !this.canEnable;
-    this.elements.enable.disabled = this.busy || active || !this.statusFresh || !this.canEnable || !this.elements.consent.checked;
-    this.elements.review.disabled = this.busy || !pending || ticket;
+    this.elements.consent.disabled = this.continuousListeningBlocked || this.busy || active || !this.statusFresh || !this.canEnable;
+    this.elements.enable.disabled = this.continuousListeningBlocked || this.busy || active || !this.statusFresh || !this.canEnable || !this.elements.consent.checked;
+    this.elements.review.disabled = this.continuousListeningBlocked || this.busy || !pending || ticket;
     this.elements.review.hidden = !pending || ticket;
-    this.elements.preview.disabled = this.busy || !ticket || loaded;
+    this.elements.preview.disabled = this.continuousListeningBlocked || this.busy || !ticket || loaded;
     this.elements.preview.hidden = !ticket || loaded;
-    this.elements.audition.disabled = this.busy || !ticket || !loaded || this.auditionActive;
+    this.elements.audition.disabled = this.continuousListeningBlocked || this.busy || !ticket || !loaded || this.auditionActive;
     this.elements.audition.hidden = !ticket || !loaded;
-    this.elements.attestation.disabled = this.busy || !ticket || !this.heardFullClip;
-    this.elements.confirm.disabled = this.busy || !ticket || !loaded || !this.heardFullClip || !this.elements.attestation.checked;
+    this.elements.attestation.disabled = this.continuousListeningBlocked || this.busy || !ticket || !this.heardFullClip;
+    this.elements.confirm.disabled = this.continuousListeningBlocked || this.busy || !ticket || !loaded || !this.heardFullClip || !this.elements.attestation.checked;
     this.elements.confirm.hidden = !ticket;
     this.elements.cancel.disabled = this.busy || !ticket;
     this.elements.cancel.hidden = !ticket;

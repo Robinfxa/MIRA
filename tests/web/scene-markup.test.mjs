@@ -10,7 +10,9 @@ test('scene preserves integration selectors and adds explicit voice and phase ho
     assert.match(html, new RegExp(`data-${name}(?:[\\s=>])`), name);
   }
   assert.match(html, /name="message"/);
-  assert.match(html, /<fieldset[^>]*disabled/);
+  assert.doesNotMatch(html, /<fieldset[^>]*disabled/);
+  assert.match(html, /data-send-message[^>]*disabled/);
+  assert.match(html, /data-connect-retry/);
 });
 test('art identifies an original adult and contains real independently animated character layers', () => {
   assert.match(html, /26 岁/);
@@ -41,12 +43,12 @@ test('diagnostics stay collapsed and photo is initially absent', () => {
   assert.doesNotMatch(html, /<details[^>]*\bopen\b/);
 });
 test('the existing Stop control stays unique and precedes the rehearsal guide', () => {
-  const controls = html.match(/<fieldset class="conversation-controls" disabled>([\s\S]*?)<\/fieldset>/)?.[1];
-  assert.ok(controls, 'conversation controls keep their disabled startup fieldset');
+  const controls = html.match(/<fieldset class="conversation-controls">([\s\S]*?)<\/fieldset>/)?.[1];
+  assert.ok(controls, 'conversation controls keep an editable draft fieldset');
 
   const stops = [...html.matchAll(/<button\b[^>]*data-stop\b[^>]*>[\s\S]*?<\/button>/g)];
   assert.equal(stops.length, 1, 'the existing Stop button remains unique');
-  assert.match(stops[0][0], /type="button"[\s\S]*停止回应/, 'the original labeled Stop control is preserved');
+  assert.match(stops[0][0], /type="button"[\s\S]*停止全部/, 'global Stop is clearly labeled separately from reply interruption');
   const guideIndex = controls.indexOf('<section class="rehearsal-guide"');
   assert.ok(guideIndex >= 0, 'the offline rehearsal guide remains in the conversation controls');
   const stopIndex = controls.indexOf('data-stop');
@@ -55,9 +57,16 @@ test('the existing Stop control stays unique and precedes the rehearsal guide', 
   assert.match(read('apps/web/src/app/main.ts'), /element\('\[data-stop\]'\)\.addEventListener\('click'/,
     'the existing Stop handler selector is unchanged');
 });
+test('continuous listening exposes a distinct reply-only interruption control and cautious onset limits', () => {
+  assert.match(html, /data-continuous-interrupt[^>]*hidden[^>]*>打断回应，继续听我说</);
+  assert.match(html, /系统没有声学回声检测/);
+  assert.match(html, /噪声或扬声器回声可能影响结果/);
+  assert.match(html, /自动分句可能根据停顿判断/);
+  assert.match(read('apps/web/src/app/main.ts'), /continuousInterrupt\.addEventListener\('click',\s*\(\)\s*=>\s*\{\s*submissionGeneration\+\+;[\s\S]*?controller\.interruptReply\(\)/);
+});
 test('long rehearsal help is progressively disclosed while fixed conversation controls remain', () => {
-  const controls = html.match(/<fieldset class="conversation-controls" disabled>([\s\S]*?)<\/fieldset>/)?.[1];
-  assert.ok(controls, 'conversation controls keep their disabled startup fieldset');
+  const controls = html.match(/<fieldset class="conversation-controls">([\s\S]*?)<\/fieldset>/)?.[1];
+  assert.ok(controls, 'conversation controls keep an editable draft fieldset');
   const helpIndex = controls.indexOf('<details class="rehearsal-instructions">');
   assert.ok(helpIndex >= 0, 'lengthy help uses native details disclosure');
 

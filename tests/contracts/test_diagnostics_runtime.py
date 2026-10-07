@@ -69,9 +69,13 @@ async def test_media_stop_and_disconnect_have_separate_reasons():
         await started.wait()
         operation.cancel(reason=reason)
         await operation.close()
-        terminals = [e for e in sink.events if e.outcome == DiagnosticOutcome.CANCELLED]
+        terminals = [e for e in sink.events if e.stage == DiagnosticStage.STT
+                     and e.outcome == DiagnosticOutcome.CANCELLED]
         assert len(terminals) == 1 and terminals[0].cancellation_reason == reason
         assert not any(e.outcome == DiagnosticOutcome.FAILED for e in sink.events)
+        stream_end, = [e for e in sink.events if e.stage == DiagnosticStage.STT_STREAM_END]
+        assert stream_end.outcome == DiagnosticOutcome.CANCELLED
+        assert stream_end.duration_ms is not None and stream_end.duration_ms >= 0
 
 
 def test_broken_diagnostic_sink_cannot_break_http_business_path():
@@ -219,3 +223,27 @@ def test_loader_requires_explicit_raw_consent_and_private_bounded_settings():
     configured = load_settings(root=root, environ={"MIRA_DIAGNOSTICS__DEVELOPMENT_RECORDING": "true",
         "MIRA_DIAGNOSTICS__RECORDING_CONSENT": "true"})
     assert configured.diagnostics.development_recording
+
+@pytest.mark.asyncio
+async def test_microphone_diagnostics_emit_numeric_revision_and_stream_end_milestones_only():
+    from mira.application.ports.media import TranscriptRevision
+
+    sink = CollectDiagnostics()
+    async def source():
+        yield TranscriptRevision("synthetic-stream", 1, "secret interim", False)
+        yield TranscriptRevision("synthetic-stream", 2, "secret final", True)
+
+    operation = MediaOperation(source, activity_seq=1, input_epoch=1, output_epoch=1,
+                               diagnostics=sink)
+    received = [value async for value in operation.values()]
+    await operation.done.wait()
+    assert [value.text for value in received] == ["secret interim", "secret final"]
+    milestones = [event for event in sink.events if event.stage in {
+        getattr(DiagnosticStage, "STT_FIRST_REVISION", None),
+        getattr(DiagnosticStage, "STT_FIRST_FINAL_REVISION", None),
+        getattr(DiagnosticStage, "STT_STREAM_END", None),
+    }]
+    assert [event.stage.value for event in milestones] == [
+        "stt_first_revision", "stt_first_final_revision", "stt_stream_end"]
+    assert all(event.duration_ms is not None and event.duration_ms >= 0 for event in milestones)
+    assert "secret interim" not in repr(sink.events) and "secret final" not in repr(sink.events)

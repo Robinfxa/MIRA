@@ -1,0 +1,37 @@
+{
+  "feature": "UFBCTRL",
+  "spec": "specs/features/UNKNOWN-FALLBACK-CONTROL/spec.md",
+  "requirements": [
+    {
+      "id": "UFBCTRL-001",
+      "tests": [
+        "tests/contracts/test_semantic_unknown_fallback.py::test_asgi_output_semantic_unknown_is_fail_closed_clarification"
+      ]
+    },
+    {
+      "id": "UFBCTRL-002",
+      "tests": [
+        "tests/contracts/test_semantic_unknown_fallback.py::test_asgi_input_semantic_unknown_propagates_without_output_dispatch"
+      ]
+    },
+    {
+      "id": "UFBCTRL-003",
+      "tests": [
+        "tests/contracts/test_semantic_unknown_fallback.py::test_asgi_consecutive_unknowns_allow_a_later_valid_turn"
+      ]
+    },
+    {
+      "id": "UFBCTRL-004",
+      "tests": [
+        "tests/contracts/test_semantic_unknown_fallback.py::test_asgi_presented_prefix_survives_uncertain_remainder",
+        "tests/contracts/test_semantic_unknown_fallback.py::test_asgi_stop_or_new_input_fences_late_unknown"
+      ]
+    },
+    {
+      "id": "UFBCTRL-005",
+      "tests": [
+        "tests/contracts/test_semantic_unknown_fallback.py::test_asgi_technical_failures_do_not_enter_clarification"
+      ]
+    }
+  ]
+}

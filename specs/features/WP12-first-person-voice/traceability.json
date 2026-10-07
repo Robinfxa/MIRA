@@ -1,0 +1,29 @@
+{
+  "feature": "WP12VOICE",
+  "spec": "specs/features/WP12-first-person-voice/spec.md",
+  "requirements": [
+    {
+      "id": "WP12VOICE-001",
+      "tests": [
+        "tests/contracts/test_character_first_person_voice.py::test_latest_character_style_is_brisk_warm_and_forthright",
+        "tests/contracts/test_character_first_person_voice.py::test_fixed_voice_contract_is_composed_once_for_every_capability",
+        "tests/contracts/test_character_first_person_voice.py::test_editorial_negative_fixtures_have_explicit_policy_coverage"
+      ]
+    },
+    {
+      "id": "WP12VOICE-002",
+      "tests": [
+        "tests/contracts/test_character_first_person_voice.py::test_user_text_cannot_become_voice_policy_or_character_history",
+        "tests/contracts/test_character_first_person_voice.py::test_builtin_daily_habits_remain_released_canon_and_hidden_history_stays_hidden"
+      ]
+    },
+    {
+      "id": "WP12VOICE-003",
+      "tests": [
+        "tests/contracts/test_character_first_person_voice.py::test_fixed_voice_contract_is_composed_once_for_every_capability",
+        "tests/contracts/test_character_first_person_voice.py::test_direct_request_carries_voice_policy_with_synthetic_transport",
+        "tests/contracts/test_character_first_person_voice.py::test_native_text_only_request_carries_same_fixed_voice_policy"
+      ]
+    }
+  ]
+}

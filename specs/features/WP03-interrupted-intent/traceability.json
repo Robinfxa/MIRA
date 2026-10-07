@@ -1,0 +1,39 @@
+{
+  "feature": "WP03INTENT",
+  "spec": "specs/features/WP03-interrupted-intent/spec.md",
+  "requirements": [
+    {
+      "id": "WP03INTENT-001",
+      "tests": [
+        "tests/unit/test_interrupted_intent.py::test_interruption_preserves_composite_intent_and_separate_presentation_stages",
+        "tests/unit/test_interrupted_intent.py::test_generation_and_semantic_snapshot_share_the_same_versioned_request_context"
+      ]
+    },
+    {
+      "id": "WP03INTENT-002",
+      "tests": [
+        "tests/unit/test_interrupted_intent.py::test_three_additions_retain_original_and_only_accepted_inputs",
+        "tests/unit/test_interrupted_intent.py::test_input_count_budget_starts_marked_current_request_without_deleting_history",
+        "tests/unit/test_interrupted_intent.py::test_utf8_budget_and_generated_draft_bounds_are_explicit",
+        "tests/unit/test_interrupted_intent.py::test_long_supplements_preserve_primary_facts_within_full_prompt_budget"
+      ]
+    },
+    {
+      "id": "WP03INTENT-003",
+      "tests": [
+        "tests/unit/test_interrupted_intent.py::test_stop_retains_link_new_topic_resets_chain_and_close_rejects_input"
+      ]
+    },
+    {
+      "id": "WP03INTENT-004",
+      "tests": [
+        "tests/unit/test_interrupted_intent.py::test_stale_or_foreign_parent_preserves_current_valid_text_without_foreign_data",
+        "tests/unit/test_interrupted_intent.py::test_retry_includes_relation_identity_without_duplicate_generation_or_receipts",
+        "tests/unit/test_interrupted_intent.py::test_late_cancel_resistant_generation_cannot_enter_new_intent",
+        "tests/unit/test_interrupted_intent.py::test_repeated_identical_text_and_stop_epochs_keep_exact_input_indices",
+        "tests/integration/test_interrupted_intent_http.py::test_http_partial_reply_three_additions_exact_retry_and_new_topic",
+        "tests/integration/test_interrupted_intent_http.py::test_http_foreign_pointer_is_ordinary_input_and_malformed_relation_is_rejected"
+      ]
+    }
+  ]
+}

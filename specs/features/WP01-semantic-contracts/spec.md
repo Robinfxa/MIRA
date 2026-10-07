@@ -45,3 +45,26 @@ contract is produced; existing output adapter and D-M/fixed asset admission stay
 Reuse the existing injected fixed-origin HttpxJevTransport; no runtime client on
 construction, environment/key lookup, redirects, retry or raw provider exception logs.
 Synthetic corpus and mocked results test mechanics only, not Chinese model quality.
+
+### WP01SEM-007 Versioned referent applicability
+Given the explicitly selected `mira-input-v2` question set, ask in English whether the
+requested response requires binding a specific controlled or presented object/content
+identity. A confident NO at the selected policy's `<= 0.4` boundary may make an
+unresolved identity non-blocking only when the separate display-request predicate is
+also NO. Preserve the raw relevance probability, unresolved referent status and
+probability distribution, and the exact `referent_identity` unresolved marker in the
+typed observation and response contract. This lets a greeting, permitted expression or
+pose, or a permitted look toward author-policy ambient scenery proceed without
+fabricating an object identity.
+
+When necessity is YES (`>= 0.6`) or UNKNOWN, keep the input blocked unless the exact
+identity has supported presented evidence. A midband probability remains UNKNOWN.
+Requesting the contents, identity, appearance or history of a particular absent item
+still requires that item's binding. A display request for a specific pre-existing
+controlled object/content item also requires an exact presented target even when
+referent necessity is NO. Newly generated text and subtitles are not pre-existing
+content display requests. Arbitrary unresolved markers, missing markers, unsupported
+or unpresented identities, Stop, existing prohibitions, and MEDIA controls remain
+blocked by their existing gates. The v1 question bytes, default adapter revision, and
+two-argument evaluator helper retain their historical behavior. English wording is an
+evidence-boundary instruction and does not establish semantic quality or model accuracy.

@@ -1,0 +1,44 @@
+{
+  "feature": "WP03-LIVE-VOICE-CLI",
+  "spec": "specs/features/WP03-live-voice-cli/spec.md",
+  "requirements": [
+    {
+      "id": "WP03LIVEVOICECLI-001",
+      "tests": [
+        "tests/contracts/test_live_voice_launcher.py::test_separate_voice_consent_is_required_before_admission_or_auth",
+        "tests/contracts/test_live_voice_launcher.py::test_text_cli_voice_flag_remains_fail_closed"
+      ]
+    },
+    {
+      "id": "WP03LIVEVOICECLI-002",
+      "tests": [
+        "tests/contracts/test_live_voice_launcher.py::test_check_reports_declared_voice_without_reading_adc_or_touching_provider",
+        "tests/contracts/test_live_voice_launcher.py::test_official_adc_loader_uses_only_explicit_file_and_google_sdk",
+        "tests/contracts/test_live_voice_launcher.py::test_sdk_token_provider_defers_refresh_and_uses_opaque_google_credentials",
+        "tests/contracts/test_live_voice_launcher.py::test_network_environment_drift_blocks_auth_and_frontend",
+        "tests/contracts/test_live_voice_launcher.py::test_unsupported_approved_proxy_stops_before_auth_loading",
+        "tests/contracts/test_live_voice_launcher.py::test_explicit_approved_ca_is_bridged_to_verifying_grpc",
+        "tests/contracts/test_live_voice_launcher.py::test_invalid_explicit_ca_fails_closed_without_grpc",
+        "tests/contracts/test_live_voice_launcher.py::test_no_custom_ca_uses_platform_roots_and_directory_only_is_explicitly_blocked"
+      ]
+    },
+    {
+      "id": "WP03LIVEVOICECLI-003",
+      "tests": [
+        "tests/contracts/test_live_voice_launcher.py::test_nonselected_voice_setup_stops_before_adc_or_provider",
+        "tests/contracts/test_live_voice_launcher.py::test_voice_file_and_limit_validation_precedes_auth",
+        "tests/contracts/test_live_voice_launcher.py::test_admitted_serve_uses_existing_factory_and_voice_required_lifespan"
+      ]
+    },
+    {
+      "id": "WP03LIVEVOICECLI-004",
+      "tests": [
+        "tests/contracts/test_live_voice_launcher.py::test_unarmed_and_help_never_read_admission_or_load_google_auth",
+        "tests/contracts/test_live_voice_launcher.py::test_check_reports_declared_voice_without_reading_adc_or_touching_provider",
+        "tests/contracts/test_live_voice_launcher.py::test_admitted_serve_uses_existing_factory_and_voice_required_lifespan",
+        "tests/contracts/test_live_voice_launcher.py::test_google_voice_startup_failure_closes_http_client_and_suppresses_details",
+        "tests/contracts/test_live_voice_launcher.py::test_fallback_http_cleanup_preserves_external_event_loop"
+      ]
+    }
+  ]
+}

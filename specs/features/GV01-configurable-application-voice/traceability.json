@@ -1,0 +1,30 @@
+{
+  "feature": "GV01",
+  "spec": "specs/features/GV01-configurable-application-voice/spec.md",
+  "requirements": [
+    {
+      "id": "GV01-001",
+      "tests": [
+        "tests/contracts/test_google_voice_configuration.py::test_application_voice_reaches_actual_request_and_preserves_content",
+        "tests/contracts/test_google_voice_configuration.py::test_application_rejects_unselected_voice_before_provider_allocation",
+        "tests/contracts/test_google_voice_configuration.py::test_probe_remains_fixed_kore_and_no_voice_default_is_silently_changed",
+        "tests/contracts/test_google_voice_configuration.py::test_shared_settings_validator_is_inert_and_returns_exact_selection",
+        "tests/contracts/test_google_voice_configuration.py::test_shared_settings_validator_rejects_other_routes_and_selections",
+        "tests/contracts/test_google_voice_configuration.py::test_low_level_unknown_voice_rejects_before_sdk_and_http_allocation"
+      ]
+    },
+    {
+      "id": "GV01-002",
+      "tests": [
+        "tests/contracts/test_google_voice_configuration.py::test_application_voice_reaches_actual_request_and_preserves_content",
+        "tests/contracts/test_google_voice_configuration.py::test_application_voice_selection_does_not_grant_authorization"
+      ]
+    },
+    {
+      "id": "GV01-003",
+      "tests": [
+        "tests/contracts/test_google_voice_configuration.py::test_application_voice_reaches_actual_request_and_preserves_content"
+      ]
+    }
+  ]
+}

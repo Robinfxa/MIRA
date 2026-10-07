@@ -1,0 +1,12 @@
+{
+  "feature": "IMG-STATUS-01 frontend",
+  "spec": "specs/features/IMG-STATUS-01-process-admission/spec.md",
+  "owner": "web lane",
+  "checker_note": "Compiled Node test sidecar; not real browser acceptance.",
+  "tests": [
+    {
+      "file": "tests/web/controller-generated-images.test.mjs",
+      "case": "held budget explains exhausted local allowance and keeps ordinary text available"
+    }
+  ]
+}

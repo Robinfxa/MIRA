@@ -1,0 +1,11 @@
+{
+  "independent_test_path": "/workspace/scratch/96ff05e059bf/mira-story-image-adapter-audit-20261005T2302Z/test_independent_adapters.py",
+  "independent_test_sha256": "6393ec9b9d67548fe560bcfd59e3907ed9943b153634578881ba481a240e4219",
+  "matches_original_independent_red": true,
+  "independent_reproduction_red": "006-independent-audit-red",
+  "independent_final_green": "013-independent-final",
+  "owned_final_green": "012-v2-owned-final",
+  "owned_tests": 124,
+  "independent_tests": 120,
+  "live_calls": 0
+}

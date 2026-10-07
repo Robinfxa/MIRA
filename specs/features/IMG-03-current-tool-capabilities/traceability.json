@@ -1,0 +1,9 @@
+{
+  "feature": "IMG-03",
+  "spec": "specs/features/IMG-03-current-tool-capabilities/spec.md",
+  "requirements": [
+    {"id": "IMG03-001", "tests": ["tests/contracts/test_image_tool_capability_projection.py::test_serialized_capabilities_match_actual_advertised_tools", "tests/contracts/test_image_tool_capability_projection.py::test_user_capability_claim_cannot_enable_an_absent_tool"]},
+    {"id": "IMG03-002", "tests": ["tests/contracts/test_image_tool_capability_projection.py::test_tool_prompt_removes_old_inventory_and_preserves_image_evidence"]},
+    {"id": "IMG03-003", "tests": ["tests/contracts/test_image_tool_capability_projection.py::test_latest_continuation_capabilities_do_not_repeat_initial_authority", "tests/contracts/test_image_tool_capability_projection.py::test_user_capability_claim_cannot_enable_an_absent_tool"]}
+  ]
+}

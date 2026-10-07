@@ -1,0 +1,22 @@
+{
+  "feature": "WP03-streaming-transcript-preview",
+  "spec": "specs/features/WP03-streaming-transcript-preview/spec.md",
+  "checker_note": "Web sidecar; browser tests belong to the web lane. Server milestone test is linked separately under WP03-stt-diagnostic-milestones.",
+  "owner": "tests/quality.toml web lane: tests/web/*.test.mjs",
+  "requirements": [
+    {"id": "STP-001", "tests": [
+      {"file": "tests/web/microphone-preview.test.mjs", "case": "valid revisions reach only the optional provisional callback and produce numeric elapsed timing"},
+      {"file": "tests/web/controller-main.test.mjs", "case": "provisional microphone preview is accessible, text-only, and separate from the assistant and composer"}]},
+    {"id": "STP-002", "tests": [
+      {"file": "tests/web/microphone-preview.test.mjs", "case": "finish clears preview, interim after client finish cannot repaint, final remains only in completion"},
+      {"file": "tests/web/controller-voice.test.mjs", "case": "microphone revisions remain provisional and finish, newer input, permission denial, Stop and Close clear stale callbacks"}]},
+    {"id": "STP-003", "tests": [
+      {"file": "tests/web/microphone-preview.test.mjs", "case": "duplicate and out-of-order revisions fail closed and clear the provisional value"},
+      {"file": "tests/web/microphone-preview.test.mjs", "case": "final revision before user finish stays provisional and cannot authorize complete"},
+      {"file": "tests/web/microphone-preview.test.mjs", "case": "transport close and late packet cannot restore an old revision"},
+      {"file": "tests/web/controller-voice.test.mjs", "case": "microphone revisions remain provisional and finish, newer input, permission denial, Stop and Close clear stale callbacks"}]},
+    {"id": "STP-004", "tests": [
+      {"file": "tests/web/microphone-preview.test.mjs", "case": "valid revisions reach only the optional provisional callback and produce numeric elapsed timing"}]}
+  ],
+  "verification_boundary": "Synthetic WebSocket, fake monotonic clock, and DOM only; no provider, microphone, real browser, account, or paid call."
+}

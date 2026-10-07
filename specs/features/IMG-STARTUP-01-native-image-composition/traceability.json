@@ -1,0 +1,28 @@
+{
+  "feature": "IMG-STARTUP-01",
+  "spec": "specs/features/IMG-STARTUP-01-native-image-composition/spec.md",
+  "requirements": [
+    {
+      "id": "IMGSTARTUP01-001",
+      "tests": [
+        "tests/contracts/test_native_image_startup.py::test_exact_cli_native_voice_story_images_enters_and_closes_lifespan",
+        "tests/contracts/test_native_image_startup.py::test_exact_cli_explicit_legacy_voice_story_images_still_enters_lifespan"
+      ]
+    },
+    {
+      "id": "IMGSTARTUP01-002",
+      "tests": [
+        "tests/contracts/test_native_image_startup.py::test_exact_cli_native_image_chain_requires_pixels_and_renderer_receipt"
+      ]
+    },
+    {
+      "id": "IMGSTARTUP01-003",
+      "tests": [
+        "tests/contracts/test_native_image_startup.py::test_exact_cli_missing_consent_prevents_provider_allocation",
+        "tests/contracts/test_native_image_startup.py::test_exact_cli_missing_custom_brief_keeps_tool_unavailable",
+        "tests/contracts/test_native_image_startup.py::test_exact_cli_api_requires_both_explicit_spend_consents",
+        "tests/contracts/test_native_image_startup.py::test_non_native_image_composition_still_requires_optional_intent_review"
+      ]
+    }
+  ]
+}

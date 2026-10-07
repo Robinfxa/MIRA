@@ -1,0 +1,30 @@
+{
+  "feature": "CODEX-STARTUP-NOTIFICATIONS",
+  "spec": "specs/features/CODEX-startup-notifications/spec.md",
+  "requirements": [
+    {
+      "id": "CODEXSTARTUPNOTIFICATIONS-001",
+      "tests": [
+        "tests/contracts/test_runtime_admission_preparation.py::test_pinned_startup_warnings_are_discarded_before_mandatory_config_check",
+        "tests/contracts/test_runtime_admission_preparation.py::test_startup_warning_never_overrides_unsafe_effective_configuration",
+        "tests/contracts/test_runtime_admission_preparation.py::test_warning_before_initialize_response_remains_forbidden",
+        "tests/contracts/test_runtime_admission_preparation.py::test_config_rejection_reports_exact_safe_check_without_values",
+        "tests/contracts/test_runtime_admission_preparation.py::test_inactive_optional_instruction_and_credential_values_do_not_block_metadata",
+        "tests/contracts/test_runtime_admission_preparation.py::test_nonempty_or_malformed_instruction_and_credential_values_remain_rejected"
+      ]
+    },
+    {
+      "id": "CODEXSTARTUPNOTIFICATIONS-002",
+      "tests": [
+        "tests/contracts/test_runtime_admission_preparation.py::test_startup_notifications_fail_closed_on_requests_unknown_and_schema_changes"
+      ]
+    },
+    {
+      "id": "CODEXSTARTUPNOTIFICATIONS-003",
+      "tests": [
+        "tests/contracts/test_runtime_admission_preparation.py::test_startup_notification_count_and_byte_budgets_are_exact_and_global",
+        "tests/contracts/test_runtime_admission_preparation.py::test_accepted_warning_does_not_extend_deadline_or_mask_rpc_error"
+      ]
+    }
+  ]
+}

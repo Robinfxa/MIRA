@@ -1,0 +1,581 @@
+{
+  "schema": "mira.story-graph.v1",
+  "story_id": "mira.rain_window.unfinished_print",
+  "graph_id": "mira.rain_window.raincoat_invitation",
+  "revision": 1,
+  "status": "authored_candidate_not_runtime_implemented",
+  "initial_node": "cafe_chat",
+  "state_scope": "server_bound_session",
+  "future_nodes_are_history": false,
+  "scope_required_from_server": true,
+  "canonical_seed_ref": "mira.story-seed.v1.json",
+  "affect_lane_ref": "mira.story-seed.v1.json#/affect_lane",
+  "all_nodes_allow_chat": true,
+  "story_refusal_affects_relationship": false,
+  "effect_adapter_note": "target_capabilities是逻辑ID，须由能力目录映射到既有或新增且审核过的EffectProposal；不得把新字段直接塞进现行kind/value DTO。",
+  "jev_question": {
+    "id": "willing_for_presented_rain_offer",
+    "revision": 1,
+    "target": "当前已完整呈现的offer_id，其提议是Mira披上琥珀雨衣，在虚构咖啡馆窗边看雨。",
+    "question": "用户当前可靠输入是否明确愿意接受这个已呈现的提议？",
+    "answers": {
+      "YES": "明确愿意接受该提议",
+      "NO": "明确拒绝该提议",
+      "UNKNOWN": "未表态、歧义、答非所问或证据不足"
+    },
+    "no_score_changes": true,
+    "not_responsible_for": [
+      "资产合法性",
+      "服装是否ready",
+      "节点转移",
+      "执行许可",
+      "记忆是否成立"
+    ],
+    "transport_mapping": "由director映射到当前JEV简单选择与置信度策略，不引入私自放宽的阈值。"
+  },
+  "nodes": [
+    {
+      "id": "cafe_chat",
+      "revision": 1,
+      "preconditions": [],
+      "allowed_events": [
+        "chat",
+        "offer_rain",
+        "goodbye"
+      ],
+      "resource_refs": [],
+      "llm_response_goal": "自然回应当前话题；雨景相关时可以提出一次可拒绝邀请；闲聊可以长期停留。",
+      "exit_conditions": [
+        "offer_rain已完整呈现后才进入await_rain_choice",
+        "明确告别时结束会话"
+      ],
+      "presentation_condition": null,
+      "future_node_not_memory": true
+    },
+    {
+      "id": "await_rain_choice",
+      "revision": 1,
+      "preconditions": [
+        "offer_rain的完整呈现回执有效",
+        "pending_offer_id对应该邀请"
+      ],
+      "allowed_events": [
+        "chat",
+        "classify_rain_choice",
+        "goodbye",
+        "stop"
+      ],
+      "resource_refs": [],
+      "llm_response_goal": "接住当前回应；不催答，未知时至多一次简短澄清，不自动重复邀请。",
+      "exit_conditions": [
+        "YES且资源ready并获当前许可后进入raincoat_pending",
+        "NO回cafe_chat并关闭邀请",
+        "UNKNOWN保持当前节点",
+        "asset_unavailable回cafe_chat并关闭本次邀请",
+        "Stop回cafe_chat且意图suspended"
+      ],
+      "presentation_condition": "进入本节点只证明邀请在软件端呈现",
+      "future_node_not_memory": true
+    },
+    {
+      "id": "raincoat_pending",
+      "revision": 1,
+      "preconditions": [
+        "当前同一offer得到YES",
+        "完整雨衣变体组合ready",
+        "当前活动和许可有效"
+      ],
+      "allowed_events": [
+        "chat",
+        "wardrobe_receipt",
+        "wardrobe_failure",
+        "stop",
+        "new_input",
+        "goodbye"
+      ],
+      "resource_refs": [
+        "mira.outfit.amber_raincoat"
+      ],
+      "llm_response_goal": "只准备当前换雨衣cue；未获完成回执前不说换好了，不抢先执行下一剧情。",
+      "exit_conditions": [
+        "可信服装完成回执进入rain_view",
+        "失败或Stop回cafe_chat并保留实际服装",
+        "新可靠输入先取消尚未完成服装cue，回cafe_chat；再按新输入处理闲聊，已呈现服装保持"
+      ],
+      "presentation_condition": "qualified wardrobe receipt才证明软件服装状态改变",
+      "future_node_not_memory": true
+    },
+    {
+      "id": "rain_view",
+      "revision": 1,
+      "preconditions": [
+        "本次amber_raincoat有效呈现回执已提交"
+      ],
+      "allowed_events": [
+        "chat",
+        "look_at_rain",
+        "quiet",
+        "return_to_cafe",
+        "stop",
+        "goodbye"
+      ],
+      "resource_refs": [
+        "mira.outfit.amber_raincoat",
+        "mira.pose.look_at_rain",
+        "cafe.scene.rain_window"
+      ],
+      "llm_response_goal": "跟随用户当前话题；愿意继续看雨时用一个具体视觉观察，不强加旅行、亲密或外出。",
+      "exit_conditions": [
+        "明确回到原话题可留本节点或回cafe_chat",
+        "明确告别结束会话"
+      ],
+      "presentation_condition": "看雨pose和scene各自回执；不得用换衣回执代替雨窗回执",
+      "future_node_not_memory": true
+    }
+  ],
+  "transitions": [
+    {
+      "id": "t.offer",
+      "revision": 1,
+      "from": [
+        "cafe_chat"
+      ],
+      "event": "offer_rain",
+      "llm_proposal": "邀请文本候选",
+      "target_capabilities": [],
+      "to_on_admission": "cafe_chat",
+      "to_on_receipt": "await_rain_choice",
+      "required_receipt": "complete_offer_cue_presentation",
+      "dialogue_example": "雨变细了。我想披上那件琥珀色雨衣，在窗边看一会儿。你想一起看吗？",
+      "memory_success": null,
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "topic_relevant",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "offer_allowed",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_permission",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_epoch",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "雨景/雨衣话题相关或用户主动提出",
+        "没有已拒绝/已挂起的同题邀请，除非用户明确重开",
+        "当前允许回复"
+      ]
+    },
+    {
+      "id": "t.yes",
+      "revision": 1,
+      "from": [
+        "await_rain_choice"
+      ],
+      "event": "classify_rain_choice",
+      "llm_proposal": "换雨衣的当轮短cue与外套效果候选",
+      "target_capabilities": [
+        "mira.outfit.amber_raincoat"
+      ],
+      "to_on_admission": "raincoat_pending",
+      "to_on_receipt": "rain_view",
+      "required_receipt": "trusted_current_wardrobe_completion",
+      "dialogue_example": "好，我把雨衣披上。我们就在窗边看。",
+      "memory_success": "episode.wardrobe_change",
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "choice",
+            "operator": "eq",
+            "value": "YES"
+          },
+          {
+            "fact": "raincoat_asset_ready",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "offer_id_matches",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_permission",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_epoch",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "choice==YES",
+        "raincoat_asset_ready==true",
+        "offer_id_matches==true",
+        "current_permission==true",
+        "current_epoch==true"
+      ]
+    },
+    {
+      "id": "t.no",
+      "revision": 1,
+      "from": [
+        "await_rain_choice"
+      ],
+      "event": "classify_rain_choice",
+      "llm_proposal": "接住拒绝并接着闲聊",
+      "target_capabilities": [],
+      "to_on_admission": "cafe_chat",
+      "to_on_receipt": null,
+      "required_receipt": null,
+      "dialogue_example": "那就留在这里。继续聊也很好。",
+      "memory_success": null,
+      "intent_result": "declined",
+      "affect_delta": "none_from_choice",
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "choice",
+            "operator": "eq",
+            "value": "NO"
+          },
+          {
+            "fact": "offer_id_matches",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_epoch",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "choice==NO"
+      ]
+    },
+    {
+      "id": "t.unknown",
+      "revision": 1,
+      "from": [
+        "await_rain_choice"
+      ],
+      "event": "classify_rain_choice",
+      "llm_proposal": "回应实际内容，必要时澄清一次",
+      "target_capabilities": [],
+      "to_on_admission": "await_rain_choice",
+      "to_on_receipt": null,
+      "required_receipt": null,
+      "dialogue_example": "你是想继续聊雨，还是想看我换上雨衣？",
+      "memory_success": null,
+      "clarification_limit_per_offer": 1,
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "choice",
+            "operator": "eq",
+            "value": "UNKNOWN"
+          },
+          {
+            "fact": "offer_id_matches",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_epoch",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "choice==UNKNOWN"
+      ]
+    },
+    {
+      "id": "t.unavailable",
+      "revision": 1,
+      "from": [
+        "await_rain_choice"
+      ],
+      "event": "classify_rain_choice",
+      "llm_proposal": "简短说明切换未发生，继续室内话题",
+      "target_capabilities": [],
+      "to_on_admission": "cafe_chat",
+      "to_on_receipt": null,
+      "required_receipt": null,
+      "dialogue_example": "雨衣暂时没能切换出来，我们先留在这里看雨吧。",
+      "memory_success": null,
+      "intent_result": "closed_capability_unavailable",
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "choice",
+            "operator": "eq",
+            "value": "YES"
+          },
+          {
+            "fact": "raincoat_asset_ready",
+            "operator": "eq",
+            "value": false
+          },
+          {
+            "fact": "offer_id_matches",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_epoch",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "choice==YES",
+        "raincoat_asset_ready==false"
+      ]
+    },
+    {
+      "id": "t.stop",
+      "revision": 1,
+      "from": [
+        "await_rain_choice",
+        "raincoat_pending"
+      ],
+      "event": "stop",
+      "llm_proposal": null,
+      "target_capabilities": [],
+      "to_on_admission": "cafe_chat",
+      "to_on_receipt": null,
+      "required_receipt": null,
+      "dialogue_example": null,
+      "memory_success": null,
+      "intent_result": "suspended",
+      "preserve_actual_presented_state": true,
+      "reentry_requires_new_explicit_request": true,
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "stop_requested",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "always_local_first"
+      ]
+    },
+    {
+      "id": "t.window",
+      "revision": 1,
+      "from": [
+        "rain_view"
+      ],
+      "event": "look_at_rain",
+      "llm_proposal": "一个观察与本轮雨窗动作",
+      "target_capabilities": [
+        "mira.pose.look_at_rain",
+        "cafe.scene.rain_window"
+      ],
+      "to_on_admission": "rain_view",
+      "to_on_receipt": "rain_view",
+      "required_receipt": "independent_scene_and_pose_receipts",
+      "dialogue_example": "灯映在水上，颜色比刚才散得更开了。",
+      "memory_success": "episode.rain_window",
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "rain_view_request_active",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "window_assets_ready",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_permission",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "current_epoch",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "fact": "no_newer_input",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "current_input_wants_rain_or_original_live_offer_still_applies",
+        "current_permission",
+        "current_epoch",
+        "no_new_topic_or_stop"
+      ]
+    },
+    {
+      "id": "t.chat",
+      "revision": 1,
+      "from": [
+        "cafe_chat",
+        "await_rain_choice",
+        "rain_view"
+      ],
+      "event": "chat",
+      "llm_proposal": "自由闲聊与独立情绪候选",
+      "target_capabilities": [],
+      "to_on_admission": "same",
+      "to_on_receipt": "same",
+      "required_receipt": null,
+      "dialogue_example": null,
+      "memory_success": null,
+      "story_progress_delta": 0,
+      "relationship_delta": 0,
+      "pending_output_rule": "从raincoat_pending收到新可靠输入时先用t.new_input_suspend取消旧cue，随后在cafe_chat处理chat。",
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "reliable_current_input",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "reliable_current_input"
+      ]
+    },
+    {
+      "id": "t.new_input_suspend",
+      "revision": 1,
+      "from": [
+        "raincoat_pending"
+      ],
+      "event": "new_input",
+      "llm_proposal": null,
+      "target_capabilities": [],
+      "to_on_admission": "cafe_chat",
+      "to_on_receipt": null,
+      "required_receipt": null,
+      "dialogue_example": null,
+      "memory_success": null,
+      "intent_result": "suspended",
+      "preserve_actual_presented_state": true,
+      "then": "process_current_input_as_chat_or_fresh_explicit_request",
+      "guard_rules": {
+        "all": [
+          {
+            "fact": "reliable_new_input",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "guard_notes": [
+        "reliable_new_input"
+      ]
+    }
+  ],
+  "receipt_gate": {
+    "identity_fields": [
+      "session_binding",
+      "story_id",
+      "graph_revision",
+      "node_revision",
+      "offer_id",
+      "transition_id",
+      "activity_seq",
+      "output_epoch",
+      "effect_id",
+      "asset_revision"
+    ],
+    "all_must_match_current_or_verified_historical_context": true,
+    "generation_or_approval_is_receipt": false,
+    "late_old_effect_may_execute": false,
+    "late_verified_earlier_receipt": "可以幂等补录真正已发生的软件呈现事实；不复活effect、不自动推进当前node。",
+    "episode_output": "qualified_candidate_only_after_trusted_evidence",
+    "durable_write": "requires_separate_explicit_persistence_consent",
+    "perception_claim": "software_presented_only_not_physically_seen_or_understood",
+    "qualification_rules": {
+      "all": [
+        {
+          "fact": "receipt_authentic",
+          "operator": "eq",
+          "value": true
+        },
+        {
+          "fact": "effect_identity_matches",
+          "operator": "eq",
+          "value": true
+        },
+        {
+          "fact": "asset_revision_matches",
+          "operator": "eq",
+          "value": true
+        },
+        {
+          "fact": "presentation_completed",
+          "operator": "eq",
+          "value": true
+        },
+        {
+          "fact": "receipt_not_already_applied",
+          "operator": "eq",
+          "value": true
+        }
+      ]
+    },
+    "history_only_when_stale": true
+  },
+  "affect_rule": "仅正常闲聊也运行独立affect lane；NO、未知、停留、Stop不扣关系分。emotion×phase×outfit能力在执行前逐项检查。",
+  "guard_fact_ownership": {
+    "application": [
+      "offer_allowed",
+      "offer_id_matches",
+      "current_permission",
+      "current_epoch",
+      "stop_requested",
+      "reliable_current_input",
+      "reliable_new_input",
+      "rain_view_request_active",
+      "no_newer_input"
+    ],
+    "capability_registry": [
+      "raincoat_asset_ready",
+      "window_assets_ready"
+    ],
+    "review_observation": [
+      "choice",
+      "topic_relevant"
+    ],
+    "llm_authority": [],
+    "missing_fact_policy": "guard_fails_closed_no_story_transition",
+    "operator_allowlist": [
+      "eq"
+    ],
+    "unknown_review_value": "choice=UNKNOWN;topic_relevant=false unless YES reliably established"
+  }
+}

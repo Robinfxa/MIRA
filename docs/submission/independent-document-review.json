@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "scope": "Documentation and public source restoration only",
+  "independent_audit_original_sha256": "550edf8d4c143efa22ab7ca02dbdc5d3dfe803546d3c5d3424e4c35072fa16f6",
+  "documentation_files": 8,
+  "runtime_files_unchanged": 324,
+  "current_offline_illustrations": 4,
+  "historical_browser_screenshot": 1,
+  "shell_syntax_blocks": 12,
+  "live_commands_parser_only": 3,
+  "external_provider_calls": 0,
+  "new_full_runtime_suite": false,
+  "recorded_video_included": false,
+  "pending": [
+    "final 3–5 minute recording",
+    "same-version desktop and mobile voice acceptance",
+    "reviewer-accessible latest source repository",
+    "author-confirmed effective work hours",
+    "fresh installation timing"
+  ]
+}
