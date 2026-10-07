@@ -3,8 +3,8 @@
   "date_utc": "2026-10-07",
   "archive_root": "MIRA-20261007-submission-project",
   "note": "Manifest excludes itself and SOURCE-SHA256SUMS.txt; all other packaged files are listed. Historical manifests retain their original version scope.",
-  "file_count": 1813,
-  "total_bytes": 70471963,
+  "file_count": 1769,
+  "total_bytes": 68180569,
   "files": [
     {
       "path": ".editorconfig",
@@ -22,18 +22,6 @@
       "path": ".env.example",
       "size": 3083,
       "sha256": "db55a9fe113a44dc029035d717471656d7d81463a4d048926ece28ba75b8bc56",
-      "mode": 420
-    },
-    {
-      "path": ".github/pull_request_template.md",
-      "size": 885,
-      "sha256": "b5bbc02d2d497753c38dc709435310cc882d43a2251eb7040bb7e7a1ffd4797f",
-      "mode": 420
-    },
-    {
-      "path": ".github/workflows/ci.yml",
-      "size": 3309,
-      "sha256": "cb2a76261f49b995c6d18179fd7bb98bb3c5686dc32a4bee1ed236c0a2c39df8",
       "mode": 420
     },
     {
@@ -67,69 +55,9 @@
       "mode": 420
     },
     {
-      "path": "BACKUP-README-20261003T100400Z.md",
-      "size": 2735,
-      "sha256": "73eb343b69d395266fb00350eba2f6111ebb324bca86d77baaf6ff6e0c8da1aa",
-      "mode": 420
-    },
-    {
-      "path": "BACKUP-README-20261003T1104Z.md",
-      "size": 3382,
-      "sha256": "1214d7b792e1a83a1b352b7f0bc5cbdbcfb688885812dff1d169c588015508b5",
-      "mode": 420
-    },
-    {
-      "path": "BACKUP-README-20261003T1158Z.md",
-      "size": 4462,
-      "sha256": "d6a5229f74897c0419bed23f70c3e6899d5356f33bcfc4239a085e33d59ab538",
-      "mode": 420
-    },
-    {
-      "path": "BACKUP-README-20261003T1236Z.md",
-      "size": 4698,
-      "sha256": "6057d18772845829d9b1b4edb2d9b7ab0caddf96a977a70929610205684c03df",
-      "mode": 420
-    },
-    {
-      "path": "BACKUP-README-20261003T1256Z.md",
-      "size": 5680,
-      "sha256": "2642b070fd006e6045d4734ff903a11a4d48ee299ca8c9600652ed449d9cd117",
-      "mode": 420
-    },
-    {
-      "path": "BACKUP-README-20261003T1448Z.md",
-      "size": 4465,
-      "sha256": "2777b4efe8f498bcf3592391e3c9a4990c8c57445cd832144d03a67404afe32c",
-      "mode": 420
-    },
-    {
-      "path": "BACKUP-README-20261003T1756Z.md",
-      "size": 3382,
-      "sha256": "ea521bc878c452e8700fd5920a68d6639497e63944108cd5e5ec521581888a43",
-      "mode": 420
-    },
-    {
-      "path": "BACKUP-README-20261003T1843Z.md",
-      "size": 4886,
-      "sha256": "ec0fee3013c11c04d54be2e498a26c7804807ac033ebe20f692f17d528a77699",
-      "mode": 420
-    },
-    {
-      "path": "BACKUP-README-20261003T1955Z.md",
-      "size": 4837,
-      "sha256": "9d58f2ec5a2e7b88f79fc0d422344fc0e53932e5d3e5d7f87b0587eb7c3c1866",
-      "mode": 420
-    },
-    {
       "path": "CHANGELOG.md",
       "size": 2316,
       "sha256": "5f5682862a46b59d8e82db67b8f50b8c0ce0f0437bdc6c8923d8c710f21b5232",
-      "mode": 420
-    },
-    {
-      "path": "CHECKPOINTS.md",
-      "size": 645,
-      "sha256": "220cbd9e2d52d96bc2567e1668c7011fbd5bf198ee3ad86449aeb8cffff3166a",
       "mode": 420
     },
     {
@@ -145,120 +73,6 @@
       "mode": 420
     },
     {
-      "path": "KNOWN-GAPS-20261003T1158Z.md",
-      "size": 4032,
-      "sha256": "ff84e7c0d931f7c92983dfe14ee24e2e2e93712ff495b8e3e01eb4100ce0426d",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-GAPS-20261003T1236Z.md",
-      "size": 5871,
-      "sha256": "62cff63b3ca804182f938dfca3fc8cd2a0af1447d200d361594eb5d407b438a7",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-GAPS-20261003T1256Z.md",
-      "size": 7304,
-      "sha256": "56d323f12b5bc1aa7497d0d0cb3d45fb4cc4c4b7a79337d8f2b285d4a168a759",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-GAPS-20261003T1448Z.md",
-      "size": 4821,
-      "sha256": "b6b0203a16fabee9eb6bfa16e4639d0803be42bc5f7e691c5db48004b25c945c",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-ISSUE-ADDENDUM-20261003T1256Z.md",
-      "size": 1928,
-      "sha256": "d3a8751ff96788aca8f8a979737c016c9292fd059fce9e86b32c5d270a0b76ea",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-ISSUE-ADDENDUM-20261003T1256Z.md.sha256",
-      "size": 105,
-      "sha256": "b52a3da139296dae26e81c585aad1213fbd58fab5b95cdcb76afcf4511acb43f",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-ISSUE-ADDENDUM-20261003T1448Z.md",
-      "size": 1897,
-      "sha256": "372dc556cf61a44022dce47cd8f7c716066e4c37c964533ce29606bb6addcdac",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-ISSUE-ADDENDUM-20261003T1448Z.md.sha256",
-      "size": 105,
-      "sha256": "a8dfc5d52254cacfcc9a1718be7ba770b1f9aa97f0e567acd5874303935a4e5c",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-ISSUES-20261003T1104Z.md",
-      "size": 1640,
-      "sha256": "673421c10cb686b4225aa0e966c5e864ec64b88b61224502e26bc6ded070c641",
-      "mode": 420
-    },
-    {
-      "path": "KNOWN-ISSUES-SHA256-20261003T1104Z.txt",
-      "size": 97,
-      "sha256": "19f8095158de6193e1e6c1b61531dfec02d753af75a4d913b4e5f2dfc670694e",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T100400Z.json",
-      "size": 223713,
-      "sha256": "1fea7aec5b8b7b124f0b9ef289155dd1a09b8dded2b2f47b1e6defef1915737b",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T1104Z.json",
-      "size": 177087,
-      "sha256": "4151a53cffee8cd67af35981f24c89320ca509a13d0ad46188966bfc1db316c4",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T1158Z.json",
-      "size": 203182,
-      "sha256": "17188b077d0ff9e7b41fd6d96cb7aadd7ebb0179ad9075cfb523bd051ffbad0b",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T1236Z.json",
-      "size": 209602,
-      "sha256": "1a6b27aaef70f4fc9bf3d296502ad2cbcc617b8775b5f65d4011a7cdb6a229ec",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T1256Z.json",
-      "size": 229726,
-      "sha256": "426c1709b755ede420ac662d81887de49d2c15c113735523df9094e1643c4ebf",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T1448Z.json",
-      "size": 246446,
-      "sha256": "5b69dea67f6fae233423f68de998c34af29d03ecd09fcee71f09aad3da5e04a3",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T1756Z.json",
-      "size": 154937,
-      "sha256": "5f3613dd9e50c27ed81b771e7f28aba2af0e4444f70bec586468ce042cd91b91",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T1843Z.json",
-      "size": 181067,
-      "sha256": "2bcee14e11e8ce1e9150a7a36a08da7b91af7db99352cbbba9ace4c3e99fe744",
-      "mode": 420
-    },
-    {
-      "path": "MIRA-CHECKPOINT-MANIFEST-20261003T1955Z.json",
-      "size": 184988,
-      "sha256": "7b797f8c17c1b014457cbcda3064fbe94aeca9efcedafc0fc49777094c807dee",
-      "mode": 420
-    },
-    {
       "path": "Makefile",
       "size": 341,
       "sha256": "153cecba1bc2d1044eb4478a2eab0b447c86fa22473ea58c1298628bb5d961d7",
@@ -268,42 +82,6 @@
       "path": "README.md",
       "size": 23856,
       "sha256": "7f70a5a7cfbad37beb1af4bc505db5806052389019b1cdc8aa66537966c1a257",
-      "mode": 420
-    },
-    {
-      "path": "RELEASE-EVIDENCE-20261003T1158Z.json",
-      "size": 82149,
-      "sha256": "d42a091a1ced8e57ab0bcd450c98fbce66552a70b584702bfb8bea212fa2fc7d",
-      "mode": 420
-    },
-    {
-      "path": "RELEASE-EVIDENCE-20261003T1236Z.json",
-      "size": 84894,
-      "sha256": "53e30116758487b5c1a8387879c1de044b79bf8c4e5dd4a257522e290c93effc",
-      "mode": 420
-    },
-    {
-      "path": "RELEASE-EVIDENCE-20261003T1256Z.json",
-      "size": 93497,
-      "sha256": "17421aeee6041c7fd7385d1efbabfd3320230d2b47c5a450562dde5bca00b557",
-      "mode": 420
-    },
-    {
-      "path": "RELEASE-EVIDENCE-20261003T1448Z.json",
-      "size": 94245,
-      "sha256": "bfeb3eaa9405289f69946597055f97585bf57c01000c37417e00cb616e504315",
-      "mode": 420
-    },
-    {
-      "path": "RESTORE-INDEPENDENT-SIGNOFF-20261003T1448Z.md",
-      "size": 2604,
-      "sha256": "657f5431cd20106da068023efced910166b527555a574028189b9bae115c5f2c",
-      "mode": 420
-    },
-    {
-      "path": "RESTORE-SAFETY-NOTICE-20261003T1448Z.md",
-      "size": 1945,
-      "sha256": "308f5bc7285f8f29d048e0b0dc849e79d7443453543a1d857ba3a25c93623907",
       "mode": 420
     },
     {
@@ -6172,48 +5950,6 @@
       "path": "requirements/runtime.lock",
       "size": 765,
       "sha256": "d89b4cc21bf3e954635fbe8c9cd0388f210433e7e8d51e751e35adfd793fdb8a",
-      "mode": 420
-    },
-    {
-      "path": "restore-checkpoint-20261003T1158Z.py",
-      "size": 1534,
-      "sha256": "18ef32d3792f2d9f9ef67e492dd245843ab7f600717d91b6a6aa5e0d7e7e5f42",
-      "mode": 420
-    },
-    {
-      "path": "restore-checkpoint-20261003T1236Z.py",
-      "size": 1534,
-      "sha256": "18ef32d3792f2d9f9ef67e492dd245843ab7f600717d91b6a6aa5e0d7e7e5f42",
-      "mode": 420
-    },
-    {
-      "path": "restore-checkpoint-20261003T1256Z.py",
-      "size": 1534,
-      "sha256": "18ef32d3792f2d9f9ef67e492dd245843ab7f600717d91b6a6aa5e0d7e7e5f42",
-      "mode": 420
-    },
-    {
-      "path": "restore-checkpoint-explicit-20261003T1448Z.py",
-      "size": 11386,
-      "sha256": "3fdb4eeebf61f608401cdf4e17ef5be2f56f5d811eeda9f1d3b704d7ad8517aa",
-      "mode": 420
-    },
-    {
-      "path": "restore-checkpoint-explicit-20261003T1756Z.py",
-      "size": 11386,
-      "sha256": "3fdb4eeebf61f608401cdf4e17ef5be2f56f5d811eeda9f1d3b704d7ad8517aa",
-      "mode": 420
-    },
-    {
-      "path": "restore-checkpoint-explicit-20261003T1843Z.py",
-      "size": 11386,
-      "sha256": "3fdb4eeebf61f608401cdf4e17ef5be2f56f5d811eeda9f1d3b704d7ad8517aa",
-      "mode": 420
-    },
-    {
-      "path": "restore-checkpoint-explicit-20261003T1955Z.py",
-      "size": 11386,
-      "sha256": "3fdb4eeebf61f608401cdf4e17ef5be2f56f5d811eeda9f1d3b704d7ad8517aa",
       "mode": 420
     },
     {
