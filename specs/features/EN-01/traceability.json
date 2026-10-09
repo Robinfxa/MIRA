@@ -1,0 +1,32 @@
+{
+  "feature": "EN01",
+  "spec": "specs/features/EN-01/spec.md",
+  "requirements": [
+    {
+      "id": "EN01-001",
+      "tests": [
+        "tests/contracts/test_english_prompts.py::test_english_is_default_in_every_generation_prompt"
+      ]
+    },
+    {
+      "id": "EN01-002",
+      "tests": [
+        "tests/contracts/test_english_prompts.py::test_english_seed_is_exactly_bound_and_keeps_fiction_boundaries",
+        "tests/contracts/test_english_prompts.py::test_waiting_role_binding_uses_reviewed_english_canon_digest",
+        "tests/contracts/test_english_prompts.py::test_loaded_english_waiting_canon_keeps_role_guard_closed_on_mutation"
+      ]
+    },
+    {
+      "id": "EN01-003",
+      "tests": [
+        "tests/contracts/test_english_prompts.py::test_english_chapter_matches_runtime_and_retains_wire_role"
+      ]
+    },
+    {
+      "id": "EN01-004",
+      "tests": [
+        "tests/contracts/test_english_prompts.py::test_english_homepage_exposes_runtime_sources_and_chinese_backup"
+      ]
+    }
+  ]
+}

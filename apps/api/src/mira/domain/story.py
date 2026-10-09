@@ -204,7 +204,7 @@ class CanonEntry:
 def awaited_friend_claim_available(chapter: ChapterState, entries: tuple[CanonEntry, ...]) -> bool:
     """Only the selected, unchanged authored waiting fact resolves this fiction role.
 
-    The digest binds canon.waiting v3 text plus first-person text, not user data.
+    The digest binds the reviewed English canon.waiting v3 text and first-person text, not user data.
     A canon edit needs an explicit review/update of this narrow role binding.
     """
     if (type(chapter) is not ChapterState or chapter.source_hash != CHAPTER_SOURCE_HASH
@@ -223,7 +223,7 @@ def awaited_friend_claim_available(chapter: ChapterState, entries: tuple[CanonEn
         return False
     source = json.dumps({'text': entry.text, 'first_person_text': entry.first_person_text},
                         ensure_ascii=False, sort_keys=True, separators=(',', ':'))
-    return hashlib.sha256(source.encode()).hexdigest() == '87b8182b9f2d82ff60542bb7cfe532c33de6757b0de1011aec7c3d524fc967e7'
+    return hashlib.sha256(source.encode()).hexdigest() == '79d444a3a0f1b3b869e645063fb0b2b1fe0ffddf548839d1764de05f06769377'
 
 
 @dataclass(frozen=True, slots=True)
@@ -1812,3 +1812,4 @@ def valid_story_projection(projection: object) -> bool:
 
 def _is_sha256(value: object) -> bool:
     return isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
+

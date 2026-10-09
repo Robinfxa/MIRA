@@ -5,7 +5,7 @@
   "seed_source": {
     "path": "apps/api/src/mira/adapters/story/assets/mira.story-seed.v1.json",
     "seed_revision": 3,
-    "sha256": "50390ed34eb35076c370b615c6b7031b63c708b57214d61a39f1a52f689e3966"
+    "sha256": "70dc59ce094bccf5568895707a109878138b3bb9c354759f7be7074492c23feb"
   },
   "authorization_scope": "explicitly selected fictional character canon for the MIRA writing/integration task only",
   "not_user_data": true,

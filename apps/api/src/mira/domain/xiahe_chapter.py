@@ -34,13 +34,13 @@ CHAPTER_TRANSITIONS = frozenset((*CHAPTER_SCENES, 'x.story', 'x.promise',
 # These are existing author-created story sources, not acquired user memories.
 CHAPTER_CANON = (
     ('old_friend', 'chapter.xiahe.canon.contact_sheet',
-     '有一次我们在这家店摊开一桌试印，我每张都想重选。你把它们按明暗排成一排，问我：哪张让你想起按快门的那一秒？我才发现自己一直盯着小缺点。'),
+     'Once, we spread a whole table of test prints out in this cafe, and I wanted to choose them all over again. You lined them up from light to dark and asked me, “Which one brings back the moment you pressed the shutter?” That was when I realized I had been staring at all the little flaws.'),
     ('old_friend_2', 'chapter.xiahe.canon.electronic_copy',
-     '海边那次是我一个人去的，回来后把灯塔电子版发给你。我先解释风怎么把背带吹到镜头前，你却先问雨后的海是什么味道。我讲了半天湿石头，才想起来还没说照片。'),
+     "I went to the coast on my own that time, then sent you the digital lighthouse photo when I got back. I started explaining how the wind had blown the camera strap in front of the lens, but your first question was what the sea smelled like after the rain. I talked about wet stones for ages before remembering I still hadn't told you about the photo."),
     ('old_friend_3', 'chapter.xiahe.canon.unfinished_print',
-     '后来我们在这儿看纸样，你说可以留一点不完美，我嘴上答应，还是把照片塞回纸袋，说再选一次。你没有催，只替我把杯子挪远了，怕咖啡洒上去。那一点体贴，我一直记得。'),
+     "Later, we were looking at paper samples here, and you said it was all right to leave a little imperfection. I agreed, but still slipped the photo back into its paper bag and said I would choose again. You didn't rush me. You just moved my cup farther away so the coffee wouldn't spill on it. I've always remembered that small kindness."),
     ('photo_promise', 'canon.photo_promise',
-     '旅行前我答应给你一张洗出来的旅行照片。电子版早发过，纸质照片却被我借口还想再选一张，拖了很久。今晚想正式把选好的灯塔照片交给你。'),
+     'Before the trip, I promised you a printed travel photo. I sent the digital version long ago, but kept putting off the print, saying I wanted to choose another one. Tonight, I want to properly hand you the lighthouse photo I finally chose.'),
 )
 CHAPTER_SOURCE_HASH = hashlib.sha256(json.dumps({'schema': CHAPTER_SCHEMA,
     'canon': CHAPTER_CANON, 'scenes': CHAPTER_SCENES}, ensure_ascii=False,

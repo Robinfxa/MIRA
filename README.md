@@ -1,107 +1,115 @@
-# MIRA · 雨夜咖啡馆里的实时角色互动
+[English](README.md) | [简体中文](README.zh-CN.md)
 
-MIRA 是一位 26 岁的原创虚构摄影师。你可以在雨夜咖啡馆里和她打字、说话、打断回应，聊摄影、改变穿着与场景，再以老朋友「夏禾」的身份完成一次相认与赠照。角色和环境是体验主体，聊天框负责输入与辅助阅读。
+# MIRA · Real-time character interaction in a rainy-night café
 
-本项目选择**代码驱动的角色动画**作为核心多模态能力，同时提供固定灯塔照片和可选的后台图片生成。日常对话保持角色口吻；明确问到 AI 身份、现实存在或图片来源时，她应如实说明自己是扮演 MIRA 的 AI，以及素材的真实来源。
+MIRA is an original fictional photographer, age 26. In a rainy-night café, you can type or speak with her, interrupt her replies, talk about photography, change her outfit and surroundings, and take on the role of her old friend Xiahe (夏禾) for a reunion and a photo-giving scene. The character and setting are the heart of the experience; the chat panel supports input and reading.
 
-**当前交付：2026-10-07 项目提交源码 ZIP，已整合 2012 基线、图片审核、自然对话衔接和默认同 Wi-Fi 免配对三项修补，无需再运行补丁安装器。** 包内前端由同一冻结源码编译；依赖环境另行准备。用户已确认基本聊天、固定照片，以及一次生成图的显示与主动完成通知，但反馈没有绑定精确源码摘要。完整语音、真实打断、手机和同版本完整流程尚待实机验收，演示视频随邮件另附（用户已录制，本包未包含且未代验）。历史发布、后续影响面检查和本次打包核验的范围见[验证说明](docs/submission/VERIFICATION.md)；本次未重新执行完整发布套件，未发布新的在线演示或远端仓库。
+The project's core multimodal capability is **code-driven character animation**, complemented by a fixed lighthouse photo and optional background image generation. MIRA stays in character during everyday conversation. When explicitly asked about being an AI, existing in the real world, or where images come from, she should truthfully explain that she is an AI playing MIRA and identify the actual source of the assets.
 
-[先从这里开始](START-HERE.md) · [首次使用／升级](FIRST-RUN.md) · [提交前清单](docs/SUBMISSION-CHECKLIST.md) · [录制步骤](docs/development/DEMO-RECORDING.md) · [AI 使用说明](AI_USAGE.md) · [验证范围](docs/submission/VERIFICATION.md)
+## English branch: start with the character prompts
 
-## 可以体验什么
+**[Explore the English character and story prompts →](docs/prompts/README.md)**
 
-- **实时交流**：文字与显式开启的真实麦克风输入；声音、字幕和待机／倾听／思考／说话四态。
-- **可见表演**：平常、戒备、开心、娇羞四种神情；举起与放回相机；黑夹克、奶油色内搭、琥珀雨衣；相机头饰与星星发卡。
-- **场景变化**：咖啡馆与雨窗。相机动作只改变角色姿态，不会拍摄用户。
-- **夏禾章节**：陌生人交流 → 明确自认夏禾 → 共同挑试印的往事 → 赠照邀请 → 一次接受 → 屏内实际递照。预览照片与完成赠照分别记录。
-- **后台新图**：请求一张无人物、无动物的虚构环境／静物图后继续聊天；实际显示后才自然通知一次。可分别收起固定照片、取消生成任务或停止全部。
-- **无密钥体验**：本地 Mock 和带预录声音的固定排练，保留明确的离线标识。
+This branch provides an English README and English character prompts. It is not a complete localization of the application: existing UI labels, offline rehearsal triggers, and STT/TTS language settings have not all been translated or reconfigured. Chinese UI labels and exact rehearsal inputs are retained below where needed to operate the current application. For the runtime character instructions, see [`character_voice.py`](apps/api/src/mira/adapters/generation/codex_support/character_voice.py); the [story seed](apps/api/src/mira/adapters/story/assets/mira.story-seed.v1.json) and [Xiahe chapter](apps/api/src/mira/adapters/story/assets/xiahe-chapter.v1.json) define the authored story material. The [prompt guide](docs/prompts/README.md) explains how these sources fit together. The original Chinese project overview is preserved in [README.zh-CN.md](README.zh-CN.md).
 
-## 当前角色与开发画面
+**Source delivery baseline: the project submission source ZIP dated 2026-10-07, incorporating the 2012 baseline and three fixes for image review, natural conversational transitions, and default pairing-free access on the same Wi-Fi network. No separate patch installer is needed.** The frontend included in that package was compiled from the same frozen source; dependencies must be prepared separately. The user confirmed basic chat, the fixed photo, and one generated image with a proactive completion notification, but that feedback was not tied to an exact source digest. Full voice interaction, real interruption, mobile use, and the complete flow on the same version still require hands-on acceptance testing. The demo video is supplied separately by email: the user has recorded it, but it is not included in this package and has not been independently checked on their behalf. See the [verification notes](docs/submission/VERIFICATION.md) for the scope of historical releases, subsequent impact checks, and this packaging verification. The full release suite was not rerun for that package, and no new online demo or remote repository was published as part of that packaging work.
 
-下面前三张是**当前代码离线渲染示意**：使用同版角色组合函数和已有场景，经 SVG 光栅化制作。它们展示实际代码里的造型、服装和表情，没有模拟产品 UI，也不是浏览器／设备截图。
+[Start here](START-HERE.md) · [First run / upgrading](FIRST-RUN.md) · [Submission checklist](docs/SUBMISSION-CHECKLIST.md) · [Recording guide](docs/development/DEMO-RECORDING.md) · [AI usage notes](AI_USAGE.md) · [Verification scope](docs/submission/VERIFICATION.md)
 
-![当前代码离线渲染示意：MIRA 与雨夜咖啡馆](docs/images/01-current-stage.png)
+## What you can experience
 
-三套服装：黑夹克、奶油色内搭与琥珀雨衣。此图用于对照造型，不代替实际换装交互验收。
+- **Real-time conversation:** text and real microphone input that you explicitly enable, with voice, subtitles, and four states: idle, listening, thinking, and speaking.
+- **Visible performance:** neutral, guarded, happy, and shy expressions; raising and putting down the camera; a black jacket, cream inner top, and amber raincoat; a camera hair clip and a star hair clip.
+- **Changing scenes:** the café and a rain-streaked window. Camera actions change only the character's pose; they do not photograph the user.
+- **The Xiahe chapter:** talking as strangers → explicitly identifying yourself as Xiahe → recalling how you chose test prints together → an invitation to receive a photo → one acceptance → actually handing over the photo on screen. Previewing the photo and completing the gift are recorded separately.
+- **New images in the background:** request a fictional environment or still-life image with no people or animals, then keep chatting. MIRA gives one natural notification only after the image is actually displayed. You can separately hide the fixed photo, cancel a generation task, or stop everything.
+- **No-key experience:** a local Mock mode and a fixed rehearsal with prerecorded audio, both clearly marked as offline.
 
-![当前代码离线渲染的三套服装](docs/images/02-current-wardrobes.png)
+## Current character artwork and development views
 
-四种表情：平常、戒备、开心、娇羞。[四态固定帧](docs/images/04-current-phases.png)另供参考；静帧不能证明真实语音、口型同步或动画性能。
+The first three images below are **offline renders of the current code**. They use the character composition functions from the same version and existing scenes, rasterized from SVG. They show the designs, outfits, and expressions present in the actual code. They are neither simulated product UI nor browser/device screenshots.
 
-![当前代码离线渲染的四种表情](docs/images/03-current-emotions.png)
+![Offline render of the current code: MIRA in the rainy-night café](docs/images/01-current-stage.png)
 
-下面是**历史真实浏览器截图**：原文件名日期为 2026-10-04 22:54:22，时区与具体构建号未确认，使用旧 `static-pixi` 插画界面。仅裁去标签栏和开发者工具，保留“正在连接”与停止字幕；不代表本包当前运行界面或真实模型验收。
+Three outfits: black jacket, cream inner top, and amber raincoat. This image is a visual reference, not a substitute for testing the actual outfit-changing interaction.
 
-![历史 static-pixi 浏览器界面，保留正在连接与停止状态](docs/images/05-historical-browser.png)
+![Offline render of the three current outfits](docs/images/02-current-wardrobes.png)
 
-每张图的模式、尺寸、来源与摘要见[图片来源说明](docs/images/PROVENANCE.md)。
+Four expressions: neutral, guarded, happy, and shy. [Still frames of the four interaction states](docs/images/04-current-phases.png) are also available. Still images cannot establish that real voice, lip synchronization, or animation performance works.
 
-## 快速启动
+![Offline render of the four current expressions](docs/images/03-current-emotions.png)
 
-在完整源码根目录操作。需要 **Python 3.11–3.13（含 venv／ensurepip）、Node.js 22.12+ 和 npm**。macOS／Linux 使用下面的命令；Windows 尚未验证。
+The following is a **historical screenshot from a real browser**. Its original filename carries the timestamp 2026-10-04 22:54:22; the time zone and exact build are unconfirmed. It shows the older `static-pixi` illustrated interface. Only the tab bar and developer tools were cropped out; the “connecting” indication and stopped subtitles remain. It does not represent the current running interface in this package or acceptance testing with a real model.
 
-ZIP 包含完整源码、现有素材和同版预编译 `apps/web/dist`，不包含 `.venv` 或 `node_modules`。首次准备依赖时，下面的工具使用现有 `requirements/dev.lock` 和 `package-lock.json`，需要访问 Python／npm 包注册表：
+![Historical static-pixi browser interface, retaining the connecting and stopped states](docs/images/05-historical-browser.png)
+
+See [image provenance](docs/images/PROVENANCE.md) for each image's mode, dimensions, source, and digest.
+
+## Quick start
+
+Run these commands from the root of the complete source tree. You need **Python 3.11–3.13 (including venv/ensurepip), Node.js 22.12+, and npm**. The commands below are for macOS/Linux; Windows has not been verified.
+
+The ZIP includes the complete source, existing assets, and a precompiled `apps/web/dist` from the same version. It does not include `.venv` or `node_modules`. For initial dependency setup, the following tool uses the existing `requirements/dev.lock` and `package-lock.json` and requires access to the Python/npm package registries:
 
 ```sh
 sh scripts/start --setup
 ```
 
-安装完成后，使用常用入口：
+After installation, use the standard entry point:
 
 ```sh
 sh scripts/start
 ```
 
-首次选择 `1` 真实默认预设、`2` 无密钥离线排练或 `0` 取消，以后复用本目录的选择。之前选过离线时，用 `sh scripts/start --preset live` 切换真实预设。真实预设保留原 `gpt-6.1-sol`＋Fast、Google 语音、剧情、可选图片与 `gpt-6-luna` 图片审核；首次选择需确认其数据和用量范围。新用户缺少 `.env` 时只创建不含秘密的模板，已有文件不覆盖；登录、ADC 与缺项处理见[首次使用／升级](FIRST-RUN.md)。
+On the first run, choose `1` for the default live preset, `2` for the no-key offline rehearsal, or `0` to cancel. Later runs reuse the choice saved for this directory. If you previously chose offline mode, switch to the live preset with `sh scripts/start --preset live`. The live preset retains the original `gpt-6.1-sol` + Fast configuration, Google voice services, story mode, optional images, and `gpt-6-luna` image review. The first selection requires confirmation of the data-sharing and usage scope. If a new user has no `.env`, only a template without secrets is created; existing files are not overwritten. See [first run / upgrading](FIRST-RUN.md) for login, ADC, and missing-configuration handling.
 
-在运行服务的电脑打开 **http://127.0.0.1:8000**。端口占用时追加 `--port 8123`；按 Ctrl+C 结束服务。普通启动检查合同、构建前端，不自动安装依赖；只有 `--setup` 显式安装，完成后须另行启动。当前默认角色为 `code-native-review`；旧全帧插画可用 `sh scripts/start -- --character-renderer static-pixi` 显式选择。
+On the computer running the service, open **http://127.0.0.1:8000**. If the port is in use, append `--port 8123`; press Ctrl+C to stop the service. A normal launch checks contracts and builds the frontend, but does not install dependencies automatically. Only `--setup` explicitly installs them, and you must start the service separately afterward. The current default character renderer is `code-native-review`; explicitly select the older full-frame illustrations with `sh scripts/start -- --character-renderer static-pixi`.
 
-已有兼容 Python 环境可以复用，不要搬迁旧 `.venv`；新源码目录也需要自己的前端依赖入口：
+You may reuse an existing compatible Python environment, but do not relocate an old `.venv`. A new source directory also needs its own frontend dependency setup:
 
 ```sh
 sh scripts/start --python /absolute/path/to/ready/python
 ```
 
-需要无密钥声音与故障排练时：
+For no-key audio and failure rehearsals:
 
 ```sh
 sh scripts/start --preset offline
 ```
 
-页面显示 `OFFLINE · 离线排练`。可使用「你好」「不要拍我」「看照片」「照片里有什么」「讲讲旅途」「听雨」「暖灯」和 `/fail`。这条路线使用固定文本与预录 Flite/slt 英文合成声音；「按住演练输入」不录音，也不进行自由模型对话。原 Mock 入口 `sh scripts/dev` 与 `sh scripts/dev --profile rehearsal` 保留；Mock 同样不读取私密配置、不调用服务、不采集真实麦克风。
+The page displays `OFFLINE · 离线排练` (“offline rehearsal”). Supported inputs include `你好` (“hello”), `不要拍我` (“don't photograph me”), `看照片` (“show the photo”), `照片里有什么` (“what's in the photo?”), `讲讲旅途` (“tell me about the trip”), `听雨` (“listen to the rain”), `暖灯` (“warm light”), and `/fail`. This route uses fixed text and prerecorded English speech synthesized with Flite/slt. The “按住演练输入” (“hold for rehearsal input”) control does not record audio or initiate open-ended model conversation. The original Mock entry points, `sh scripts/dev` and `sh scripts/dev --profile rehearsal`, remain available. Mock mode likewise does not read private configuration, call services, or capture a real microphone.
 
-准备好依赖后可一条命令启动；全新电脑的安装耗时受工具和网络影响，**目前没有完整 ≤15 分钟安装计时证据**。
+Once dependencies are ready, one command starts the application. Installation time on a new computer depends on its tools and network. **There is currently no complete timing evidence demonstrating installation in 15 minutes or less.**
 
-## 连接真实模型、语音和图片
+## Connect real models, voice, and images
 
-常用入口 `sh scripts/start` 将选定的订阅预设交给现有 `tools/live_provider.py`，不依赖 Codex CLI。`--dry-run` 只查看最终参数，`--check` 只做本地预检；两者不启动真实服务。默认 `luna_tools` 是原生函数工具协议名称，实际对话模型由 `--model` 选择。正常路径不构造 JEV，也不需要 JEV 凭据。只有原 CLI 显式选择 `legacy_jev` 才使用旧兼容路线。
+The standard `sh scripts/start` entry point passes the selected subscription preset to the existing `tools/live_provider.py`; it does not depend on the Codex CLI. `--dry-run` only shows the final arguments, and `--check` only performs local preflight checks. Neither starts a live service. The default `luna_tools` is the name of the native function-tool protocol; `--model` selects the actual conversation model. The normal route does not construct JEV and requires no JEV credentials. Only explicitly selecting `legacy_jev` in the original CLI uses the legacy compatibility route.
 
-### 1. 复用配置和已有登录
+### 1. Reuse configuration and an existing login
 
-保留原有私密 `.env`、Google ADC 和 **MIRA 自己的登录**。下方沿用用户原命令：项目根 `.env`、现有 Google ADC 路径，以及默认 MIRA 登录存储，不新增 `--auth-store`。只有原命令已使用自定义 MIRA 登录存储时，才继续追加原有 `--auth-store` 路径。已有有效登录无需重新 OAuth，不要复制其他应用的认证或把整份 `.env` 用 `source` 导入开发环境。首次登录与新装／升级区别见[首次使用说明](FIRST-RUN.md)。
+Keep your existing private `.env`, Google ADC, and **MIRA's own login**. The examples below retain the user's original command setup: the project-root `.env`, the existing Google ADC path, and MIRA's default login store, without adding `--auth-store`. Keep an existing custom `--auth-store` path only if your original command already used one. A valid existing login does not need a new OAuth authorization. Do not copy another application's authentication or `source` an entire `.env` into your development environment. See the [first-run instructions](FIRST-RUN.md) for first-time login and the distinction between a fresh installation and an upgrade.
 
-新环境运行 `sh scripts/start --preset live` 并选择真实预设后，仅在 `.env` 不存在时复制公开 `.env.example`，以仅本人可读写权限保存；已有配置保持原样。模板带现有非秘密语音预设，Google 项目等缺项由本人填写。具体步骤见[首次使用说明](FIRST-RUN.md)和 [Google 语音配置](docs/development/GOOGLE_VOICE_CONFIGURATION.md)。配置与 ADC 须为本人拥有、仅本人可读写的普通文件。不要将密钥、认证文件、配对码或私人对话放进仓库、截图和录屏。
+In a new environment, running `sh scripts/start --preset live` and choosing the live preset copies the public `.env.example` only if `.env` does not exist, saving it with owner-only read/write permissions. Existing configuration is left intact. The template contains the existing non-secret voice preset; you must fill in missing items such as your Google project yourself. See the [first-run instructions](FIRST-RUN.md) and [Google voice configuration](docs/development/GOOGLE_VOICE_CONFIGURATION.md). Configuration and ADC must be regular files owned by you, with read/write access restricted to you. Do not put keys, authentication files, pairing codes, or private conversations in the repository, screenshots, or recordings.
 
-常用模型、Fast 等级、语音／剧情／图片开关和 ADC 路径可在 `.env` 的 `MIRAAPP_*` 字段中保存；模板已填原预设，自定义 `MIRAAPP_AUTH_STORE` 留空以保留默认登录存储。已有配置缺少这些字段时仍用原默认；明确 CLI 参数优先。预设不替代数据／用量授权，`--dry-run` 会读取这些预设来展示最终参数。字段和开关对照见[首次使用说明](FIRST-RUN.md)。
+Common model choices, the Fast tier, voice/story/image switches, and the ADC path can be saved in `.env` fields named `MIRAAPP_*`. The template already contains the original preset; leave custom `MIRAAPP_AUTH_STORE` empty to retain the default login store. Existing configurations without these fields continue to use the original defaults, and explicit CLI arguments take precedence. Presets do not replace authorization for data sharing or usage. `--dry-run` reads these presets to display the final arguments. See the [first-run instructions](FIRST-RUN.md) for the field-to-switch mapping.
 
-以下命令只检查 MIRA 的本机登录记录，不联网、不刷新，也不验证模型资格：
+The following command checks only MIRA's local login record. It does not connect to the network, refresh credentials, or verify model eligibility:
 
 ```sh
 .venv/bin/python tools/provider_login.py status
 ```
 
-仅当确实没有 MIRA 登录，并决定授予它独立访问时，运行下面的命令并按本机提示在官方页面完成授权：
+Only if MIRA genuinely has no login and you decide to grant it independent access, run the following command and follow the local instructions to authorize it on the official page:
 
 ```sh
 .venv/bin/python tools/provider_login.py login
 ```
 
-自选存储路径应放在子命令前，例如 `tools/provider_login.py --auth-store /absolute/private/mira-session.json status`。订阅路线使用非公开兼容后端，资格、配额与长期兼容性仍取决于服务方。
+Place a custom store path before the subcommand, for example `tools/provider_login.py --auth-store /absolute/private/mira-session.json status`. The subscription route uses a non-public compatibility backend. Eligibility, quota, and long-term compatibility remain subject to the service provider.
 
-### 2. 文字＋剧情
+### 2. Text + story
 
-下面沿用当前选定的 `gpt-6.1-sol` 和显式 Fast 等级。将示例路径替换为自己的现有私密配置；`--authorize-provider-data` 表示同意将对话和受控工具上下文发给所选 OpenAI 服务。
+The following retains the currently selected `gpt-6.1-sol` and explicit Fast tier. Replace the example path with your own existing private configuration. `--authorize-provider-data` means you agree to send conversation data and controlled tool context to the selected OpenAI service.
 
 ```sh
 PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
@@ -110,11 +118,11 @@ PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
   --authorize-provider-data --story
 ```
 
-去掉 `--story` 可关闭作者剧情。将同一命令的 `serve` 改为 `check`，只检查所选配置及声明，不发模型请求、不读取登录存储、不打开麦克风，也不证明账户可用。`live_provider.py` 没有 `--python` 参数；复用环境时直接替换命令开头的 `.venv/bin/python`。Fast 是请求等级，不是速度或供应商实际计量保证；可用 `--service-tier standard` 明确选择 Standard。
+Remove `--story` to disable the authored storyline. Replacing `serve` with `check` in the same command checks only the selected configuration and declarations. It does not send model requests, read the login store, open the microphone, or establish that the account works. `live_provider.py` has no `--python` argument; to reuse an environment, replace `.venv/bin/python` at the start of the command. Fast is a requested service tier, not a guarantee of speed or the provider's actual metering. Select Standard explicitly with `--service-tier standard`.
 
-### 3. 语音＋剧情＋可选新图
+### 3. Voice + story + optional new images
 
-`sh scripts/start` 的真实预设来自下面这条用户已经使用的完整命令，图片审核明确选择 `gpt-6-luna`。它使用项目根 `.env` 和已有 ADC；若原文件放在别处，用入口的 `--env-file`／`--adc-file` 指定，或修改下方对应路径。运行前，须已同意对话外传、Google 的音频／文字处理和服务用量，以及图片数据、订阅用量与本轮可变虚构描述的外传范围。**已有更小限额应继续保留。** 本次打包不读取或迁移这些文件，不重新授权，也不修改系统或证书设置。
+The live preset in `sh scripts/start` comes from the full command below, which the user has already used. It explicitly selects `gpt-6-luna` for image review. It uses the project-root `.env` and existing ADC. If your files are elsewhere, specify them with the entry point's `--env-file` / `--adc-file`, or change the corresponding paths below. Before running it, you must have agreed to external transmission of conversation data, Google's audio/text processing and service usage, and the scope of image data, subscription usage, and external transmission of variable fictional descriptions in this session. **Keep any lower limits you already have.** The packaging process did not read or migrate these files, reauthorize access, or change system or certificate settings.
 
 ```sh
 PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
@@ -129,17 +137,17 @@ PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
   --story-image-review-model gpt-6-luna
 ```
 
-这条命令沿用原默认：`luna_tools`、TTS 20 次／每次最多 30 秒、单 STT RPC 120 秒、图片 1 个任务，不扩大额度。图片的四个启用／授权开关是 `--story-images` 和三个 `--authorize-story-image-…` 参数。只要语音＋剧情时，去掉这四个开关及 `--story-image-review-model gpt-6-luna`。`--story` 本身不会开启生图。固定灯塔照片无需图片服务调用。
+This command retains the original defaults: `luna_tools`, 20 TTS requests at no more than 30 seconds each, 120 seconds per STT RPC, and one image task. It does not increase those limits. The four image-enabling/authorization switches are `--story-images` and the three `--authorize-story-image-…` arguments. For voice + story only, remove those four switches and `--story-image-review-model gpt-6-luna`. `--story` alone does not enable image generation. The fixed lighthouse photo requires no image-service call.
 
-在 Mac／服务电脑上仍打开 **http://127.0.0.1:8000** 使用原语音入口；手机打开终端打印的 `http://PRIVATE_IP:8000`，无需配对。普通 `serve` 默认只选唯一可确认的活动物理 Wi-Fi／以太网私网 IPv4；无法确定时打印 `WARNING` 并继续本机服务。需要指定地址时只追加 `--private-bind 192.168.2.13`（换成电脑当前地址）；只供本机则追加 `--loopback-only`，两者不要混用。
+On the Mac/service computer, continue to use the original voice entry point at **http://127.0.0.1:8000**. On a phone, open the `http://PRIVATE_IP:8000` address printed in the terminal; no pairing is required. By default, ordinary `serve` selects a private IPv4 address only when exactly one active physical Wi-Fi/Ethernet address can be confidently identified. If it cannot determine one, it prints a `WARNING` and continues serving locally. To specify an address, append only `--private-bind 192.168.2.13`, replacing it with the computer's current address. To serve only the local machine, append `--loopback-only`. Do not combine the two.
 
-使用常用入口时，网络及有限预算参数放在分隔符后，例如 `sh scripts/start -- --private-bind 192.168.2.13`、`sh scripts/start -- --loopback-only` 或 `sh scripts/start -- --tts-requests 10`。入口只透传支持的网络、有限预算与 renderer 参数；其他路线和额外授权继续使用原 CLI。
+With the standard entry point, put networking and finite-budget arguments after the separator, for example `sh scripts/start -- --private-bind 192.168.2.13`, `sh scripts/start -- --loopback-only`, or `sh scripts/start -- --tts-requests 10`. The entry point passes through only supported networking, finite-budget, and renderer arguments. Continue using the original CLI for other routes and additional authorizations.
 
-手机 HTTP 严格只支持文字及已启用的图片功能：后端没有该会话的 STT／TTS 端口，不能通过声音偏好或 WebSocket 开启语音。手机语音须使用已经配置并由两端信任的 HTTPS；原有 TLS 参数和语音授权见[设备指南](docs/development/PRIVATE-DEVICE-TESTING.md)。手动配对是可选路线，须配置 `--require-device-pairing`、`--device-pairing-dir` 和精确 `--device-origin`；HTTP 配对同样不支持语音。
+Phone access over HTTP strictly supports only text and enabled image features. The backend exposes no STT/TTS ports for that session, and voice cannot be enabled through sound preferences or WebSocket. Phone voice requires HTTPS that is already configured and trusted by both devices. See the [device guide](docs/development/PRIVATE-DEVICE-TESTING.md) for the existing TLS parameters and voice authorization. Manual pairing is optional and requires `--require-device-pairing`, `--device-pairing-dir`, and an exact `--device-origin`. HTTP pairing does not support voice either.
 
-图片路线接收已释放的虚构场景说明；独立读图路线接收规范化 PNG、绑定信息与审核标准。可变描述限 600 字符，只支持无人、无动物的环境或静物，不附加完整对话、私有记忆、参考图、URL 或文件路径。不要在描述里提供私人资料。订阅图片请求为 `gpt-image-2`／`auto`；默认独立读图模型跟随所选对话模型，也可显式用 `--story-image-review-model` 指定已获准的模型。
+The image-generation route receives fictional scene descriptions that have been cleared for release; the separate image-reading route receives a normalized PNG, binding information, and review criteria. Variable descriptions are limited to 600 characters and support only environments or still lifes without people or animals. They do not include the full conversation, private memories, reference images, URLs, or file paths. Do not put private information in descriptions. Subscription image requests use `gpt-image-2` / `auto`. By default, the independent image-reading model follows the selected conversation model; you can explicitly select an authorized model with `--story-image-review-model`.
 
-官方 API 是另行选择的路线，需要自己的 API 配置及计费同意；不会由订阅失败自动切入：
+The official API is a separately selected route requiring your own API configuration and billing consent. A failed subscription request does not automatically switch to it:
 
 ```sh
 PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
@@ -148,96 +156,96 @@ PYTHONPATH=apps/api/src .venv/bin/python tools/live_provider.py serve \
   --authorize-provider-data --authorize-api-billing --story
 ```
 
-### 当前默认预算
+### Current default budgets
 
-| 项目 | 默认与边界 |
+| Item | Default and boundaries |
 |---|---|
-| 订阅文字 | 本机模型请求次数、文字轮数不设上限；`--generation-requests N`、`--turns N` 可选有限值 |
-| 连续聆听／Google STT | 本机时长、发送、启动、续接和共享 STT 请求次数默认不设上限；单识别 RPC 最多 120 秒，可续接 |
-| Google TTS | 每进程 20 次，每次最多 30 秒 |
-| 新图 | 每进程 1 个任务；一次生成＋至多一次独立读图，不自动重试 |
-| 官方 API 文字 | 默认 20 次生成、20 轮 |
+| Subscription text | No local cap on model requests or text turns; optionally set finite limits with `--generation-requests N` and `--turns N` |
+| Continuous listening / Google STT | No default local caps on duration, sends, starts, continuations, or shared STT request counts; each recognition RPC lasts at most 120 seconds and may be continued |
+| Google TTS | 20 requests per process, at most 30 seconds each |
+| New images | One task per process: one generation + at most one independent image-reading call, with no automatic retry |
+| Official API text | Defaults to 20 generations and 20 turns |
 
-无需追加 `--local-unlimited`。本机不限不代表免费，也不取消供应商配额、超时、并发或队列限制。Google 持续识别会继续产生用量，直到用户停止或服务限制／故障终止。有限参数仍可通过 `--stt-requests`、`--listen-max-seconds`、`--listen-max-utterances` 等设置，完整选项见 `serve --help`。
+There is no need to add `--local-unlimited`. Having no local cap does not mean the service is free, nor does it remove provider quotas, timeouts, concurrency limits, or queue limits. Continuous Google recognition continues to incur usage until the user stops it or a service limit/failure ends it. You can still set finite limits with options such as `--stt-requests`, `--listen-max-seconds`, and `--listen-max-utterances`. See `serve --help` for the full list.
 
-普通聊天通常一次模型请求；工具轮至多一个工具和两次模型请求。图片实际显示后的完成通知还可能使用一次无工具模型续答及原有 TTS 额度。失败／取消不退有限计数；重启只重置本机计数，这些值不是账户账本或金额硬上限。
+Ordinary chat usually takes one model request. A tool turn uses at most one tool and two model requests. The completion notification after an image is actually displayed may also use one tool-free model continuation and the existing TTS allowance. Failures/cancellations do not refund finite counters. Restarting resets only local counters; these values are neither an account ledger nor hard monetary spending caps.
 
-同一可信私人网络内能访问地址的人可能消耗已启用的额度。所有入口共享同一个 provider runtime 和原有预算，**16 个独立临时浏览器会话是资源上限，不是 provider 请求额度，也不会按设备增加 TTS 20 次或图片 1 次的额度**。`--memory-db`、`--story-db`、`--conversation-db` 持久模式保留原本机单操作者及配对边界，不会默认开放 LAN；普通 `--story` 是临时剧情。
+Anyone on the same trusted private network who can reach the address may consume the enabled allowances. All entry points share one provider runtime and the original budgets. **The limit of 16 independent temporary browser sessions is a resource limit, not a provider-request allowance. Adding devices does not multiply the 20-request TTS allowance or the one-image allowance.** Persistent modes using `--memory-db`, `--story-db`, or `--conversation-db` retain the original local single-operator and pairing boundaries; they do not expose LAN access by default. Ordinary `--story` uses a temporary story session.
 
-## 语音和打断怎样工作
+## How voice and interruption work
 
-1. 用户在浏览器点击「开始自然对话」并允许麦克风，音频送到 Google STT；临时转写只作预览。
-2. 本地检测到有效说话后约 700 毫秒安静，进入有界收尾；合格最终转写才提交一轮。文字也可随时输入。
-3. 服务端生成完整候选与受控工具请求；确认可执行的内容交给前端。Google TTS 提供声音，字幕与角色四态配合呈现。
-4. 默认开启语音插话：新声音活动可先在本地停旧声音和待播内容，再提交新输入。旧结果不得在后续回合复活。按钮「打断回应，继续听我说」保留麦克风；全局 Stop／关闭会释放麦克风并停止相关未完成任务。
+1. The user clicks “开始自然对话” (“start natural conversation”) in the browser and grants microphone access. Audio is sent to Google STT; interim transcription is only a preview.
+2. After local detection of valid speech followed by roughly 700 milliseconds of silence, the system enters a bounded finalization phase. Only a qualifying final transcript is submitted as a turn. Text can also be entered at any time.
+3. The server generates a complete candidate response and controlled tool requests. Content confirmed as executable is handed to the frontend. Google TTS supplies the voice, alongside subtitles and the character's four states.
+4. Voice interruption is enabled by default: new voice activity can first stop old and queued audio locally, then submit the new input. Old results must not reappear in later turns. The “打断回应，继续听我说” (“interrupt the reply and keep listening”) button keeps the microphone active. Global Stop/close releases the microphone and stops related unfinished tasks.
 
-选择“本地先停＋服务端取消／版本校验”，是为了让用户夺回话轮时不必等待网络。显式打断按钮提供可理解的兜底；另外保留保守的重叠语音手动确认模式。当前音量／时间启发式没有可靠说话人识别或声学回声消除，建议使用耳机；实际声尾、误触发和新输入处理仍需真机验证。字幕采用本地确定性边界，不额外调用 JEV；口部运动是状态动画，尚未实现音素同步。
+The design combines local stopping first with server-side cancellation/version checks so users do not have to wait for the network to reclaim their turn. The explicit interruption button is an understandable fallback. A conservative mode requiring manual confirmation of overlapping speech is also retained. Current volume/timing heuristics do not provide reliable speaker recognition or acoustic echo cancellation, so headphones are recommended. Actual audio tails, false triggers, and handling of new input still need real-device testing. Subtitle boundaries are deterministic and local, with no additional JEV calls. Mouth movement is state-based animation; phoneme synchronization has not been implemented.
 
-「静音回应」会关闭回应声音并继续显示文字，麦克风可继续聆听；「开启回应声音」从后续回合恢复。它提供主动文字降级入口，不等于已经验证音频服务故障恢复。
+“静音回应” (“mute replies”) turns off reply audio while continuing to show text, and the microphone may keep listening. “开启回应声音” (“enable reply audio”) restores sound starting with subsequent turns. This is an explicit text fallback; it is not proof that recovery from audio-service failures has been verified.
 
-普通输入或回复级打断保留已经接受的后台图片任务；精确取消只处理指定图片／任务。全局 Stop 的范围更大。已真实呈现的状态与可靠用户输入会保留，未呈现的旧输出不能被当作已发生。
+Ordinary input or reply-level interruption preserves background image tasks that have already been accepted. Targeted cancellation affects only the specified image/task. Global Stop has broader scope. States that were genuinely presented and reliable user input are retained; old output that was never presented cannot be treated as having happened.
 
-## 角色指令与系统结构
+## Character instructions and system structure
 
-模型提出动作，应用核对参数、当前素材、状态前提与数据／用量许可，浏览器实际绘制后返回呈现回执。对白里的“已经给你了”不能代替动作完成。
+The model proposes actions. The application checks parameters, current assets, state prerequisites, and data/usage permissions. After the browser actually renders the result, it returns a presentation receipt. Saying “I've already given it to you” in dialogue is not a substitute for completing the action.
 
-| 互动目的 | 结构化工具／参数 |
+| Interaction goal | Structured tool / parameters |
 |---|---|
-| 看灯塔照片 | `show_photo(photo_id=trip_photo)` |
-| 换衣／头饰 | `set_outfit`：`black_jacket`、`cream_inner_only`、`amber_raincoat`；`set_accessory`：`camera_clip`、`star_clip` |
-| 表情／动作 | `set_emotion`：`normal`、`guarded`、`happy`、`shy`；`perform_action`：`raise_camera`、`return_camera` |
-| 场景 | `set_scene`：`cafe`、`rain_window` |
-| 有限剧情 | `advance_story`：相认、往事、邀请、接受／拒绝等，受当前章节状态约束 |
-| 可选新图 | `generate_story_image`；有当前任务时才提供对应 `cancel_story_image` |
+| View the lighthouse photo | `show_photo(photo_id=trip_photo)` |
+| Change outfit / hair accessory | `set_outfit`: `black_jacket`, `cream_inner_only`, `amber_raincoat`; `set_accessory`: `camera_clip`, `star_clip` |
+| Expression / action | `set_emotion`: `normal`, `guarded`, `happy`, `shy`; `perform_action`: `raise_camera`, `return_camera` |
+| Scene | `set_scene`: `cafe`, `rain_window` |
+| Bounded story | `advance_story`: recognition, shared memories, invitation, acceptance/refusal, and other transitions, constrained by the current chapter state |
+| Optional new image | `generate_story_image`; the corresponding `cancel_story_image` is offered only when a current task exists |
 
-工具能力会随模式、预算和当前状态变化。夏禾是用户选择的虚构角色，不是现实身份认证。共同往事由作者预设；灯塔是 MIRA 独自拍摄的角色故事，二人的共同经历是回到咖啡馆挑试印。
+Available tools vary with the mode, budget, and current state. Xiahe is a fictional role the user chooses, not a verification of real-world identity. Shared memories are authored in advance. In MIRA's character backstory, she photographed the lighthouse on her own; their shared experience is choosing test prints after she returned to the café.
 
-| 模块 | 作用 |
+| Module | Purpose |
 |---|---|
-| `apps/web/src` | TypeScript 前端：场景与代码角色、音频／字幕、输入、停止与呈现回执 |
-| `apps/api/src/mira/entrypoints/http` | FastAPI／WebSocket 入口、会话与设备配对 |
-| `apps/api/src/mira/application` | 会话 Actor、工具执行、后台图片、语音及取消调度 |
-| `apps/api/src/mira/domain` | 状态、剧情、邀请与实际呈现事实，独立于 HTTP／服务 SDK |
-| `apps/api/src/mira/adapters`、`bootstrap` | OpenAI／Google／存储适配器与显式组装 |
-| `tools`、`tests`、`specs` | 启动与恢复工具、分块离线检查、行为规格 |
+| `apps/web/src` | TypeScript frontend: scenes and code-driven character, audio/subtitles, input, stopping, and presentation receipts |
+| `apps/api/src/mira/entrypoints/http` | FastAPI/WebSocket entry points, sessions, and device pairing |
+| `apps/api/src/mira/application` | Session Actor, tool execution, background images, voice, and cancellation scheduling |
+| `apps/api/src/mira/domain` | State, story, invitations, and facts about actual presentation, independent of HTTP/service SDKs |
+| `apps/api/src/mira/adapters`, `bootstrap` | OpenAI/Google/storage adapters and explicit assembly |
+| `tools`, `tests`, `specs` | Startup and recovery tools, partitioned offline checks, and behavioral specifications |
 
-完整链路为：浏览器文字／语音 → 会话 Actor → 所选模型与有限工具 → 状态和许可检查 → 音频／字幕／角色／图片 → 呈现回执 → 下一轮上下文。原始对话和音频录制默认关闭；本地记忆、会话档案与角色存档分别显式启用，不自动保存或学习人格。
+The full flow is: browser text/voice → Session Actor → selected model and bounded tools → state and permission checks → audio/subtitles/character/images → presentation receipt → next-turn context. Raw conversation and audio recording are off by default. Local memory, conversation archives, and character saves are enabled separately and explicitly; the application does not automatically save or learn a personality.
 
-## 技术选择、模型与素材
+## Technology choices, models, and assets
 
-| 选择 | 用途与取舍 |
+| Choice | Purpose and trade-offs |
 |---|---|
-| TypeScript＋代码原生角色；保留 PixiJS 回退 | 同一组可编辑部件表达衣装、情绪和动作，便于取消；造型、动作幅度和口型仍有限 |
-| Python＋FastAPI／WebSocket＋单会话 Actor | 把状态、取消和真实呈现放在同一控制流程；当前面向本地体验，尚未作为多用户线上服务验收 |
-| OpenAI 订阅直连；官方 API 显式备用 | 本次示例为 `gpt-6.1-sol`＋Fast；无自动换模型、重试或付费回退 |
-| Google STT V2 `chirp_3`＋`gemini-3.8-flash-tts` | 真实识别与合成分开，便于控制输入和播放；需要 Google 配置、ADC 与用量授权 |
-| 固定素材＋可选 `gpt-image-2` | 固定照片使主要章节无需等生图；新图异步生成，失败时保留其他聊天能力 |
+| TypeScript + code-native character, retaining a PixiJS fallback | The same editable parts express outfits, emotions, and actions, making cancellation manageable; character design, range of motion, and mouth animation remain limited |
+| Python + FastAPI/WebSocket + per-session Actor | Keeps state, cancellation, and actual presentation in one control flow; currently targets local use and has not passed acceptance testing as a multi-user online service |
+| Direct OpenAI subscription connection; explicitly selected official API alternative | These examples use `gpt-6.1-sol` + Fast; no automatic model switching, retries, or paid fallback |
+| Google STT V2 `chirp_3` + `gemini-3.8-flash-tts` | Separates real recognition and synthesis to control input and playback; requires Google configuration, ADC, and usage authorization |
+| Fixed assets + optional `gpt-image-2` | The fixed photo lets the main chapter proceed without waiting for generation; new images are generated asynchronously, and other chat capabilities remain available if generation fails |
 
-默认角色由代码绘制。咖啡馆、固定灯塔插画和历史角色 PNG 的 AI 辅助原创来源见[素材说明](apps/web/public/scene/ORIGINAL-ASSETS.md)及 [AI_USAGE](AI_USAGE.md)。离线声音为本地 Flite/slt 合成输出。主要依赖、许可证和第三方通知见[来源清单](docs/development/ATTRIBUTION-INVENTORY.md)与[第三方通知](docs/development/third-party-notices/README.md)；本说明不替项目选择整体开源许可证。
+The default character is drawn in code. See the [asset notes](apps/web/public/scene/ORIGINAL-ASSETS.md) and [AI_USAGE](AI_USAGE.md) for the AI-assisted original sources of the café, fixed lighthouse illustration, and historical character PNGs. Offline audio is synthesized locally with Flite/slt. For major dependencies, licenses, and third-party notices, see the [attribution inventory](docs/development/ATTRIBUTION-INVENTORY.md) and [third-party notices](docs/development/third-party-notices/README.md). This document does not choose an overall open-source license for the project.
 
-## 已验证与待完成
+## What has been verified, and what remains
 
-本次保留了 2012 的历史 13-lane 完整离线发布收据，以及三项后续修补各自的影响面证据。默认 LAN 的最终汇总曾在 providers 约 98% 时中断：保留十个已成功检查块，并只补跑 providers（4523 项通过）；这不是本次完整 release 重跑。另有两名 AI 代理参与的 5 次独立运行、共 63 条自然输入：使用真实生产提示，程序工具与编译前端回执实际执行，外部 provider、图片和 TTS 使用模拟。它们不等于真实 `gpt-6.1-sol` 订阅／付费服务、声音或设备验收。本次核对恢复来源、编译产物、启动参数、文档与归档完整性；详细来源、独立复核和范围见[验证说明](docs/submission/VERIFICATION.md)。
+The package retains the historical complete 13-lane offline release receipt from the 2012 baseline, together with impact evidence for each of the three subsequent fixes. The final default-LAN aggregate run was interrupted when providers was about 98% complete: ten successfully checked blocks were retained, and only providers was rerun, with 4,523 tests passing. This was not a fresh full release run for this package. There were also five independent runs involving two AI agents and 63 natural-language inputs in total. They used the real production prompts and actually executed programmatic tools and presentation receipts from the compiled frontend, while external providers, images, and TTS were simulated. These runs are not equivalent to acceptance testing of the real `gpt-6.1-sol` subscription/paid services, audio, or devices. Packaging checks covered recovery sources, compiled artifacts, launch arguments, documentation, and archive completeness. See the [verification notes](docs/submission/VERIFICATION.md) for detailed provenance, independent review, and scope.
 
-| 当前状态／问题 | 下一步 |
+| Current status / issue | Next step |
 |---|---|
-| 基本聊天、固定照片、一次生成图与主动通知有用户确认；未绑定精确源码摘要 | 录制时记录实际版本、命令和设备，复核完整主线 |
-| 语音链路、自动／手动打断有实现和离线证据；完整可听回复、声尾与回声未完成同版本实测 | 戴耳机实录：说话中插话、继续听、新一轮回复、迟到不复活 |
-| 三衣装、情绪和场景具备软件路径；整体美术、自然度及移动端仍待验收 | 实际录到至少三种可辨表情、两种非说话状态和一次环境变化 |
-| 手机语音需要已受信任的 HTTPS；私网默认免配对，也可显式要求人工配对。窄视口截图不能证明手机麦克风可用 | 按[双设备指南](docs/development/PRIVATE-DEVICE-TESTING.md)做真实手机检查 |
-| 生图资格、时延和审核仍受外部服务影响；审核合格不代表角色已理解全部像素细节 | 保留实际失败反馈，核对显示后的单次通知，不从描述臆测画面 |
-| 用户已录制视频并将随邮件另附；本包未收录、未代验。全新安装计时和最新远端仓库仍待确认 | 对照[录制指南](docs/development/DEMO-RECORDING.md)检查视频内容，在提交清单登记实际文件／地址 |
-| 音素口型、可靠声学回声消除、完整长期人格学习未完成 | 后续按体验价值逐项推进，不列为当前完成能力 |
+| The user confirmed basic chat, the fixed photo, and one generated image with a proactive notification; the feedback is not tied to an exact source digest | Record the actual version, command, and device during recording, and recheck the complete main flow |
+| Voice and automatic/manual interruption have implementations and offline evidence; complete audible replies, audio tails, and echo have not been tested on the same version | Record with headphones: interrupt during speech, keep listening, receive a new reply, and verify late results do not reappear |
+| The three outfits, expressions, and scenes have software paths; overall art, naturalness, and mobile behavior still need acceptance testing | Record at least three distinguishable expressions, two non-speaking states, and one environmental change |
+| Phone voice requires already-trusted HTTPS; private-network access is pairing-free by default, with optional explicit manual pairing. A narrow-viewport screenshot does not prove the phone microphone works | Perform real-phone checks using the [two-device guide](docs/development/PRIVATE-DEVICE-TESTING.md) |
+| Image-generation eligibility, latency, and review remain dependent on external services; passing review does not mean the character understands every pixel-level detail | Preserve actual failure feedback, verify the single notification after display, and avoid inferring image contents from its description |
+| The user has recorded a video and will attach it separately by email; it is neither included nor independently checked here. Clean-install timing and the latest remote repository still need confirmation | Check the video against the [recording guide](docs/development/DEMO-RECORDING.md) and enter the actual file/address in the submission checklist |
+| Phoneme-based lip sync, reliable acoustic echo cancellation, and complete long-term personality learning are unfinished | Address them individually according to their value to the experience; do not list them as completed capabilities |
 
-## 投入时间与再开发两周
+## Time invested and another two weeks of development
 
-作者按**包含 AI 运行时间**的口径粗估总投入约 **100 小时**：设计 5、后端 30、人物 30、整合 10、返工与路线变动 20、测试 5 小时。这是各部分的粗略投入统计，不是个人工作 100 小时，也不代表连续 100 小时的开发周期。可核对的迭代记录覆盖 2026-10-03 至 2026-10-07；完整第一人称复盘见 [AI_USAGE](AI_USAGE.md)。
+The author roughly estimates total investment at **about 100 hours, including AI runtime**: design 5, backend 30, character 30, integration 10, rework and changes of approach 20, and testing 5 hours. These are rough effort estimates by area, not a claim of 100 hours of personal labor or a continuous 100-hour development period. Verifiable iteration records cover 2026-10-03 through 2026-10-07. See [AI_USAGE](AI_USAGE.md) for the full first-person retrospective.
 
-如继续开发两周，建议先完成当前体验验收，再扩大能力：
+With another two weeks of development, the recommendation is to finish acceptance testing of the current experience before expanding capabilities:
 
-- **第 1–3 天**：冻结版本，补齐桌面／手机语音、打断与故障恢复实测；记录首轮延迟、声尾和实际服务用量。
-- **第 4–7 天**：依据录屏修正表情可辨性、动作衔接、字幕节奏与语音误触发，优先解决主线阻塞。
-- **第 8–10 天**：完善图片排队／取消反馈和模型理解图片的明确边界；改善剧情岔开话题与拒绝后的自然衔接。
-- **第 11–14 天**：做干净安装计时、设备回归与长会话检查，补齐素材来源、可重复录制和最终发布收据。
+- **Days 1–3:** freeze the version and complete desktop/mobile voice, interruption, and failure-recovery testing. Record first-turn latency, audio tails, and actual service usage.
+- **Days 4–7:** use recordings to improve expression readability, action transitions, subtitle pacing, and false voice triggers. Prioritize blockers in the main flow.
+- **Days 8–10:** improve image queuing/cancellation feedback and clearly communicate the boundaries of the model's image understanding. Make topic changes and responses after refusals feel more natural within the story.
+- **Days 11–14:** time a clean installation, run device regressions and long-session checks, and complete asset provenance, repeatable recording procedures, and the final release receipt.
 
-这是演进建议，不是已完成工作或交付日期承诺。
+This is a proposed development path, not completed work or a promised delivery date.

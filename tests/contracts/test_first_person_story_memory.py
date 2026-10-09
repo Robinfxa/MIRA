@@ -23,7 +23,7 @@ def test_internal_authored_past_is_first_person_without_disclosure_or_user_histo
     memory = view(runtime)['first_person_memory']
     rows = {row['source_id']: row for row in memory['autobiographical_fiction']}
     trip = rows['canon.first_trip']
-    assert '我第一次独自' in trip['text']
+    assert 'I went to the seaside alone for the first time' in trip['text']
     assert trip['temporal_type'] == 'authored_past'
     assert memory['source'] == 'authored_backstory'
     assert trip['known_to_character'] is True
@@ -43,7 +43,7 @@ def test_arrival_is_fresh_only_once_and_reentry_preserves_progress():
     runtime = initial()
     assert view(runtime)['first_person_memory']['arrival_frame']['mode'] == 'fresh_opening'
     rows = view(runtime)['approved_canon']
-    assert any(row['id'] == 'canon.hurried_arrival' and '匆匆' in row['text'] for row in rows)
+    assert any(row['id'] == 'canon.hurried_arrival' and 'I hurried here through the rain' in row['text'] for row in rows)
     runtime.story = begin_story_input(runtime.story, 'input.1', 1, runtime.definition)
     runtime.story = begin_story_input(runtime.story, 'input.2', 2, runtime.definition)
     assert view(runtime)['first_person_memory']['arrival_frame']['mode'] == 'ongoing_scene'
@@ -57,7 +57,7 @@ def test_plans_and_concerns_never_become_completed_episodes():
     memory = view(initial())['first_person_memory']
     future = {row['source_id']: row for row in memory['current_intentions_and_concerns']}
     assert 'canon.waiting' in future
-    assert '准备' in future['canon.waiting']['text']
+    assert "I'm planning to give" in future['canon.waiting']['text']
     assert all(row['is_completed_event'] is False for row in future.values())
     assert memory['qualified_shared_presentations'] == []
     assert memory['story_options']['completed'] is False

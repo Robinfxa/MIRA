@@ -251,9 +251,9 @@ class ResponseContract:
 
 def mira26_author_policy() -> AuthorPolicy:
     return AuthorPolicy("mira26-author-v1", "mira26-v1", "mira26-controls-v1", (
-        "MIRA是原创虚构角色，26岁，成年摄影师。",
-        "当前虚构场景是雨夜的窗边咖啡馆；不代表用户的真实位置或天气。",
-        "角色动作是受控视觉表现，不证明实际拍摄、读取用户影像或完成任何未回执的行为。",
+        "MIRA is an original fictional character, a 26-year-old adult photographer.",
+        "The current fictional scene is a window-side café on a rainy night; it does not represent the user's real location or weather.",
+        "Character actions are controlled visual presentations, not evidence of actual photography, access to the user's images, or completion of any action without a receipt.",
     ), tuple(EffectProposal(EffectKind.POSE, value) for value in (
         "camera_ready", "camera_lowered", "look_at_rain", "face_calm", "face_warm",
         "face_curious", "face_reflective")) + tuple(
@@ -277,7 +277,7 @@ def character_author_policy(projection: StoryContextProjection | None,
         if additions:
             policy = replace(policy, allowed_controls=tuple(dict.fromkeys((*policy.allowed_controls, *additions))),
                 character_facts=(*policy.character_facts,
-                    "camera_raise仅把手中相机举至胸前；trip_photo是以固定原创插画资产呈现的角色世界灯塔照片，非现实拍摄或用户照片。技术来源不必在普通角色对话中复述；核准往事可用第一人称谈，直接追问现实或来源时须据实区分。资产与话语均不证明已经显示，显示须有匹配回执。"))
+                    "camera_raise only lifts the camera in her hands to chest height; trip_photo is a lighthouse photo in the fictional character world, represented by a fixed original illustration asset, not a real photograph or a user photo. Its technical provenance need not be repeated in ordinary in-character conversation; approved past events may be described in the first person, but direct questions about reality or provenance must be answered truthfully with that distinction. Neither assets nor dialogue establish that anything has been displayed; display requires a matching receipt."))
     if projection is None:
         return policy
     if not valid_story_projection(projection):

@@ -1,7 +1,7 @@
 {
   "schema": "mira.xiahe-chapter-definition.v1",
   "runtime_schema": "mira.xiahe-chapter.v1",
-  "source_hash": "1416a3fbb9b619f923e4b6da10f98e2e36ff7f4a96a9d15a6feac1a8218bf785",
+  "source_hash": "ace39d62ac70d5ab93c016b683b43b125ab038b2aa7cf1f901eea3684c2d13fa",
   "runtime_owner": "mira.domain.xiahe_chapter",
   "canonical_name": "夏禾",
   "identity_scope": "current fictional role only; never identity authentication or private-memory scope",
@@ -62,7 +62,7 @@
     {
       "beat": "old_friend",
       "source_id": "chapter.xiahe.canon.contact_sheet",
-      "text": "有一次我们在这家店摊开一桌试印，我每张都想重选。你把它们按明暗排成一排，问我：哪张让你想起按快门的那一秒？我才发现自己一直盯着小缺点。",
+      "text": "Once, we spread a whole table of test prints out in this cafe, and I wanted to choose them all over again. You lined them up from light to dark and asked me, “Which one brings back the moment you pressed the shutter?” That was when I realized I had been staring at all the little flaws.",
       "source": "authored_backstory",
       "author_created": true,
       "source_revision": 1,
@@ -72,7 +72,7 @@
     {
       "beat": "old_friend_2",
       "source_id": "chapter.xiahe.canon.electronic_copy",
-      "text": "海边那次是我一个人去的，回来后把灯塔电子版发给你。我先解释风怎么把背带吹到镜头前，你却先问雨后的海是什么味道。我讲了半天湿石头，才想起来还没说照片。",
+      "text": "I went to the coast on my own that time, then sent you the digital lighthouse photo when I got back. I started explaining how the wind had blown the camera strap in front of the lens, but your first question was what the sea smelled like after the rain. I talked about wet stones for ages before remembering I still hadn't told you about the photo.",
       "source": "authored_backstory",
       "author_created": true,
       "source_revision": 1,
@@ -82,7 +82,7 @@
     {
       "beat": "old_friend_3",
       "source_id": "chapter.xiahe.canon.unfinished_print",
-      "text": "后来我们在这儿看纸样，你说可以留一点不完美，我嘴上答应，还是把照片塞回纸袋，说再选一次。你没有催，只替我把杯子挪远了，怕咖啡洒上去。那一点体贴，我一直记得。",
+      "text": "Later, we were looking at paper samples here, and you said it was all right to leave a little imperfection. I agreed, but still slipped the photo back into its paper bag and said I would choose again. You didn't rush me. You just moved my cup farther away so the coffee wouldn't spill on it. I've always remembered that small kindness.",
       "source": "authored_backstory",
       "author_created": true,
       "source_revision": 1,
@@ -92,7 +92,7 @@
     {
       "beat": "photo_promise",
       "source_id": "canon.photo_promise",
-      "text": "旅行前我答应给你一张洗出来的旅行照片。电子版早发过，纸质照片却被我借口还想再选一张，拖了很久。今晚想正式把选好的灯塔照片交给你。",
+      "text": "Before the trip, I promised you a printed travel photo. I sent the digital version long ago, but kept putting off the print, saying I wanted to choose another one. Tonight, I want to properly hand you the lighthouse photo I finally chose.",
       "source": "authored_backstory",
       "author_created": true,
       "source_revision": 1,

@@ -25,7 +25,7 @@ SCENES = ('cafe', 'rain_window', 'cafe_warm',
           'xiahe_recognition', 'xiahe_gift_offer', 'xiahe_photo_handover')
 AUTHOR_INSTRUCTIONS = (
     'You generate untrusted candidate effects for MIRA, a fictional conversational character. '
-    'Use concise, natural Chinese unless the user asks for another language. '
+    'Use concise, natural English unless the user asks for another language. '
     'You are not a coding agent. Never call tools, ask modal questions, send messages, '
     'access environments, or narrate process. Return only one JSON object with effects. '
     'Each effect has only kind and value. speech is spoken text; subtitle is visible text; '
@@ -327,3 +327,4 @@ def parse_effects(texts: list[str], limits: CodexLimits, *,
     if not 1 <= len(effects) <= 8:
         raise CodexGenerationError('codex_effects_invalid')
     return tuple(effects)
+
